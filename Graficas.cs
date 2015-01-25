@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using ListasExtra;
 
-namespace Gráficas
+namespace Graficas
 {
     /// <summary>
     /// Representa una gráfica, en el sentido abstracto.
     /// Los nodos serán del tipo <c>T</c>.
     /// </summary>
-    public class Gráfica<T>
+    public class Grafica<T>
     {
         public ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>>();
 
@@ -26,7 +26,10 @@ namespace Gráficas
             return ret;
         }
 
-        public bool EsSimétrico = false;
+        /// <summary>
+        /// Devuelve o establece si la gráfica es bidireccional.
+        /// </summary>
+		public bool EsSimetrico = false;
 
         /// <summary>
         /// Devuelve la lista de vecinos de x (a todos los que apunta x)
@@ -85,9 +88,9 @@ namespace Gráficas
 
             public override bool Equals(object obj)
             {
-                if (obj.GetType() is Gráfica<T>.Ruta)
+                if (obj.GetType() is Grafica<T>.Ruta)
                 {
-                    Gráfica<T>.Ruta Obj = (Gráfica<T>.Ruta)obj;
+                    Grafica<T>.Ruta Obj = (Grafica<T>.Ruta)obj;
                     return this == Obj;
                 }
                 else return false;                    
@@ -138,8 +141,8 @@ namespace Gráficas
         /// <summary>
         /// Devuelve o establece el peso de la arista que une dos vértices.
         /// </summary>
-        /// <param name="x">Un vértice.</param>
-        /// <param name="y">Otro vértice.</param>
+        /// <param name="x">Vértice origen.</param>
+        /// <param name="y">Vértice destino.</param>
         /// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
         public float this[T x, T y]
         {
@@ -150,7 +153,7 @@ namespace Gráficas
             set
             {
                 Vecinos[new Tuple<T,T>(x,y)] = value;
-                if (EsSimétrico) Vecinos[new Tuple<T,T>(y,x)] = value;
+                if (EsSimetrico) Vecinos[new Tuple<T,T>(y,x)] = value;
             }
         }
 
@@ -160,7 +163,7 @@ namespace Gráficas
         /// <param name="x">Un nodo.</param>
         /// <param name="y">Otro nodo.</param>
         /// <param name="Peso">El peso de la arista entre los nodos</param>
-        public void AgregaVértice(T x, T y, float Peso)
+        public void AgregaVertice(T x, T y, float Peso)
         {
             {
                 this[x,y] = Peso;
@@ -231,25 +234,64 @@ namespace Gráficas
 
         /// <summary>
         /// Genera una gráfica aleatoria.
-        /// Por ahora no es aleatoria. Es completa, con peso aleatorio.
         /// </summary>
         /// <param name="Nodos">El conjunto de nodos que se usarán.</param>
         /// <param name="r">El generador aleatorio.</param>
-        /// <returns></returns>
-        public static Gráfica<T> GeneraGráficaAleatoria(T[] Nods, Random r)
+        /// <returns>Devuelve una gráfica aleatoria.</returns>
+        public static Grafica<T> GeneraGráficaAleatoria(T[] Nods)
         {
-            Gráfica<T> ret = new Gráfica<T>();
+            Grafica<T> ret = new Grafica<T>();
 
-            for (int i = 0; i < Nods.Length; i++)
-            {
-                for (int j = i + 1; j < Nods.Length; j++)
-                {
-                    ret.AgregaVértice(Nods[i], Nods[j], (float)r.NextDouble());
-                }                
-            }
+			foreach (var v in Nods) {
+				ret.AgregaVerticeAzar (v);
+			}
             return ret;
         }
          
+		/// <summary>
+		/// Agrega un vértice al grafo, generando aristas al azar a nodos antiguos.
+		/// </summary>
+		/// <param name="Vertice">Vertice.</param>
+		public void AgregaVerticeAzar (T Vertice){
+			if (NumNodos == 0) {
+				this [Vertice, Vertice] = 0;
+				return;
+			}
+
+			// Genera la lista de probabilidad.
+			// Obtener los pesos
+			ListaPeso <T> Prob = new ListaPeso<T> ();
+			foreach (var x in Nodos) {
+				foreach (var y in Vecino(x)) {
+					if (this [x, y] == 0)
+						throw new Exception (string.Format ("La distancia entro {0} y {1} es cero", x, y));
+					Prob [x] += this [x, y];
+				}
+				Prob [x] = 1 / Prob [x];
+			}
+			// Normalizar Prob
+			float S = Prob.SumaTotal ();
+			foreach (var x in Prob.Keys) { 
+				Prob [x] = Prob [x] / S;
+			}
+
+			// Seleccionar un vértice
+			double r = new Random ().NextDouble ();		// Número al azar r \in [1,1) con probabilidad uniforme.
+			List <T> P = new List<T> (Prob.Keys);
+			int i = 1;
+
+			while (Prob[P[i]] >= r) {
+				r -= Prob [P [i++]];
+			}
+
+			// Pues entonces hay que agregar arista de x a P[i];
+			r = new Random ().NextDouble () + 0.5d;
+
+			AgregaVertice (Vertice, P [i - 1], (float)r);
+		}
+		
+		
+		
 
         /* // TODO: Esto...
 
@@ -293,7 +335,8 @@ namespace Gráficas
         }
          */
 
-        /// <summary>
+
+		/// <summary>
         /// Selecciona pseudoaleatoriamente una sublista de tamaño fijo de una lista dada.
         /// </summary>
         /// <param name="r"></param>
