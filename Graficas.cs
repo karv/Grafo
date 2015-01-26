@@ -10,6 +10,10 @@ namespace Graficas
     /// </summary>
     public class Grafica<T>
     {
+        public Grafica()
+        {
+            Vecinos.Nulo = float.PositiveInfinity;
+        }
         public ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>>();
 
         /// <summary>
@@ -238,12 +242,23 @@ namespace Graficas
         /// <param name="Nodos">El conjunto de nodos que se usarán.</param>
         /// <param name="r">El generador aleatorio.</param>
         /// <returns>Devuelve una gráfica aleatoria.</returns>
-        public static Grafica<T> GeneraGráficaAleatoria(T[] Nods)
+        public static Grafica<T> GeneraGráficaAleatoria(List<T> Nods)
         {
+            Random r = new Random();
+            if (Nods.Count < 2)
+                throw new Exception("No se puede generar una gráfica aleatoria con menos de dos elementos.");
             Grafica<T> ret = new Grafica<T>();
 
+            T v0, v1;
+            v0 = Nods[0];
+            v1 = Nods[1];
+            Nods.RemoveAt(0);
+            Nods.RemoveAt(0);
+
+            ret.AgregaVertice(v0, v1, 1);            
+
 			foreach (var v in Nods) {
-				ret.AgregaVerticeAzar (v);
+				ret.AgregaVerticeAzar (v, r);
 			}
             return ret;
         }
@@ -252,7 +267,7 @@ namespace Graficas
 		/// Agrega un vértice al grafo, generando aristas al azar a nodos antiguos.
 		/// </summary>
 		/// <param name="Vertice">Vertice.</param>
-		public void AgregaVerticeAzar (T Vertice){
+		public void AgregaVerticeAzar (T Vertice, Random r){
 			if (NumNodos == 0) {
 				this [Vertice, Vertice] = 0;
 				return;
@@ -267,29 +282,43 @@ namespace Graficas
 						throw new Exception (string.Format ("La distancia entro {0} y {1} es cero", x, y));
 					Prob [x] += this [x, y];
 				}
-				Prob [x] = 1 / Prob [x];
+				Prob [x] = 1 / (Prob [x] + 1);
 			}
 			// Normalizar Prob
 			float S = Prob.SumaTotal ();
-			foreach (var x in Prob.Keys) { 
+            // Clonar a Prob.keys
+            List<T> P = new List<T>(Prob.Keys); 
+ 
+			foreach (var x in P) { 
 				Prob [x] = Prob [x] / S;
 			}
 
 			// Seleccionar un vértice
-			double r = new Random ().NextDouble ();		// Número al azar r \in [1,1) con probabilidad uniforme.
-			List <T> P = new List<T> (Prob.Keys);
-			int i = 1;
-
-			while (Prob[P[i]] >= r) {
-				r -= Prob [P [i++]];
-			}
+            T v = SelecciónAzar(Prob, r);
 
 			// Pues entonces hay que agregar arista de x a P[i];
-			r = new Random ().NextDouble () + 0.5d;
+			double p = r.NextDouble () + 0.5d;
 
-			AgregaVertice (Vertice, P [i - 1], (float)r);
+			AgregaVertice (Vertice, v, (float)p);
 		}
-		
+
+        /// <summary>
+        /// Selecciona al azar un elemento.
+        /// </summary>
+        /// <param name="Prob">La función de probabilidad. ¡Debe estar normalizada!</param>
+        /// <returns></returns>
+        T SelecciónAzar(ListaPeso<T> Prob, Random r)
+        {
+            double q = r.NextDouble();
+            foreach (var x in Prob.Keys)
+            {
+                if (q < Prob[x])
+                    return x;
+                q -= Prob[x];
+            }
+            throw new Exception("No sé cómo llegó el algoritmo aquí D:");
+            //return default(T);
+        }
 		
 		
 
