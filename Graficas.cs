@@ -242,7 +242,7 @@ namespace Graficas
         /// <param name="Nodos">El conjunto de nodos que se usarán.</param>
         /// <param name="r">El generador aleatorio.</param>
         /// <returns>Devuelve una gráfica aleatoria.</returns>
-        public static Grafica<T> GeneraGráficaAleatoria(List<T> Nods)
+        public static Grafica<T> GeneraGraficaAleatoria(List<T> Nods)
         {
             Random r = new Random();
             if (Nods.Count < 2)
