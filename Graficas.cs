@@ -10,9 +10,26 @@ namespace Graficas
 	/// </summary>
 	public class Grafica<T>
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.Grafica`1"/> class.
+		/// </summary>
 		public Grafica()
 		{
 			Vecinos.Nulo = float.PositiveInfinity;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.Grafica`1"/> class.
+		/// Crea una gráfica al azar
+		/// </summary>
+		/// <param name="Nods">Nodos de la gráfica</param>
+		public Grafica(T[] Nods):this()
+		{
+			Random r = new Random();
+			foreach (var x in Nods)
+			{
+				AgregaVerticeAzar(x, r);
+			}
 		}
 
 		public ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>>();
