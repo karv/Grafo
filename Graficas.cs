@@ -14,6 +14,7 @@ namespace Graficas
 		{
 			Vecinos.Nulo = float.PositiveInfinity;
 		}
+
 		public ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>>();
 
 		/// <summary>
@@ -46,7 +47,8 @@ namespace Graficas
 			T[] Nods = Nodos;
 			foreach (var y in Nods)
 			{
-				if (!float.IsPositiveInfinity(this[x, y])) ret.Add(y);
+				if (!float.IsPositiveInfinity(this[x, y]))
+					ret.Add(y);
 			}
 			return ret;
 		}
@@ -62,7 +64,8 @@ namespace Graficas
 			T[] Nods = Nodos;
 			foreach (var y in Nods)
 			{
-				if (!float.IsPositiveInfinity(this[y, x])) ret.Add(y);
+				if (!float.IsPositiveInfinity(this[y, x]))
+					ret.Add(y);
 			}
 			return ret;
 		}
@@ -76,11 +79,13 @@ namespace Graficas
 
 			public static bool operator ==(Ruta left, Ruta right)
 			{
-				if (left.Paso.Count != right.Paso.Count) return false;
+				if (left.Paso.Count != right.Paso.Count)
+					return false;
 
 				for (int i = 0; i < left.Paso.Count; i++)
 				{
-					if (!left.Paso[i].Equals(right.Paso[i])) return false;
+					if (!left.Paso[i].Equals(right.Paso[i]))
+						return false;
 				}
 				return true;
 			}
@@ -92,12 +97,13 @@ namespace Graficas
 
 			public override bool Equals(object obj)
 			{
-				if (obj.GetType() is Grafica<T>.Ruta)
+				if (obj is Grafica<T>.Ruta)
 				{
 					Grafica<T>.Ruta Obj = (Grafica<T>.Ruta)obj;
 					return this == Obj;
 				}
-				else return false;
+				else
+					return false;
 			}
 
 			public override int GetHashCode()
@@ -105,6 +111,7 @@ namespace Graficas
 				return base.GetHashCode();
 			}
 		}
+
 		/// <summary>
 		/// Devuelve un clon de la lista de nodos.
 		/// </summary>
@@ -128,7 +135,6 @@ namespace Graficas
 				return ret.ToArray();
 			}
 		}
-
 		/*
 		/// <summary>
 		/// Agrega un nodo al árbol.
@@ -141,14 +147,13 @@ namespace Graficas
 			return ret;
 		}
 		 * */
-
 		/// <summary>
 		/// Devuelve o establece el peso de la arista que une dos vértices.
 		/// </summary>
 		/// <param name="x">Vértice origen.</param>
 		/// <param name="y">Vértice destino.</param>
 		/// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
-		public float this[T x, T y]
+		public float this [T x, T y]
 		{
 			get
 			{
@@ -157,7 +162,8 @@ namespace Graficas
 			set
 			{
 				Vecinos[new Tuple<T, T>(x, y)] = value;
-				if (EsSimetrico) Vecinos[new Tuple<T, T>(y, x)] = value;
+				if (EsSimetrico)
+					Vecinos[new Tuple<T, T>(y, x)] = value;
 			}
 		}
 
