@@ -15,14 +15,44 @@ namespace Graficas
 		}
 
 		T[] Vecinos(T nodo);
+
+		T getMejorNodo(T nodo);
+
+		T getMejorNodo(T nodo, List<T> evitar);
 	}
 
 	/// <summary>
 	/// Representa una gráfica, en el sentido abstracto.
-	/// Los nodos serán del tipo <c>T</c>.
+	/// Los nodos son del tipo <c>T</c>.
 	/// </summary>
 	public class Grafica<T>: IGrafica<T>
 	{
+		T IGrafica<T>.getMejorNodo(T nodo)
+		{
+			T ret = default(T);
+
+			foreach (var x in Vecino(nodo))
+			{
+				if (this[nodo, x] < this[nodo, ret])
+					ret = x;
+			}
+			return ret;
+		}
+
+		T IGrafica<T>.getMejorNodo(T nodo, List<T> evitar)
+		{
+			T ret = default(T);
+			List<T> nods = new List<T>(Vecino(nodo));
+			nods.RemoveAll(x => evitar.Contains(x));
+
+			foreach (var x in nods)
+			{
+				if (this[nodo, x] < this[nodo, ret])
+					ret = x;
+			}
+			return ret;
+		}
+
 		T[] Graficas.IGrafica<T>.Vecinos(T nodo)
 		{
 			return Vecino(nodo).ToArray();
@@ -455,6 +485,16 @@ namespace Graficas
 
 	public class GraficaNoPeso<T>:IGrafica<T>
 	{
+		T IGrafica<T>.getMejorNodo (T nodo)
+		{
+			return Vecinos(nodo)[0];
+		}
+
+		T IGrafica<T>.getMejorNodo (T nodo, List<T> Evitar)
+		{
+			throw new NotImplementedException();
+		}
+
 		class Nodo
 		{
 			public T obj;
