@@ -534,8 +534,7 @@ namespace Graficas
 		/// <param name="hasta">Destino.</param>
 		public void AgregaVertice (T desde, T hasta)
 		{
-			Nodo des = getNodo(desde);
-			des.Vecinos.Add(hasta);
+			getNodo(desde).Vecinos.Add (hasta);
 		}
 	}
 
