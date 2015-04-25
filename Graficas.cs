@@ -536,6 +536,25 @@ namespace Graficas
 		{
 			getNodo(desde).Vecinos.Add (hasta);
 		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
+		/// </summary>
+		/// <param name="nods">Nodos de la gráfica.</param>
+		public GraficaNoPeso(T[] nods):this()
+		{
+			foreach (var x in nods)
+			{
+				AgregaNodo(x);
+			}
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
+		/// </summary>
+		public GraficaNoPeso()
+		{
+		}
 	}
 
 	
