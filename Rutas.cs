@@ -1,27 +1,14 @@
 using System;
 using System.Collections.Generic;
 
-namespace Graficas
+namespace Graficas.Rutas
 {
 	/// <summary>
 	/// Da herramientas para trabajar con rutas en IGraficas
 	/// </summary>
-	public static class ExtensionRutas<T>
+	public static class ExtensionRutas // where T:IDisposable
 	{
-		public static Ruta<T> MejorRuta(IGrafica<T> graf, T origen, T destino)
-		{
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Calcula la ruta óptima de un nodo a otro.
-		/// </summary>
-		/// <param name="x">Nodo inicial.</param>
-		/// <param name="y">Nodo final.</param>
-		/// <param name="Ignorar">Lista de nodos a evitar.</param>
-		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
-		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public static Ruta<T> CaminoÓptimo(IGrafica<T> graf, T x, T y, List<T> Ignorar)
+		public static Ruta<T> MejorRuta<T>(IGrafica<T> graf, T origen, T destino)
 		{
 			throw new NotImplementedException();
 		}
