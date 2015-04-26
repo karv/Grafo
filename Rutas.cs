@@ -8,7 +8,7 @@ namespace Graficas.Rutas
 	/// </summary>
 	public static class ExtensionRutas // where T:IDisposable
 	{
-		public static Ruta<T> MejorRuta<T>(IGrafica<T> graf, T origen, T destino)
+		public static Ruta<T> MejorRuta<T>(this IGrafica<T> graf, T origen, T destino)
 		{
 			throw new NotImplementedException();
 		}
