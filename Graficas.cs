@@ -4,26 +4,17 @@ using ListasExtra;
 
 namespace Graficas
 {
-	/// <summary>
-	/// Promete lista de vecinos.
-	/// </summary>
-	public interface IGrafica<T>
-	{
-		T[] Nodos
-		{
-			get;
-		}
 
-		T[] Vecinos(T nodo);
-	}
 
 	/// <summary>
 	/// Representa una gráfica, en el sentido abstracto.
 	/// Los nodos son del tipo <c>T</c>.
 	/// </summary>
-	public class Grafica<T>: IGrafica<T>
+	public class Grafica<T> : IGrafica<T>
 	{
-		T[] Graficas.IGrafica<T>.Vecinos(T nodo)
+
+
+		IEnumerable<T> IGrafica<T>.Vecinos(T nodo)
 		{
 			return Vecino(nodo).ToArray();
 		}
@@ -41,7 +32,8 @@ namespace Graficas
 		/// Crea una gráfica al azar
 		/// </summary>
 		/// <param name="Nods">Nodos de la gráfica</param>
-		public Grafica(T[] Nods):this()
+		public Grafica(T[] Nods)
+			: this()
 		{
 			Random r = new Random();
 			foreach (var x in Nods)
@@ -79,7 +71,7 @@ namespace Graficas
 		public List<T> Vecino(T x)
 		{
 			List<T> ret = new List<T>();
-			T[] Nods = Nodos;
+			IEnumerable<T> Nods = Nodos;
 			foreach (var y in Nods)
 			{
 				if (!float.IsPositiveInfinity(this[x, y]))
@@ -96,7 +88,7 @@ namespace Graficas
 		public List<T> AntiVecino(T x)
 		{
 			List<T> ret = new List<T>();
-			T[] Nods = Nodos;
+			IEnumerable<T> Nods = Nodos;
 			foreach (var y in Nods)
 			{
 				if (!float.IsPositiveInfinity(this[y, x]))
@@ -188,7 +180,7 @@ namespace Graficas
 		/// <param name="x">Vértice origen.</param>
 		/// <param name="y">Vértice destino.</param>
 		/// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
-		public float this [T x, T y]
+		public float this[T x, T y]
 		{
 			get
 			{
@@ -451,9 +443,17 @@ namespace Graficas
 				return null;
 			}
 		}
+
+		IEnumerable<T> IGrafica<T>.Nodos
+		{
+			get
+			{
+				return (IEnumerable<T>)Nodos;
+			}
+		}
 	}
 
-	public class GraficaNoPeso<T>:IGrafica<T>
+	public class GraficaNoPeso<T> : IGrafica<T>
 	{
 		class Nodo
 		{
@@ -481,7 +481,7 @@ namespace Graficas
 		}
 
 		List<Nodo> nodos = new List<Nodo>();
-		T[] IGrafica<T>.Nodos 
+		IEnumerable<T> IGrafica<T>.Nodos
 		{
 			get
 			{
@@ -492,7 +492,7 @@ namespace Graficas
 		/// Devuelve la lista de vecinos de un nodo.
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public T[] Vecinos (T nodo)
+		public IEnumerable<T> Vecinos(T nodo)
 		{
 			return nodos.Find(x => x.Equals(nodo)).Vecinos.ToArray();
 		}
@@ -501,7 +501,7 @@ namespace Graficas
 		/// Devuelve un arreglo con los vecinos de un nodo específico.
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public T[] this [T nodo]
+		public T[] this[T nodo]
 		{
 			get
 			{
@@ -522,7 +522,7 @@ namespace Graficas
 		/// </summary>
 		/// <returns>The nodo.</returns>
 		/// <param name="nod">Nod.</param>
-		Nodo getNodo (T nod)
+		Nodo getNodo(T nod)
 		{
 			return nodos.Find(x => x.obj.Equals(nod));
 		}
@@ -532,16 +532,17 @@ namespace Graficas
 		/// </summary>
 		/// <param name="desde">Origen.</param>
 		/// <param name="hasta">Destino.</param>
-		public void AgregaVertice (T desde, T hasta)
+		public void AgregaVertice(T desde, T hasta)
 		{
-			getNodo(desde).Vecinos.Add (hasta);
+			getNodo(desde).Vecinos.Add(hasta);
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
 		/// </summary>
 		/// <param name="nods">Nodos de la gráfica.</param>
-		public GraficaNoPeso(T[] nods):this()
+		public GraficaNoPeso(T[] nods)
+			: this()
 		{
 			foreach (var x in nods)
 			{
@@ -557,40 +558,43 @@ namespace Graficas
 		}
 	}
 
-	
+
 	[Serializable]
 	public class NodoInexistenteException : Exception
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
 		/// </summary>
-		public NodoInexistenteException ()
+		public NodoInexistenteException()
 		{
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
 		/// </summary>
 		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
-		public NodoInexistenteException (string message) : base (message)
+		public NodoInexistenteException(string message)
+			: base(message)
 		{
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
 		/// </summary>
 		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
 		/// <param name="inner">The exception that is the cause of the current exception. </param>
-		public NodoInexistenteException (string message, Exception inner) : base (message, inner)
+		public NodoInexistenteException(string message, Exception inner)
+			: base(message, inner)
 		{
 		}
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
 		/// </summary>
 		/// <param name="context">The contextual information about the source or destination.</param>
 		/// <param name="info">The object that holds the serialized object data.</param>
-		protected NodoInexistenteException (System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base (info, context)
+		protected NodoInexistenteException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			: base(info, context)
 		{
 		}
 	}
