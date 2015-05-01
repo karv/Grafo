@@ -10,9 +10,8 @@ namespace Graficas
 	/// Representa una gráfica, en el sentido abstracto.
 	/// Los nodos son del tipo <c>T</c>.
 	/// </summary>
-	public class Grafica<T> : IGrafica<T>
+	public class Grafica<T> : IGraficaPeso<T> where T : IEquatable<T>
 	{
-
 
 		IEnumerable<T> IGrafica<T>.Vecinos(T nodo)
 		{
@@ -451,9 +450,14 @@ namespace Graficas
 				return (IEnumerable<T>)Nodos;
 			}
 		}
+
+		float IGraficaPeso<T>.Peso(T desde, T hasta)
+		{
+			return this[desde, hasta];
+		}
 	}
 
-	public class GraficaNoPeso<T> : IGrafica<T>
+	public class GraficaNoPeso<T> : IGrafica<T> where T : IEquatable<T>
 	{
 		class Nodo
 		{

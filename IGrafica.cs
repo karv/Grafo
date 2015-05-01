@@ -9,7 +9,7 @@ namespace Graficas
 	/// <summary>
 	/// Promete lista de vecinos.
 	/// </summary>
-	public interface IGrafica<T>
+	public interface IGrafica<T> where T : IEquatable<T>
 	{
 		IEnumerable<T> Nodos
 		{
@@ -32,7 +32,7 @@ namespace Graficas
 
 	public static class ExtIGrafica
 	{
-		public static IEnumerable<IArista<T>> EnumerarNodos<T>(this IGrafica<T> graf)
+		public static IEnumerable<IArista<T>> EnumerarNodos<T>(this IGrafica<T> graf) where T : IEquatable<T>
 		{
 			List<Arista<T>> ret = new List<Arista<T>>();
 			foreach (T x in graf.Nodos)
