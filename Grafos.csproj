@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AF2E2C37-9F1D-4D32-AE62-8484B0A9DD50}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Grafos</RootNamespace>
@@ -41,7 +39,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\listaextras\ListaExtras.csproj">
+    <ProjectReference Include="..\ListaExtras\ListaExtras.csproj">
       <Project>{B9F315AE-47F8-4629-83FC-3B4D70087083}</Project>
       <Name>ListaExtras</Name>
     </ProjectReference>

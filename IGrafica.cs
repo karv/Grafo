@@ -9,7 +9,7 @@ namespace Graficas
 	/// <summary>
 	/// Promete lista de vecinos.
 	/// </summary>
-	public interface IGrafica<T> where T : IEquatable<T>
+	public interface IGrafica<T>
 	{
 		IEnumerable<T> Nodos
 		{
@@ -26,6 +26,7 @@ namespace Graficas
 	public interface IArista<T>
 	{
 		T desde { get; }
+
 		T hasta { get; }
 	}
 

@@ -8,11 +8,14 @@ namespace Graficas.Rutas
 	/// Promete enumerar nodos en una ruta.
 	/// </summary>
 	/// <typeparam name="T">Tipo de nodos</typeparam>
-	public interface IRuta<T> : IEnumerable<T> where T : IEquatable<T>
+	public interface IRuta<T> : IEnumerable<T>
 	{
 		T nodoInicial { get; }
+
 		T nodoFinal { get; }
+
 		IGrafica<T> getGrafica();
+
 		/// <summary>
 		/// Devuelve en número de nodos en la ruta
 		/// </summary>
@@ -47,6 +50,7 @@ namespace Graficas.Rutas
 			}
 			return ret;
 		}
+
 		/// <summary>
 		/// Devuelve la longitud de una ruta.
 		/// </summary>
@@ -74,7 +78,8 @@ namespace Graficas.Rutas
 				}
 				return ret;
 			}
-			else return ruta.numPasos - 1;	// Devuelve el número de pasos si la gráfica no es de peso.
+			else
+				return ruta.numPasos - 1;	// Devuelve el número de pasos si la gráfica no es de peso.
 		}
 
 		/// <summary>
@@ -90,7 +95,8 @@ namespace Graficas.Rutas
 		public static Ruta<T> MejorRuta<T>(this IGrafica<T> graf, T origen, T destino, List<T> nodosIgnorar = null) where T : IEquatable<T>
 		{
 			Ruta<T> ret = new Ruta<T>(graf);
-			if (nodosIgnorar == null) nodosIgnorar = new List<T>();
+			if (nodosIgnorar == null)
+				nodosIgnorar = new List<T>();
 			ret.Paso.Add(origen);
 
 			if (origen.Equals(destino))
@@ -108,7 +114,8 @@ namespace Graficas.Rutas
 							mejorTemporal = rutaIterador;
 					}
 				}
-				if (mejorTemporal == null) return null;
+				if (mejorTemporal == null)
+					return null;
 				foreach (T x in mejorTemporal.Paso)
 				{
 					ret.Paso.Add(x);

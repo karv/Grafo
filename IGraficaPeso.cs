@@ -9,7 +9,7 @@ namespace Graficas
 	/// Promete la habilidad de decidir el peso de cada arista en una gráfica.
 	/// </summary>
 	/// <typeparam name="T">Tipo de nodos.</typeparam>
-	interface IGraficaPeso<T> : IGrafica<T> where T : IEquatable<T>
+	interface IGraficaPeso<T> : IGrafica<T>
 	{
 		/// <summary>
 		/// El peso de una arista.
