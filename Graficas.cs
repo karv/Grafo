@@ -4,15 +4,41 @@ using ListasExtra;
 
 namespace Graficas
 {
+
+
 	/// <summary>
 	/// Representa una gráfica, en el sentido abstracto.
-	/// Los nodos serán del tipo <c>T</c>.
+	/// Los nodos son del tipo <c>T</c>.
 	/// </summary>
-	public class Grafica<T>
+	public class Grafica<T> : IGraficaPeso<T> where T : IEquatable<T>
 	{
+
+		IEnumerable<T> IGrafica<T>.Vecinos(T nodo)
+		{
+			return Vecino(nodo).ToArray();
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.Grafica`1"/> class.
+		/// </summary>
 		public Grafica()
 		{
 			Vecinos.Nulo = float.PositiveInfinity;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.Grafica`1"/> class.
+		/// Crea una gráfica al azar
+		/// </summary>
+		/// <param name="Nods">Nodos de la gráfica</param>
+		public Grafica(T[] Nods)
+			: this()
+		{
+			Random r = new Random();
+			foreach (var x in Nods)
+			{
+				AgregaVerticeAzar(x, r);
+			}
 		}
 
 		public ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>>();
@@ -44,7 +70,7 @@ namespace Graficas
 		public List<T> Vecino(T x)
 		{
 			List<T> ret = new List<T>();
-			T[] Nods = Nodos;
+			IEnumerable<T> Nods = Nodos;
 			foreach (var y in Nods)
 			{
 				if (!float.IsPositiveInfinity(this[x, y]))
@@ -61,7 +87,7 @@ namespace Graficas
 		public List<T> AntiVecino(T x)
 		{
 			List<T> ret = new List<T>();
-			T[] Nods = Nodos;
+			IEnumerable<T> Nods = Nodos;
 			foreach (var y in Nods)
 			{
 				if (!float.IsPositiveInfinity(this[y, x]))
@@ -102,8 +128,7 @@ namespace Graficas
 					Grafica<T>.Ruta Obj = (Grafica<T>.Ruta)obj;
 					return this == Obj;
 				}
-				else
-					return false;
+				else return false;
 			}
 
 			public override int GetHashCode()
@@ -135,6 +160,7 @@ namespace Graficas
 				return ret.ToArray();
 			}
 		}
+
 		/*
 		/// <summary>
 		/// Agrega un nodo al árbol.
@@ -147,13 +173,14 @@ namespace Graficas
 			return ret;
 		}
 		 * */
+
 		/// <summary>
 		/// Devuelve o establece el peso de la arista que une dos vértices.
 		/// </summary>
 		/// <param name="x">Vértice origen.</param>
 		/// <param name="y">Vértice destino.</param>
 		/// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
-		public float this [T x, T y]
+		public float this[T x, T y]
 		{
 			get
 			{
@@ -201,7 +228,7 @@ namespace Graficas
 		/// <param name="Ignorar">Lista de nodos a evitar.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public Ruta CaminoOptimo(T x, T y, List<T> Ignorar)
+		public Ruta CaminoÓptimo(T x, T y, List<T> Ignorar)
 		{
 			Ruta ret = new Ruta();
 			Ruta RutaBuscar;
@@ -222,7 +249,7 @@ namespace Graficas
 					Ignorar.CopyTo(tmp);
 					Ignora2 = new List<T>(tmp);
 
-					RutaBuscar = CaminoOptimo(x, n, Ignora2);
+					RutaBuscar = CaminoÓptimo(x, n, Ignora2);
 					RutaBuscar.Paso.Add(y);
 
 					if (ret.Paso.Count > 0 && Longitud(ret) > Longitud(RutaBuscar)) ret = RutaBuscar;
@@ -238,9 +265,9 @@ namespace Graficas
 		/// <param name="y">Nodo final.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public Ruta CaminoOptimo(T x, T y)
+		public Ruta CaminoÓptimo(T x, T y)
 		{
-			return CaminoOptimo(x, y, new List<T>());
+			return CaminoÓptimo(x, y, new List<T>());
 		}
 
 		/// <summary>
@@ -307,7 +334,7 @@ namespace Graficas
 			}
 
 			// Seleccionar un vértice
-			T v = SeleccionAzar(Prob, r);
+			T v = SelecciónAzar(Prob, r);
 
 			// Pues entonces hay que agregar arista de x a P[i];
 			double p = r.NextDouble() + 0.5d;
@@ -320,7 +347,7 @@ namespace Graficas
 		/// </summary>
 		/// <param name="Prob">La función de probabilidad. ¡Debe estar normalizada!</param>
 		/// <returns></returns>
-		T SeleccionAzar(ListaPeso<T> Prob, Random r)
+		T SelecciónAzar(ListaPeso<T> Prob, Random r)
 		{
 			double q = r.NextDouble();
 			foreach (var x in Prob.Keys)
@@ -416,6 +443,164 @@ namespace Graficas
 				return null;
 			}
 		}
+
+		IEnumerable<T> IGrafica<T>.Nodos
+		{
+			get
+			{
+				return (IEnumerable<T>)Nodos;
+			}
+		}
+
+		float IGraficaPeso<T>.Peso(T desde, T hasta)
+		{
+			return this[desde, hasta];
+		}
 	}
 
+	public class GraficaNoPeso<T> : IGrafica<T> where T : IEquatable<T>
+	{
+		class Nodo
+		{
+			public T obj;
+			public List<T> Vecinos = new List<T>();
+
+			public Nodo(T nod)
+			{
+				obj = nod;
+			}
+		}
+		/// <summary>
+		/// Devuelve la lista de nodos.
+		/// </summary>
+		/// <returns>The nodos.</returns>
+		public T[] getNodos()
+		{
+			int num = nodos.Count;
+			T[] ret = new T[num];
+			for (int i = 0; i < num; i++)
+			{
+				ret[i] = nodos[i].obj;
+			}
+			return ret;
+		}
+
+		List<Nodo> nodos = new List<Nodo>();
+		IEnumerable<T> IGrafica<T>.Nodos
+		{
+			get
+			{
+				return getNodos();
+			}
+		}
+		/// <summary>
+		/// Devuelve la lista de vecinos de un nodo.
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
+		public IEnumerable<T> Vecinos(T nodo)
+		{
+			return nodos.Find(x => x.Equals(nodo)).Vecinos.ToArray();
+		}
+
+		/// <summary>
+		/// Devuelve un arreglo con los vecinos de un nodo específico.
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
+		public T[] this[T nodo]
+		{
+			get
+			{
+				return nodos.Find(x => x.obj.Equals(nodo)).Vecinos.ToArray();
+			}
+		}
+
+		public void AgregaNodo(T nodo)
+		{
+			// Resiva si existe
+			if (nodos.Exists(x => x.obj.Equals(nodo)))
+				throw new Exception("Nodo ya existente.");
+			nodos.Add(new Nodo(nodo));
+		}
+
+		/// <summary>
+		/// Devuelve el nodo que le corresponde a un objeto tipo T.
+		/// </summary>
+		/// <returns>The nodo.</returns>
+		/// <param name="nod">Nod.</param>
+		Nodo getNodo(T nod)
+		{
+			return nodos.Find(x => x.obj.Equals(nod));
+		}
+
+		/// <summary>
+		/// Agrega un vértice dado su origen y final.
+		/// </summary>
+		/// <param name="desde">Origen.</param>
+		/// <param name="hasta">Destino.</param>
+		public void AgregaVertice(T desde, T hasta)
+		{
+			getNodo(desde).Vecinos.Add(hasta);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
+		/// </summary>
+		/// <param name="nods">Nodos de la gráfica.</param>
+		public GraficaNoPeso(T[] nods)
+			: this()
+		{
+			foreach (var x in nods)
+			{
+				AgregaNodo(x);
+			}
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
+		/// </summary>
+		public GraficaNoPeso()
+		{
+		}
+	}
+
+
+	[Serializable]
+	public class NodoInexistenteException : Exception
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
+		/// </summary>
+		public NodoInexistenteException()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
+		/// </summary>
+		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
+		public NodoInexistenteException(string message)
+			: base(message)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
+		/// </summary>
+		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
+		/// <param name="inner">The exception that is the cause of the current exception. </param>
+		public NodoInexistenteException(string message, Exception inner)
+			: base(message, inner)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
+		/// </summary>
+		/// <param name="context">The contextual information about the source or destination.</param>
+		/// <param name="info">The object that holds the serialized object data.</param>
+		protected NodoInexistenteException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			: base(info, context)
+		{
+		}
+	}
 }
