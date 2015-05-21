@@ -6,29 +6,40 @@ namespace Graficas
 {
 	/// <summary>
 	/// Representa una gráfica, en el sentido abstracto.
-	/// Los nodos serán del tipo <c>T</c>.
+	/// Los nodos son del tipo <c>T</c>.
 	/// </summary>
-	public class Grafica<T>
+	public class Grafica<T> : IGraficaPeso<T> where T : IEquatable<T>
 	{
+
+		IEnumerable<T> IGrafica<T>.Vecinos(T nodo)
+		{
+			return Vecino(nodo).ToArray();
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.Grafica`1"/> class.
+		/// </summary>
 		public Grafica()
 		{
 			Vecinos.Nulo = float.PositiveInfinity;
 		}
-		public ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>>();
 
 		/// <summary>
-		/// Devuelve la longitud de la ruta.
+		/// Initializes a new instance of the <see cref="Graficas.Grafica`1"/> class.
+		/// Crea una gráfica al azar
 		/// </summary>
-		public float Longitud(Ruta R)
+		/// <param name="Nods">Nodos de la gráfica</param>
+		public Grafica(T[] Nods)
+			: this()
 		{
-			float ret = 0f;
-			for (int i = 0; i < R.Paso.Count - 1; i++)
+			Random r = new Random();
+			foreach (var x in Nods)
 			{
-				ret += this[R.Paso[i], R.Paso[i + 1]];
-
+				AgregaVerticeAzar(x, r);
 			}
-			return ret;
 		}
+
+		public ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>>();
 
 		/// <summary>
 		/// Devuelve o establece si la gráfica es bidireccional.
@@ -43,10 +54,11 @@ namespace Graficas
 		public List<T> Vecino(T x)
 		{
 			List<T> ret = new List<T>();
-			T[] Nods = Nodos;
+			IEnumerable<T> Nods = Nodos;
 			foreach (var y in Nods)
 			{
-				if (!float.IsPositiveInfinity(this[x, y])) ret.Add(y);
+				if (!float.IsPositiveInfinity(this[x, y]))
+					ret.Add(y);
 			}
 			return ret;
 		}
@@ -59,52 +71,15 @@ namespace Graficas
 		public List<T> AntiVecino(T x)
 		{
 			List<T> ret = new List<T>();
-			T[] Nods = Nodos;
+			IEnumerable<T> Nods = Nodos;
 			foreach (var y in Nods)
 			{
-				if (!float.IsPositiveInfinity(this[y, x])) ret.Add(y);
+				if (!float.IsPositiveInfinity(this[y, x]))
+					ret.Add(y);
 			}
 			return ret;
 		}
 
-		/// <summary>
-		/// Representa una ruta en un árbol.
-		/// </summary>
-		public class Ruta
-		{
-			public List<T> Paso;
-
-			public static bool operator ==(Ruta left, Ruta right)
-			{
-				if (left.Paso.Count != right.Paso.Count) return false;
-
-				for (int i = 0; i < left.Paso.Count; i++)
-				{
-					if (!left.Paso[i].Equals(right.Paso[i])) return false;
-				}
-				return true;
-			}
-
-			public static bool operator !=(Ruta left, Ruta right)
-			{
-				return !(left == right);
-			}
-
-			public override bool Equals(object obj)
-			{
-				if (obj.GetType() is Grafica<T>.Ruta)
-				{
-					Grafica<T>.Ruta Obj = (Grafica<T>.Ruta)obj;
-					return this == Obj;
-				}
-				else return false;
-			}
-
-			public override int GetHashCode()
-			{
-				return base.GetHashCode();
-			}
-		}
 		/// <summary>
 		/// Devuelve un clon de la lista de nodos.
 		/// </summary>
@@ -129,26 +104,13 @@ namespace Graficas
 			}
 		}
 
-		/*
-		/// <summary>
-		/// Agrega un nodo al árbol.
-		/// </summary>
-		/// <param name="nodo"></param>
-		public Nodo AgregaNodo (T nodo)
-		{
-			Nodo ret = new Nodo(nodo);
-			_Nodos.Add(ret);
-			return ret;
-		}
-		 * */
-
 		/// <summary>
 		/// Devuelve o establece el peso de la arista que une dos vértices.
 		/// </summary>
 		/// <param name="x">Vértice origen.</param>
 		/// <param name="y">Vértice destino.</param>
 		/// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
-		public float this[T x, T y]
+		public float this [T x, T y]
 		{
 			get
 			{
@@ -157,7 +119,8 @@ namespace Graficas
 			set
 			{
 				Vecinos[new Tuple<T, T>(x, y)] = value;
-				if (EsSimetrico) Vecinos[new Tuple<T, T>(y, x)] = value;
+				if (EsSimetrico)
+					Vecinos[new Tuple<T, T>(y, x)] = value;
 			}
 		}
 
@@ -185,56 +148,6 @@ namespace Graficas
 			{
 				return Nodos.Length;
 			}
-		}
-
-		/// <summary>
-		/// Calcula la ruta óptima de un nodo a otro.
-		/// </summary>
-		/// <param name="x">Nodo inicial.</param>
-		/// <param name="y">Nodo final.</param>
-		/// <param name="Ignorar">Lista de nodos a evitar.</param>
-		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
-		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public Ruta CaminoÓptimo(T x, T y, List<T> Ignorar)
-		{
-			Ruta ret = new Ruta();
-			Ruta RutaBuscar;
-			List<T> Ignora2;
-			T[] tmp = { };
-
-
-			if (x.Equals(y))
-			{
-				ret.Paso.Add(x);
-				return ret;
-			}
-			// else
-			foreach (var n in AntiVecino(y))
-			{
-				if (!Ignorar.Contains(n))
-				{
-					Ignorar.CopyTo(tmp);
-					Ignora2 = new List<T>(tmp);
-
-					RutaBuscar = CaminoÓptimo(x, n, Ignora2);
-					RutaBuscar.Paso.Add(y);
-
-					if (ret.Paso.Count > 0 && Longitud(ret) > Longitud(RutaBuscar)) ret = RutaBuscar;
-				}
-			}
-			return ret;
-		}
-
-		/// <summary>
-		/// Calcula la ruta óptima de un nodo a otro.
-		/// </summary>
-		/// <param name="x">Nodo inicial.</param>
-		/// <param name="y">Nodo final.</param>
-		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
-		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public Ruta CaminoÓptimo(T x, T y)
-		{
-			return CaminoÓptimo(x, y, new List<T>());
 		}
 
 		/// <summary>
@@ -384,7 +297,8 @@ namespace Graficas
 			List<object> ret;
 			float Suma = 0;
 			float rn;
-			if (n == 0) return new List<object>();
+			if (n == 0)
+				return new List<object>();
 			else
 			{
 				ret = SeleccionaPeso(r, n - 1, Lista);
@@ -410,6 +324,167 @@ namespace Graficas
 				return null;
 			}
 		}
+
+		IEnumerable<T> IGrafica<T>.Nodos
+		{
+			get
+			{
+				return (IEnumerable<T>)Nodos;
+			}
+		}
+
+		float IGraficaPeso<T>.Peso(T desde, T hasta)
+		{
+			return this[desde, hasta];
+		}
 	}
 
+	public class GraficaNoPeso<T> : IGrafica<T> where T : IEquatable<T>
+	{
+		class Nodo
+		{
+			public T obj;
+			public List<T> Vecinos = new List<T>();
+
+			public Nodo(T nod)
+			{
+				obj = nod;
+			}
+		}
+
+		/// <summary>
+		/// Devuelve la lista de nodos.
+		/// </summary>
+		/// <returns>The nodos.</returns>
+		public T[] getNodos()
+		{
+			int num = nodos.Count;
+			T[] ret = new T[num];
+			for (int i = 0; i < num; i++)
+			{
+				ret[i] = nodos[i].obj;
+			}
+			return ret;
+		}
+
+		List<Nodo> nodos = new List<Nodo>();
+
+		IEnumerable<T> IGrafica<T>.Nodos
+		{
+			get
+			{
+				return getNodos();
+			}
+		}
+
+		/// <summary>
+		/// Devuelve la lista de vecinos de un nodo.
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
+		public IEnumerable<T> Vecinos(T nodo)
+		{
+			return nodos.Find(x => x.Equals(nodo)).Vecinos.ToArray();
+		}
+
+		/// <summary>
+		/// Devuelve un arreglo con los vecinos de un nodo específico.
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
+		public T[] this [T nodo]
+		{
+			get
+			{
+				return nodos.Find(x => x.obj.Equals(nodo)).Vecinos.ToArray();
+			}
+		}
+
+		public void AgregaNodo(T nodo)
+		{
+			// Resiva si existe
+			if (nodos.Exists(x => x.obj.Equals(nodo)))
+				throw new Exception("Nodo ya existente.");
+			nodos.Add(new Nodo(nodo));
+		}
+
+		/// <summary>
+		/// Devuelve el nodo que le corresponde a un objeto tipo T.
+		/// </summary>
+		/// <returns>The nodo.</returns>
+		/// <param name="nod">Nod.</param>
+		Nodo getNodo(T nod)
+		{
+			return nodos.Find(x => x.obj.Equals(nod));
+		}
+
+		/// <summary>
+		/// Agrega un vértice dado su origen y final.
+		/// </summary>
+		/// <param name="desde">Origen.</param>
+		/// <param name="hasta">Destino.</param>
+		public void AgregaVertice(T desde, T hasta)
+		{
+			getNodo(desde).Vecinos.Add(hasta);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
+		/// </summary>
+		/// <param name="nods">Nodos de la gráfica.</param>
+		public GraficaNoPeso(T[] nods)
+			: this()
+		{
+			foreach (var x in nods)
+			{
+				AgregaNodo(x);
+			}
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
+		/// </summary>
+		public GraficaNoPeso()
+		{
+		}
+	}
+
+
+	[Serializable]
+	public class NodoInexistenteException : Exception
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
+		/// </summary>
+		public NodoInexistenteException()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
+		/// </summary>
+		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
+		public NodoInexistenteException(string message)
+			: base(message)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
+		/// </summary>
+		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
+		/// <param name="inner">The exception that is the cause of the current exception. </param>
+		public NodoInexistenteException(string message, Exception inner)
+			: base(message, inner)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:NodoInexistenteException"/> class
+		/// </summary>
+		/// <param name="context">The contextual information about the source or destination.</param>
+		/// <param name="info">The object that holds the serialized object data.</param>
+		protected NodoInexistenteException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context)
+			: base(info, context)
+		{
+		}
+	}
 }
