@@ -43,14 +43,19 @@ namespace Graficas.Nodos
 
 		IEnumerable<T> IGrafica<T>.Vecinos(T nodo)
 		{
-			throw new NotImplementedException();
+			List<T> ret = new List<T>();
+			foreach (var x in this[nodo].getSucc)
+			{
+				ret.Add(x.getObjeto);
+			}
+			return ret;
 		}
 
 		IEnumerable<T> IGrafica<T>.Nodos
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return _dat.ConvertAll(x => x.getObjeto);
 			}
 		}
 
@@ -60,12 +65,12 @@ namespace Graficas.Nodos
 
 		public IEnumerator<IHardNodo<T>> GetEnumerator()
 		{
-			throw new NotImplementedException();
+			return _dat.GetEnumerator();
 		}
 
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
-			throw new NotImplementedException();
+			return _dat.ConvertAll(x => x.getObjeto).GetEnumerator();
 		}
 
 		#endregion
@@ -74,7 +79,7 @@ namespace Graficas.Nodos
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
-			throw new NotImplementedException();
+			return _dat.GetEnumerator();
 		}
 
 		#endregion
