@@ -170,7 +170,8 @@ namespace Graficas.Continuo
 
 			public bool Equals(ContinuoPunto other)
 			{
-				throw new NotImplementedException();
+				return (A.Equals(other.A) && B.Equals(other.B) && loc == other.loc) ||
+				(A.Equals(other.B) && B.Equals(other.A) && loc == other.aloc);
 			}
 
 			#endregion
@@ -179,7 +180,7 @@ namespace Graficas.Continuo
 
 			void IDisposable.Dispose()
 			{
-				throw new NotImplementedException();
+				_universo.Puntos.Remove(this);
 			}
 
 			#endregion
