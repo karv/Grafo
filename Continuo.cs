@@ -121,6 +121,10 @@ namespace Graficas.Continuo
 			/// <param name="p2">El otro extramo del intervalo.</param>
 			public bool enIntervaloInmediato(T p1, T p2)
 			{
+				if (B == null)
+				{
+					return A.Equals(p1) || A.Equals(p2);
+				}
 				return (A.Equals(p1) && B.Equals(p2)) || (A.Equals(p2) && B.Equals(p1));
 			}
 
@@ -188,8 +192,8 @@ namespace Graficas.Continuo
 			#endregion
 		}
 
-		readonly IGraficaPeso<T> _grafica;
-		readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto>();
+		public readonly IGraficaPeso<T> _grafica;
+		public readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto>();
 
 		public Continuo(IGraficaPeso<T> grafica)
 		{
