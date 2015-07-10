@@ -170,6 +170,8 @@ namespace Graficas.Continuo
 
 			public bool Equals(ContinuoPunto other)
 			{
+				if (B == null)
+					return (A.Equals(other.A) && other.loc == 0);
 				return (A.Equals(other.A) && B.Equals(other.B) && loc == other.loc) ||
 				(A.Equals(other.B) && B.Equals(other.A) && loc == other.aloc);
 			}
