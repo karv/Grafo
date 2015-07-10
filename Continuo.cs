@@ -35,13 +35,14 @@ namespace Graficas.Continuo
 		/// </summary>
 		public class ContinuoPunto : IEquatable<ContinuoPunto>, IDisposable
 		{
-			public ContinuoPunto(Continuo<T> universo, T A)
+			public ContinuoPunto(Continuo<T> universo, T A) : this(universo)
+			{
+				_origen = A;
+			}
+
+			public ContinuoPunto(Continuo<T> universo)
 			{
 				_universo = universo;
-				_origen = A;
-				_destino = default(T);
-				_loc = 0;
-
 				_universo.Puntos.Add(this);
 			}
 
@@ -107,7 +108,7 @@ namespace Graficas.Continuo
 				return loc == 0;
 			}
 
-			public bool enDestino()
+			bool enDestino()
 			{
 				return aloc == 0;
 			}
