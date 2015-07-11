@@ -35,6 +35,8 @@ namespace Graficas.Continuo
 		/// </summary>
 		public class ContinuoPunto : IEquatable<ContinuoPunto>, IDisposable
 		{
+			#region Ctor
+
 			public ContinuoPunto(Continuo<T> universo, T A) : this(universo)
 			{
 				_origen = A;
@@ -46,9 +48,16 @@ namespace Graficas.Continuo
 				_universo.Puntos.Add(this);
 			}
 
-			readonly Continuo<T> _universo;
+			#endregion
 
-
+			public override string ToString()
+			{
+				if (this.enOrigen())
+					return A.ToString();
+				else
+					return string.Format("[{0}, {1}]@{2}", A, B, loc);
+				return string.Format("[ContinuoPunto: A={0}, B={1}, loc={2}, aloc={3}]", A, B, loc, aloc);
+			}
 
 			#region Posición
 
@@ -103,6 +112,10 @@ namespace Graficas.Continuo
 
 			#endregion
 
+			#region Topología
+
+			readonly Continuo<T> _universo;
+
 			public bool enOrigen()
 			{
 				return loc == 0;
@@ -154,6 +167,8 @@ namespace Graficas.Continuo
 					return _universo[A, B];
 				}
 			}
+
+			#endregion
 
 			#region Conversores
 
