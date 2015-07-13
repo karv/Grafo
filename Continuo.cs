@@ -56,7 +56,6 @@ namespace Graficas.Continuo
 					return A.ToString();
 				else
 					return string.Format("[{0}, {1}]@{2}", A, B, loc);
-				return string.Format("[ContinuoPunto: A={0}, B={1}, loc={2}, aloc={3}]", A, B, loc, aloc);
 			}
 
 			#region Posición
