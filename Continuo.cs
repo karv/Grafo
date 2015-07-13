@@ -35,6 +35,18 @@ namespace Graficas.Continuo
 		/// </summary>
 		public class ContinuoPunto : IEquatable<ContinuoPunto>, IDisposable
 		{
+			#region General
+
+			public override string ToString()
+			{
+				if (this.enOrigen())
+					return A.ToString();
+				else
+					return string.Format("[{0}, {1}]@{2}", A, B, loc);
+			}
+
+			#endregion
+
 			#region Ctor
 
 			public ContinuoPunto(Continuo<T> universo, T A) : this(universo)
@@ -49,14 +61,6 @@ namespace Graficas.Continuo
 			}
 
 			#endregion
-
-			public override string ToString()
-			{
-				if (this.enOrigen())
-					return A.ToString();
-				else
-					return string.Format("[{0}, {1}]@{2}", A, B, loc);
-			}
 
 			#region Posición
 
