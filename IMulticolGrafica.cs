@@ -14,6 +14,10 @@ namespace Graficas
 		}
 
 		ICollection<T> Vecinos(T nodo, V color);
+
+		void AgregaColor(V color);
+
+		IGrafica<T> GraficaColor(V color);
 	}
 }
 
