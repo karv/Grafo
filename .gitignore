@@ -1,2 +1,7 @@
 bin/
 obj/
+/Grafos.sln
+/Grafos.userprefs
+/.gitmodules
+/GrafosTest/
+/listaextras/
