@@ -19,7 +19,7 @@ namespace Graficas
 		{
 		}
 
-	
+
 
 		#region IMulticolGrafica implementation
 

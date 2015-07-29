@@ -37,10 +37,13 @@
     <Compile Include="IGraficaPeso.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Graficas.cs" />
-    <Compile Include="Rutas.cs" />
     <Compile Include="Continuo.cs" />
     <Compile Include="IMulticolGrafica.cs" />
     <Compile Include="MulticolGrafica.cs" />
+    <Compile Include="Paso.cs" />
+    <Compile Include="IPaso.cs" />
+    <Compile Include="Ruta.cs" />
+    <Compile Include="IRuta.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
