@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ListasExtra;
+using Graficas.Rutas;
 
 namespace Graficas
 {
@@ -42,20 +43,6 @@ namespace Graficas
 		}
 
 		/// <summary>
-		/// Devuelve la longitud de la ruta.
-		/// </summary>
-		public float Longitud(Ruta R)
-		{
-			float ret = 0f;
-			for (int i = 0; i < R.Paso.Count - 1; i++)
-			{
-				ret += this[R.Paso[i], R.Paso[i + 1]];
-
-			}
-			return ret;
-		}
-
-		/// <summary>
 		/// Devuelve o establece si la gráfica es bidireccional.
 		/// </summary>
 		public bool EsSimetrico = false;
@@ -94,12 +81,72 @@ namespace Graficas
 			return ret;
 		}
 
+		/*
 		/// <summary>
 		/// Representa una ruta en un árbol.
 		/// </summary>
-		public class Ruta
+		public class Ruta: IRuta<T>
 		{
 			public List<T> Paso;
+
+			#region IRuta implementation
+
+			public IRuta<T> Reversa()
+			{
+				throw new NotImplementedException();
+			}
+
+			public T NodoInicial
+			{
+				get
+				{
+					return Paso[0];
+				}
+			}
+
+			public T NodoFinal
+			{
+				get
+				{
+					return Paso[Paso.Count - 1];
+				}
+			}
+
+			public float Longitud
+			{
+				get
+				{
+					throw new NotImplementedException();
+				}
+			}
+
+			public int NumPasos
+			{
+				get
+				{
+					return Paso.Count;
+				}
+			}
+
+			#endregion
+
+			#region IEnumerable implementation
+
+			public IEnumerator<T> GetEnumerator()
+			{
+				throw new NotImplementedException();
+			}
+
+			#endregion
+
+			#region IEnumerable implementation
+
+			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			{
+				throw new NotImplementedException();
+			}
+
+			#endregion
 
 			public static bool operator ==(Ruta left, Ruta right)
 			{
@@ -136,6 +183,7 @@ namespace Graficas
 			}
 		}
 
+*/
 		/// <summary>
 		/// Devuelve un clon de la lista de nodos.
 		/// </summary>
@@ -219,6 +267,20 @@ namespace Graficas
 			}
 		}
 
+		public Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq)
+		{
+			throw new NotImplementedException();
+		}
+
+		#region IEquatable implementation
+
+		public bool Equals(T other)
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion
+
 		/// <summary>
 		/// Calcula la ruta óptima de un nodo a otro.
 		/// </summary>
@@ -227,17 +289,18 @@ namespace Graficas
 		/// <param name="Ignorar">Lista de nodos a evitar.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public Ruta CaminoÓptimo(T x, T y, List<T> Ignorar)
+		public Graficas.Rutas.IRuta<T> CaminoÓptimo(T x, T y, List<T> Ignorar)
 		{
-			Ruta ret = new Ruta();
-			Ruta RutaBuscar;
+			//List<T> retLista = new List<T>();
+			IRuta<T> ret = new Ruta<T>();
+			IRuta<T> RutaBuscar;
 			List<T> Ignora2;
 			T[] tmp = { };
 
 
 			if (x.Equals(y))
 			{
-				ret.Paso.Add(x);
+				ConcatRuta(ret, x);
 				return ret;
 			}
 			// else
@@ -249,13 +312,24 @@ namespace Graficas
 					Ignora2 = new List<T>(tmp);
 
 					RutaBuscar = CaminoÓptimo(x, n, Ignora2);
-					RutaBuscar.Paso.Add(y);
+					ConcatRuta(RutaBuscar, y);
+					//RutaBuscar.Concat(new Paso<T> ()  y);
 
-					if (ret.Paso.Count > 0 && Longitud(ret) > Longitud(RutaBuscar))
+					if (ret.NumPasos > 0 && ret.Longitud > RutaBuscar.Longitud)
 						ret = RutaBuscar;
 				}
 			}
 			return ret;
+		}
+
+		/// <summary>
+		/// Concatena una ruta y un nodo
+		/// </summary>
+		/// <param name="ruta">Ruta.</param>
+		/// <param name="nodo">Nodo.</param>
+		public void ConcatRuta(IRuta<T> ruta, T nodo)
+		{
+			ruta.Concat(new Paso<T>(ruta.NodoFinal, nodo, this[ruta.NodoFinal, nodo]));
 		}
 
 		/// <summary>
@@ -265,7 +339,7 @@ namespace Graficas
 		/// <param name="y">Nodo final.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public Ruta CaminoÓptimo(T x, T y)
+		public IRuta<T> CaminoÓptimo(T x, T y)
 		{
 			return CaminoÓptimo(x, y, new List<T>());
 		}
@@ -565,6 +639,12 @@ namespace Graficas
 		public GraficaNoPeso()
 		{
 		}
+
+		public IRuta<T> toRuta(IEnumerable<T> seq)
+		{
+			throw new NotImplementedException();
+		}
+
 	}
 
 

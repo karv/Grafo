@@ -17,6 +17,8 @@ namespace Graficas
 		}
 
 		ICollection<T> Vecinos(T nodo);
+
+		Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq);
 	}
 
 	/// <summary>

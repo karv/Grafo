@@ -14,6 +14,10 @@ namespace Graficas.Rutas
 		int NumPasos { get; }
 
 		IRuta<T> Reversa();
+
+		void Concat(IPaso<T> paso);
+
+		void Concat(IRuta<T> ruta);
 	}
 }
 

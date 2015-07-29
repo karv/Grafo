@@ -42,6 +42,19 @@ namespace Graficas.Rutas
 
 		#region IMultiRuta implementation
 
+		public void Concat(IPaso<T> paso)
+		{
+			if (!NodoFinal.Equals(paso.Origen))
+				throw new Exception("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
+
+			_paso.Add(paso);
+		}
+
+		public void Concat(IRuta<T> ruta)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IRuta<T> Reversa()
 		{
 			Ruta<T> ret = new Ruta<T>();
