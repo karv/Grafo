@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Graficas
+namespace Graficas.Rutas
 {
 	public interface IPaso<T>
 	{
