@@ -7,6 +7,8 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Grafos</RootNamespace>
     <AssemblyName>Grafos</AssemblyName>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,10 +39,12 @@
     <Compile Include="Graficas.cs" />
     <Compile Include="Rutas.cs" />
     <Compile Include="Continuo.cs" />
+    <Compile Include="IMulticolGrafica.cs" />
+    <Compile Include="MulticolGrafica.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <ProjectReference Include="..\ListaExtras\ListaExtras.csproj">
+    <ProjectReference Include="listaextras\ListaExtras.csproj">
       <Project>{B9F315AE-47F8-4629-83FC-3B4D70087083}</Project>
       <Name>ListaExtras</Name>
     </ProjectReference>

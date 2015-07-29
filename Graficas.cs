@@ -11,7 +11,7 @@ namespace Graficas
 	public class Grafica<T> : IGraficaPeso<T> where T : IEquatable<T>
 	{
 
-		IEnumerable<T> IGrafica<T>.Vecinos(T nodo)
+		ICollection<T> IGrafica<T>.Vecinos(T nodo)
 		{
 			return Vecino(nodo).ToArray();
 		}
@@ -445,11 +445,11 @@ namespace Graficas
 			}
 		}
 
-		IEnumerable<T> IGrafica<T>.Nodos
+		ICollection<T> IGrafica<T>.Nodos
 		{
 			get
 			{
-				return (IEnumerable<T>)Nodos;
+				return Nodos;
 			}
 		}
 
@@ -489,7 +489,7 @@ namespace Graficas
 
 		List<Nodo> nodos = new List<Nodo>();
 
-		IEnumerable<T> IGrafica<T>.Nodos
+		ICollection<T> IGrafica<T>.Nodos
 		{
 			get
 			{
@@ -501,7 +501,7 @@ namespace Graficas
 		/// Devuelve la lista de vecinos de un nodo.
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public IEnumerable<T> Vecinos(T nodo)
+		public ICollection<T> Vecinos(T nodo)
 		{
 			return nodos.Find(x => x.Equals(nodo)).Vecinos.ToArray();
 		}

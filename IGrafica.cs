@@ -11,12 +11,12 @@ namespace Graficas
 	/// </summary>
 	public interface IGrafica<T>
 	{
-		IEnumerable<T> Nodos
+		ICollection<T> Nodos
 		{
 			get;
 		}
 
-		IEnumerable<T> Vecinos(T nodo);
+		ICollection<T> Vecinos(T nodo);
 	}
 
 	/// <summary>
