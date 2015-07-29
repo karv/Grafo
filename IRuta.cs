@@ -12,6 +12,8 @@ namespace Graficas.Rutas
 		float Longitud { get; }
 
 		int NumPasos { get; }
+
+		IRuta<T> Reversa();
 	}
 }
 

@@ -42,6 +42,16 @@ namespace Graficas.Rutas
 
 		#region IMultiRuta implementation
 
+		public IRuta<T> Reversa()
+		{
+			Ruta<T> ret = new Ruta<T>();
+			for (int i = _paso.Count - 1; i >= 0; i--)
+			{
+				ret._paso.Add(new Paso<T>(_paso[i].Destino, _paso[i].Origen, _paso[i].Peso));
+			}
+			return ret;
+		}
+
 		/// <summary>
 		/// Devuelve el origen de la ruta
 		/// </summary>
