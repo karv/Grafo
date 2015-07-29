@@ -322,6 +322,7 @@ namespace Graficas
 			return ret;
 		}
 
+
 		/// <summary>
 		/// Concatena una ruta y un nodo
 		/// </summary>
@@ -339,10 +340,11 @@ namespace Graficas
 		/// <param name="y">Nodo final.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public IRuta<T> CaminoÓptimo(T x, T y)
+		public IRuta<T> RutaOptima(T x, T y)
 		{
 			return CaminoÓptimo(x, y, new List<T>());
 		}
+
 
 		/// <summary>
 		/// Genera una gráfica aleatoria.
@@ -590,6 +592,11 @@ namespace Graficas
 			{
 				return nodos.Find(x => x.obj.Equals(nodo)).Vecinos.ToArray();
 			}
+		}
+
+		public IRuta<T> RutaOptima(T x, T y)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void AgregaNodo(T nodo)

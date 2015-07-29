@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Graficas.Rutas;
 
 namespace Graficas
 {
@@ -19,6 +20,8 @@ namespace Graficas
 		ICollection<T> Vecinos(T nodo);
 
 		Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq);
+
+		IRuta<T> RutaOptima(T x, T y);
 	}
 
 	/// <summary>
