@@ -30,6 +30,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="ListaExtras">
+      <HintPath>dll\ListaExtras.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arista.cs" />
@@ -47,12 +50,6 @@
     <Compile Include="LinkedPaso.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="listaextras\ListaExtras.csproj">
-      <Project>{B9F315AE-47F8-4629-83FC-3B4D70087083}</Project>
-      <Name>ListaExtras</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
@@ -64,4 +61,10 @@
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <None Include="dll\ListaExtras.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="dll\" />
+  </ItemGroup>
 </Project>
