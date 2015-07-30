@@ -8,16 +8,14 @@ namespace Graficas
 	/// </summary>
 	public interface IMulticolGrafica<T, V>: IGrafica<T>
 	{
-		ICollection<T> Nodos
-		{
-			get;
-		}
 
 		ICollection<T> Vecinos(T nodo, V color);
 
 		void AgregaColor(V color);
 
 		IGrafica<T> GraficaColor(V color);
+
+		IEnumerable<V> getColoresArista(IArista<T> aris);
 	}
 }
 

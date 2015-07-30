@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Rutas;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using Graficas.Rutas;
 
 namespace Graficas
 {
@@ -70,6 +69,22 @@ namespace Graficas
 
 
 		#region IMulticolGrafica implementation
+
+		bool IGrafica<T>.ExisteArista(IArista<T> aris)
+		{
+			return _asignación.Any(z => z.Value.ExisteArista(aris));
+		}
+
+		public IEnumerable<V> getColoresArista(IArista<T> aris)
+		{
+			List<V> ret = new List<V>();
+			foreach (var gr in _asignación)
+			{
+				if (gr.Value.ExisteArista(aris))
+					ret.Add(gr.Key);
+			}
+			return ret;
+		}
 
 		public void AgregaColor(V color)
 		{

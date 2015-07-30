@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ListasExtra;
 using Graficas.Rutas;
+using ListasExtra;
 
 namespace Graficas
 {
@@ -265,6 +265,11 @@ namespace Graficas
 			{
 				return Nodos.Length;
 			}
+		}
+
+		public bool ExisteArista(IArista<T> aris)
+		{
+			return (this[aris.desde, aris.hasta] < float.PositiveInfinity);
 		}
 
 		public Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq)
@@ -597,6 +602,13 @@ namespace Graficas
 		public IRuta<T> RutaOptima(T x, T y)
 		{
 			throw new NotImplementedException();
+		}
+
+		public bool ExisteArista(IArista<T> aris)
+		{
+			if (this.getNodo(aris.desde).Vecinos.Contains(aris.hasta))
+				return true;
+			return false;
 		}
 
 		public void AgregaNodo(T nodo)
