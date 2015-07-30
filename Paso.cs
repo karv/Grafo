@@ -5,9 +5,9 @@ namespace Graficas.Rutas
 {
 	public struct Paso<T>: IPaso<T>
 	{
-		readonly T origen;
-		readonly T destino;
-		readonly float peso;
+		public T origen;
+		public T destino;
+		public float peso;
 
 		public Paso(T origen, T destino, float peso)
 		{

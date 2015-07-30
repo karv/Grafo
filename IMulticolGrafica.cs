@@ -6,7 +6,7 @@ namespace Graficas
 	/// <summary>
 	/// Representa una gráfica de muchos 'colores'
 	/// </summary>
-	public interface IMulticolGrafica<T, V>
+	public interface IMulticolGrafica<T, V>: IGrafica<T>
 	{
 		ICollection<T> Nodos
 		{

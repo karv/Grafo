@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Graficas.Rutas;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas
 {
@@ -17,8 +20,53 @@ namespace Graficas
 
 		public MulticolGrafica()
 		{
+			
 		}
 
+		#region IGrafica
+
+		/// <summary>
+		/// Devuelve los vecinos de cualquier color de un nodo dado
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
+		public ICollection<T> Vecinos(T nodo)
+		{
+			ISet<T> ret = new HashSet<T>();
+
+			foreach (var color in _asignación.Keys)
+			{
+				ret.UnionWith(_asignación[color].Vecinos(nodo));
+			}
+			return ret;
+		}
+
+		public Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq)
+		{
+			IRuta<T> ret = new Ruta<T>();
+			T[] arr = seq.ToArray();
+			Paso<T> mejorPaso;
+			for (int i = 0; i < arr.Count() - 1; i++)
+			{
+				// Encontrar mejor paso
+				mejorPaso = new Paso<T>(arr[i], arr[i + 1], float.PositiveInfinity);
+
+				foreach (var x in _asignación)
+				{
+					if (mejorPaso.peso > 1 &&
+					    x.Value.Vecinos(arr[i]).Contains(arr[i + 1]))
+						mejorPaso.peso = 1;
+				}
+				ret.Concat(mejorPaso);
+			}
+			return ret;
+		}
+
+		public Graficas.Rutas.IRuta<T> RutaOptima(T x, T y)
+		{
+			throw new NotImplementedException();
+		}
+
+		#endregion
 
 
 		#region IMulticolGrafica implementation
