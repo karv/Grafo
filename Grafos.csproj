@@ -49,6 +49,7 @@
     <Compile Include="IRuta.cs" />
     <Compile Include="LinkedPaso.cs" />
     <Compile Include="Ruta.cs" />
+    <Compile Include="GraficaNoPeso.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

@@ -4,16 +4,38 @@ using System.Collections.Generic;
 
 namespace Graficas
 {
+	/// <summary>
+	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
+	/// </summary>
 	public class GraficaClan<T>: IGrafica<T>
 	{
-		/// <summary>
-		/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
-		/// </summary>
+		class Clan : HashSet<T>
+		{
+			
+		}
+
+		ISet<Clan> clanes = new HashSet<Clan>();
+
 		public GraficaClan()
 		{
 		}
 
 		#region IGrafica implementation
+
+		/// <summary>
+		/// Agrega una arista
+		/// </summary>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
+		public void AgregaArista(T desde, T hasta)
+		{
+			((IGrafica<T>)this).AgregaArista(new Arista<T>(desde, hasta));
+		}
+
+		void IGrafica<T>.AgregaArista(IArista<T> aris)
+		{
+			throw new NotImplementedException();
+		}
 
 		public System.Collections.Generic.ICollection<T> Vecinos(T nodo)
 		{
