@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Graficas.Rutas;
 
 namespace Graficas
 {
@@ -11,12 +12,18 @@ namespace Graficas
 	/// </summary>
 	public interface IGrafica<T>
 	{
-		IEnumerable<T> Nodos
+		ICollection<T> Nodos
 		{
 			get;
 		}
 
-		IEnumerable<T> Vecinos(T nodo);
+		bool ExisteArista(IArista<T> aris);
+
+		ICollection<T> Vecinos(T nodo);
+
+		Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq);
+
+		IRuta<T> RutaOptima(T x, T y);
 	}
 
 	/// <summary>
