@@ -24,6 +24,11 @@ namespace Graficas
 
 		#region IGrafica
 
+		public void AgregaArista(IArista<T> aris)
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// Devuelve los vecinos de cualquier color de un nodo dado
 		/// </summary>

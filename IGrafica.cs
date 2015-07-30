@@ -19,6 +19,8 @@ namespace Graficas
 
 		bool ExisteArista(IArista<T> aris);
 
+		void AgregaArista(IArista<T> aris);
+
 		ICollection<T> Vecinos(T nodo);
 
 		Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq);
