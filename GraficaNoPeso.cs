@@ -77,6 +77,14 @@ namespace Graficas
 			return false;
 		}
 
+		bool IGrafica<T>.esSimétrico
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
 		public void AgregaArista(IArista<T> aris)
 		{
 			throw new NotImplementedException();

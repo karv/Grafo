@@ -45,7 +45,27 @@ namespace Graficas
 		/// <summary>
 		/// Devuelve o establece si la gráfica es bidireccional.
 		/// </summary>
-		public bool EsSimetrico = false;
+		bool esSimetrico = false;
+
+		bool IGrafica<T>.esSimétrico
+		{
+			get
+			{
+				return esSimetrico;
+			}
+		}
+
+		public bool EsSimétrico
+		{
+			set
+			{
+				esSimetrico = value;
+			}
+			get
+			{
+				return esSimetrico;
+			}
+		}
 
 		/// <summary>
 		/// Devuelve la lista de vecinos de x (a todos los que apunta x)
@@ -236,7 +256,7 @@ namespace Graficas
 			set
 			{
 				Vecinos[new Tuple<T, T>(x, y)] = value;
-				if (EsSimetrico)
+				if (esSimetrico)
 					Vecinos[new Tuple<T, T>(y, x)] = value;
 			}
 		}

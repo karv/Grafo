@@ -45,9 +45,12 @@
     <Compile Include="MulticolGrafica.cs" />
     <Compile Include="Paso.cs" />
     <Compile Include="IPaso.cs" />
-    <Compile Include="Ruta.cs" />
+    <Compile Include="GraficaClan.cs" />
     <Compile Include="IRuta.cs" />
     <Compile Include="LinkedPaso.cs" />
+    <Compile Include="Ruta.cs" />
+    <Compile Include="GraficaNoPeso.cs" />
+    <Compile Include="ParNoOrdenado.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

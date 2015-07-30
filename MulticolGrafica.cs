@@ -70,6 +70,15 @@ namespace Graficas
 			throw new NotImplementedException();
 		}
 
+
+		bool IGrafica<T>.esSimétrico
+		{
+			get
+			{
+				return false;
+			}
+		}
+
 		#endregion
 
 
