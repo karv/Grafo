@@ -25,6 +25,14 @@ namespace Graficas
 
 		Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq);
 
+		bool esSimétrico{ get; }
+	}
+
+	/// <summary>
+	/// Provee método para encontrar ruta óptima entre puntos
+	/// </summary>
+	public interface IGraficaRutas<T> : IGrafica<T>
+	{
 		IRuta<T> RutaOptima(T x, T y);
 	}
 

@@ -8,7 +8,7 @@ namespace Graficas
 	/// <summary>
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
-	public class GraficaClan<T>: IGrafica<T>
+	public class GraficaClan<T>: IGraficaRutas<T>
 	{
 		class Clan : HashSet<T>
 		{
@@ -80,6 +80,14 @@ namespace Graficas
 
 
 		#region IGrafica implementation
+
+		bool IGrafica<T>.esSimétrico
+		{
+			get
+			{
+				return true;
+			}
+		}
 
 		/// <summary>
 		/// Agrega una arista
