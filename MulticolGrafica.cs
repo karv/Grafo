@@ -65,6 +65,11 @@ namespace Graficas
 			return ret;
 		}
 
+		void IGrafica<T>.AgregaArista(T desde, T hasta)
+		{
+			throw new NotImplementedException();
+		}
+
 		public Graficas.Rutas.IRuta<T> RutaOptima(T x, T y)
 		{
 			throw new NotImplementedException();
@@ -84,9 +89,9 @@ namespace Graficas
 
 		#region IMulticolGrafica implementation
 
-		bool IGrafica<T>.ExisteArista(IArista<T> aris)
+		bool IGrafica<T>.ExisteArista(T desde, T hasta)
 		{
-			return _asignación.Any(z => z.Value.ExisteArista(aris));
+			return _asignación.Any(z => z.Value.ExisteArista(desde, hasta));
 		}
 
 		public IEnumerable<V> getColoresArista(IArista<T> aris)
@@ -94,7 +99,7 @@ namespace Graficas
 			List<V> ret = new List<V>();
 			foreach (var gr in _asignación)
 			{
-				if (gr.Value.ExisteArista(aris))
+				if (gr.Value.ExisteArista(aris.desde, aris.hasta))
 					ret.Add(gr.Key);
 			}
 			return ret;

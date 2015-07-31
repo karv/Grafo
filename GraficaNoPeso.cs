@@ -8,6 +8,16 @@ namespace Graficas
 
 	public class GraficaNoPeso<T> : IGrafica<T> where T : IEquatable<T>
 	{
+		public bool ExisteArista(T desde, T hasta)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AgregaArista(T desde, T hasta)
+		{
+			throw new NotImplementedException();
+		}
+
 		class Nodo
 		{
 			public T obj;

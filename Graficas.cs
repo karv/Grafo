@@ -67,6 +67,16 @@ namespace Graficas
 			}
 		}
 
+		public bool ExisteArista(T desde, T hasta)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AgregaArista(T desde, T hasta)
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// Devuelve la lista de vecinos de x (a todos los que apunta x)
 		/// </summary>
@@ -261,9 +271,13 @@ namespace Graficas
 			}
 		}
 
+		/// <summary>
+		/// Agrega una arista II
+		/// </summary>
+		/// <param name="aris">Aris.</param>
 		public void AgregaArista(IArista<T> aris)
 		{
-			throw new NotImplementedException();
+			this[aris.desde, aris.hasta] = 1;
 		}
 
 		/// <summary>

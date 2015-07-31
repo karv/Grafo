@@ -81,6 +81,11 @@ namespace Graficas
 
 		#region IGrafica implementation
 
+		public bool ExisteArista(T desde, T hasta)
+		{
+			throw new NotImplementedException();
+		}
+
 		bool IGrafica<T>.esSimétrico
 		{
 			get
@@ -96,18 +101,18 @@ namespace Graficas
 		/// <param name="hasta">Hasta.</param>
 		public void AgregaArista(T desde, T hasta)
 		{
-			((IGrafica<T>)this).AgregaArista(new Arista<T>(desde, hasta));
+			((IGrafica<T>)this).AgregaArista(desde, hasta);
 		}
 
-		void IGrafica<T>.AgregaArista(IArista<T> aris)
+		void IGrafica<T>.AgregaArista(T desde, T hasta)
 		{
 			Clan NuevoClan = new Clan();
 			clanes.Add(NuevoClan);
 			Clan tempo;
-			_nodos.Add(aris.desde);
-			_nodos.Add(aris.hasta);
-			NuevoClan.Add(aris.desde);
-			NuevoClan.Add(aris.hasta);
+			_nodos.Add(desde);
+			_nodos.Add(hasta);
+			NuevoClan.Add(desde);
+			NuevoClan.Add(hasta);
 			foreach (var z in Nodos)
 			{
 				if (!NuevoClan.Contains(z))

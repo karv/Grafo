@@ -17,9 +17,9 @@ namespace Graficas
 			get;
 		}
 
-		bool ExisteArista(IArista<T> aris);
+		bool ExisteArista(T desde, T hasta);
 
-		void AgregaArista(IArista<T> aris);
+		void AgregaArista(T desde, T hasta);
 
 		ICollection<T> Vecinos(T nodo);
 
