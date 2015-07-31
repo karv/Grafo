@@ -16,18 +16,27 @@ namespace Graficas
 		/// </summary>
 		Dictionary <V, IGrafica<T>> _asignación = new Dictionary<V, IGrafica<T>>();
 
+		/// <summary>
+		/// Color default
+		/// </summary>
+		V defColor;
 
 		public MulticolGrafica()
 		{
 			
 		}
 
-		#region IGrafica
-
-		public void AgregaArista(IArista<T> aris)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.MulticolGrafica`2"/> class.
+		/// </summary>
+		/// <param name="defColor">Color default</param>
+		public MulticolGrafica(V defColor)
 		{
-			throw new NotImplementedException();
+			this.defColor = defColor;
+			AgregaColor(defColor);
 		}
+
+		#region IGrafica
 
 		/// <summary>
 		/// Devuelve los vecinos de cualquier color de un nodo dado
@@ -67,11 +76,7 @@ namespace Graficas
 
 		void IGrafica<T>.AgregaArista(T desde, T hasta)
 		{
-			throw new NotImplementedException();
-		}
 
-		public Graficas.Rutas.IRuta<T> RutaOptima(T x, T y)
-		{
 			throw new NotImplementedException();
 		}
 
@@ -120,6 +125,9 @@ namespace Graficas
 			if (_asignación.ContainsKey(color))
 				throw new ColorDuplicadoExpection("Ya existe el color " + color.ToString());
 			_asignación.Add(color, modelo);
+
+			if (defColor == null)
+				defColor = color;
 		}
 
 		public IGrafica<T> GraficaColor(V color)
