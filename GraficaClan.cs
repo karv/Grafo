@@ -83,7 +83,7 @@ namespace Graficas
 
 		public bool ExisteArista(T desde, T hasta)
 		{
-			throw new NotImplementedException();
+			return ExisteArista(new Graficas.Arista<T>(desde, hasta));
 		}
 
 		bool IGrafica<T>.esSimétrico
@@ -159,7 +159,14 @@ namespace Graficas
 
 		public Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq)
 		{
-			throw new NotImplementedException();
+			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T>();
+			List<T> lst = new List<T>(seq);
+			for (int i = 0; i < lst.Count - 1; i++)
+			{
+				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T>(lst[i], lst[i + 1], 1);
+				ret.Concat(nuevoPaso);
+			}
+			return ret;
 		}
 
 		public Graficas.Rutas.IRuta<T> RutaOptima(T x, T y)

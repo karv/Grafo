@@ -16,7 +16,7 @@ namespace Graficas.Rutas
 
 		#region IEnumerable implementation
 
-		public System.Collections.Generic.IEnumerator<T> GetEnumerator()
+		public System.Collections.Generic.IEnumerator<IPaso<T>> GetEnumerator()
 		{
 			T[] ret = new T[NumPasos + 1];
 			ret[0] = _paso[0].Origen;
@@ -26,7 +26,7 @@ namespace Graficas.Rutas
 				ret[i + 1] = _paso[i].Destino;
 			}
 
-			return ((IEnumerable<T>)ret).GetEnumerator();
+			return ((IEnumerable<IPaso<T>>)ret).GetEnumerator();
 		}
 
 		#endregion
@@ -52,7 +52,13 @@ namespace Graficas.Rutas
 
 		public void Concat(IRuta<T> ruta)
 		{
-			throw new NotImplementedException();
+			if (!NodoFinal.Equals(ruta.NodoInicial))
+				throw new Exception("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
+
+			foreach (var paso in ruta)
+			{
+				_paso.Add(paso);
+			}
 		}
 
 		public IRuta<T> Reversa()

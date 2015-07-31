@@ -8,20 +8,10 @@ namespace Graficas
 
 	public class GraficaNoPeso<T> : IGrafica<T> where T : IEquatable<T>
 	{
-		public bool ExisteArista(T desde, T hasta)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AgregaArista(T desde, T hasta)
-		{
-			throw new NotImplementedException();
-		}
-
 		class Nodo
 		{
 			public T obj;
-			public List<T> Vecinos = new List<T>();
+			public ISet<T> Vecinos = new HashSet<T>();
 
 			public Nodo(T nod)
 			{
@@ -29,28 +19,60 @@ namespace Graficas
 			}
 		}
 
-		/// <summary>
-		/// Devuelve la lista de nodos.
-		/// </summary>
-		/// <returns>The nodos.</returns>
-		public T[] getNodos()
+		#region IGrafica
+
+		public IRuta<T> toRuta(IEnumerable<T> seq)
 		{
-			int num = nodos.Count;
-			T[] ret = new T[num];
-			for (int i = 0; i < num; i++)
+			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T>();
+			List<T> lst = new List<T>(seq);
+			for (int i = 0; i < lst.Count - 1; i++)
 			{
-				ret[i] = nodos[i].obj;
+				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T>(lst[i], lst[i + 1], 1);
+				ret.Concat(nuevoPaso);
 			}
 			return ret;
 		}
 
-		List<Nodo> nodos = new List<Nodo>();
+		/// <summary>
+		/// Agrega un vértice dado su origen y final.
+		/// </summary>
+		/// <param name="desde">Origen.</param>
+		/// <param name="hasta">Destino.</param>
+		public void AgregaVertice(T desde, T hasta)
+		{
+			getNodo(desde).Vecinos.Add(hasta);
+		}
 
-		ICollection<T> IGrafica<T>.Nodos
+		/// <summary>
+		/// Revisa si existe una arista dada
+		/// </summary>
+		/// <returns><c>true</c>, if arista was existed, <c>false</c> otherwise.</returns>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
+		public bool ExisteArista(T desde, T hasta)
+		{
+			return this[desde].Contains(hasta);
+		}
+
+		/// <summary>
+		/// Agrega una arista a la gráfica
+		/// </summary>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
+		public void AgregaArista(T desde, T hasta)
+		{
+			this[desde].Add(hasta);
+		}
+
+		/// <summary>
+		/// Devuelve la lista de nodos.
+		/// </summary>
+		/// <returns>Devuelve una copia, no la colección modificable interna</returns>
+		public ICollection<T> Nodos
 		{
 			get
 			{
-				return getNodos();
+				return nodos.ConvertAll(x => x.obj);
 			}
 		}
 
@@ -60,24 +82,19 @@ namespace Graficas
 		/// <param name="nodo">Nodo.</param>
 		public ICollection<T> Vecinos(T nodo)
 		{
-			return nodos.Find(x => x.Equals(nodo)).Vecinos.ToArray();
+			return nodos.Find(x => x.Equals(nodo)).Vecinos;
 		}
 
 		/// <summary>
 		/// Devuelve un arreglo con los vecinos de un nodo específico.
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public T[] this [T nodo]
+		public ISet<T> this [T nodo]
 		{
 			get
 			{
-				return nodos.Find(x => x.obj.Equals(nodo)).Vecinos.ToArray();
+				return nodos.Find(x => x.obj.Equals(nodo)).Vecinos;
 			}
-		}
-
-		public IRuta<T> RutaOptima(T x, T y)
-		{
-			throw new NotImplementedException();
 		}
 
 		public bool ExisteArista(IArista<T> aris)
@@ -91,13 +108,13 @@ namespace Graficas
 		{
 			get
 			{
-				throw new NotImplementedException();
+				return false;
 			}
 		}
 
 		public void AgregaArista(IArista<T> aris)
 		{
-			throw new NotImplementedException();
+			getNodo(aris.desde).Vecinos.Add(aris.hasta);
 		}
 
 		public void AgregaNodo(T nodo)
@@ -107,6 +124,13 @@ namespace Graficas
 				throw new Exception("Nodo ya existente.");
 			nodos.Add(new Nodo(nodo));
 		}
+
+
+		#endregion
+
+		#region Internos
+
+		List<Nodo> nodos = new List<Nodo>();
 
 		/// <summary>
 		/// Devuelve el nodo que le corresponde a un objeto tipo T.
@@ -118,15 +142,9 @@ namespace Graficas
 			return nodos.Find(x => x.obj.Equals(nod));
 		}
 
-		/// <summary>
-		/// Agrega un vértice dado su origen y final.
-		/// </summary>
-		/// <param name="desde">Origen.</param>
-		/// <param name="hasta">Destino.</param>
-		public void AgregaVertice(T desde, T hasta)
-		{
-			getNodo(desde).Vecinos.Add(hasta);
-		}
+		#endregion
+
+		#region ctor
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
@@ -148,10 +166,7 @@ namespace Graficas
 		{
 		}
 
-		public IRuta<T> toRuta(IEnumerable<T> seq)
-		{
-			throw new NotImplementedException();
-		}
+		#endregion
 
 	}
 	

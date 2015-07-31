@@ -76,8 +76,7 @@ namespace Graficas
 
 		void IGrafica<T>.AgregaArista(T desde, T hasta)
 		{
-
-			throw new NotImplementedException();
+			_asignación[defColor].AgregaArista(desde, hasta);
 		}
 
 
