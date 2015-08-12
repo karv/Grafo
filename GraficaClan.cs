@@ -81,6 +81,11 @@ namespace Graficas
 
 		#region IGrafica implementation
 
+		public bool ExisteArista(T desde, T hasta)
+		{
+			return ExisteArista(new Graficas.Arista<T>(desde, hasta));
+		}
+
 		bool IGrafica<T>.esSimétrico
 		{
 			get
@@ -96,18 +101,18 @@ namespace Graficas
 		/// <param name="hasta">Hasta.</param>
 		public void AgregaArista(T desde, T hasta)
 		{
-			((IGrafica<T>)this).AgregaArista(new Arista<T>(desde, hasta));
+			((IGrafica<T>)this).AgregaArista(desde, hasta);
 		}
 
-		void IGrafica<T>.AgregaArista(IArista<T> aris)
+		void IGrafica<T>.AgregaArista(T desde, T hasta)
 		{
 			Clan NuevoClan = new Clan();
 			clanes.Add(NuevoClan);
 			Clan tempo;
-			_nodos.Add(aris.desde);
-			_nodos.Add(aris.hasta);
-			NuevoClan.Add(aris.desde);
-			NuevoClan.Add(aris.hasta);
+			_nodos.Add(desde);
+			_nodos.Add(hasta);
+			NuevoClan.Add(desde);
+			NuevoClan.Add(hasta);
 			foreach (var z in Nodos)
 			{
 				if (!NuevoClan.Contains(z))
@@ -154,7 +159,14 @@ namespace Graficas
 
 		public Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq)
 		{
-			throw new NotImplementedException();
+			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T>();
+			List<T> lst = new List<T>(seq);
+			for (int i = 0; i < lst.Count - 1; i++)
+			{
+				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T>(lst[i], lst[i + 1], 1);
+				ret.Concat(nuevoPaso);
+			}
+			return ret;
 		}
 
 		public Graficas.Rutas.IRuta<T> RutaOptima(T x, T y)

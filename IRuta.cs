@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Graficas.Rutas
 {
-	public interface IRuta<T>: IEnumerable<T>
+	public interface IRuta<T>: IEnumerable<IPaso<T>>
 	{
 		T NodoInicial { get; }
 

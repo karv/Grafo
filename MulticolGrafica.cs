@@ -16,18 +16,27 @@ namespace Graficas
 		/// </summary>
 		Dictionary <V, IGrafica<T>> _asignación = new Dictionary<V, IGrafica<T>>();
 
+		/// <summary>
+		/// Color default
+		/// </summary>
+		V defColor;
 
 		public MulticolGrafica()
 		{
 			
 		}
 
-		#region IGrafica
-
-		public void AgregaArista(IArista<T> aris)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.MulticolGrafica`2"/> class.
+		/// </summary>
+		/// <param name="defColor">Color default</param>
+		public MulticolGrafica(V defColor)
 		{
-			throw new NotImplementedException();
+			this.defColor = defColor;
+			AgregaColor(defColor);
 		}
+
+		#region IGrafica
 
 		/// <summary>
 		/// Devuelve los vecinos de cualquier color de un nodo dado
@@ -65,9 +74,9 @@ namespace Graficas
 			return ret;
 		}
 
-		public Graficas.Rutas.IRuta<T> RutaOptima(T x, T y)
+		void IGrafica<T>.AgregaArista(T desde, T hasta)
 		{
-			throw new NotImplementedException();
+			_asignación[defColor].AgregaArista(desde, hasta);
 		}
 
 
@@ -84,9 +93,9 @@ namespace Graficas
 
 		#region IMulticolGrafica implementation
 
-		bool IGrafica<T>.ExisteArista(IArista<T> aris)
+		bool IGrafica<T>.ExisteArista(T desde, T hasta)
 		{
-			return _asignación.Any(z => z.Value.ExisteArista(aris));
+			return _asignación.Any(z => z.Value.ExisteArista(desde, hasta));
 		}
 
 		public IEnumerable<V> getColoresArista(IArista<T> aris)
@@ -94,7 +103,7 @@ namespace Graficas
 			List<V> ret = new List<V>();
 			foreach (var gr in _asignación)
 			{
-				if (gr.Value.ExisteArista(aris))
+				if (gr.Value.ExisteArista(aris.desde, aris.hasta))
 					ret.Add(gr.Key);
 			}
 			return ret;
@@ -115,6 +124,9 @@ namespace Graficas
 			if (_asignación.ContainsKey(color))
 				throw new ColorDuplicadoExpection("Ya existe el color " + color.ToString());
 			_asignación.Add(color, modelo);
+
+			if (defColor == null)
+				defColor = color;
 		}
 
 		public IGrafica<T> GraficaColor(V color)

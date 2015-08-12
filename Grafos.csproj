@@ -51,6 +51,10 @@
     <Compile Include="Ruta.cs" />
     <Compile Include="GraficaNoPeso.cs" />
     <Compile Include="ParNoOrdenado.cs" />
+    <Compile Include="IGraficaRutas.cs" />
+    <Compile Include="IArista.cs" />
+    <Compile Include="ExtIGrafica.cs" />
+    <Compile Include="NodoInexistenteException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
