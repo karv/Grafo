@@ -117,7 +117,7 @@ namespace Graficas.Continuo
 
 			#region Topología
 
-			readonly Continuo<T> _universo;
+			protected readonly Continuo<T> _universo;
 
 			public bool enOrigen()
 			{

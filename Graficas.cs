@@ -240,7 +240,7 @@ namespace Graficas
 			//return default(T);
 		}
 
-		public bool EsSimétrico
+		public bool EsSimetrico
 		{
 			set
 			{
