@@ -12,14 +12,11 @@ namespace Graficas.Nodos
 	{
 		List<IHardNodo<T>> _dat = new List<IHardNodo<T>>();
 
-		public ConjuntoNodos() : base()
+		public ConjuntoNodos()
 		{
 			//_nodos = new List<IHardNodo<T>>();
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Graficas.Nodos.ConjuntoNodos`1"/> class.
-		/// </summary>
 		/// <param name="graf">Gráfica de dónde copiar la información.</param>
 		public ConjuntoNodos(IGrafica<T> graf) : this()
 		{
@@ -41,9 +38,9 @@ namespace Graficas.Nodos
 
 		#region IGrafica implementation
 
-		IEnumerable<T> IGrafica<T>.Vecinos(T nodo)
+		ICollection<T> IGrafica<T>.Vecinos(T nodo)
 		{
-			List<T> ret = new List<T>();
+			var ret = new List<T>();
 			foreach (var x in this[nodo].getSucc)
 			{
 				ret.Add(x.getObjeto);
@@ -51,11 +48,34 @@ namespace Graficas.Nodos
 			return ret;
 		}
 
-		IEnumerable<T> IGrafica<T>.Nodos
+		ICollection<T> IGrafica<T>.Nodos
 		{
 			get
 			{
 				return _dat.ConvertAll(x => x.getObjeto);
+			}
+		}
+
+		bool IGrafica<T>.ExisteArista(T desde, T hasta)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IGrafica<T>.AgregaArista(T desde, T hasta)
+		{
+			throw new NotImplementedException();
+		}
+
+		Graficas.Rutas.IRuta<T> IGrafica<T>.ToRuta(IEnumerable<T> seq)
+		{
+			throw new NotImplementedException();
+		}
+
+		bool IGrafica<T>.EsSimétrico
+		{
+			get
+			{
+				throw new NotImplementedException();
 			}
 		}
 
@@ -88,14 +108,7 @@ namespace Graficas.Nodos
 		{
 			get
 			{
-				try
-				{
-					return _dat.Find(x => x.getObjeto.Equals(Key));
-				}
-				finally
-				{
-					
-				}
+				return _dat.Find(x => x.getObjeto.Equals(Key));
 			}
 		}
 
@@ -107,7 +120,7 @@ namespace Graficas.Nodos
 			if (Contains(item))
 				throw new Exception("Ya se encuentra nodo.");
 
-			this._dat.Add(new HardNodo<T>(item));
+			_dat.Add(new HardNodo<T>(item));
 		}
 
 		public void Clear()
