@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas
 {
@@ -305,6 +306,12 @@ namespace Graficas
 			}
 		}
 
+
+		public IRuta<T> CaminoÓptimo(T x, T y)
+		{
+			return CaminoÓptimo(x, y, new HashSet<T>());
+		}
+
 		/// <summary>
 		/// Calcula la ruta óptima de un nodo a otro.
 		/// </summary>
@@ -319,28 +326,30 @@ namespace Graficas
 			IRuta<T> ret = new Ruta<T>();
 			IRuta<T> RutaBuscar;
 			ISet<T> Ignora2;
-			T[] tmp = { };
-
 
 			if (x.Equals(y))
 			{
 				ConcatRuta(ret, x);
 				return ret;
 			}
-			// else
+
+			Ignora2 = new HashSet<T>(Ignorar);
+			Ignora2.Add(y);
+
 			foreach (var n in AntiVecino(y))
 			{
 				if (!Ignorar.Contains(n))
 				{
-					Ignorar.CopyTo(tmp, 0);
-					Ignora2 = new HashSet<T>(tmp);
-
 					RutaBuscar = CaminoÓptimo(x, n, Ignora2);
-					ConcatRuta(RutaBuscar, y);
-					//RutaBuscar.Concat(new Paso<T> ()  y);
 
-					if (ret.NumPasos > 0 && ret.Longitud > RutaBuscar.Longitud)
-						ret = RutaBuscar;
+					if (ret.NumPasos <= 0 || ret.Longitud > RutaBuscar.Longitud)
+					{
+						if (RutaBuscar.NumPasos >= 0)
+						{
+							ConcatRuta(RutaBuscar, y);
+							ret = RutaBuscar;
+						}
+					}
 				}
 			}
 			return ret;
@@ -393,7 +402,7 @@ namespace Graficas
 		/// <param name="nodo">Nodo.</param>
 		public void ConcatRuta(IRuta<T> ruta, T nodo)
 		{
-			ruta.Concat(new Paso<T>(ruta.NodoFinal, nodo, this[ruta.NodoFinal, nodo]));
+			ruta.Concat(nodo, ruta.NumPasos >= 0 ? this[ruta.NodoFinal, nodo] : 0);
 		}
 
 

@@ -16,6 +16,11 @@ namespace Graficas.Rutas
 			this.peso = peso;
 		}
 
+		public override string ToString()
+		{
+			return string.Format("{0} --{1}--> {2}", origen, peso, destino);
+		}
+
 		#region IMultiPaso implementation
 
 		public T Origen

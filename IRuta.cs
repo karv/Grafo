@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Graficas.Rutas
 {
-	public interface IRuta<T>: IEnumerable<IPaso<T>>
+	public interface IRuta<T>
 	{
 		T NodoInicial { get; }
 
@@ -18,6 +18,11 @@ namespace Graficas.Rutas
 		void Concat(IPaso<T> paso);
 
 		void Concat(IRuta<T> ruta);
+
+		void Concat(T nodo, float peso);
+
+		IEnumerable<IPaso<T>> Pasos { get; }
+
 	}
 }
 

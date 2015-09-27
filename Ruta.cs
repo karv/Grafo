@@ -2,52 +2,76 @@
 using System.Collections.Generic;
 using System.Collections;
 using System.Threading;
+using System.IO;
 
 namespace Graficas.Rutas
 {
 	public class Ruta<T>: IRuta<T>
 	{
-		IList<IPaso<T>> _paso = new List<IPaso<T>>();
+		struct NodoPeso
+		{
+			public T Nodo;
+			public float Peso;
 
+			public NodoPeso(T nodo, float peso)
+			{
+				Nodo = nodo;
+				Peso = peso;
+			}
+		}
+
+		IList<NodoPeso> _paso = new List<NodoPeso>();
+
+		public override string ToString()
+		{
+			string ret = string.Format("[{0}]: ", NumPasos);
+			foreach (var x in _paso)
+			{
+				ret += string.Format(" {0} ", x.Nodo);
+
+			}
+			return ret;
+		}
 
 		public Ruta()
 		{
 		}
 
-		#region IEnumerable implementation
-
-		public System.Collections.Generic.IEnumerator<IPaso<T>> GetEnumerator()
-		{
-			T[] ret = new T[NumPasos + 1];
-			ret[0] = _paso[0].Origen;
-
-			for (int i = 0; i < NumPasos; i++)
-			{
-				ret[i + 1] = _paso[i].Destino;
-			}
-
-			return ((IEnumerable<IPaso<T>>)ret).GetEnumerator();
+		public IEnumerable<IPaso<T>> Pasos
+		{ 
+			get
+			{ 
+				var ret = new List<IPaso<T>>();
+				for (int i = 0; i < _paso.Count - 1; i++)
+				{
+					ret.Add(new Paso<T>(_paso[i].Nodo, _paso[i + 1].Nodo, _paso[i + 1].Peso));
+				}
+				return ret;
+			} 
 		}
-
-		#endregion
-
-		#region IEnumerable implementation
-
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return GetEnumerator();
-		}
-
-		#endregion
 
 		#region IMultiRuta implementation
 
 		public void Concat(IPaso<T> paso)
 		{
-			if (!NodoFinal.Equals(paso.Origen))
-				throw new Exception("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
-
-			_paso.Add(paso);
+			if (paso == null)
+				throw new NullReferenceException();
+			if (NumPasos == 0)
+			{
+				_paso.Add(new NodoPeso(paso.Origen, 0));
+				_paso.Add(new NodoPeso(paso.Destino, paso.Peso));
+			}
+			else
+			{
+				if (NodoFinal.Equals(paso.Origen))
+				{
+					_paso.Add(new NodoPeso(paso.Destino, paso.Peso));
+				}
+				else
+				{
+					throw new Exception("El nodo final debe coincidir con el origen de el paso para poder concatenar.");
+				}
+			}
 		}
 
 		public void Concat(IRuta<T> ruta)
@@ -55,20 +79,20 @@ namespace Graficas.Rutas
 			if (!NodoFinal.Equals(ruta.NodoInicial))
 				throw new Exception("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 
-			foreach (var paso in ruta)
+			foreach (var paso in ruta.Pasos)
 			{
-				_paso.Add(paso);
+				_paso.Add(new NodoPeso(paso.Destino, paso.Peso));
 			}
+		}
+
+		public void Concat(T nodo, float peso)
+		{
+			_paso.Add(new NodoPeso(nodo, peso));
 		}
 
 		public IRuta<T> Reversa()
 		{
-			Ruta<T> ret = new Ruta<T>();
-			for (int i = _paso.Count - 1; i >= 0; i--)
-			{
-				ret._paso.Add(new Paso<T>(_paso[i].Destino, _paso[i].Origen, _paso[i].Peso));
-			}
-			return ret;
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -79,7 +103,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return _paso[0].Origen;
+				return _paso[0].Nodo;
 			}
 		}
 
@@ -91,7 +115,9 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return _paso[NumPasos - 1].Destino;
+				if (NumPasos < 0)
+					throw new Exception("No existe el nodo final en un path vacío.");
+				return _paso[NumPasos].Nodo;
 			}
 		}
 
@@ -120,7 +146,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return _paso.Count;
+				return _paso.Count - 1;
 			}
 		}
 
