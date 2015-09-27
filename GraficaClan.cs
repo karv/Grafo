@@ -12,7 +12,7 @@ namespace Graficas
 	{
 		class Clan : HashSet<T>
 		{
-			public Clan() : base()
+			public Clan()
 			{
 			}
 
@@ -23,11 +23,7 @@ namespace Graficas
 
 		ICollection<T> _nodos = new HashSet<T>();
 
-		ISet<Clan> clanes = new HashSet<Clan>();
-
-		public GraficaClan()
-		{
-		}
+		readonly ISet<Clan> clanes = new HashSet<Clan>();
 
 		#region Interno Técnico
 
@@ -38,7 +34,7 @@ namespace Graficas
 		/// <param name="conj">Conj.</param>
 		bool EsCompleto(ISet<T> conj)
 		{
-			ISet<Graficas.Misc.ParNoOrdenado<T>> H = getPares(conj);
+			var H = GetPares(conj);
 
 			foreach (var clan in clanes)
 			{
@@ -49,7 +45,7 @@ namespace Graficas
 						H.Remove(r);
 				}
 */
-				H.ExceptWith(getPares(clan));
+				H.ExceptWith(GetPares(clan));
 			}
 			return H.Count == 0;
 		}
@@ -59,16 +55,16 @@ namespace Graficas
 		/// </summary>
 		/// <returns>The pares.</returns>
 		/// <param name="conj">Conj.</param>
-		ISet<Graficas.Misc.ParNoOrdenado<T>> getPares(ICollection<T> conj)
+		static ISet<ParNoOrdenado<T>> GetPares(ICollection<T> conj)
 		{
-			T[] arr = new T[conj.Count];
-			ISet<Graficas.Misc.ParNoOrdenado<T>> ret = new HashSet<Graficas.Misc.ParNoOrdenado<T>>(new ParNoOrdenado<T>.comparer());
+			var arr = new T[conj.Count];
+			ISet<ParNoOrdenado<T>> ret = new HashSet<ParNoOrdenado<T>>(new ParNoOrdenado<T>.comparer());
 			conj.CopyTo(arr, 0);
 			for (int i = 0; i < conj.Count; i++)
 			{
 				for (int j = i + 1; j < conj.Count; j++)
 				{
-					ret.Add(new Graficas.Misc.ParNoOrdenado<T>(arr[i], arr[j]));
+					ret.Add(new ParNoOrdenado<T>(arr[i], arr[j]));
 				}
 			}
 			return ret;
@@ -83,10 +79,10 @@ namespace Graficas
 
 		public bool ExisteArista(T desde, T hasta)
 		{
-			return ExisteArista(new Graficas.Arista<T>(desde, hasta));
+			return ExisteArista(new Arista<T>(desde, hasta));
 		}
 
-		bool IGrafica<T>.esSimétrico
+		bool IGrafica<T>.EsSimétrico
 		{
 			get
 			{
@@ -106,7 +102,7 @@ namespace Graficas
 
 		void IGrafica<T>.AgregaArista(T desde, T hasta)
 		{
-			Clan NuevoClan = new Clan();
+			var NuevoClan = new Clan();
 			clanes.Add(NuevoClan);
 			Clan tempo;
 			_nodos.Add(desde);
@@ -124,7 +120,7 @@ namespace Graficas
 				}
 			}
 			// Eliminar todos los clanes ya no maximales
-			HashSet<Clan> clone = new HashSet<Clan>(clanes);
+			var clone = new HashSet<Clan>(clanes);
 			clone.Remove(NuevoClan);
 			foreach (var c in clone)
 			{
@@ -133,9 +129,9 @@ namespace Graficas
 			}
 		}
 
-		public System.Collections.Generic.ICollection<T> Vecinos(T nodo)
+		public ICollection<T> Vecinos(T nodo)
 		{
-			HashSet<T> ret = new HashSet<T>();
+			var ret = new HashSet<T>();
 			foreach (var c in clanes)
 			{
 				if (c.Contains(nodo))
@@ -147,8 +143,8 @@ namespace Graficas
 		public bool ExisteArista(IArista<T> aris)
 		{
 			ISet<T> ar = new HashSet<T>();
-			ar.Add(aris.desde);
-			ar.Add(aris.hasta);
+			ar.Add(aris.Origen);
+			ar.Add(aris.Destino);
 			foreach (var c in clanes)
 			{
 				if (c.IsSupersetOf(ar))
@@ -157,10 +153,10 @@ namespace Graficas
 			return false;
 		}
 
-		public Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq)
+		public Graficas.Rutas.IRuta<T> ToRuta(IEnumerable<T> seq)
 		{
 			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T>();
-			List<T> lst = new List<T>(seq);
+			var lst = new List<T>(seq);
 			for (int i = 0; i < lst.Count - 1; i++)
 			{
 				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T>(lst[i], lst[i + 1], 1);
@@ -174,7 +170,7 @@ namespace Graficas
 			throw new NotImplementedException();
 		}
 
-		public System.Collections.Generic.ICollection<T> Nodos
+		public ICollection<T> Nodos
 		{
 			get
 			{

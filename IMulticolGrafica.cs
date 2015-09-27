@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Graficas
 {
@@ -15,7 +14,7 @@ namespace Graficas
 
 		IGrafica<T> GraficaColor(V color);
 
-		IEnumerable<V> getColoresArista(IArista<T> aris);
+		IEnumerable<V> ColoresArista(IArista<T> aris);
 	}
 }
 

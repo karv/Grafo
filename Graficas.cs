@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas
 {
@@ -14,23 +13,16 @@ namespace Graficas
 	{
 		#region ctor
 
-		/// <summary>
-		/// Initializes a new instance of the <see creVecinosicas.Grafica`1"/> class.
-		/// </summary>
 		public Grafica()
 		{
 			Vecinos.Nulo = float.PositiveInfinity;
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Graficas.Grafica`1"/> class.
-		/// Crea una gráfica al azar
-		/// </summary>
 		/// <param name="Nods">Nodos de la gráfica</param>
 		public Grafica(T[] Nods)
 			: this()
 		{
-			Random r = new Random();
+			var r = new Random();
 			foreach (var x in Nods)
 			{
 				AgregaVerticeAzar(x, r);
@@ -71,11 +63,11 @@ namespace Graficas
 			return Vecino(nodo);
 		}
 
-		bool IGrafica<T>.esSimétrico
+		bool IGrafica<T>.EsSimétrico
 		{
 			get
 			{
-				return esSimetrico;
+				return EsSimetrico;
 			}
 		}
 
@@ -101,7 +93,7 @@ namespace Graficas
 		{
 			get
 			{
-				HashSet<T> ret = new HashSet<T>();
+				var ret = new HashSet<T>();
 				foreach (var x in Vecinos.Keys)
 				{
 					if (!ret.Contains(x.Item1))
@@ -124,7 +116,7 @@ namespace Graficas
 		/// <param name="aris">Aris.</param>
 		public void AgregaArista(IArista<T> aris)
 		{
-			this[aris.desde, aris.hasta] = 1;
+			this[aris.Origen, aris.Destino] = 1;
 		}
 
 		/// <summary>
@@ -155,10 +147,10 @@ namespace Graficas
 
 		public bool ExisteArista(IArista<T> aris)
 		{
-			return (this[aris.desde, aris.hasta] < float.PositiveInfinity);
+			return (this[aris.Origen, aris.Destino] < float.PositiveInfinity);
 		}
 
-		public Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq)
+		public IRuta<T> ToRuta(IEnumerable<T> seq)
 		{
 			throw new NotImplementedException();
 		}
@@ -170,11 +162,6 @@ namespace Graficas
 
 		ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>>();
 
-		/// <summary>
-		/// Devuelve o establece si la gráfica es bidireccional.
-		/// </Vecinos>
-		bool esSimetrico = false;
-
 		#endregion
 
 		#region Propios
@@ -183,6 +170,7 @@ namespace Graficas
 		/// Agrega un vértice al grafo, generando aristas al azar a nodos antiguos.
 		/// </summary>
 		/// <param name="Vertice">Vertice.</param>
+		/// <param name="r">Generador aleatorio </param>
 		public void AgregaVerticeAzar(T Vertice, Random r)
 		{
 			if (NumNodos == 0)
@@ -193,7 +181,7 @@ namespace Graficas
 
 			// Genera la lista de probabilidad.
 			// Obtener los pesos
-			ListaPeso<T> Prob = new ListaPeso<T>();
+			var Prob = new ListaPeso<T>();
 			foreach (var x in Nodos)
 			{
 				foreach (var y in Vecino(x))
@@ -207,7 +195,7 @@ namespace Graficas
 			// Normalizar Prob
 			float S = Prob.SumaTotal();
 			// Clonar a Prob.keys
-			List<T> P = new List<T>(Prob.Keys);
+			var P = new List<T>(Prob.Keys);
 
 			foreach (var x in P)
 			{
@@ -227,8 +215,9 @@ namespace Graficas
 		/// Selecciona al azar un elemento.
 		/// </summary>
 		/// <param name="Prob">La función de probabilidad. ¡Debe estar normalizada!</param>
+		/// /// <param name="r">Aleatorio</param>
 		/// <returns></returns>
-		T SelecciónAzar(ListaPeso<T> Prob, Random r)
+		static T SelecciónAzar(IDictionary<T, float> Prob, Random r)
 		{
 			double q = r.NextDouble();
 			foreach (var x in Prob.Keys)
@@ -238,25 +227,14 @@ namespace Graficas
 				q -= Prob[x];
 			}
 			throw new Exception("No sé cómo llegó el algoritmo aquí D:");
-			//return default(T);
 		}
 
-		public bool EsSimetrico
-		{
-			set
-			{
-				esSimetrico = value;
-			}
-			get
-			{
-				return esSimetrico;
-			}
-		}
+		public bool EsSimetrico { get; set; }
 
+		/// <summary>
 		/// Devuelve la lista de vecinos de x (a todos los que apunta x)
 		/// </summary>
-		/// <param name="x"></param>
-		/// <returns></returns>
+		/// <param name="x">Nodo</param>
 		public ISet<T> Vecino(T x)
 		{
 			ISet<T> ret = new HashSet<T>();
@@ -301,7 +279,7 @@ namespace Graficas
 			set
 			{
 				Vecinos[new Tuple<T, T>(x, y)] = value;
-				if (esSimetrico)
+				if (EsSimetrico)
 					Vecinos[new Tuple<T, T>(y, x)] = value;//TODO hacer que essimetrico haga efecto al leer; no al escribir.
 			}
 		}
@@ -320,7 +298,7 @@ namespace Graficas
 		/// <param name="Ignorar">Lista de nodos a evitar.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		Graficas.Rutas.IRuta<T> CaminoÓptimo(T x, T y, ISet<T> Ignorar)
+		IRuta<T> CaminoÓptimo(T x, T y, ISet<T> Ignorar)
 		{
 			//List<T> retLista = new List<T>();
 			IRuta<T> ret = new Ruta<T>();
@@ -362,7 +340,7 @@ namespace Graficas
 		/// <param name="n">Número de elementos a seleccionar.</param>
 		/// <param name="Lista">Lista de dónde seleccionar la sublista.</param>
 		/// <returns>Devuelve una lista con los elementos seleccionados.</returns>
-		List<object> SeleccionaPeso(Random r, int n, ListasExtra.ListaPeso<object> Lista)
+		List<object> SeleccionaPeso(Random r, int n, ListaPeso<object> Lista)
 		{
 			List<object> ret;
 			float Suma = 0;
@@ -413,15 +391,14 @@ namespace Graficas
 		/// <summary>
 		/// Genera una gráfica aleatoria.
 		/// </summary>
-		/// <param name="Nodos">El conjunto de nodos que se usarán.</param>
-		/// <param name="r">El generador aleatorio.</param>
+		/// <param name="Nods">El conjunto de nodos que se usarán.</param>
 		/// <returns>Devuelve una gráfica aleatoria.</returns>
 		public static Grafica<T> GeneraGraficaAleatoria(List<T> Nods)
 		{
-			Random r = new Random();
+			var r = new Random();
 			if (Nods.Count < 2)
 				throw new Exception("No se puede generar una gráfica aleatoria con menos de dos elementos.");
-			Grafica<T> ret = new Grafica<T>();
+			var ret = new Grafica<T>();
 
 			T v0, v1;
 			v0 = Nods[0];

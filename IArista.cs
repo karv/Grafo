@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Graficas.Rutas;
-
 namespace Graficas
 {
 
@@ -13,9 +7,9 @@ namespace Graficas
 	/// <typeparam name="T">Tipo de nodos</typeparam>
 	public interface IArista<T>
 	{
-		T desde { get; }
+		T Origen { get; }
 
-		T hasta { get; }
+		T Destino { get; }
 	}
 
 }

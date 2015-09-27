@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Graficas.Rutas;
-using ListasExtra;
 
 namespace Graficas
 {
@@ -21,13 +20,13 @@ namespace Graficas
 
 		#region IGrafica
 
-		public IRuta<T> toRuta(IEnumerable<T> seq)
+		public IRuta<T> ToRuta(IEnumerable<T> seq)
 		{
-			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T>();
-			List<T> lst = new List<T>(seq);
+			var ret = new Ruta<T>();
+			var lst = new List<T>(seq);
 			for (int i = 0; i < lst.Count - 1; i++)
 			{
-				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T>(lst[i], lst[i + 1], 1);
+				var nuevoPaso = new Paso<T>(lst[i], lst[i + 1], 1);
 				ret.Concat(nuevoPaso);
 			}
 			return ret;
@@ -99,12 +98,10 @@ namespace Graficas
 
 		public bool ExisteArista(IArista<T> aris)
 		{
-			if (this.getNodo(aris.desde).Vecinos.Contains(aris.hasta))
-				return true;
-			return false;
+			return getNodo(aris.Origen).Vecinos.Contains(aris.Destino);
 		}
 
-		bool IGrafica<T>.esSimétrico
+		bool IGrafica<T>.EsSimétrico
 		{
 			get
 			{
@@ -114,7 +111,7 @@ namespace Graficas
 
 		public void AgregaArista(IArista<T> aris)
 		{
-			getNodo(aris.desde).Vecinos.Add(aris.hasta);
+			getNodo(aris.Origen).Vecinos.Add(aris.Destino);
 		}
 
 		public void AgregaNodo(T nodo)
@@ -130,7 +127,7 @@ namespace Graficas
 
 		#region Internos
 
-		List<Nodo> nodos = new List<Nodo>();
+		readonly List<Nodo> nodos = new List<Nodo>();
 
 		/// <summary>
 		/// Devuelve el nodo que le corresponde a un objeto tipo T.
@@ -147,7 +144,7 @@ namespace Graficas
 		#region ctor
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
+		/// Ctor
 		/// </summary>
 		/// <param name="nods">Nodos de la gráfica.</param>
 		public GraficaNoPeso(T[] nods)
@@ -159,9 +156,6 @@ namespace Graficas
 			}
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Graficas.GraficaNoPeso`1"/> class.
-		/// </summary>
 		public GraficaNoPeso()
 		{
 		}

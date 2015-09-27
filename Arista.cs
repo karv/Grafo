@@ -1,35 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Graficas
+﻿namespace Graficas
 {
 	public class Arista<T> : IArista<T>
 	{
-		T _desde;
-		T _hasta;
+		public T Origen { get; }
 
-		public T desde
-		{
-			get
-			{
-				return _desde;
-			}
-		}
+		public T Destino { get; }
 
-		public T hasta
+		public Arista(T origen, T destino)
 		{
-			get
-			{
-				return _hasta;
-			}
-		}
-
-		public Arista(T nDesde, T nHasta)
-		{
-			_desde = nDesde;
-			_hasta = nHasta;
+			Origen = origen;
+			Destino = destino;
 		}
 	}
 }

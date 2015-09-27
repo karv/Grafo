@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Graficas.Rutas;
 
 namespace Graficas
@@ -23,8 +20,8 @@ namespace Graficas
 
 		ICollection<T> Vecinos(T nodo);
 
-		Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq);
+		IRuta<T> ToRuta(IEnumerable<T> seq);
 
-		bool esSimétrico{ get; }
+		bool EsSimétrico{ get; }
 	}
 }

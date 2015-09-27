@@ -1,46 +1,30 @@
-﻿using System;
-
-namespace Graficas.Rutas
+﻿namespace Graficas.Rutas
 {
 	/// <summary>
 	/// Es un paso cuyo peso se va calculando dependiende de una gráfica
 	/// </summary>
 	public struct LinkedPaso<T>:IPaso<T>
 	{
-		T origen;
-		T destino;
-		IGraficaPeso<T> graf;
+		readonly IGraficaPeso<T> graf;
 
 		public LinkedPaso(T origen, T destino, IGraficaPeso<T> graf)
 		{
-			this.origen = origen;
-			this.destino = destino;
+			Origen = origen;
+			Destino = destino;
 			this.graf = graf;
 		}
 
 		#region IPaso implementation
 
-		public T Origen
-		{
-			get
-			{
-				return origen;
-			}
-		}
+		public T Origen { get; }
 
-		public T Destino
-		{
-			get
-			{
-				return destino;
-			}
-		}
+		public T Destino { get; }
 
 		public float Peso
 		{
 			get
 			{
-				return graf.Peso(origen, destino);
+				return graf.Peso(Origen, Destino);
 			}
 		}
 

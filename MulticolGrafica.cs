@@ -14,7 +14,7 @@ namespace Graficas
 		/// <summary>
 		/// La asignación de color -> Gráfica
 		/// </summary>
-		Dictionary <V, IGrafica<T>> _asignación = new Dictionary<V, IGrafica<T>>();
+		readonly Dictionary <V, IGrafica<T>> _asignación = new Dictionary<V, IGrafica<T>>();
 
 		/// <summary>
 		/// Color default
@@ -26,9 +26,6 @@ namespace Graficas
 			
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Graficas.MulticolGrafica`2"/> class.
-		/// </summary>
 		/// <param name="defColor">Color default</param>
 		public MulticolGrafica(V defColor)
 		{
@@ -53,7 +50,7 @@ namespace Graficas
 			return ret;
 		}
 
-		public Graficas.Rutas.IRuta<T> toRuta(IEnumerable<T> seq)
+		public IRuta<T> ToRuta(IEnumerable<T> seq)
 		{
 			IRuta<T> ret = new Ruta<T>();
 			T[] arr = seq.ToArray();
@@ -80,7 +77,7 @@ namespace Graficas
 		}
 
 
-		bool IGrafica<T>.esSimétrico
+		bool IGrafica<T>.EsSimétrico
 		{
 			get
 			{
@@ -98,12 +95,12 @@ namespace Graficas
 			return _asignación.Any(z => z.Value.ExisteArista(desde, hasta));
 		}
 
-		public IEnumerable<V> getColoresArista(IArista<T> aris)
+		public IEnumerable<V> ColoresArista(IArista<T> aris)
 		{
-			List<V> ret = new List<V>();
+			var ret = new List<V>();
 			foreach (var gr in _asignación)
 			{
-				if (gr.Value.ExisteArista(aris.desde, aris.hasta))
+				if (gr.Value.ExisteArista(aris.Origen, aris.Destino))
 					ret.Add(gr.Key);
 			}
 			return ret;
@@ -122,11 +119,8 @@ namespace Graficas
 		public void AgregaColor(V color, IGrafica<T> modelo)
 		{
 			if (_asignación.ContainsKey(color))
-				throw new ColorDuplicadoExpection("Ya existe el color " + color.ToString());
+				throw new ColorDuplicadoExpection("Ya existe el color " + color);
 			_asignación.Add(color, modelo);
-
-			if (defColor == null)
-				defColor = color;
 		}
 
 		public IGrafica<T> GraficaColor(V color)
@@ -137,12 +131,7 @@ namespace Graficas
 		public ICollection<T> Vecinos(T nodo, V color)
 		{
 			IGrafica<T> graf;
-			if (_asignación.TryGetValue(color, out graf))
-			{
-				return graf.Vecinos(nodo);
-			}
-			else
-				return new T[0];
+			return _asignación.TryGetValue(color, out graf) ? graf.Vecinos(nodo) : new T[0];
 		}
 
 		/// <summary>
@@ -153,7 +142,7 @@ namespace Graficas
 		{			
 			get
 			{
-				List<T> ret = new List<T>();
+				var ret = new List<T>();
 				foreach (var x in _asignación)
 				{
 					foreach (var nod in x.Value.Nodos)
@@ -176,35 +165,18 @@ namespace Graficas
 		[Serializable]
 		public class ColorDuplicadoExpection : Exception
 		{
-			/// <summary>
-			/// Initializes a new instance of the <see cref="T:MyException"/> class
-			/// </summary>
 			public ColorDuplicadoExpection()
 			{
 			}
 
-			/// <summary>
-			/// Initializes a new instance of the <see cref="T:MyException"/> class
-			/// </summary>
-			/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
 			public ColorDuplicadoExpection(string message) : base(message)
 			{
 			}
 
-			/// <summary>
-			/// Initializes a new instance of the <see cref="T:MyException"/> class
-			/// </summary>
-			/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
-			/// <param name="inner">The exception that is the cause of the current exception. </param>
 			public ColorDuplicadoExpection(string message, Exception inner) : base(message, inner)
 			{
 			}
 
-			/// <summary>
-			/// Initializes a new instance of the <see cref="T:MyException"/> class
-			/// </summary>
-			/// <param name="context">The contextual information about the source or destination.</param>
-			/// <param name="info">The object that holds the serialized object data.</param>
 			protected ColorDuplicadoExpection(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
 			{
 			}

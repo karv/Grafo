@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Graficas.Rutas;
 
 namespace Graficas
 {
@@ -11,7 +8,7 @@ namespace Graficas
 	{
 		public static IEnumerable<IArista<T>> EnumerarNodos<T>(this IGrafica<T> graf) where T : IEquatable<T>
 		{
-			List<Arista<T>> ret = new List<Arista<T>>();
+			var ret = new List<Arista<T>>();
 			foreach (T x in graf.Nodos)
 			{
 				foreach (T y in graf.Vecinos(x))

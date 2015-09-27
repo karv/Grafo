@@ -9,7 +9,9 @@ namespace Graficas.Misc
 		{
 			#region IEqualityComparer implementation
 
+			// Analysis disable MemberHidesStaticFromOuterClass
 			bool IEqualityComparer<ParNoOrdenado<T>>.Equals(ParNoOrdenado<T> x, ParNoOrdenado<T> y)
+			// Analysis restore MemberHidesStaticFromOuterClass
 			{
 				return x.Equals(y);
 			}

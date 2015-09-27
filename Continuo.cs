@@ -21,7 +21,6 @@
 using System;
 using System.Collections.Generic;
 using Graficas;
-using System.Linq;
 
 namespace Graficas.Continuo
 {
@@ -39,10 +38,7 @@ namespace Graficas.Continuo
 
 			public override string ToString()
 			{
-				if (this.enOrigen())
-					return A.ToString();
-				else
-					return string.Format("[{0}, {1}]@{2}", A, B, loc);
+				return enOrigen() ? A.ToString() : string.Format("[{0}, {1}]@{2}", A, B, loc);
 			}
 
 			#endregion
@@ -51,7 +47,7 @@ namespace Graficas.Continuo
 
 			public ContinuoPunto(Continuo<T> universo, T A) : this(universo)
 			{
-				_origen = A;
+				this.A = A;
 			}
 
 			public ContinuoPunto(Continuo<T> universo)
@@ -64,27 +60,17 @@ namespace Graficas.Continuo
 
 			#region Posición
 
-			T _origen;
-			T _destino;
 			float _loc;
 
 			/// <summary>
 			/// Posición A
 			/// </summary>
-			public T A
-			{
-				get { return _origen; }
-				set { _origen = value; }
-			}
+			public T A { get; set; }
 
 			/// <summary>
 			/// Posición B
 			/// </summary>
-			public T B
-			{
-				get { return _destino; }
-				set { _destino = value; }
-			}
+			public T B { get; set; }
 
 			/// <summary>
 			/// Distancia hasta A   [A --[loc]-- aquí --- B]
@@ -96,9 +82,9 @@ namespace Graficas.Continuo
 				{ 
 					_loc = value; 
 					if (_loc < 0)
-						FromGrafica(_origen);
+						FromGrafica(A);
 					if (aloc < 0)
-						FromGrafica(_destino);
+						FromGrafica(B);
 				}
 			}
 
@@ -137,7 +123,7 @@ namespace Graficas.Continuo
 			/// <param name="p2">El otro extramo del intervalo.</param>
 			public bool enIntervaloInmediato(T p1, T p2)
 			{
-				if (B == null)
+				if (enOrigen())
 				{
 					return A.Equals(p1) || A.Equals(p2);
 				}
@@ -153,11 +139,11 @@ namespace Graficas.Continuo
 				if (enOrigen())
 				{
 					T orig = A; // Posición de este punto.
-					List<ContinuoPunto> ret = new List<ContinuoPunto>();
+					var ret = new List<ContinuoPunto>();
 					// Si estoy en terreno
 					foreach (var x in _universo._grafica.Vecinos(orig))
 					{
-						foreach (var y in this._universo [orig, x])
+						foreach (var y in _universo [orig, x])
 						{
 							if (!ret.Contains(y))
 								ret.Add(y);
@@ -190,9 +176,11 @@ namespace Graficas.Continuo
 
 			#region IEquatable implementation
 
+			// Analysis disable MemberHidesStaticFromOuterClass
 			public bool Equals(ContinuoPunto other)
+			// Analysis restore MemberHidesStaticFromOuterClass
 			{
-				if (B == null)
+				if (enOrigen())
 					return (A.Equals(other.A) && other.loc == 0);
 				return (A.Equals(other.A) && B.Equals(other.B) && loc == other.loc) ||
 				(A.Equals(other.B) && B.Equals(other.A) && loc == other.aloc);

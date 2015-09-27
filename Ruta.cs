@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.Threading;
-using System.IO;
 
 namespace Graficas.Rutas
 {
@@ -20,7 +17,7 @@ namespace Graficas.Rutas
 			}
 		}
 
-		IList<NodoPeso> _paso = new List<NodoPeso>();
+		readonly IList<NodoPeso> _paso = new List<NodoPeso>();
 
 		public override string ToString()
 		{
@@ -31,10 +28,6 @@ namespace Graficas.Rutas
 
 			}
 			return ret;
-		}
-
-		public Ruta()
-		{
 		}
 
 		public IEnumerable<IPaso<T>> Pasos

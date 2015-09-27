@@ -1,7 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
-
-namespace Graficas.Rutas
+﻿namespace Graficas.Rutas
 {
 	public struct Paso<T>: IPaso<T>
 	{
