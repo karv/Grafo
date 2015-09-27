@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas
 {
