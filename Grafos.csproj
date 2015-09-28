@@ -32,30 +32,29 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="ListaExtras">
-      <HintPath>packages\ListaExtras.0.2\lib\ListaExtras.dll</HintPath>
+      <HintPath>..\ListaExtras\bin\Release\ListaExtras.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Arista.cs" />
-    <Compile Include="IGrafica.cs" />
-    <Compile Include="IGraficaPeso.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Graficas.cs" />
-    <Compile Include="Continuo.cs" />
-    <Compile Include="IMulticolGrafica.cs" />
-    <Compile Include="MulticolGrafica.cs" />
-    <Compile Include="Paso.cs" />
-    <Compile Include="IPaso.cs" />
-    <Compile Include="GraficaClan.cs" />
-    <Compile Include="IRuta.cs" />
-    <Compile Include="LinkedPaso.cs" />
-    <Compile Include="Ruta.cs" />
-    <Compile Include="GraficaNoPeso.cs" />
-    <Compile Include="ParNoOrdenado.cs" />
-    <Compile Include="IGraficaRutas.cs" />
-    <Compile Include="IArista.cs" />
-    <Compile Include="ExtIGrafica.cs" />
-    <Compile Include="NodoInexistenteException.cs" />
+    <Compile Include="Aristas\Arista.cs" />
+    <Compile Include="Aristas\IArista.cs" />
+    <Compile Include="Continuo\Continuo.cs" />
+    <Compile Include="Gráficas\GraficaClan.cs" />
+    <Compile Include="Gráficas\GraficaNoPeso.cs" />
+    <Compile Include="Gráficas\Graficas.cs" />
+    <Compile Include="Gráficas\IGrafica.cs" />
+    <Compile Include="Gráficas\IGraficaPeso.cs" />
+    <Compile Include="Gráficas\IGraficaRutas.cs" />
+    <Compile Include="Gráficas\IMulticolGrafica.cs" />
+    <Compile Include="Rutas\IPaso.cs" />
+    <Compile Include="Rutas\IRuta.cs" />
+    <Compile Include="Rutas\LinkedPaso.cs" />
+    <Compile Include="Rutas\Paso.cs" />
+    <Compile Include="Rutas\Ruta.cs" />
+    <Compile Include="Gráficas\MulticolGrafica.cs" />
+    <Compile Include="Exception\NodoInexistenteException.cs" />
+    <Compile Include="General\ParNoOrdenado.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -70,9 +69,11 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Folder Include="dll\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Aristas\" />
+    <Folder Include="Continuo\" />
+    <Folder Include="Gráficas\" />
+    <Folder Include="Rutas\" />
+    <Folder Include="Exception\" />
+    <Folder Include="General\" />
   </ItemGroup>
 </Project>
