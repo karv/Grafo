@@ -3,4 +3,5 @@ obj/
 /Grafos.sln
 /Grafos.userprefs
 GrafosTest/
+packages/
 *.nupkg
