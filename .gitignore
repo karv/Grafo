@@ -2,7 +2,5 @@ bin/
 obj/
 /Grafos.sln
 /Grafos.userprefs
-/.gitmodules
-/GrafosTest/
-/listaextras/
-/packages/
+GrafosTest/
+*.nupkg
