@@ -12,6 +12,8 @@
 		/// <param name="desde">Origen de la arista</param>
 		/// <param name="hasta">Destino de la arista</param>
 		/// <returns>Devuelve el peso (float) de la arista.</returns>
-		float Peso(T desde, T hasta);
+		float GetPeso(T desde, T hasta);
+
+		void SetPeso(T desde, T hasta, float peso);
 	}
 }

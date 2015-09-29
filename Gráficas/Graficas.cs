@@ -33,9 +33,14 @@ namespace Graficas
 
 		#region IGrafica
 
-		float IGraficaPeso<T>.Peso(T desde, T hasta)
+		float IGraficaPeso<T>.GetPeso(T desde, T hasta)
 		{
 			return this[desde, hasta];
+		}
+
+		void IGraficaPeso<T>.SetPeso(T desde, T hasta, float peso)
+		{
+			this[desde, hasta] = peso;
 		}
 
 		ICollection<T> IGrafica<T>.Nodos
@@ -120,17 +125,15 @@ namespace Graficas
 		}
 
 		/// <summary>
-		/// Agrega un vértice entre dos nodos existentes a la gráfica.
+		/// Agrega una arista entre dos nodos existentes a la gráfica.
 		/// </summary>
 		/// <param name="x">Un nodo.</param>
 		/// <param name="y">Otro nodo.</param>
-		/// <param name="Peso">El peso de la arista entre los nodos</param>
-		public void AgregaVertice(T x, T y, float Peso)
+		/// <param name="peso">El peso de la arista entre los nodos</param>
+		public void AgregaArista(T x, T y, float peso)
 		{
 			{
-				this[x, y] = Peso;
-				//x.Vecinos[y] = Peso;
-				//y.Vecinos[x] = Peso;
+				this[x, y] = peso;
 			}
 		}
 
@@ -208,7 +211,7 @@ namespace Graficas
 			// Pues entonces hay que agregar arista de x a P[i];
 			double p = r.NextDouble() + 0.5d;
 
-			AgregaVertice(Vertice, v, (float)p);
+			AgregaArista(Vertice, v, (float)p);
 		}
 
 		/// <summary>
@@ -406,7 +409,7 @@ namespace Graficas
 			Nods.RemoveAt(0);
 			Nods.RemoveAt(0);
 
-			ret.AgregaVertice(v0, v1, 1);
+			ret.AgregaArista(v0, v1, 1);
 
 			foreach (var v in Nods)
 			{

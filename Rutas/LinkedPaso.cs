@@ -24,7 +24,7 @@
 		{
 			get
 			{
-				return graf.Peso(Origen, Destino);
+				return graf.GetPeso(Origen, Destino);
 			}
 		}
 
