@@ -7,18 +7,19 @@ namespace Pruebas
 	[TestFixture]
 	public class TestCaminoCorto
 	{
-		const int max = 3000;
+		const int max = 100;
 
 		[Test]
 		public void TestCase ()
 		{
 			var gr = new Grafica<int> ();
 			gr.EsSimetrico = true;
-			CrearGráfica (gr);
+			CrearGráficaPeso (gr);
 
 
 			var ruta = gr.CaminoÓptimo (0, max - 1);
 			Console.WriteLine (ruta);
+			Console.WriteLine ("Peso: " + ruta.Longitud);
 
 		}
 
@@ -35,7 +36,7 @@ namespace Pruebas
 			}
 		}
 
-		public static void CrearGraficaPeso (IGraficaPeso<int> gr)
+		public static void CrearGráficaPeso (IGraficaPeso<int> gr)
 		{
 			int a;
 			var r = new Random ();
@@ -43,8 +44,7 @@ namespace Pruebas
 
 				if (i > 0) {
 					a = r.Next (i - 1);
-					gr.Peso (i, a);
-					gr.AgregaArista (i, a);
+					gr.SetPeso (i, a, (float)r.NextDouble ());
 				}
 			}
 
