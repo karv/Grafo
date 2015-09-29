@@ -5,11 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AF2E2C37-9F1D-4D32-AE62-8484B0A9DD50}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Grafos</RootNamespace>
+    <RootNamespace>Graficas</RootNamespace>
     <AssemblyName>Grafos</AssemblyName>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ReleaseVersion>0.1.1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +54,7 @@
     <Compile Include="Gráficas\MulticolGrafica.cs" />
     <Compile Include="Exception\NodoInexistenteException.cs" />
     <Compile Include="General\ParNoOrdenado.cs" />
+    <Compile Include="Exception\ColorDuplicadoException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

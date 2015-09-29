@@ -18,12 +18,12 @@ namespace Graficas
 			Vecinos.Nulo = float.PositiveInfinity;
 		}
 
-		/// <param name="Nods">Nodos de la gráfica</param>
-		public Grafica(T[] Nods)
+		/// <param name="nods">Nodos de la gráfica</param>
+		public Grafica(T[] nods)
 			: this()
 		{
 			var r = new Random();
-			foreach (var x in Nods)
+			foreach (var x in nods)
 			{
 				AgregaVerticeAzar(x, r);
 			}
@@ -58,7 +58,7 @@ namespace Graficas
 		/// <param name="y">Nodo final.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public IRuta<T> RutaOptima(T x, T y)
+		public IRuta<T> RutaÓptima(T x, T y)
 		{
 			return CaminoÓptimo(x, y, new HashSet<T>());
 		}
@@ -172,13 +172,13 @@ namespace Graficas
 		/// <summary>
 		/// Agrega un vértice al grafo, generando aristas al azar a nodos antiguos.
 		/// </summary>
-		/// <param name="Vertice">Vertice.</param>
+		/// <param name="vértice">Vertice.</param>
 		/// <param name="r">Generador aleatorio </param>
-		public void AgregaVerticeAzar(T Vertice, Random r)
+		public void AgregaVerticeAzar(T vértice, Random r)
 		{
 			if (NumNodos == 0)
 			{
-				this[Vertice, Vertice] = 0;
+				this[vértice, vértice] = 0;
 				return;
 			}
 
@@ -211,23 +211,23 @@ namespace Graficas
 			// Pues entonces hay que agregar arista de x a P[i];
 			double p = r.NextDouble() + 0.5d;
 
-			AgregaArista(Vertice, v, (float)p);
+			AgregaArista(vértice, v, (float)p);
 		}
 
 		/// <summary>
 		/// Selecciona al azar un elemento.
 		/// </summary>
-		/// <param name="Prob">La función de probabilidad. ¡Debe estar normalizada!</param>
+		/// <param name="prob">La función de probabilidad. ¡Debe estar normalizada!</param>
 		/// /// <param name="r">Aleatorio</param>
 		/// <returns></returns>
-		static T SelecciónAzar(IDictionary<T, float> Prob, Random r)
+		static T SelecciónAzar(IDictionary<T, float> prob, Random r)
 		{
 			double q = r.NextDouble();
-			foreach (var x in Prob.Keys)
+			foreach (var x in prob.Keys)
 			{
-				if (q < Prob[x])
+				if (q < prob[x])
 					return x;
-				q -= Prob[x];
+				q -= prob[x];
 			}
 			throw new Exception("No sé cómo llegó el algoritmo aquí D:");
 		}
@@ -298,10 +298,10 @@ namespace Graficas
 		/// </summary>
 		/// <param name="x">Nodo inicial.</param>
 		/// <param name="y">Nodo final.</param>
-		/// <param name="Ignorar">Lista de nodos a evitar.</param>
+		/// <param name="ignorar">Lista de nodos a evitar.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		IRuta<T> CaminoÓptimo(T x, T y, ISet<T> Ignorar)
+		IRuta<T> CaminoÓptimo(T x, T y, ISet<T> ignorar)
 		{
 			//List<T> retLista = new List<T>();
 			IRuta<T> ret = new Ruta<T>();
@@ -314,12 +314,12 @@ namespace Graficas
 				return ret;
 			}
 
-			Ignora2 = new HashSet<T>(Ignorar);
+			Ignora2 = new HashSet<T>(ignorar);
 			Ignora2.Add(y);
 
 			foreach (var n in AntiVecino(y))
 			{
-				if (!Ignorar.Contains(n))
+				if (!ignorar.Contains(n))
 				{
 					RutaBuscar = CaminoÓptimo(x, n, Ignora2);
 
@@ -341,9 +341,9 @@ namespace Graficas
 		/// </summary>
 		/// <param name="r"></param>
 		/// <param name="n">Número de elementos a seleccionar.</param>
-		/// <param name="Lista">Lista de dónde seleccionar la sublista.</param>
+		/// <param name="lista">Lista de dónde seleccionar la sublista.</param>
 		/// <returns>Devuelve una lista con los elementos seleccionados.</returns>
-		List<object> SeleccionaPeso(Random r, int n, ListaPeso<object> Lista)
+		List<object> SeleccionaPeso(Random r, int n, ListaPeso<object> lista)
 		{
 			List<object> ret;
 			float Suma = 0;
@@ -352,20 +352,20 @@ namespace Graficas
 				return new List<object>();
 			else
 			{
-				ret = SeleccionaPeso(r, n - 1, Lista);
+				ret = SeleccionaPeso(r, n - 1, lista);
 
 				foreach (var x in ret)
 				{
-					Lista[x] = 0;
+					lista[x] = 0;
 				}
 
 				// Ahora seleecionar uno.
 				Suma = 0;
-				rn = (float)r.NextDouble() * Lista.SumaTotal();
+				rn = (float)r.NextDouble() * lista.SumaTotal();
 
-				foreach (var x in Lista.Keys)
+				foreach (var x in lista.Keys)
 				{
-					Suma += Lista[x];
+					Suma += lista[x];
 					if (Suma >= rn)
 					{
 						ret.Add(x);
@@ -394,24 +394,24 @@ namespace Graficas
 		/// <summary>
 		/// Genera una gráfica aleatoria.
 		/// </summary>
-		/// <param name="Nods">El conjunto de nodos que se usarán.</param>
+		/// <param name="nods">El conjunto de nodos que se usarán.</param>
 		/// <returns>Devuelve una gráfica aleatoria.</returns>
-		public static Grafica<T> GeneraGraficaAleatoria(List<T> Nods)
+		public static Grafica<T> GeneraGraficaAleatoria(List<T> nods)
 		{
 			var r = new Random();
-			if (Nods.Count < 2)
+			if (nods.Count < 2)
 				throw new Exception("No se puede generar una gráfica aleatoria con menos de dos elementos.");
 			var ret = new Grafica<T>();
 
 			T v0, v1;
-			v0 = Nods[0];
-			v1 = Nods[1];
-			Nods.RemoveAt(0);
-			Nods.RemoveAt(0);
+			v0 = nods[0];
+			v1 = nods[1];
+			nods.RemoveAt(0);
+			nods.RemoveAt(0);
 
 			ret.AgregaArista(v0, v1, 1);
 
-			foreach (var v in Nods)
+			foreach (var v in nods)
 			{
 				ret.AgregaVerticeAzar(v, r);
 			}

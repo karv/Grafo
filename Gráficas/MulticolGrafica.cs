@@ -8,18 +8,18 @@ namespace Graficas
 	/// <summary>
 	/// Modela una IMulticolGrafica que es la superposición de varias IGráficas
 	/// </summary>
-	public class MulticolGrafica<T, V> : IMulticolGrafica<T, V>
-		where T :IEquatable<T>
+	public class MulticolGrafica<TNodo, TColor> : IMulticolGrafica<TNodo, TColor>
+		where TNodo :IEquatable<TNodo>
 	{
 		/// <summary>
 		/// La asignación de color -> Gráfica
 		/// </summary>
-		readonly Dictionary <V, IGrafica<T>> _asignación = new Dictionary<V, IGrafica<T>>();
+		readonly Dictionary <TColor, IGrafica<TNodo>> _asignación = new Dictionary<TColor, IGrafica<TNodo>>();
 
 		/// <summary>
 		/// Color default
 		/// </summary>
-		V defColor;
+		TColor defColor;
 
 		public MulticolGrafica()
 		{
@@ -27,7 +27,7 @@ namespace Graficas
 		}
 
 		/// <param name="defColor">Color default</param>
-		public MulticolGrafica(V defColor)
+		public MulticolGrafica(TColor defColor)
 		{
 			this.defColor = defColor;
 			AgregaColor(defColor);
@@ -39,9 +39,9 @@ namespace Graficas
 		/// Devuelve los vecinos de cualquier color de un nodo dado
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public ICollection<T> Vecinos(T nodo)
+		public ICollection<TNodo> Vecinos(TNodo nodo)
 		{
-			ISet<T> ret = new HashSet<T>();
+			ISet<TNodo> ret = new HashSet<TNodo>();
 
 			foreach (var color in _asignación.Keys)
 			{
@@ -50,15 +50,15 @@ namespace Graficas
 			return ret;
 		}
 
-		public IRuta<T> ToRuta(IEnumerable<T> seq)
+		public IRuta<TNodo> ToRuta(IEnumerable<TNodo> seq)
 		{
-			IRuta<T> ret = new Ruta<T>();
-			T[] arr = seq.ToArray();
-			Paso<T> mejorPaso;
+			IRuta<TNodo> ret = new Ruta<TNodo>();
+			TNodo[] arr = seq.ToArray();
+			Paso<TNodo> mejorPaso;
 			for (int i = 0; i < arr.Count() - 1; i++)
 			{
 				// Encontrar mejor paso
-				mejorPaso = new Paso<T>(arr[i], arr[i + 1], float.PositiveInfinity);
+				mejorPaso = new Paso<TNodo>(arr[i], arr[i + 1], float.PositiveInfinity);
 
 				foreach (var x in _asignación)
 				{
@@ -71,13 +71,13 @@ namespace Graficas
 			return ret;
 		}
 
-		void IGrafica<T>.AgregaArista(T desde, T hasta)
+		void IGrafica<TNodo>.AgregaArista(TNodo desde, TNodo hasta)
 		{
 			_asignación[defColor].AgregaArista(desde, hasta);
 		}
 
 
-		bool IGrafica<T>.EsSimétrico
+		bool IGrafica<TNodo>.EsSimétrico
 		{
 			get
 			{
@@ -90,14 +90,14 @@ namespace Graficas
 
 		#region IMulticolGrafica implementation
 
-		bool IGrafica<T>.ExisteArista(T desde, T hasta)
+		bool IGrafica<TNodo>.ExisteArista(TNodo desde, TNodo hasta)
 		{
 			return _asignación.Any(z => z.Value.ExisteArista(desde, hasta));
 		}
 
-		public IEnumerable<V> ColoresArista(IArista<T> aris)
+		public IEnumerable<TColor> ColoresArista(IArista<TNodo> aris)
 		{
-			var ret = new List<V>();
+			var ret = new List<TColor>();
 			foreach (var gr in _asignación)
 			{
 				if (gr.Value.ExisteArista(aris.Origen, aris.Destino))
@@ -106,9 +106,9 @@ namespace Graficas
 			return ret;
 		}
 
-		public void AgregaColor(V color)
+		public void AgregaColor(TColor color)
 		{
-			AgregaColor(color, new Grafica<T>());
+			AgregaColor(color, new Grafica<TNodo>());
 		}
 
 		/// <summary>
@@ -116,33 +116,33 @@ namespace Graficas
 		/// </summary>
 		/// <param name="color">Nombre del color</param>
 		/// <param name="modelo">Gráfica que modela este color</param>
-		public void AgregaColor(V color, IGrafica<T> modelo)
+		public void AgregaColor(TColor color, IGrafica<TNodo> modelo)
 		{
 			if (_asignación.ContainsKey(color))
-				throw new ColorDuplicadoExpection("Ya existe el color " + color);
+				throw new ColorDuplicadoException("Ya existe el color " + color);
 			_asignación.Add(color, modelo);
 		}
 
-		public IGrafica<T> GraficaColor(V color)
+		public IGrafica<TNodo> GraficaColor(TColor color)
 		{
 			return _asignación[color];
 		}
 
-		public ICollection<T> Vecinos(T nodo, V color)
+		public ICollection<TNodo> Vecinos(TNodo nodo, TColor color)
 		{
-			IGrafica<T> graf;
-			return _asignación.TryGetValue(color, out graf) ? graf.Vecinos(nodo) : new T[0];
+			IGrafica<TNodo> graf;
+			return _asignación.TryGetValue(color, out graf) ? graf.Vecinos(nodo) : new TNodo[0];
 		}
 
 		/// <summary>
 		/// Devuelve los nodos de la gráfica
 		/// </summary>
 		/// <value>The nodos.</value>
-		public ICollection<T> Nodos
+		public ICollection<TNodo> Nodos
 		{			
 			get
 			{
-				var ret = new List<T>();
+				var ret = new List<TNodo>();
 				foreach (var x in _asignación)
 				{
 					foreach (var nod in x.Value.Nodos)
@@ -157,32 +157,6 @@ namespace Graficas
 
 		#endregion
 
-		#region Exceptions
-
-		/// <summary>
-		/// Color duplicado expection.
-		/// </summary>
-		[Serializable]
-		public class ColorDuplicadoExpection : Exception
-		{
-			public ColorDuplicadoExpection()
-			{
-			}
-
-			public ColorDuplicadoExpection(string message) : base(message)
-			{
-			}
-
-			public ColorDuplicadoExpection(string message, Exception inner) : base(message, inner)
-			{
-			}
-
-			protected ColorDuplicadoExpection(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
-			{
-			}
-		}
-
-		#endregion
 	}
 }
 

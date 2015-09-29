@@ -9,12 +9,12 @@ namespace Graficas
 	{
 		class Nodo
 		{
-			public T obj;
+			public T Obj;
 			public ISet<T> Vecinos = new HashSet<T>();
 
 			public Nodo(T nod)
 			{
-				obj = nod;
+				Obj = nod;
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace Graficas
 		{
 			get
 			{
-				return nodos.ConvertAll(x => x.obj);
+				return nodos.ConvertAll(x => x.Obj);
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace Graficas
 		{
 			get
 			{
-				return nodos.Find(x => x.obj.Equals(nodo)).Vecinos;
+				return nodos.Find(x => x.Obj.Equals(nodo)).Vecinos;
 			}
 		}
 
@@ -117,7 +117,7 @@ namespace Graficas
 		public void AgregaNodo(T nodo)
 		{
 			// Resiva si existe
-			if (nodos.Exists(x => x.obj.Equals(nodo)))
+			if (nodos.Exists(x => x.Obj.Equals(nodo)))
 				throw new Exception("Nodo ya existente.");
 			nodos.Add(new Nodo(nodo));
 		}
@@ -136,7 +136,7 @@ namespace Graficas
 		/// <param name="nod">Nod.</param>
 		Nodo getNodo(T nod)
 		{
-			return nodos.Find(x => x.obj.Equals(nod));
+			return nodos.Find(x => x.Obj.Equals(nod));
 		}
 
 		#endregion

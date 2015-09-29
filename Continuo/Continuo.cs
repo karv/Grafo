@@ -38,22 +38,22 @@ namespace Graficas.Continuo
 
 			public override string ToString()
 			{
-				return enOrigen() ? A.ToString() : string.Format("[{0}, {1}]@{2}", A, B, loc);
+				return EnOrigen() ? A.ToString() : string.Format("[{0}, {1}]@{2}", A, B, Loc);
 			}
 
 			#endregion
 
 			#region Ctor
 
-			public ContinuoPunto(Continuo<T> universo, T A) : this(universo)
+			public ContinuoPunto(Continuo<T> universo, T nodo) : this(universo)
 			{
-				this.A = A;
+				A = nodo;
 			}
 
 			public ContinuoPunto(Continuo<T> universo)
 			{
-				_universo = universo;
-				_universo.Puntos.Add(this);
+				Universo = universo;
+				Universo.Puntos.Add(this);
 			}
 
 			#endregion
@@ -75,7 +75,7 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Distancia hasta A   [A --[loc]-- aquí --- B]
 			/// </summary>
-			public float loc
+			public float Loc
 			{
 				get { return _loc; }
 				set
@@ -83,7 +83,7 @@ namespace Graficas.Continuo
 					_loc = value; 
 					if (_loc < 0)
 						FromGrafica(A);
-					if (aloc < 0)
+					if (Aloc < 0)
 						FromGrafica(B);
 				}
 			}
@@ -91,11 +91,11 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Distancia hasta B   [A --- aquí --[aloc]-- B]
 			/// </summary>
-			public float aloc
+			public float Aloc
 			{
 				get
 				{
-					return _universo._grafica.GetPeso(A, B) - loc;
+					return Universo.GráficaBase.GetPeso(A, B) - Loc;
 				}
 			}
 
@@ -103,16 +103,16 @@ namespace Graficas.Continuo
 
 			#region Topología
 
-			protected readonly Continuo<T> _universo;
+			protected readonly Continuo<T> Universo;
 
-			public bool enOrigen()
+			public bool EnOrigen()
 			{
-				return loc == 0;
+				return Loc == 0;
 			}
 
 			bool enDestino()
 			{
-				return aloc == 0;
+				return Aloc == 0;
 			}
 
 			/// <summary>
@@ -121,9 +121,9 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si el punto está en el intervalo, <c>false</c> otherwise.</returns>
 			/// <param name="p1">Un extremo del intervalo.</param>
 			/// <param name="p2">El otro extramo del intervalo.</param>
-			public bool enIntervaloInmediato(T p1, T p2)
+			public bool EnIntervaloInmediato(T p1, T p2)
 			{
-				if (enOrigen())
+				if (EnOrigen())
 				{
 					return A.Equals(p1) || A.Equals(p2);
 				}
@@ -134,16 +134,16 @@ namespace Graficas.Continuo
 			/// Devuelve la lista de terrenos contiguos a esta pseudoposición.
 			/// </summary>
 			/// <returns>Una nueva lista.</returns>
-			public List<ContinuoPunto> getVecindad()
+			public List<ContinuoPunto> Vecindad()
 			{
-				if (enOrigen())
+				if (EnOrigen())
 				{
 					T orig = A; // Posición de este punto.
 					var ret = new List<ContinuoPunto>();
 					// Si estoy en terreno
-					foreach (var x in _universo._grafica.Vecinos(orig))
+					foreach (var x in Universo.GráficaBase.Vecinos(orig))
 					{
-						foreach (var y in _universo [orig, x])
+						foreach (var y in Universo [orig, x])
 						{
 							if (!ret.Contains(y))
 								ret.Add(y);
@@ -151,10 +151,7 @@ namespace Graficas.Continuo
 					}
 					return ret;
 				}
-				else
-				{
-					return _universo[A, B];
-				}
+				return Universo[A, B];
 			}
 
 			#endregion
@@ -169,7 +166,7 @@ namespace Graficas.Continuo
 			{
 				A = punto;
 				B = default(T);
-				loc = 0;
+				Loc = 0;
 			}
 
 			#endregion
@@ -180,10 +177,10 @@ namespace Graficas.Continuo
 			public bool Equals(ContinuoPunto other)
 			// Analysis restore MemberHidesStaticFromOuterClass
 			{
-				if (enOrigen())
-					return (A.Equals(other.A) && other.loc == 0);
-				return (A.Equals(other.A) && B.Equals(other.B) && loc == other.loc) ||
-				(A.Equals(other.B) && B.Equals(other.A) && loc == other.aloc);
+				if (EnOrigen())
+					return (A.Equals(other.A) && other.Loc == 0);
+				return (A.Equals(other.A) && B.Equals(other.B) && Loc == other.Loc) ||
+				(A.Equals(other.B) && B.Equals(other.A) && Loc == other.Aloc);
 			}
 
 			#endregion
@@ -192,18 +189,18 @@ namespace Graficas.Continuo
 
 			void IDisposable.Dispose()
 			{
-				_universo.Puntos.Remove(this);
+				Universo.Puntos.Remove(this);
 			}
 
 			#endregion
 		}
 
-		public readonly IGraficaPeso<T> _grafica;
+		public readonly IGraficaPeso<T> GráficaBase;
 		public readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto>();
 
 		public Continuo(IGraficaPeso<T> grafica)
 		{
-			_grafica = grafica;
+			GráficaBase = grafica;
 		}
 
 		/// <summary>
@@ -215,7 +212,7 @@ namespace Graficas.Continuo
 		{
 			get
 			{
-				return Puntos.FindAll(x => x.enIntervaloInmediato(p1, p2));
+				return Puntos.FindAll(x => x.EnIntervaloInmediato(p1, p2));
 			}
 		}
 	}

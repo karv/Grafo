@@ -5,7 +5,7 @@ namespace Graficas.Misc
 {
 	public class ParNoOrdenado<T> : Tuple<T, T>, IEquatable<Tuple<T, T>>, IEquatable<ParNoOrdenado<T>>
 	{
-		public class comparer : IEqualityComparer<ParNoOrdenado<T>>
+		public class Comparador : IEqualityComparer<ParNoOrdenado<T>>
 		{
 			#region IEqualityComparer implementation
 

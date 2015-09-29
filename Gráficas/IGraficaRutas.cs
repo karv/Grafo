@@ -8,7 +8,7 @@ namespace Graficas
 	/// </summary>
 	public interface IGraficaRutas<T> : IGrafica<T>
 	{
-		IRuta<T> RutaOptima(T x, T y);
+		IRuta<T> RutaÓptima(T x, T y);
 	}
 
 }

@@ -58,7 +58,7 @@ namespace Graficas
 		static ISet<ParNoOrdenado<T>> GetPares(ICollection<T> conj)
 		{
 			var arr = new T[conj.Count];
-			ISet<ParNoOrdenado<T>> ret = new HashSet<ParNoOrdenado<T>>(new ParNoOrdenado<T>.comparer());
+			ISet<ParNoOrdenado<T>> ret = new HashSet<ParNoOrdenado<T>>(new ParNoOrdenado<T>.Comparador());
 			conj.CopyTo(arr, 0);
 			for (int i = 0; i < conj.Count; i++)
 			{
@@ -165,7 +165,7 @@ namespace Graficas
 			return ret;
 		}
 
-		public Graficas.Rutas.IRuta<T> RutaOptima(T x, T y)
+		public Graficas.Rutas.IRuta<T> RutaÓptima(T x, T y)
 		{
 			throw new NotImplementedException();
 		}
@@ -185,7 +185,7 @@ namespace Graficas
 		/// </summary>
 		/// <returns><c>true</c>, if completo was esed, <c>false</c> otherwise.</returns>
 		/// <param name="nods">Nods.</param>
-		public bool esCompleto(IEnumerable<T> nods)
+		public bool EsCompleto(IEnumerable<T> nods)
 		{
 			foreach (var x in clanes)
 			{
