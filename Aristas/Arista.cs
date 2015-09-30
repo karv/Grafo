@@ -6,10 +6,13 @@
 
 		public T Destino { get; }
 
-		public Arista(T origen, T destino)
+		public float Peso { get; }
+
+		public Arista(T origen, T destino, float peso)
 		{
 			Origen = origen;
 			Destino = destino;
+			Peso = peso;
 		}
 	}
 }

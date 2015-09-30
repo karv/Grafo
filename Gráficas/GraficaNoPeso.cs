@@ -20,6 +20,11 @@ namespace Graficas
 
 		#region IGrafica
 
+		ICollection<IArista<T>> IGrafica<T>.Aristas()
+		{
+			throw new NotImplementedException();
+		}
+
 		public IRuta<T> ToRuta(IEnumerable<T> seq)
 		{
 			var ret = new Ruta<T>();

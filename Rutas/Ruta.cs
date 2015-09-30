@@ -17,6 +17,30 @@ namespace Graficas.Rutas
 			}
 		}
 
+		public Ruta()
+		{
+			
+		}
+
+		public Ruta(T origen)
+		{
+			_paso.Add(new NodoPeso(origen, 0));
+		}
+
+		public Ruta(IRuta<T> ruta) : this(ruta.NodoInicial)
+		{
+			foreach (var x in ruta.Pasos)
+			{
+				_paso.Add(new NodoPeso(x.Destino, x.Peso));
+			}
+		}
+
+		public Ruta(IArista<T> aris)
+		{
+			_paso.Add(new NodoPeso(aris.Origen, 0));
+			_paso.Add(new NodoPeso(aris.Destino, aris.Peso));
+		}
+
 		readonly IList<NodoPeso> _paso = new List<NodoPeso>();
 
 		public override string ToString()
@@ -42,8 +66,6 @@ namespace Graficas.Rutas
 				return ret;
 			} 
 		}
-
-		#region IMultiRuta implementation
 
 		public void Concat(IPaso<T> paso)
 		{
@@ -143,7 +165,6 @@ namespace Graficas.Rutas
 			}
 		}
 
-		#endregion
 	}
 }
 

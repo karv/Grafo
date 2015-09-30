@@ -35,6 +35,11 @@ namespace Graficas
 
 		#region IGrafica
 
+		ICollection<IArista<TNodo>> IGrafica<TNodo>.Aristas()
+		{
+			throw new NotImplementedException();
+		}
+
 		/// <summary>
 		/// Devuelve los vecinos de cualquier color de un nodo dado
 		/// </summary>

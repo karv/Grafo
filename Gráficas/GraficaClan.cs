@@ -77,9 +77,14 @@ namespace Graficas
 
 		#region IGrafica implementation
 
+		ICollection<IArista<T>> IGrafica<T>.Aristas()
+		{
+			throw new NotImplementedException();
+		}
+
 		public bool ExisteArista(T desde, T hasta)
 		{
-			return ExisteArista(new Arista<T>(desde, hasta));
+			return ExisteArista(new Arista<T>(desde, hasta, 1));
 		}
 
 		bool IGrafica<T>.EsSimétrico
