@@ -33,6 +33,16 @@ namespace Graficas
 
 		#region IGrafica
 
+		public ICollection<IArista<T>> Aristas()
+		{
+			var ret = new List<IArista<T>>();
+			foreach (var x in Vecinos)
+			{
+				ret.Add(new Arista<T>(x.Key.Item1, x.Key.Item2, x.Value));
+			}
+			return ret;
+		}
+
 		float IGraficaPeso<T>.GetPeso(T desde, T hasta)
 		{
 			return this[desde, hasta];
