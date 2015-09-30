@@ -31,7 +31,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="ListaExtras">
-      <HintPath>..\ListaExtras\bin\Release\ListaExtras.dll</HintPath>
+      <HintPath>packages\ListaExtras.0.2.2\lib\ListaExtras.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +55,7 @@
     <Compile Include="Exception\NodoInexistenteException.cs" />
     <Compile Include="General\ParNoOrdenado.cs" />
     <Compile Include="Exception\ColorDuplicadoException.cs" />
+    <Compile Include="ConjuntoRutasÓptimas.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -75,5 +76,8 @@
     <Folder Include="Rutas\" />
     <Folder Include="Exception\" />
     <Folder Include="General\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
