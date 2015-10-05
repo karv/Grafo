@@ -157,8 +157,8 @@ namespace Graficas.Continuo
 					return Loc;
 				if (extremo.Equals(B))
 					return Aloc;
-				if (EnOrigen && Universo.GráficaBase.GetPeso(A, extremo) < float.PositiveInfinity)
-					return Universo.GráficaBase.GetPeso(A, extremo);
+				if (EnOrigen && !float.IsInfinity(Universo.GráficaBase[A, extremo]))
+					return Universo.GráficaBase[A, extremo];
 
 				throw new IndexOutOfRangeException(string.Format("{0} no es un extremo de {1}", extremo, this));
 				
@@ -239,12 +239,20 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si llegó <c>false</c> otherwise.</returns>
 			/// <param name="destino">Destino.</param>
 			/// <param name="dist">Distancia.</param>
-			bool AvanzarHacia(T destino, ref float dist) //TEST
+			bool AvanzarHacia(T destino, ref float dist)
 			{
 				var restante = DistanciaAExtremo(destino);
 				if (restante > dist) // No llega
 				{
-					Loc += dist;
+					if (destino.Equals(A))
+					{
+						Loc -= dist;
+					}
+					else
+					{
+						B = destino;
+						Loc = dist;
+					}
 					dist = 0;
 					AlDesplazarse?.Invoke(this, null);
 					return false;
@@ -268,13 +276,17 @@ namespace Graficas.Continuo
 				return AvanzarHacia(destino, ref Ref);
 			}
 
-			public bool AvanzarHacia(Ruta ruta, float dist) //TEST
+			public bool AvanzarHacia(Ruta ruta, float dist)
 			{
 				foreach (var r in ruta.Pasos)
 				{
-					if (!AvanzarHacia(r.Origen, ref dist))
+					if (r.Destino.Equals(this))
+						continue;
+					if (!AvanzarHacia(r.Destino, ref dist))
 						return false;
+					ruta.EliminarPrimero();
 				}
+				AlTerminarRuta?.Invoke(this, null);
 				return true;
 			}
 
@@ -284,7 +296,7 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si llegó, <c>false</c> otherwise.</returns>
 			/// <param name="destino">Destino.</param>
 			/// <param name="dist">Distancia</param>
-			public bool AvanzarHacia(ContinuoPunto destino, ref float dist) //TEST
+			public bool AvanzarHacia(ContinuoPunto destino, ref float dist)
 			{
 				if (!CoincideCon(destino))
 					throw new Exception("No se puede avanzar si no coinciden");
@@ -313,10 +325,16 @@ namespace Graficas.Continuo
 			/// Ocurre cuando este punto se desplaza con respecto a la gráfica.
 			/// </summary>
 			public event EventHandler AlDesplazarse;
+
 			/// <summary>
 			/// Ocurre cuando este punto coincide con un punto en la gráfica.
 			/// </summary>
 			public event EventHandler AlLlegarANodo;
+
+			/// <summary>
+			/// Ocurre cuando, al llamar a AvanzarHacia(Ruta), ésta devuelve true.
+			/// </summary>
+			public event EventHandler AlTerminarRuta;
 
 			#endregion
 
@@ -377,6 +395,11 @@ namespace Graficas.Continuo
 			public Ruta(ContinuoPunto inicial)
 			{
 				NodoInicial = inicial;
+			}
+
+			public void EliminarPrimero()
+			{
+				Paso.RemoveAt(0);
 			}
 
 			/// <summary>
