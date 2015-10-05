@@ -474,10 +474,10 @@ namespace Graficas.Continuo
 			}
 		}
 
-		public readonly IGraficaPeso<T> GráficaBase;
+		public readonly ILecturaGrafoPeso<T> GráficaBase;
 		public readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto>();
 
-		public Continuo(IGraficaPeso<T> grafica)
+		public Continuo(ILecturaGrafoPeso<T> grafica)
 		{
 			GráficaBase = grafica;
 		}

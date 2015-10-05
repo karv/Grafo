@@ -1,10 +1,6 @@
 ﻿namespace Graficas
 {
-	/// <summary>
-	/// Promete la habilidad de decidir el peso de cada arista en una gráfica.
-	/// </summary>
-	/// <typeparam name="T">Tipo de nodos.</typeparam>
-	public interface IGraficaPeso<T> : IGrafica<T>
+	public interface IGrafoPeso<T> : ILecturaGrafoPeso<T>
 	{
 		/// <summary>
 		/// El peso de una arista.
@@ -15,3 +11,4 @@
 		new float this [T desde, T hasta] { get; set; }
 	}
 }
+

@@ -8,10 +8,10 @@ namespace GrafosTest
 	{
 		public static void Main2(string[] args)
 		{
-			Grafica<int> g = new Grafica<int>();
+			Grafo<int> g = new Grafo<int>();
 			g.EsSimetrico = true;
 
-			GraficaClan<int> gr = new GraficaClan<int>();
+			GrafoClan<int> gr = new GrafoClan<int>();
 			gr.AgregaArista(0, 1);
 			gr.AgregaArista(0, 2);
 			gr.AgregaArista(1, 2);

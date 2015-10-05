@@ -8,12 +8,12 @@ namespace Test
 	[TestFixture]
 	public class ContinuoTest
 	{
-		public Grafica<int> graf;
+		public Grafo<int> graf;
 		Continuo<int> Gr;
 
 		public void Iniciar()
 		{
-			graf = new Grafica<int>();
+			graf = new Grafo<int>();
 			Gr = new Continuo<int>(graf);
 			graf.EsSimetrico = true;
 		}

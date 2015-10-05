@@ -5,9 +5,9 @@ namespace Graficas
 {
 
 	/// <summary>
-	/// Promete lista de vecinos.
+	/// Una grafo sólo lectura
 	/// </summary>
-	public interface IGrafica<T>
+	public interface ILecturaGrafo<T>
 	{
 		ICollection<T> Nodos
 		{
@@ -17,8 +17,6 @@ namespace Graficas
 		bool this [T desde, T hasta]{ get; }
 
 		ICollection<IArista<T>> Aristas();
-
-		void AgregaArista(T desde, T hasta);
 
 		ICollection<T> Vecinos(T nodo);
 

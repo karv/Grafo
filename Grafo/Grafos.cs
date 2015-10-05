@@ -9,17 +9,17 @@ namespace Graficas
 	/// Representa una gráfica, en el sentido abstracto.
 	/// Los nodos son del tipo <c>T</c>.
 	/// <Vecinosy>
-	public class Grafica<T> : IGraficaPeso<T>, IGraficaRutas<T> where T : IEquatable<T>
+	public class Grafo<T> : IGrafoPeso<T>, IGrafoRutas<T> where T : IEquatable<T>
 	{
 		#region ctor
 
-		public Grafica()
+		public Grafo()
 		{
 			Vecinos.Nulo = float.PositiveInfinity;
 		}
 
 		/// <param name="nods">Nodos de la gráfica</param>
-		public Grafica(T[] nods)
+		public Grafo(T[] nods)
 			: this()
 		{
 			var r = new Random();
@@ -33,7 +33,7 @@ namespace Graficas
 
 		#region IGrafica
 
-		bool IGrafica<T>.this [T desde, T hasta]
+		bool ILecturaGrafo<T>.this [T desde, T hasta]
 		{ get { return ExisteArista(desde, hasta); } }
 
 		public ICollection<IArista<T>> Aristas()
@@ -46,7 +46,7 @@ namespace Graficas
 			return ret;
 		}
 
-		float IGraficaPeso<T>.this [T desde, T hasta]
+		float IGrafoPeso<T>.this [T desde, T hasta]
 		{ 
 			get
 			{
@@ -58,7 +58,7 @@ namespace Graficas
 			}
 		}
 
-		ICollection<T> IGrafica<T>.Nodos
+		ICollection<T> ILecturaGrafo<T>.Nodos
 		{
 			get
 			{
@@ -78,7 +78,7 @@ namespace Graficas
 			return CaminoÓptimo(x, y, new HashSet<T>());
 		}
 
-		ICollection<T> IGrafica<T>.Vecinos(T nodo)
+		ICollection<T> ILecturaGrafo<T>.Vecinos(T nodo)
 		{
 			return Vecino(nodo);
 		}
@@ -403,12 +403,12 @@ namespace Graficas
 		/// </summary>
 		/// <param name="nods">El conjunto de nodos que se usarán.</param>
 		/// <returns>Devuelve una gráfica aleatoria.</returns>
-		public static Grafica<T> GeneraGraficaAleatoria(List<T> nods)
+		public static Grafo<T> GeneraGraficaAleatoria(List<T> nods)
 		{
 			var r = new Random();
 			if (nods.Count < 2)
 				throw new Exception("No se puede generar una gráfica aleatoria con menos de dos elementos.");
-			var ret = new Grafica<T>();
+			var ret = new Grafo<T>();
 
 			T v0, v1;
 			v0 = nods[0];

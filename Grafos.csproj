@@ -40,23 +40,25 @@
     <Compile Include="Aristas\Arista.cs" />
     <Compile Include="Aristas\IArista.cs" />
     <Compile Include="Continuo\Continuo.cs" />
-    <Compile Include="Gráficas\GraficaClan.cs" />
-    <Compile Include="Gráficas\GraficaNoPeso.cs" />
-    <Compile Include="Gráficas\Graficas.cs" />
-    <Compile Include="Gráficas\IGrafica.cs" />
-    <Compile Include="Gráficas\IGraficaPeso.cs" />
-    <Compile Include="Gráficas\IGraficaRutas.cs" />
-    <Compile Include="Gráficas\IMulticolGrafica.cs" />
     <Compile Include="Rutas\IPaso.cs" />
     <Compile Include="Rutas\IRuta.cs" />
     <Compile Include="Rutas\LinkedPaso.cs" />
     <Compile Include="Rutas\Paso.cs" />
     <Compile Include="Rutas\Ruta.cs" />
-    <Compile Include="Gráficas\MulticolGrafica.cs" />
     <Compile Include="Exception\NodoInexistenteException.cs" />
     <Compile Include="General\ParNoOrdenado.cs" />
     <Compile Include="Exception\ColorDuplicadoException.cs" />
     <Compile Include="ConjuntoRutasÓptimas.cs" />
+    <Compile Include="Grafo\GrafoClan.cs" />
+    <Compile Include="Grafo\GrafoNoPeso.cs" />
+    <Compile Include="Grafo\Grafos.cs" />
+    <Compile Include="Grafo\ILecturaGrafo.cs" />
+    <Compile Include="Grafo\ILecturaGrafoPeso.cs" />
+    <Compile Include="Grafo\IGrafoRutas.cs" />
+    <Compile Include="Grafo\IMulticolGrafo.cs" />
+    <Compile Include="Grafo\MulticolGrafica.cs" />
+    <Compile Include="Grafo\IGrafo.cs" />
+    <Compile Include="Grafo\IGrafoPeso.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -73,10 +75,10 @@
   <ItemGroup>
     <Folder Include="Aristas\" />
     <Folder Include="Continuo\" />
-    <Folder Include="Gráficas\" />
     <Folder Include="Rutas\" />
     <Folder Include="Exception\" />
     <Folder Include="General\" />
+    <Folder Include="Grafo\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

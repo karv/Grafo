@@ -8,34 +8,17 @@ namespace Graficas
 	/// <summary>
 	/// Modela una IMulticolGrafica que es la superposición de varias IGráficas
 	/// </summary>
-	public class MulticolGrafica<TNodo, TColor> : IMulticolGrafica<TNodo, TColor>
+	public class MulticolGrafica<TNodo, TColor> : IMulticolGrafo<TNodo, TColor>
 		where TNodo :IEquatable<TNodo>
 	{
 		/// <summary>
 		/// La asignación de color -> Gráfica
 		/// </summary>
-		readonly Dictionary <TColor, IGrafica<TNodo>> _asignación = new Dictionary<TColor, IGrafica<TNodo>>();
-
-		/// <summary>
-		/// Color default
-		/// </summary>
-		TColor defColor;
-
-		public MulticolGrafica()
-		{
-			
-		}
-
-		/// <param name="defColor">Color default</param>
-		public MulticolGrafica(TColor defColor)
-		{
-			this.defColor = defColor;
-			AgregaColor(defColor);
-		}
+		readonly Dictionary <TColor, ILecturaGrafo<TNodo>> _asignación = new Dictionary<TColor, ILecturaGrafo<TNodo>>();
 
 		#region IGrafica
 
-		ICollection<IArista<TNodo>> IGrafica<TNodo>.Aristas()
+		ICollection<IArista<TNodo>> ILecturaGrafo<TNodo>.Aristas()
 		{
 			throw new NotImplementedException();
 		}
@@ -76,16 +59,10 @@ namespace Graficas
 			return ret;
 		}
 
-		bool IGrafica<TNodo>.this [TNodo desde, TNodo hasta]
+		bool ILecturaGrafo<TNodo>.this [TNodo desde, TNodo hasta]
 		{ get { return ExisteArista(desde, hasta); } }
 
-		void IGrafica<TNodo>.AgregaArista(TNodo desde, TNodo hasta)
-		{
-			_asignación[defColor].AgregaArista(desde, hasta);
-		}
-
 		#endregion
-
 
 		#region IMulticolGrafica implementation
 
@@ -106,31 +83,29 @@ namespace Graficas
 			return ret;
 		}
 
-		public void AgregaColor(TColor color)
-		{
-			AgregaColor(color, new Grafica<TNodo>());
-		}
-
 		/// <summary>
 		/// Agrega un color
 		/// </summary>
 		/// <param name="color">Nombre del color</param>
-		/// <param name="modelo">Gráfica que modela este color</param>
-		public void AgregaColor(TColor color, IGrafica<TNodo> modelo)
+		/// <param name="grafo">Grafo que modela este color</param>
+		public void AgregaColor(TColor color, ILecturaGrafo<TNodo> grafo)
 		{
 			if (_asignación.ContainsKey(color))
 				throw new ColorDuplicadoException("Ya existe el color " + color);
-			_asignación.Add(color, modelo);
+			_asignación.Add(color, grafo);
 		}
 
-		public IGrafica<TNodo> GraficaColor(TColor color)
+		public ILecturaGrafo<TNodo> GrafoColor(TColor color)
 		{
-			return _asignación[color];
+			ILecturaGrafo<TNodo> ret;
+			if (_asignación.TryGetValue(color, out ret))
+				return ret;
+			throw new Exception(string.Format("Color {0} no existe.", color));
 		}
 
 		public ICollection<TNodo> Vecinos(TNodo nodo, TColor color)
 		{
-			IGrafica<TNodo> graf;
+			ILecturaGrafo<TNodo> graf;
 			return _asignación.TryGetValue(color, out graf) ? graf.Vecinos(nodo) : new TNodo[0];
 		}
 
@@ -156,7 +131,6 @@ namespace Graficas
 		}
 
 		#endregion
-
 	}
 }
 

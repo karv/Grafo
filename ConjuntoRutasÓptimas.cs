@@ -46,7 +46,7 @@ namespace Graficas
 			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>>(null, null);
 		}
 
-		public ConjuntoRutasÓptimas(IGrafica<TNodo> gr) : this()
+		public ConjuntoRutasÓptimas(ILecturaGrafo<TNodo> gr) : this()
 		{
 			var aris = new List<IArista<TNodo>>(gr.Aristas());
 			var comp = new Comparison<IArista<TNodo>>((x, y) => x.Peso < y.Peso ? -1 : 1);

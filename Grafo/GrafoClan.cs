@@ -8,7 +8,7 @@ namespace Graficas
 	/// <summary>
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
-	public class GraficaClan<T>: IGraficaRutas<T>
+	public class GrafoClan<T>: IGrafoRutas<T>
 	{
 		class Clan : HashSet<T>
 		{
@@ -77,7 +77,7 @@ namespace Graficas
 
 		#region IGrafica implementation
 
-		bool IGrafica<T>.this [T desde, T hasta]
+		bool ILecturaGrafo<T>.this [T desde, T hasta]
 		{
 			get
 			{
@@ -85,7 +85,7 @@ namespace Graficas
 			}
 		}
 
-		ICollection<IArista<T>> IGrafica<T>.Aristas()
+		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas()
 		{
 			throw new NotImplementedException();
 		}
@@ -101,11 +101,6 @@ namespace Graficas
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
 		public void AgregaArista(T desde, T hasta)
-		{
-			((IGrafica<T>)this).AgregaArista(desde, hasta);
-		}
-
-		void IGrafica<T>.AgregaArista(T desde, T hasta)
 		{
 			var NuevoClan = new Clan();
 			clanes.Add(NuevoClan);

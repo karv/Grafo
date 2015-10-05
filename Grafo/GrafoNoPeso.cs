@@ -5,7 +5,7 @@ using Graficas.Rutas;
 namespace Graficas
 {
 
-	public class GraficaNoPeso<T> : IGrafica<T> where T : IEquatable<T>
+	public class GrafoNoPeso<T> : IGrafo<T> where T : IEquatable<T>
 	{
 		class Nodo
 		{
@@ -20,10 +20,28 @@ namespace Graficas
 
 		#region IGrafica
 
-		bool IGrafica<T>.this [T desde, T hasta]
-		{ get { return ExisteArista(desde, hasta); } }
+		bool ILecturaGrafo<T>.this [T desde, T hasta]{ get { return ExisteArista(desde, hasta); } }
 
-		ICollection<IArista<T>> IGrafica<T>.Aristas()
+		bool IGrafo<T>.this [T desde, T hasta]
+		{ 
+			get
+			{ 
+				return ExisteArista(desde, hasta); 
+			} 
+			set
+			{
+				if (value)
+				{
+					AgregaArista(desde, hasta);
+				}
+				else
+				{
+					getNodo(desde).Vecinos.Remove(hasta);
+				}
+			}
+		}
+
+		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas()
 		{
 			throw new NotImplementedException();
 		}
@@ -147,7 +165,7 @@ namespace Graficas
 		/// Ctor
 		/// </summary>
 		/// <param name="nods">Nodos de la gráfica.</param>
-		public GraficaNoPeso(T[] nods)
+		public GrafoNoPeso(T[] nods)
 			: this()
 		{
 			foreach (var x in nods)
@@ -156,7 +174,7 @@ namespace Graficas
 			}
 		}
 
-		public GraficaNoPeso()
+		public GrafoNoPeso()
 		{
 		}
 

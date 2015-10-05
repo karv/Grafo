@@ -8,11 +8,11 @@ namespace Test
 	public class GeneralTest
 	{
 		
-		public void GeneraGraficaConexa(IGrafica<int> gr, int cant = 100)
+		public void GeneraGraficaConexa(ILecturaGrafo<int> gr, int cant = 100)
 		{
 			for (int i = 1; i <= cant; i++)
-			{
-				gr.AgregaArista(0, i);
+			{//TODO
+				//gr.AgregaArista(0, i);
 				//gr.AgregaArista(i, 0);
 			}
 			Assert.AreEqual(cant + 1, gr.Nodos.Count);
@@ -22,7 +22,7 @@ namespace Test
 		[Test]
 		public void CaminoOptimo()
 		{
-			var gr = new Grafica<int>();
+			var gr = new Grafo<int>();
 			gr.EsSimetrico = true;
 
 			GeneraGraficaConexa(gr);

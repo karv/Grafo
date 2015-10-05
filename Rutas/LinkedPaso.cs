@@ -5,9 +5,9 @@
 	/// </summary>
 	public struct LinkedPaso<T>:IPaso<T>
 	{
-		readonly IGraficaPeso<T> graf;
+		readonly ILecturaGrafoPeso<T> graf;
 
-		public LinkedPaso(T origen, T destino, IGraficaPeso<T> graf)
+		public LinkedPaso(T origen, T destino, ILecturaGrafoPeso<T> graf)
 		{
 			Origen = origen;
 			Destino = destino;
