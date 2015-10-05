@@ -157,7 +157,9 @@ namespace Graficas.Continuo
 					return Loc;
 				if (extremo.Equals(B))
 					return Aloc;
-				
+				if (EnOrigen && Universo.GráficaBase.GetPeso(A, extremo) < float.PositiveInfinity)
+					return Universo.GráficaBase.GetPeso(A, extremo);
+
 				throw new IndexOutOfRangeException(string.Format("{0} no es un extremo de {1}", extremo, this));
 				
 			}
@@ -229,12 +231,100 @@ namespace Graficas.Continuo
 
 			#endregion
 
+			#region Dinámico
+
+			/// <summary>
+			/// Avanza esta pseudoposición hacia un vecino T una distancia específica
+			/// </summary>
+			/// <returns><c>true</c>, si llegó <c>false</c> otherwise.</returns>
+			/// <param name="destino">Destino.</param>
+			/// <param name="dist">Distancia.</param>
+			bool AvanzarHacia(T destino, ref float dist) //TEST
+			{
+				var restante = DistanciaAExtremo(destino);
+				if (restante > dist) // No llega
+				{
+					Loc += dist;
+					dist = 0;
+					AlDesplazarse?.Invoke(this, null);
+					return false;
+				}
+				dist = dist - restante;
+				AlDesplazarse?.Invoke(this, null);
+				AlLlegarANodo?.Invoke(this, null);
+				FromGrafica(destino);
+				return true;
+			}
+
+			/// <summary>
+			/// Avanza esta pseudoposición hacia un vecino T una distancia específica
+			/// </summary>
+			/// <returns><c>true</c>, si llegó <c>false</c> otherwise.</returns>
+			/// <param name="destino">Destino.</param>
+			/// <param name="dist">Distancia.</param>
+			public bool AvanzarHacia(T destino, float dist)
+			{
+				float Ref = dist;
+				return AvanzarHacia(destino, ref Ref);
+			}
+
+			public bool AvanzarHacia(Ruta ruta, float dist) //TEST
+			{
+				foreach (var r in ruta.Pasos)
+				{
+					if (!AvanzarHacia(r.Origen, ref dist))
+						return false;
+				}
+				return true;
+			}
+
+			/// <summary>
+			/// Avanza hacia un punto
+			/// </summary>
+			/// <returns><c>true</c>, si llegó, <c>false</c> otherwise.</returns>
+			/// <param name="destino">Destino.</param>
+			/// <param name="dist">Distancia</param>
+			public bool AvanzarHacia(ContinuoPunto destino, ref float dist) //TEST
+			{
+				if (!CoincideCon(destino))
+					throw new Exception("No se puede avanzar si no coinciden");
+
+				var relRestante = DistanciaAExtremo(A) - destino.DistanciaAExtremo(A);
+				var absRestante = Math.Abs(relRestante);
+				var avance = Math.Min(dist, absRestante);
+				dist -= avance;
+
+				if (relRestante < 0)
+				{
+					AvanzarHacia(B, ref avance);
+				}
+				else
+				{
+					AvanzarHacia(A, ref avance);
+				}
+				return Equals(destino);
+			}
+
+			#endregion
+
+			#region Eventos
+
+			/// <summary>
+			/// Ocurre cuando este punto se desplaza con respecto a la gráfica.
+			/// </summary>
+			public event EventHandler AlDesplazarse;
+			/// <summary>
+			/// Ocurre cuando este punto coincide con un punto en la gráfica.
+			/// </summary>
+			public event EventHandler AlLlegarANodo;
+
+			#endregion
+
 			#region Conversores
 
 			/// <summary>
 			/// Pone a este punto en un punto de la gráfica.
 			/// </summary>
-			/// <param name="punto">Punto.</param>
 			public void FromGrafica(T punto)
 			{
 				A = punto;
