@@ -5,7 +5,7 @@ namespace Graficas.Rutas
 {
 	public class Ruta<T>: IRuta<T>
 	{
-		struct NodoPeso
+		protected struct NodoPeso
 		{
 			public T Nodo;
 			public float Peso;
@@ -24,29 +24,29 @@ namespace Graficas.Rutas
 
 		public Ruta(T origen)
 		{
-			_paso.Add(new NodoPeso(origen, 0));
+			Paso.Add(new NodoPeso(origen, 0));
 		}
 
 		public Ruta(IRuta<T> ruta) : this(ruta.NodoInicial)
 		{
 			foreach (var x in ruta.Pasos)
 			{
-				_paso.Add(new NodoPeso(x.Destino, x.Peso));
+				Paso.Add(new NodoPeso(x.Destino, x.Peso));
 			}
 		}
 
 		public Ruta(IArista<T> aris)
 		{
-			_paso.Add(new NodoPeso(aris.Origen, 0));
-			_paso.Add(new NodoPeso(aris.Destino, aris.Peso));
+			Paso.Add(new NodoPeso(aris.Origen, 0));
+			Paso.Add(new NodoPeso(aris.Destino, aris.Peso));
 		}
 
-		readonly IList<NodoPeso> _paso = new List<NodoPeso>();
+		readonly protected IList<NodoPeso> Paso = new List<NodoPeso>();
 
 		public override string ToString()
 		{
 			string ret = string.Format("[{0}]: ", NumPasos);
-			foreach (var x in _paso)
+			foreach (var x in Paso)
 			{
 				ret += string.Format(" {0} ", x.Nodo);
 
@@ -59,9 +59,9 @@ namespace Graficas.Rutas
 			get
 			{ 
 				var ret = new List<IPaso<T>>();
-				for (int i = 0; i < _paso.Count - 1; i++)
+				for (int i = 0; i < Paso.Count - 1; i++)
 				{
-					ret.Add(new Paso<T>(_paso[i].Nodo, _paso[i + 1].Nodo, _paso[i + 1].Peso));
+					ret.Add(new Paso<T>(Paso[i].Nodo, Paso[i + 1].Nodo, Paso[i + 1].Peso));
 				}
 				return ret;
 			} 
@@ -73,14 +73,14 @@ namespace Graficas.Rutas
 				throw new NullReferenceException();
 			if (NumPasos == 0)
 			{
-				_paso.Add(new NodoPeso(paso.Origen, 0));
-				_paso.Add(new NodoPeso(paso.Destino, paso.Peso));
+				Paso.Add(new NodoPeso(paso.Origen, 0));
+				Paso.Add(new NodoPeso(paso.Destino, paso.Peso));
 			}
 			else
 			{
 				if (NodoFinal.Equals(paso.Origen))
 				{
-					_paso.Add(new NodoPeso(paso.Destino, paso.Peso));
+					Paso.Add(new NodoPeso(paso.Destino, paso.Peso));
 				}
 				else
 				{
@@ -96,13 +96,13 @@ namespace Graficas.Rutas
 
 			foreach (var paso in ruta.Pasos)
 			{
-				_paso.Add(new NodoPeso(paso.Destino, paso.Peso));
+				Paso.Add(new NodoPeso(paso.Destino, paso.Peso));
 			}
 		}
 
 		public void Concat(T nodo, float peso)
 		{
-			_paso.Add(new NodoPeso(nodo, peso));
+			Paso.Add(new NodoPeso(nodo, peso));
 		}
 
 		public IRuta<T> Reversa()
@@ -118,7 +118,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return _paso[0].Nodo;
+				return Paso[0].Nodo;
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace Graficas.Rutas
 			{
 				if (NumPasos < 0)
 					throw new Exception("No existe el nodo final en un path vacío.");
-				return _paso[NumPasos].Nodo;
+				return Paso[NumPasos].Nodo;
 			}
 		}
 
@@ -145,7 +145,7 @@ namespace Graficas.Rutas
 			get
 			{
 				float ret = 0;
-				foreach (var x in _paso)
+				foreach (var x in Paso)
 				{
 					ret += x.Peso;
 				}
@@ -161,7 +161,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return _paso.Count - 1;
+				return Paso.Count - 1;
 			}
 		}
 
