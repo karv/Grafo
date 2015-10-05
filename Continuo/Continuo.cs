@@ -95,7 +95,7 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-					return Universo.GráficaBase.GetPeso(A, B) - Loc;
+					return Universo.GráficaBase[A, B] - Loc;
 				}
 			}
 

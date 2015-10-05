@@ -76,6 +76,9 @@ namespace Graficas
 			return ret;
 		}
 
+		bool IGrafica<TNodo>.this [TNodo desde, TNodo hasta]
+		{ get { return ExisteArista(desde, hasta); } }
+
 		void IGrafica<TNodo>.AgregaArista(TNodo desde, TNodo hasta)
 		{
 			_asignación[defColor].AgregaArista(desde, hasta);
@@ -90,14 +93,16 @@ namespace Graficas
 			}
 		}
 
+
 		#endregion
 
 
 		#region IMulticolGrafica implementation
 
-		bool IGrafica<TNodo>.ExisteArista(TNodo desde, TNodo hasta)
+
+		bool ExisteArista(TNodo desde, TNodo hasta)
 		{
-			return _asignación.Any(z => z.Value.ExisteArista(desde, hasta));
+			return _asignación.Any(z => z.Value[desde, hasta]);
 		}
 
 		public IEnumerable<TColor> ColoresArista(IArista<TNodo> aris)
@@ -105,7 +110,7 @@ namespace Graficas
 			var ret = new List<TColor>();
 			foreach (var gr in _asignación)
 			{
-				if (gr.Value.ExisteArista(aris.Origen, aris.Destino))
+				if (gr.Value[aris.Origen, aris.Destino])
 					ret.Add(gr.Key);
 			}
 			return ret;

@@ -33,6 +33,9 @@ namespace Graficas
 
 		#region IGrafica
 
+		bool IGrafica<T>.this [T desde, T hasta]
+		{ get { return ExisteArista(desde, hasta); } }
+
 		public ICollection<IArista<T>> Aristas()
 		{
 			var ret = new List<IArista<T>>();
@@ -43,14 +46,16 @@ namespace Graficas
 			return ret;
 		}
 
-		float IGraficaPeso<T>.GetPeso(T desde, T hasta)
-		{
-			return this[desde, hasta];
-		}
-
-		void IGraficaPeso<T>.SetPeso(T desde, T hasta, float peso)
-		{
-			this[desde, hasta] = peso;
+		float IGraficaPeso<T>.this [T desde, T hasta]
+		{ 
+			get
+			{
+				return this[desde, hasta];
+			}
+			set
+			{
+				this[desde, hasta] = value;
+			}
 		}
 
 		ICollection<T> IGrafica<T>.Nodos

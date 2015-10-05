@@ -14,7 +14,7 @@ namespace Graficas
 			get;
 		}
 
-		bool ExisteArista(T desde, T hasta);
+		bool this [T desde, T hasta]{ get; }
 
 		ICollection<IArista<T>> Aristas();
 

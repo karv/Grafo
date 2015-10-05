@@ -20,6 +20,9 @@ namespace Graficas
 
 		#region IGrafica
 
+		bool IGrafica<T>.this [T desde, T hasta]
+		{ get { return ExisteArista(desde, hasta); } }
+
 		ICollection<IArista<T>> IGrafica<T>.Aristas()
 		{
 			throw new NotImplementedException();
