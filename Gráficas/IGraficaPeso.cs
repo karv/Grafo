@@ -12,6 +12,6 @@
 		/// <param name="desde">Origen de la arista</param>
 		/// <param name="hasta">Destino de la arista</param>
 		/// <returns>Devuelve el peso (float) de la arista.</returns>
-		float this [T desde, T hasta] { get; set; }
+		new float this [T desde, T hasta] { get; set; }
 	}
 }
