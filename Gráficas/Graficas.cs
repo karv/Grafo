@@ -83,14 +83,6 @@ namespace Graficas
 			return Vecino(nodo);
 		}
 
-		bool IGrafica<T>.EsSimétrico
-		{
-			get
-			{
-				return EsSimetrico;
-			}
-		}
-
 		public bool ExisteArista(T desde, T hasta)
 		{
 			return this[desde, hasta] < float.PositiveInfinity;

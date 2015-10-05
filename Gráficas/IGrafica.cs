@@ -23,7 +23,5 @@ namespace Graficas
 		ICollection<T> Vecinos(T nodo);
 
 		IRuta<T> ToRuta(IEnumerable<T> seq);
-
-		bool EsSimétrico{ get; }
 	}
 }

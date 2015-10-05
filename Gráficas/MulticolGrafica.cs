@@ -84,16 +84,6 @@ namespace Graficas
 			_asignación[defColor].AgregaArista(desde, hasta);
 		}
 
-
-		bool IGrafica<TNodo>.EsSimétrico
-		{
-			get
-			{
-				return false;
-			}
-		}
-
-
 		#endregion
 
 

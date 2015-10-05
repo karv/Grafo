@@ -109,14 +109,6 @@ namespace Graficas
 			return getNodo(aris.Origen).Vecinos.Contains(aris.Destino);
 		}
 
-		bool IGrafica<T>.EsSimétrico
-		{
-			get
-			{
-				return false;
-			}
-		}
-
 		public void AgregaArista(IArista<T> aris)
 		{
 			getNodo(aris.Origen).Vecinos.Add(aris.Destino);

@@ -95,14 +95,6 @@ namespace Graficas
 			return ExisteArista(new Arista<T>(desde, hasta, 1));
 		}
 
-		bool IGrafica<T>.EsSimétrico
-		{
-			get
-			{
-				return true;
-			}
-		}
-
 		/// <summary>
 		/// Agrega una arista
 		/// </summary>
