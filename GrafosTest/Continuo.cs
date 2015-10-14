@@ -102,13 +102,13 @@ namespace Test
 			inicial.FromGrafica (0);
 
 			inicial.AlDesplazarse += delegate {
-				Console.WriteLine ("Despl a " + inicial.ToString ());
+				Console.WriteLine ("Despl a " + inicial);
 			};
 			inicial.AlLlegarANodo += delegate {
-				Console.WriteLine ("Nodo: " + inicial.ToString ());
+				Console.WriteLine ("Nodo: " + inicial);
 			};
 			inicial.AlTerminarRuta += delegate {
-				Console.WriteLine ("Ruta terminada: " + inicial.ToString ());
+				Console.WriteLine ("Ruta terminada: " + inicial);
 			};
 
 			var final = new Continuo<int>.ContinuoPunto (Gr);
