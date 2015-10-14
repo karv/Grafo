@@ -251,7 +251,7 @@ namespace Graficas.Continuo
 					else
 					{
 						B = destino;
-						Loc = dist;
+						Loc += dist;
 					}
 					dist = 0;
 					AlDesplazarse?.Invoke(this, null);
