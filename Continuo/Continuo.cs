@@ -140,12 +140,9 @@ namespace Graficas.Continuo
 				{
 					return punto.EnOrigen ? A.Equals(punto.A) : punto.CoincideCon(this);
 				}
-				else
-				{
-					if (punto.EnOrigen)
-						return A.Equals(punto.A) || B.Equals(punto.B);
-					return Extremos.Equals(punto.Extremos);
-				}
+				if (punto.EnOrigen)
+					return A.Equals(punto.A) || B.Equals(punto.B);
+				return Extremos.Equals(punto.Extremos);
 			}
 
 			/// <summary>
@@ -251,7 +248,7 @@ namespace Graficas.Continuo
 					else
 					{
 						B = destino;
-						Loc = dist;
+						Loc += dist;
 					}
 					dist = 0;
 					AlDesplazarse?.Invoke(this, null);
