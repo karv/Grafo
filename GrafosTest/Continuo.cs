@@ -118,6 +118,9 @@ namespace Test
 
 			var r = Gr.RutaÓptima (inicial, final, rutas);
 
+			Assert.False (inicial.AvanzarHacia (r, 0));
+			Console.WriteLine (inicial);
+
 			for (int i = 0; i < 100; i++) {
 				Assert.False (inicial.AvanzarHacia (r, 0.06f));
 				Console.WriteLine (inicial);
