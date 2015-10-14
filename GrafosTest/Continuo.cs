@@ -133,22 +133,6 @@ namespace Test
 
 			Console.WriteLine (r);
 		}
-
-		/// <summary>
-		/// Pruebas de desplazamiento por ruta óptima
-		/// </summary>
-		[Test]
-		public void DesplRutas ()
-		{
-			Iniciar ();
-
-			for (int i = 0; i < 100; i++) {
-				Graf [i, i + 1] = 1;
-			}
-
-
-
-		}
 	}
 }
 
