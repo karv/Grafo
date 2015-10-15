@@ -20,6 +20,21 @@ namespace Graficas
 
 		#region IGrafica
 
+		/// <summary>
+		/// Calcula el subgrafo generado por un subconjutno de Nodos
+		/// </summary>
+		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
+		public GrafoNoPeso<T> Subgrafo(IEnumerable<T> conjunto)
+		{
+			throw new NotImplementedException();
+		}
+
+		ILecturaGrafo<T> ILecturaGrafo<T>.Subgrafo(IEnumerable<T> conjunto)
+		{
+			return Subgrafo(conjunto);
+		}
+
+
 		bool ILecturaGrafo<T>.this [T desde, T hasta]{ get { return ExisteArista(desde, hasta); } }
 
 		bool IGrafo<T>.this [T desde, T hasta]

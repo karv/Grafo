@@ -21,5 +21,11 @@ namespace Graficas
 		ICollection<T> Vecinos(T nodo);
 
 		IRuta<T> ToRuta(IEnumerable<T> seq);
+
+		/// <summary>
+		/// Calcula el subgrafo generado por un subconjutno de Nodos
+		/// </summary>
+		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
+		ILecturaGrafo<T> Subgrafo(IEnumerable<T> conjunto);
 	}
 }

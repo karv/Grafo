@@ -21,6 +21,15 @@ namespace Graficas
 			}
 		}
 
+		/// <summary>
+		/// Calcula el subgrafo generado por un subconjutno de Nodos
+		/// </summary>
+		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
+		public ILecturaGrafo<T> Subgrafo(IEnumerable<T> conjunto)
+		{
+			throw new NotImplementedException();
+		}
+
 		ICollection<T> _nodos = new HashSet<T>();
 
 		readonly ISet<Clan> clanes = new HashSet<Clan>();
