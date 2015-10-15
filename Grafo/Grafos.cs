@@ -311,13 +311,11 @@ namespace Graficas
 		{
 			get
 			{
-				return Vecinos[new Tuple<T, T>(x, y)];
+				return EsSimetrico ? Math.Min(Vecinos[new Tuple<T, T>(x, y)], Vecinos[new Tuple<T, T>(y, x)]) : Vecinos[new Tuple<T, T>(x, y)];
 			}
 			set
 			{
 				Vecinos[new Tuple<T, T>(x, y)] = value;
-				if (EsSimetrico)
-					Vecinos[new Tuple<T, T>(y, x)] = value;//TODO hacer que essimetrico haga efecto al leer; no al escribir.
 			}
 		}
 
