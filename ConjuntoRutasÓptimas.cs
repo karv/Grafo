@@ -13,6 +13,12 @@ namespace Graficas
 	{
 		ListaPeso<TNodo, TNodo, IRuta<TNodo>> RutasDict { get; }
 
+		/// <summary>
+		/// Devuelve el camino óptimo entre dos puntos.
+		/// Si no existe algún camino, es null
+		/// </summary>
+		/// <param name="x">Origen</param>
+		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo(TNodo x, TNodo y)
 		{
 			return RutasDict[x, y];
@@ -46,6 +52,10 @@ namespace Graficas
 			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>>(null, null);
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the class.
+		/// </summary>
+		/// <param name="gr">Gráfica asociada</param>
 		public ConjuntoRutasÓptimas(ILecturaGrafo<TNodo> gr) : this()
 		{
 			var aris = new List<IArista<TNodo>>(gr.Aristas());

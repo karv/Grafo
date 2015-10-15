@@ -18,6 +18,11 @@ namespace Graficas
 
 		#region IGrafica
 
+		public ILecturaGrafo<TNodo> Subgrafo(IEnumerable<TNodo> conjunto)
+		{
+			throw new NotImplementedException();
+		}
+
 		ICollection<IArista<TNodo>> ILecturaGrafo<TNodo>.Aristas()
 		{
 			throw new NotImplementedException();
