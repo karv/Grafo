@@ -105,9 +105,22 @@ namespace Graficas.Rutas
 			Paso.Add(new NodoPeso(nodo, peso));
 		}
 
-		public IRuta<T> Reversa()
+		/// <summary>
+		/// Construye uan ruta como ésta, en sentido inverso.
+		/// </summary>
+		public Ruta<T> Reversa() //TEST
 		{
-			throw new NotImplementedException();
+			var ret = new Ruta<T>(NodoFinal);
+			for (int i = Paso.Count - 1; i >= 0; i--)
+			{
+				ret.Paso.Add(Paso[i]);
+			}
+			return ret;
+		}
+
+		IRuta<T> IRuta<T>.Reversa()
+		{
+			return Reversa();
 		}
 
 		/// <summary>
