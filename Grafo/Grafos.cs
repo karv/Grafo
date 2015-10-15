@@ -9,7 +9,8 @@ namespace Graficas
 	/// Representa una gráfica, en el sentido abstracto.
 	/// Los nodos son del tipo <c>T</c>.
 	/// <Vecinosy>
-	public class Grafo<T> : IGrafoPeso<T>, IGrafoRutas<T> where T : IEquatable<T>
+	public class Grafo<T> : IGrafoPeso<T>, IGrafoRutas<T> , IGrafo<T>
+		where T : IEquatable<T>
 	{
 		#region ctor
 
@@ -32,6 +33,18 @@ namespace Graficas
 		#endregion
 
 		#region IGrafica
+
+		bool IGrafo<T>.this [T desde, T hasta]
+		{ 
+			get
+			{
+				return this[desde, hasta] == 0;
+			}
+			set
+			{
+				this[desde, hasta] = (value ? 1 : 0);
+			}
+		}
 
 		/// <summary>
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
