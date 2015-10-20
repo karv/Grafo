@@ -578,6 +578,7 @@ namespace Graficas.Continuo
 			ret.A = a;
 			ret.B = b;
 			ret.Loc = loc;
+			return ret;
 		}
 
 		/// <summary>
