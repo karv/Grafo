@@ -299,7 +299,8 @@ namespace Graficas.Continuo
 				{
 					foreach (var x in y.PuntosEnRuta(Universo))
 					{
-						AlColisionar.Invoke(x);
+						if (!ReferenceEquals(x, this))
+							AlColisionar.Invoke(x);
 					}
 				}
 
