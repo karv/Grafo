@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Graficas;
 using Graficas.Rutas;
 using ListasExtra;
+using System.Diagnostics;
 
 namespace Graficas.Continuo
 {
@@ -291,21 +292,22 @@ namespace Graficas.Continuo
 
 			void VerificaColisión(ContinuoPunto anterior)
 			{
-				// Verificar colisiones
-				var y = new Ruta(anterior);
-				y.ConcatFinal(this);
-
-				if (AlColisionar != null)
+				var extremoBase = anterior.A;
+				var minDist = anterior.DistanciaAExtremo(extremoBase);
+				var maxDist = DistanciaAExtremo(extremoBase);
+				Debug.WriteLineIf(maxDist < minDist, "¡Pasó algo raro!");
+				foreach (var x in Universo.PuntosArista(A, B))
 				{
-					foreach (var x in y.PuntosEnRuta(Universo))
+					if (!ReferenceEquals(x, this) &&
+					    !ReferenceEquals(x, anterior) &&
+					    minDist <= x.DistanciaAExtremo(extremoBase) &&
+					    maxDist >= x.DistanciaAExtremo(extremoBase))
 					{
-						if (!ReferenceEquals(x, this))
-							AlColisionar.Invoke(x);
+						AlColisionar?.Invoke(x);
+						x.AlColisionar?.Invoke(this);
 					}
 				}
-
 				anterior.Remove();
-
 			}
 
 			/// <summary>

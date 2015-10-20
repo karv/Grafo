@@ -144,6 +144,28 @@ namespace Test
 
 			Console.WriteLine(r);
 		}
+
+		[Test]
+		public void ProbarEventoColisión()
+		{
+			Iniciar();
+			int i;
+			for (i = 0; i < 10; i++)
+			{
+				Graf[0, i + 1] = 1;
+			}
+
+			var p1 = Gr.AgregaPunto(0);
+			var p2 = Gr.AgregaPunto(1);
+
+			p1.AlColisionar += obj => Console.WriteLine(string.Format("Colisión: {0} con {1}; tiempo {2}", p1, obj, i));
+
+			for (i = 0; i < 100; i++)
+			{
+				p1.AvanzarHacia(1, 0.01f);
+				p2.AvanzarHacia(0, 0.001f);
+			}
+			Assert.AreEqual(2, Gr.Puntos.Count);
+		}
 	}
 }
-
