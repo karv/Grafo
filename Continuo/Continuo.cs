@@ -579,6 +579,16 @@ namespace Graficas.Continuo
 			ret.B = b;
 			ret.Loc = loc;
 		}
+
+		/// <summary>
+		/// Agrega un punto al grafo y lo devuelve
+		/// </summary>
+		/// <param name="a">Punto en el grafo</param>
+		public ContinuoPunto AgregaPunto(T a)
+		{
+			return new ContinuoPunto(this, a);
+		}
+
 	}
 
 }
