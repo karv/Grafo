@@ -200,7 +200,7 @@ namespace Graficas
 			return (this[aris.Origen, aris.Destino] < float.PositiveInfinity);
 		}
 
-		public IRuta<T> ToRuta(IEnumerable<T> seq) //TEST
+		public IRuta<T> ToRuta(IEnumerable<T> seq)
 		{
 			IRuta<T> ret = new Ruta<T>();
 			bool iniciando = true;

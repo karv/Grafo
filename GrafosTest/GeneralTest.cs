@@ -60,6 +60,30 @@ namespace Test
 
 			Console.WriteLine(string.Format("Normal: \t{0}\nReversa:\t{1}", ruta, reversa));
 		}
+
+		[Test]
+		public void TestEnumToRuta()
+		{
+			var gr = new Grafo<int>();
+			gr.EsSimétrico = true;
+
+			GeneraGraficaConexa(gr);
+
+			var enume = new System.Collections.Generic.List<int>();
+			enume.Add(0);
+			enume.Add(1);
+			enume.Add(0);
+			enume.Add(2);
+			enume.Add(0);
+			enume.Add(3);
+			var ruta = gr.ToRuta(enume);
+
+			Assert.AreEqual(5, ruta.NumPasos);
+			Assert.AreEqual(5, ruta.Longitud);
+			Assert.AreEqual(0, ruta.NodoInicial);
+			Assert.AreEqual(3, ruta.NodoFinal);
+
+			Console.WriteLine(ruta);
+		}
 	}
 }
-
