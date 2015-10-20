@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using Graficas.Rutas;
+using Graficas.Extensiones;
 
 namespace Test
 {
@@ -84,6 +85,33 @@ namespace Test
 			Assert.AreEqual(3, ruta.NodoFinal);
 
 			Console.WriteLine(ruta);
+		}
+
+		[Test]
+		public void TestGrafConexa()
+		{
+			var gr = new Grafo<int>();
+			gr.EsSimétrico = true;
+			const int maxNod = 99;
+			const int numComp = 3;
+
+			for (int i = 0; i < maxNod - numComp; i++)
+			{
+				gr[i, i + numComp] = 1;
+			}
+
+			var comp = gr.ComponentesConexas();
+			Assert.AreEqual(numComp, comp.Count);
+
+			foreach (var item in comp)
+			{
+				Assert.AreEqual(maxNod / numComp, item.Nodos.Count);
+				Console.WriteLine();
+				foreach (var z in item.Nodos)
+				{
+					Console.Write(z + "\t");
+				}
+			}
 		}
 	}
 }
