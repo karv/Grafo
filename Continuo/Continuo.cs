@@ -251,12 +251,12 @@ namespace Graficas.Continuo
 						Loc += dist;
 					}
 					dist = 0;
-					AlDesplazarse?.Invoke(this, null);
+					AlDesplazarse?.Invoke();
 					return false;
 				}
 				dist = dist - restante;
-				AlDesplazarse?.Invoke(this, null);
-				AlLlegarANodo?.Invoke(this, null);
+				AlDesplazarse?.Invoke();
+				AlLlegarANodo?.Invoke();
 				FromGrafica(destino);
 				return true;
 			}
@@ -283,7 +283,7 @@ namespace Graficas.Continuo
 						return false;
 					ruta.EliminarPrimero();
 				}
-				AlTerminarRuta?.Invoke(this, null);
+				AlTerminarRuta?.Invoke();
 				return true;
 			}
 
@@ -321,17 +321,19 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Ocurre cuando este punto se desplaza con respecto a la gráfica.
 			/// </summary>
-			public event EventHandler AlDesplazarse;
+			public event Action AlDesplazarse;
 
 			/// <summary>
 			/// Ocurre cuando este punto coincide con un punto en la gráfica.
 			/// </summary>
-			public event EventHandler AlLlegarANodo;
+			public event Action AlLlegarANodo;
 
 			/// <summary>
 			/// Ocurre cuando, al llamar a AvanzarHacia(Ruta), ésta devuelve true.
 			/// </summary>
-			public event EventHandler AlTerminarRuta;
+			public event Action AlTerminarRuta;
+
+			//public event Action AlPasarPorNodo;
 
 			#endregion
 
