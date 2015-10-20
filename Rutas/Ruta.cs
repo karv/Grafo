@@ -108,9 +108,9 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Construye uan ruta como ésta, en sentido inverso.
 		/// </summary>
-		public Ruta<T> Reversa() //TEST
+		public Ruta<T> Reversa()
 		{
-			var ret = new Ruta<T>(NodoFinal);
+			var ret = new Ruta<T>();
 			for (int i = Paso.Count - 1; i >= 0; i--)
 			{
 				ret.Paso.Add(Paso[i]);
