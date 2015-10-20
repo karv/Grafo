@@ -591,6 +591,39 @@ namespace Graficas.Continuo
 			return new ContinuoPunto(this, a);
 		}
 
+		IEnumerable<ContinuoPunto> PuntosArista(ParNoOrdenado<T> arista)
+		{
+			foreach (var x in Puntos)
+			{
+				if (x.Extremos.Equals(arista))
+				{
+					yield return x;
+				}
+			}
+			
+		}
+
+		/// <summary>
+		/// Enumera los puntos existentes en una arista
+		/// </summary>
+		/// <param name="origen">Un extemo de la arista</param>
+		/// <param name="destino">Segundo extremo de la arista</param>
+		public IEnumerable<ContinuoPunto> PuntosArista(T origen, T destino)
+		{
+			var aris = new ParNoOrdenado<T>(origen, destino);
+			return PuntosArista(aris);
+		}
+
+		/// <summary>
+		/// Enumera los puntos existentes en una arista
+		/// </summary>
+		/// <param name="arista">Arista.</param>
+		public IEnumerable<ContinuoPunto> PuntosArista(IArista<T> arista)
+		{
+			var aris = new ParNoOrdenado<T>(arista.Origen, arista.Destino);
+			return PuntosArista(aris);
+		}
+
 	}
 
 }
