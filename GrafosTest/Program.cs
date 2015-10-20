@@ -9,7 +9,7 @@ namespace GrafosTest
 		public static void Main2(string[] args)
 		{
 			Grafo<int> g = new Grafo<int>();
-			g.EsSimetrico = true;
+			g.EsSimétrico = true;
 
 			GrafoClan<int> gr = new GrafoClan<int>();
 			gr.AgregaArista(0, 1);

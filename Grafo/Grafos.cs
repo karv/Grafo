@@ -295,7 +295,7 @@ namespace Graficas
 			throw new Exception("No sé cómo llegó el algoritmo aquí D:");
 		}
 
-		public bool EsSimetrico { get; set; }
+		public bool EsSimétrico { get; set; }
 
 		/// <summary>
 		/// Devuelve la lista de vecinos de x (a todos los que apunta x)
@@ -340,7 +340,7 @@ namespace Graficas
 		{
 			get
 			{
-				return EsSimetrico ? Math.Min(Vecinos[new Tuple<T, T>(x, y)], Vecinos[new Tuple<T, T>(y, x)]) : Vecinos[new Tuple<T, T>(x, y)];
+				return EsSimétrico ? Math.Min(Vecinos[new Tuple<T, T>(x, y)], Vecinos[new Tuple<T, T>(y, x)]) : Vecinos[new Tuple<T, T>(x, y)];
 			}
 			set
 			{

@@ -15,7 +15,7 @@ namespace Test
 		{
 			Graf = new Grafo<int>();
 			Gr = new Continuo<int>(Graf);
-			Graf.EsSimetrico = true;
+			Graf.EsSimétrico = true;
 		}
 
 		[Test]
