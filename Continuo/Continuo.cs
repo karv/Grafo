@@ -565,6 +565,20 @@ namespace Graficas.Continuo
 		{
 			return Puntos.FindAll(x => x.EnIntervaloInmediato(p1, p2));
 		}
+
+		/// <summary>
+		/// Agrega un punto al grafo y lo devuelve
+		/// </summary>
+		/// <param name="a">Un extremo del intervalo</param>
+		/// <param name="b">Otro extremo del intervalo</param>
+		/// <param name="loc">Distancia de este punto a el primer punto dado, a</param>
+		public ContinuoPunto AgregaPunto(T a, T b, float loc)
+		{
+			var ret = new ContinuoPunto(this);
+			ret.A = a;
+			ret.B = b;
+			ret.Loc = loc;
+		}
 	}
 
 }
