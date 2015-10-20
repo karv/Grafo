@@ -44,6 +44,28 @@ namespace Graficas.Continuo
 				return EnOrigen ? A.ToString() : string.Format("[{0}, {1}]@{2}", A, B, Loc);
 			}
 
+			/// <summary>
+			/// Devuelve un clón (aún como elemento de la gráfica base) de este punto.
+			/// </summary>
+			public ContinuoPunto Clonar()
+			{
+				var ret = new ContinuoPunto(Universo);
+				ret.A = A;
+				ret.B = B;
+				ret.Loc = Loc;
+				return ret;
+			}
+
+			/// <summary>
+			/// Elimina este punto de la gráfica y se libera.
+			/// </summary>
+			public void Remove()
+			{
+				Universo.Puntos.Remove(this);
+				A = default(T);
+				B = default(T);
+			}
+
 			#endregion
 
 			#region Ctor
@@ -239,6 +261,8 @@ namespace Graficas.Continuo
 			bool AvanzarHacia(T destino, ref float dist)
 			{
 				var restante = DistanciaAExtremo(destino);
+				var anterior = Clonar();
+
 				if (restante > dist) // No llega
 				{
 					if (destino.Equals(A))
@@ -252,13 +276,35 @@ namespace Graficas.Continuo
 					}
 					dist = 0;
 					AlDesplazarse?.Invoke();
+
+					VerificaColisión(anterior);
 					return false;
 				}
+
 				dist = dist - restante;
 				AlDesplazarse?.Invoke();
 				AlLlegarANodo?.Invoke();
 				FromGrafica(destino);
+				VerificaColisión(anterior);
 				return true;
+			}
+
+			void VerificaColisión(ContinuoPunto anterior)
+			{
+				// Verificar colisiones
+				var y = new Ruta(anterior);
+				y.ConcatFinal(this);
+
+				if (AlColisionar != null)
+				{
+					foreach (var x in y.PuntosEnRuta(Universo))
+					{
+						AlColisionar.Invoke(x);
+					}
+				}
+
+				anterior.Remove();
+
 			}
 
 			/// <summary>
@@ -333,7 +379,10 @@ namespace Graficas.Continuo
 			/// </summary>
 			public event Action AlTerminarRuta;
 
-			//public event Action AlPasarPorNodo;
+			/// <summary>
+			/// Ocurre cuando un punto colisiona con otro
+			/// </summary>
+			public event Action<ContinuoPunto> AlColisionar;
 
 			#endregion
 
@@ -473,6 +522,14 @@ namespace Graficas.Continuo
 				}
 
 				return false;
+			}
+
+			/// <summary>
+			/// Devuelve una enumeración de los puntos contenidos en esta ruta
+			/// </summary>
+			public List<ContinuoPunto> PuntosEnRuta(Continuo<T> gr)
+			{
+				return gr.Puntos.FindAll(Contiene);
 			}
 		}
 
