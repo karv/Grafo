@@ -373,6 +373,9 @@ namespace Graficas.Continuo
 			#endregion
 		}
 
+		/// <summary>
+		/// Una ruta de ContinuoPuntos
+		/// </summary>
 		public class Ruta : Ruta<T>
 		{
 			/// <summary>
