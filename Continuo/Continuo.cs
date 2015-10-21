@@ -606,7 +606,5 @@ namespace Graficas.Continuo
 			var aris = new ParNoOrdenado<T> (arista.Origen, arista.Destino);
 			return PuntosArista (aris);
 		}
-
 	}
-
 }

@@ -55,4 +55,3 @@ namespace Graficas.Rutas
 		IEnumerable<IPaso<T>> Pasos { get; }
 	}
 }
-

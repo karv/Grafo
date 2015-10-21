@@ -4,10 +4,6 @@
 	{
 		void Clear ();
 
-		new bool this [T desde, T hasta]
-		{
-			get;
-			set;
-		}
+		new bool this [T desde, T hasta]{ get; set; }
 	}
 }

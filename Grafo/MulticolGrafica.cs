@@ -55,9 +55,9 @@ namespace Graficas
 
 				foreach (var x in _asignación)
 				{
-					if (mejorPaso.peso > 1 &&
+					if (mejorPaso.Peso > 1 &&
 					    x.Value.Vecinos (arr [i]).Contains (arr [i + 1]))
-						mejorPaso.peso = 1;
+						mejorPaso = new Paso<TNodo> (mejorPaso.Origen, mejorPaso.Destino, 1);
 				}
 				ret.Concat (mejorPaso);
 			}
