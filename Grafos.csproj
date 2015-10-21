@@ -48,7 +48,6 @@
     <Compile Include="Exception\NodoInexistenteException.cs" />
     <Compile Include="General\ParNoOrdenado.cs" />
     <Compile Include="Exception\ColorDuplicadoException.cs" />
-    <Compile Include="ConjuntoRutasÓptimas.cs" />
     <Compile Include="Grafo\GrafoClan.cs" />
     <Compile Include="Grafo\GrafoNoPeso.cs" />
     <Compile Include="Grafo\Grafos.cs" />
@@ -59,12 +58,13 @@
     <Compile Include="Grafo\MulticolGrafica.cs" />
     <Compile Include="Grafo\IGrafo.cs" />
     <Compile Include="Grafo\IGrafoPeso.cs" />
-    <Compile Include="Extensiones.cs" />
-    <Compile Include="Nodo.cs" />
-    <Compile Include="INodo.cs" />
-    <Compile Include="HardArista.cs" />
-    <Compile Include="HardRuta.cs" />
-    <Compile Include="HardGrafo.cs" />
+    <Compile Include="Grafo\Extensiones.cs" />
+    <Compile Include="Grafo\HardGrafo.cs" />
+    <Compile Include="Aristas\HardArista.cs" />
+    <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
+    <Compile Include="Rutas\HardRuta.cs" />
+    <Compile Include="Aristas\INodo.cs" />
+    <Compile Include="Aristas\Nodo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
