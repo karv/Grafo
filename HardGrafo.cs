@@ -4,12 +4,12 @@ using Graficas;
 using Graficas.Rutas;
 using System.Linq;
 
-namespace Graficas.Nodos
+namespace Graficas
 {
 	/// <summary>
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>
-	public class ConjuntoNodos<T> :  IGrafo<T> // TEST todo
+	public class HardGrafo<T> :  IGrafo<T> // TEST todo
 		where T : IEquatable<T>
 	{
 		HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>>();
@@ -58,7 +58,7 @@ namespace Graficas.Nodos
 
 		public ILecturaGrafo<T> Subgrafo(IEnumerable<T> conjunto)
 		{
-			var ret = new ConjuntoNodos<T>();
+			var ret = new HardGrafo<T>();
 			foreach (var x in conjunto)
 			{
 				ret.Add(x);
@@ -79,12 +79,12 @@ namespace Graficas.Nodos
 			return ret;
 		}
 
-		public ConjuntoNodos()
+		public HardGrafo()
 		{
 		}
 
 		/// <param name="graf">Gráfica de dónde copiar la información.</param>
-		public ConjuntoNodos(IGrafo<T> graf) : this()
+		public HardGrafo(IGrafo<T> graf) : this()
 		{
 			// Primero crear los nodos
 			foreach (var x in graf.Nodos)

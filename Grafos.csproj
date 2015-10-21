@@ -61,10 +61,10 @@
     <Compile Include="Grafo\IGrafoPeso.cs" />
     <Compile Include="Extensiones.cs" />
     <Compile Include="Nodo.cs" />
-    <Compile Include="ConjuntoNodos.cs" />
     <Compile Include="INodo.cs" />
     <Compile Include="HardArista.cs" />
     <Compile Include="HardRuta.cs" />
+    <Compile Include="HardGrafo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
