@@ -138,8 +138,8 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Revisa si este punto coincide (están en un mismo intervalo) con otro
 			/// </summary>
-			public bool CoincideCon (ContinuoPunto punto) 
-			//TEST: Al parecer devuelve false cuando son extremos contrarios de un intervalo. ¿Usar MismoIntervalo?;
+			[Obsolete ("Usar EnMismoIntervalo()")]
+			public bool CoincideCon (ContinuoPunto punto)
 			{
 				if (EnOrigen)
 				{
@@ -187,9 +187,33 @@ namespace Graficas.Continuo
 				{ return new ParNoOrdenado<T> (A, B); }
 			}
 
+			/// <summary>
+			/// Revisa si éste y otro punto están en un mismo intervalo.
+			/// </summary>
+			/// <returns><c>true</c>, if mismo intervalo was ened, <c>false</c> otherwise.</returns>
+			/// <param name="punto">Punto.</param>
 			public bool EnMismoIntervalo (ContinuoPunto punto)
 			{
-				return Extremos.Equals (punto.Extremos);
+				// Esto si ambos extremos esan definidos
+				if (EnOrigen)
+				{
+					if (punto.EnOrigen)
+					{
+						// True si son vecinos según Universo
+						return A.Equals (punto.A) || (!float.IsPositiveInfinity (Universo.GráficaBase [A, punto.A]));
+					}
+					else
+					{
+						if (!punto.Extremos.Contiene (A))
+							return false;
+						var nodo = punto.Extremos.Excepto (A);
+						return !float.IsPositiveInfinity (Universo.GráficaBase [A, nodo]);
+					}
+				}
+				else
+				{
+					return punto.EnOrigen ? punto.EnMismoIntervalo (this) : Extremos.Equals (punto.Extremos);
+				}
 			}
 
 			/// <summary>
@@ -326,7 +350,7 @@ namespace Graficas.Continuo
 			/// <param name="dist">Distancia</param>
 			public bool AvanzarHacia (ContinuoPunto destino, ref float dist)
 			{
-				if (!CoincideCon (destino))
+				if (!EnMismoIntervalo (destino))
 					throw new Exception ("No se puede avanzar si no coinciden");
 
 				var relRestante = DistanciaAExtremo (A) - destino.DistanciaAExtremo (A);
@@ -484,7 +508,7 @@ namespace Graficas.Continuo
 				// 2) Está en un intervalo intermedio
 			
 				// 0)
-				if (NodoInicial.CoincideCon (punto))
+				if (NodoInicial.EnMismoIntervalo (punto))
 				{
 					T MyA = punto.A;
 					if (NodoInicial.DistanciaAExtremo (MyA) <= punto.Loc)
@@ -499,7 +523,7 @@ namespace Graficas.Continuo
 				}
 
 				// 1)
-				if (NodoFinal.CoincideCon (punto))
+				if (NodoFinal.EnMismoIntervalo (punto))
 				{
 					T MyB = punto.B;
 					if (NodoFinal.DistanciaAExtremo (MyB) < punto.Aloc)
