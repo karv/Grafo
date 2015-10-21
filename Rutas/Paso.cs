@@ -2,49 +2,26 @@
 {
 	public struct Paso<T>: IPaso<T>
 	{
-		public T origen;
-		public T destino;
-		public float peso;
-
-		public Paso(T origen, T destino, float peso)
+		public Paso (T origen, T destino, float peso)
 		{
-			this.origen = origen;
-			this.destino = destino;
-			this.peso = peso;
+			Origen = origen;
+			Destino = destino;
+			Peso = peso;
 		}
 
-		public override string ToString()
+		public override string ToString ()
 		{
-			return string.Format("{0} --{1}--> {2}", origen, peso, destino);
+			return string.Format ("{0} --[{1}]--> {2}", Origen, Peso, Destino);
 		}
 
 		#region IMultiPaso implementation
 
-		public T Origen
-		{
-			get
-			{
-				return origen;
-			}
-		}
+		public T Origen { get; }
 
-		public T Destino
-		{
-			get
-			{
-				return destino;
-			}
-		}
+		public T Destino { get; }
 
-		public float Peso
-		{
-			get
-			{
-				return peso;
-			}
-		}
+		public float Peso { get; }
 
 		#endregion
 	}
 }
-

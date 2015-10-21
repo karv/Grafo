@@ -10,50 +10,70 @@ namespace Graficas
 		class Nodo
 		{
 			public T Obj;
-			public ISet<T> Vecinos = new HashSet<T>();
+			public ISet<T> Vecinos = new HashSet<T> ();
 
-			public Nodo(T nod)
+			public Nodo (T nod)
 			{
 				Obj = nod;
 			}
 		}
 
+		public void Clear ()
+		{
+			nodos.Clear ();
+		}
+
 		#region IGrafica
 
-		bool ILecturaGrafo<T>.this [T desde, T hasta]{ get { return ExisteArista(desde, hasta); } }
+		/// <summary>
+		/// Calcula el subgrafo generado por un subconjutno de Nodos
+		/// </summary>
+		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
+		public GrafoNoPeso<T> Subgrafo (IEnumerable<T> conjunto)
+		{
+			throw new NotImplementedException ();
+		}
+
+		ILecturaGrafo<T> ILecturaGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		{
+			return Subgrafo (conjunto);
+		}
+
+
+		bool ILecturaGrafo<T>.this [T desde, T hasta]{ get { return ExisteArista (desde, hasta); } }
 
 		bool IGrafo<T>.this [T desde, T hasta]
 		{ 
 			get
 			{ 
-				return ExisteArista(desde, hasta); 
+				return ExisteArista (desde, hasta); 
 			} 
 			set
 			{
 				if (value)
 				{
-					AgregaArista(desde, hasta);
+					AgregaArista (desde, hasta);
 				}
 				else
 				{
-					getNodo(desde).Vecinos.Remove(hasta);
+					getNodo (desde).Vecinos.Remove (hasta);
 				}
 			}
 		}
 
-		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas()
+		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas ()
 		{
-			throw new NotImplementedException();
+			throw new NotImplementedException ();
 		}
 
-		public IRuta<T> ToRuta(IEnumerable<T> seq)
+		public IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
-			var ret = new Ruta<T>();
-			var lst = new List<T>(seq);
+			var ret = new Ruta<T> ();
+			var lst = new List<T> (seq);
 			for (int i = 0; i < lst.Count - 1; i++)
 			{
-				var nuevoPaso = new Paso<T>(lst[i], lst[i + 1], 1);
-				ret.Concat(nuevoPaso);
+				var nuevoPaso = new Paso<T> (lst [i], lst [i + 1], 1);
+				ret.Concat (nuevoPaso);
 			}
 			return ret;
 		}
@@ -63,9 +83,9 @@ namespace Graficas
 		/// </summary>
 		/// <param name="desde">Origen.</param>
 		/// <param name="hasta">Destino.</param>
-		public void AgregaVertice(T desde, T hasta)
+		public void AgregaVertice (T desde, T hasta)
 		{
-			getNodo(desde).Vecinos.Add(hasta);
+			getNodo (desde).Vecinos.Add (hasta);
 		}
 
 		/// <summary>
@@ -74,9 +94,9 @@ namespace Graficas
 		/// <returns><c>true</c>, if arista was existed, <c>false</c> otherwise.</returns>
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
-		public bool ExisteArista(T desde, T hasta)
+		public bool ExisteArista (T desde, T hasta)
 		{
-			return this[desde].Contains(hasta);
+			return this [desde].Contains (hasta);
 		}
 
 		/// <summary>
@@ -84,9 +104,9 @@ namespace Graficas
 		/// </summary>
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
-		public void AgregaArista(T desde, T hasta)
+		public void AgregaArista (T desde, T hasta)
 		{
-			this[desde].Add(hasta);
+			this [desde].Add (hasta);
 		}
 
 		/// <summary>
@@ -97,7 +117,7 @@ namespace Graficas
 		{
 			get
 			{
-				return nodos.ConvertAll(x => x.Obj);
+				return nodos.ConvertAll (x => x.Obj);
 			}
 		}
 
@@ -105,9 +125,9 @@ namespace Graficas
 		/// Devuelve la lista de vecinos de un nodo.
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public ICollection<T> Vecinos(T nodo)
+		public ICollection<T> Vecinos (T nodo)
 		{
-			return nodos.Find(x => x.Equals(nodo)).Vecinos;
+			return nodos.Find (x => x.Equals (nodo)).Vecinos;
 		}
 
 		/// <summary>
@@ -118,26 +138,26 @@ namespace Graficas
 		{
 			get
 			{
-				return nodos.Find(x => x.Obj.Equals(nodo)).Vecinos;
+				return nodos.Find (x => x.Obj.Equals (nodo)).Vecinos;
 			}
 		}
 
-		public bool ExisteArista(IArista<T> aris)
+		public bool ExisteArista (IArista<T> aris)
 		{
-			return getNodo(aris.Origen).Vecinos.Contains(aris.Destino);
+			return getNodo (aris.Origen).Vecinos.Contains (aris.Destino);
 		}
 
-		public void AgregaArista(IArista<T> aris)
+		public void AgregaArista (IArista<T> aris)
 		{
-			getNodo(aris.Origen).Vecinos.Add(aris.Destino);
+			getNodo (aris.Origen).Vecinos.Add (aris.Destino);
 		}
 
-		public void AgregaNodo(T nodo)
+		public void AgregaNodo (T nodo)
 		{
 			// Resiva si existe
-			if (nodos.Exists(x => x.Obj.Equals(nodo)))
-				throw new Exception("Nodo ya existente.");
-			nodos.Add(new Nodo(nodo));
+			if (nodos.Exists (x => x.Obj.Equals (nodo)))
+				throw new Exception ("Nodo ya existente.");
+			nodos.Add (new Nodo (nodo));
 		}
 
 
@@ -145,16 +165,16 @@ namespace Graficas
 
 		#region Internos
 
-		readonly List<Nodo> nodos = new List<Nodo>();
+		readonly List<Nodo> nodos = new List<Nodo> ();
 
 		/// <summary>
 		/// Devuelve el nodo que le corresponde a un objeto tipo T.
 		/// </summary>
 		/// <returns>The nodo.</returns>
 		/// <param name="nod">Nod.</param>
-		Nodo getNodo(T nod)
+		Nodo getNodo (T nod)
 		{
-			return nodos.Find(x => x.Obj.Equals(nod));
+			return nodos.Find (x => x.Obj.Equals (nod));
 		}
 
 		#endregion
@@ -165,16 +185,16 @@ namespace Graficas
 		/// Ctor
 		/// </summary>
 		/// <param name="nods">Nodos de la gráfica.</param>
-		public GrafoNoPeso(T[] nods)
-			: this()
+		public GrafoNoPeso (T[] nods)
+			: this ()
 		{
 			foreach (var x in nods)
 			{
-				AgregaNodo(x);
+				AgregaNodo (x);
 			}
 		}
 
-		public GrafoNoPeso()
+		public GrafoNoPeso ()
 		{
 		}
 

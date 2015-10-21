@@ -9,7 +9,7 @@
     <AssemblyName>Grafos</AssemblyName>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ReleaseVersion>0.1.2.1</ReleaseVersion>
+    <ReleaseVersion>0.1.3</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="ListaExtras">
-      <HintPath>packages\ListaExtras.0.2.2.1\lib\ListaExtras.dll</HintPath>
+      <HintPath>packages\ListaExtras.0.2.3.2\lib\ListaExtras.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -48,7 +48,6 @@
     <Compile Include="Exception\NodoInexistenteException.cs" />
     <Compile Include="General\ParNoOrdenado.cs" />
     <Compile Include="Exception\ColorDuplicadoException.cs" />
-    <Compile Include="ConjuntoRutasÓptimas.cs" />
     <Compile Include="Grafo\GrafoClan.cs" />
     <Compile Include="Grafo\GrafoNoPeso.cs" />
     <Compile Include="Grafo\Grafos.cs" />
@@ -59,15 +58,24 @@
     <Compile Include="Grafo\MulticolGrafica.cs" />
     <Compile Include="Grafo\IGrafo.cs" />
     <Compile Include="Grafo\IGrafoPeso.cs" />
+    <Compile Include="Grafo\Extensiones.cs" />
+    <Compile Include="Grafo\HardGrafo.cs" />
+    <Compile Include="Aristas\HardArista.cs" />
+    <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
+    <Compile Include="Rutas\HardRuta.cs" />
+    <Compile Include="Aristas\INodo.cs" />
+    <Compile Include="Aristas\Nodo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
       <Properties>
         <Policies>
-          <TextStylePolicy TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
-          <CSharpFormattingPolicy IndentSwitchBody="True" AnonymousMethodBraceStyle="NextLine" PropertyBraceStyle="NextLine" PropertyGetBraceStyle="NextLine" PropertySetBraceStyle="NextLine" EventBraceStyle="NextLine" EventAddBraceStyle="NextLine" EventRemoveBraceStyle="NextLine" StatementBraceStyle="NextLine" ElseNewLinePlacement="NewLine" CatchNewLinePlacement="NewLine" FinallyNewLinePlacement="NewLine" WhileNewLinePlacement="DoNotCare" ArrayInitializerWrapping="DoNotChange" ArrayInitializerBraceStyle="NextLine" BeforeMethodDeclarationParentheses="False" BeforeMethodCallParentheses="False" BeforeConstructorDeclarationParentheses="False" BeforeDelegateDeclarationParentheses="False" NewParentheses="False" SpacesBeforeBrackets="False" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+          <XmlFormattingPolicy inheritsSet="null" scope="application/config+xml" />
+          <TextStylePolicy inheritsSet="null" scope="application/config+xml" />
           <TextStylePolicy FileWidth="120" TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
+          <TextStylePolicy inheritsSet="null" scope="application/xml" />
+          <XmlFormattingPolicy inheritsSet="Mono" inheritsScope="application/xml" scope="application/xml" />
         </Policies>
       </Properties>
     </MonoDevelop>

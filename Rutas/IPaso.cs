@@ -4,9 +4,8 @@
 	{
 		T Origen { get; }
 
-		T Destino{ get; }
+		T Destino { get; }
 
 		float Peso { get; }
 	}
 }
-
