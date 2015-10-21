@@ -351,7 +351,9 @@ namespace Graficas.Continuo
 			public bool AvanzarHacia (ContinuoPunto destino, ref float dist)
 			{
 				if (!EnMismoIntervalo (destino))
-					throw new Exception ("No se puede avanzar si no coinciden");
+					throw new Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
+					                                    this,
+					                                    destino,
 
 				var relRestante = DistanciaAExtremo (A) - destino.DistanciaAExtremo (A);
 				var absRestante = Math.Abs (relRestante);
