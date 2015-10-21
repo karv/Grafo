@@ -12,66 +12,66 @@ namespace Graficas
 	public class HardGrafo<T> :  IGrafo<T> // TEST todo
 		where T : IEquatable<T>
 	{
-		HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>>();
+		HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>> ();
 
-		Nodo<T> AsNodo(T obj)
+		Nodo<T> AsNodo (T obj)
 		{
 			foreach (var x in _nodos)
 			{
-				if (x.Objeto.Equals(obj))
+				if (x.Objeto.Equals (obj))
 					return x;
 			}
 			// Si existe, lo agrego
-			var ret = new Nodo<T>(obj);
-			_nodos.Add(ret);
+			var ret = new Nodo<T> (obj);
+			_nodos.Add (ret);
 			return ret;
 		}
 
-		public ICollection<HardArista<T>> Aristas()
+		public ICollection<HardArista<T>> Aristas ()
 		{
-			var ret = new List<HardArista<T>>();
+			var ret = new List<HardArista<T>> ();
 			foreach (var x in _nodos)
 			{
 				foreach (var y in x.Vecindad)
 				{
-					ret.Add(new HardArista<T>(x, y));
+					ret.Add (new HardArista<T> (x, y));
 				}
 			}
 
 			return ret;
 		}
 
-		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas()
+		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas ()
 		{
-			return Aristas() as ICollection<IArista<T>>;
+			return Aristas () as ICollection<IArista<T>>;
 		}
 
-		public IRuta<T> ToRuta(IEnumerable<T> seq)
+		public IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
-			var Nods = new List<Nodo<T>>();
+			var Nods = new List<Nodo<T>> ();
 			foreach (var x in seq)
 			{
-				Nods.Add(AsNodo(x));
+				Nods.Add (AsNodo (x));
 			}
-			return new HardRuta<T>(Nods);
+			return new HardRuta<T> (Nods);
 		}
 
-		public ILecturaGrafo<T> Subgrafo(IEnumerable<T> conjunto)
+		public ILecturaGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
-			var ret = new HardGrafo<T>();
+			var ret = new HardGrafo<T> ();
 			foreach (var x in conjunto)
 			{
-				ret.Add(x);
+				ret.Add (x);
 			}
 
 			foreach (var x in conjunto)
 			{
-				var nodoX = ret.AsNodo(x);
+				var nodoX = ret.AsNodo (x);
 				foreach (var y in AsNodo(x).Vecindad)
 				{
-					if (conjunto.Contains(y.Objeto))
+					if (conjunto.Contains (y.Objeto))
 					{
-						nodoX.Vecindad.Add(y);
+						nodoX.Vecindad.Add (y);
 					}
 				}
 			}
@@ -79,26 +79,27 @@ namespace Graficas
 			return ret;
 		}
 
-		public HardGrafo()
+		public HardGrafo ()
 		{
 		}
 
 		/// <param name="graf">Gráfica de dónde copiar la información.</param>
-		public HardGrafo(IGrafo<T> graf) : this()
+		public HardGrafo (IGrafo<T> graf)
+			: this ()
 		{
 			// Primero crear los nodos
 			foreach (var x in graf.Nodos)
 			{
-				Add(x);
+				Add (x);
 			}
 
 			// Hacer la topología
 			foreach (var item in graf.Nodos)
 			{
-				Nodo<T> nodoDeItem = AsNodo(item);
+				Nodo<T> nodoDeItem = AsNodo (item);
 				foreach (var x in graf.Vecinos(item))
 				{
-					nodoDeItem.Vecindad.Add(AsNodo(x));
+					nodoDeItem.Vecindad.Add (AsNodo (x));
 				}
 			}
 		}
@@ -109,7 +110,7 @@ namespace Graficas
 			{
 				foreach (var x in AsNodo(desde).Vecindad)
 				{
-					if (x.Objeto.Equals(hasta))
+					if (x.Objeto.Equals (hasta))
 						return true;
 				}
 				return false;
@@ -117,9 +118,9 @@ namespace Graficas
 			set
 			{
 				if (value)
-					AsNodo(desde).Vecindad.Add(AsNodo(hasta));
+					AsNodo (desde).Vecindad.Add (AsNodo (hasta));
 				else
-					AsNodo(desde).Vecindad.Remove(AsNodo(hasta));
+					AsNodo (desde).Vecindad.Remove (AsNodo (hasta));
 			}
 		}
 
@@ -127,12 +128,12 @@ namespace Graficas
 
 		#region IGrafica implementation
 
-		ICollection<T> ILecturaGrafo<T>.Vecinos(T nodo)
+		ICollection<T> ILecturaGrafo<T>.Vecinos (T nodo)
 		{
-			var ret = new List<T>();
+			var ret = new List<T> ();
 			foreach (var x in this[nodo].Vecindad)
 			{
-				ret.Add(x.Objeto);
+				ret.Add (x.Objeto);
 			}
 			return ret;
 		}
@@ -141,10 +142,10 @@ namespace Graficas
 		{
 			get
 			{
-				var ret = new List<T>(_nodos.Count);
+				var ret = new List<T> (_nodos.Count);
 				foreach (var x in _nodos)
 				{
-					ret.Add(x.Objeto);
+					ret.Add (x.Objeto);
 				}
 				return ret;
 			}
@@ -154,43 +155,43 @@ namespace Graficas
 		#endregion
 
 
-		public INodo<T> this [T Key]
+		public INodo<T> this [T key]
 		{
 			get
 			{
-				return AsNodo(Key);
+				return AsNodo (key);
 			}
 		}
 
 		#region ICollection
 
-		public void Add(T item)
+		public void Add (T item)
 		{
 			
-			if (Contains(item))
-				throw new Exception("Ya se encuentra nodo.");
+			if (Contains (item))
+				throw new Exception ("Ya se encuentra nodo.");
 
-			_nodos.Add(new Nodo<T>(item));
+			_nodos.Add (new Nodo<T> (item));
 		}
 
-		public void Clear()
+		public void Clear ()
 		{
-			_nodos.Clear();
+			_nodos.Clear ();
 		}
 
-		public bool Contains(T item)
+		public bool Contains (T item)
 		{
 			foreach (var x in _nodos)
 			{
-				if (x.Objeto.Equals(item))
+				if (x.Objeto.Equals (item))
 					return true;
 			}
 			return false;
 		}
 
-		public void Remove(T item)
+		public void Remove (T item)
 		{
-			_nodos.Remove(AsNodo(item));
+			_nodos.Remove (AsNodo (item));
 		}
 
 		public int Count
