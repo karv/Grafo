@@ -64,6 +64,7 @@
     <Compile Include="ConjuntoNodos.cs" />
     <Compile Include="INodo.cs" />
     <Compile Include="HardArista.cs" />
+    <Compile Include="HardRuta.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

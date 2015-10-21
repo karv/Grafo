@@ -47,7 +47,12 @@ namespace Graficas.Nodos
 
 		public IRuta<T> ToRuta(IEnumerable<T> seq)
 		{
-			throw new NotImplementedException();
+			var Nods = new List<Nodo<T>>();
+			foreach (var x in seq)
+			{
+				Nods.Add(AsNodo(x));
+			}
+			return new HardRuta<T>(Nods);
 		}
 
 		public ILecturaGrafo<T> Subgrafo(IEnumerable<T> conjunto)
