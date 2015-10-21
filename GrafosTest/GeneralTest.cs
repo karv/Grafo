@@ -123,5 +123,44 @@ namespace Test
 			gr.EsSimétrico = true;
 			TestConexidad (gr);
 		}
+
+		[Test]
+		public void TestSubgrafo ()
+		{
+			var gr = new HardGrafo<int> ();
+			gr [6, 5] = true;
+			gr [6, 1] = true;
+			gr [1, 5] = true;
+			gr [3, 5] = true;
+			gr [1, 3] = true;
+			gr [7, 3] = true;
+			gr [5, 2] = true;
+			gr [1, 4] = true;
+			gr [1, 7] = true;
+			gr [2, 7] = true;
+			gr [7, 4] = true;
+			gr [5, 7] = true;
+
+			gr [5, 6] = true;
+			gr [1, 6] = true;
+			gr [5, 1] = true;
+			gr [5, 3] = true;
+			gr [3, 1] = true;
+			gr [3, 7] = true;
+			gr [2, 5] = true;
+			gr [4, 1] = true;
+			gr [7, 1] = true;
+			gr [7, 2] = true;
+			gr [7, 4] = true;
+			gr [7, 5] = true;
+
+			int[] sub = { 1, 3, 5, 7 };
+			var subg = gr.Subgrafo (sub);
+
+			foreach (var x in sub)
+			{
+				Assert.AreEqual (3, subg.AsNodo (x).Vecindad.Count);
+			}
+		}
 	}
 }

@@ -9,12 +9,12 @@ namespace Graficas
 	/// <summary>
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>
-	public class HardGrafo<T> :  IGrafo<T> // TEST todo
+	public class HardGrafo<T> :  IGrafo<T>
 		where T : IEquatable<T>
 	{
 		HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>> ();
 
-		Nodo<T> AsNodo (T obj)
+		public Nodo<T> AsNodo (T obj)
 		{
 			foreach (var x in _nodos)
 			{
@@ -56,7 +56,7 @@ namespace Graficas
 			return new HardRuta<T> (Nods);
 		}
 
-		public ILecturaGrafo<T> Subgrafo (IEnumerable<T> conjunto)
+		public HardGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new HardGrafo<T> ();
 			foreach (var x in conjunto)
@@ -64,7 +64,7 @@ namespace Graficas
 				ret.Add (x);
 			}
 
-			foreach (var x in conjunto)
+			foreach (var x in conjunto.ToArray())
 			{
 				var nodoX = ret.AsNodo (x);
 				foreach (var y in AsNodo(x).Vecindad)
@@ -77,6 +77,11 @@ namespace Graficas
 			}
 
 			return ret;
+		}
+
+		ILecturaGrafo<T> ILecturaGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		{
+			return Subgrafo (conjunto);
 		}
 
 		public HardGrafo ()
@@ -124,9 +129,8 @@ namespace Graficas
 			}
 		}
 
-		//List<IHardNodo<T>> _nodos;
-
 		#region IGrafica implementation
+
 
 		ICollection<T> ILecturaGrafo<T>.Vecinos (T nodo)
 		{
