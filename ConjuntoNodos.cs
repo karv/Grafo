@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Graficas;
 using Graficas.Rutas;
+using System.Linq;
 
 namespace Graficas.Nodos
 {
@@ -57,12 +58,29 @@ namespace Graficas.Nodos
 
 		public ILecturaGrafo<T> Subgrafo(IEnumerable<T> conjunto)
 		{
-			throw new NotImplementedException();
+			var ret = new ConjuntoNodos<T>();
+			foreach (var x in conjunto)
+			{
+				ret.Add(x);
+			}
+
+			foreach (var x in conjunto)
+			{
+				var nodoX = ret.AsNodo(x);
+				foreach (var y in AsNodo(x).Vecindad)
+				{
+					if (conjunto.Contains(y))
+					{
+						nodoX.Vecindad.Add(y);
+					}
+				}
+			}
+
+			return ret;
 		}
 
 		public ConjuntoNodos()
 		{
-			//_nodos = new List<IHardNodo<T>>();
 		}
 
 		/// <param name="graf">Gráfica de dónde copiar la información.</param>
