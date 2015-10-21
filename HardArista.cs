@@ -30,6 +30,11 @@
 			}
 		}
 
+		public override string ToString()
+		{
+			return string.Format("[HardArista: Origen={0}, Destino={1}, Peso={2}]", Origen.Objeto, Destino.Objeto, Peso);
+		}
+
 		public HardArista(Nodo<T> desde, Nodo<T> hasta)
 		{
 			Origen = desde;
