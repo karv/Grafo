@@ -56,24 +56,42 @@ namespace Graficas
 			}
 		}
 
-		public void Concat (T nodo, float peso)
+		public void Concat (T nodo)
 		{
-			throw new NotImplementedException ();
+			
+			var agrega = NodoFinal.Vecindad.Find (x => x.Objeto.Equals (nodo));
+			if (agrega == null)
+				throw new Exception ("Paso inexsistente en grafo.");
+			_pasos.Add (agrega);
 		}
 
-		public T NodoInicial
+		void IRuta<T>.Concat (T nodo, float peso)
+		{
+			Concat (nodo);
+		}
+
+		public Nodo<T> NodoInicial
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				return _pasos [0];
 			}
 		}
+
+		T IRuta<T>.NodoInicial
+		{
+			get
+			{
+				return NodoInicial.Objeto;
+			}
+		}
+
 
 		T IRuta<T>.NodoFinal
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				return NodoFinal.Objeto;
 			}
 		}
 
@@ -81,7 +99,7 @@ namespace Graficas
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				return NumPasos;
 			}
 		}
 
@@ -89,15 +107,18 @@ namespace Graficas
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				return _pasos.Count - 1;
 			}
 		}
 
-		public System.Collections.Generic.IEnumerable<IPaso<T>> Pasos
+		public IEnumerable<IPaso<T>> Pasos
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				for (int i = 0; i < NumPasos; i++)
+				{
+					yield return new Paso<T> (_pasos [i].Objeto, _pasos [i + 1].Objeto, 1);
+				}
 			}
 		}
 	}
