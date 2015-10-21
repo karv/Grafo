@@ -138,7 +138,8 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Revisa si este punto coincide (están en un mismo intervalo) con otro
 			/// </summary>
-			public bool CoincideCon (ContinuoPunto punto)
+			public bool CoincideCon (ContinuoPunto punto) 
+			//TEST: Al parecer devuelve false cuando son extremos contrarios de un intervalo. ¿Usar MismoIntervalo?;
 			{
 				if (EnOrigen)
 				{
