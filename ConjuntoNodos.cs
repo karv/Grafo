@@ -188,11 +188,6 @@ namespace Graficas.Nodos
 			return false;
 		}
 
-		public void CopyTo(T[] array, int arrayIndex)
-		{
-			throw new NotImplementedException();
-		}
-
 		public void Remove(T item)
 		{
 			_nodos.Remove(AsNodo(item));
