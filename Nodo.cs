@@ -4,10 +4,10 @@ namespace Graficas
 {
 	public class Nodo<T>: INodo<T>
 	{
-		public Nodo(T obj)
+		public Nodo (T obj)
 		{
 			Objeto = obj;
-			Vecindad = new List<Nodo<T>>();
+			Vecindad = new List<Nodo<T>> ();
 		}
 
 		public T Objeto { get; }
@@ -37,4 +37,3 @@ namespace Graficas
 		#endregion
 	}
 }
-

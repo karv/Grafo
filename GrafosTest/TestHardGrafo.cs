@@ -28,8 +28,8 @@ namespace Test
 			var r = new Random ();
 			for (int i = 0; i < MaxTests; i++)
 			{
-				int a = r.Next (MaxSize);
-				int b = r.Next (MaxSize);
+				int a = r.Next (MaxSize - 1) + 1;
+				int b = r.Next (MaxSize - 1) + 1;
 				Assert.AreEqual (b % a == 0, gr [a, b]);
 			}
 		}

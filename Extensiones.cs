@@ -13,36 +13,36 @@ namespace Graficas.Extensiones
 		/// </summary>
 		/// <param name="gr">Gráfo</param>
 		/// <typeparam name="T">Tipo de nodos de la gráfica</typeparam>
-		public static ICollection<ILecturaGrafo<T>> ComponentesConexas<T>(this ILecturaGrafo<T> gr)
+		public static ICollection<ILecturaGrafo<T>> ComponentesConexas<T> (this ILecturaGrafo<T> gr)
 		{
-			var nodosRestantes = new HashSet<T>(gr.Nodos);
+			var nodosRestantes = new HashSet<T> (gr.Nodos);
 			HashSet<T> Verdes;
-			var ret = new List<ILecturaGrafo<T>>();
+			var ret = new List<ILecturaGrafo<T>> ();
 
 			while (nodosRestantes.Count > 0)
 			{
-				T nodo = nodosRestantes.Aleatorio();
+				T nodo = nodosRestantes.Aleatorio ();
 
 				// Calcular la nube de nodo
-				var nubeActual = new HashSet<T>();
-				nubeActual.Add(nodo);
-				Verdes = new HashSet<T>(nubeActual);
+				var nubeActual = new HashSet<T> ();
+				nubeActual.Add (nodo);
+				Verdes = new HashSet<T> (nubeActual);
 				HashSet<T> nubeAgregando;
 				do
 				{
-					nubeAgregando = new HashSet<T>();
+					nubeAgregando = new HashSet<T> ();
 					foreach (var x in Verdes)
 					{
-						nubeAgregando.UnionWith(gr.Vecinos(x));
-						nubeAgregando.ExceptWith(nubeActual);
-						nubeAgregando.ExceptWith(Verdes);
+						nubeAgregando.UnionWith (gr.Vecinos (x));
+						nubeAgregando.ExceptWith (nubeActual);
+						nubeAgregando.ExceptWith (Verdes);
 					}
-					nubeActual.UnionWith(Verdes);
-					Verdes = new HashSet<T>(nubeAgregando);
+					nubeActual.UnionWith (Verdes);
+					Verdes = new HashSet<T> (nubeAgregando);
 				} while (Verdes.Count > 0);
 
-				ret.Add(gr.Subgrafo(nubeActual));
-				nodosRestantes.ExceptWith(nubeActual);
+				ret.Add (gr.Subgrafo (nubeActual));
+				nodosRestantes.ExceptWith (nubeActual);
 			}
 
 			return ret;

@@ -13,5 +13,4 @@ namespace Graficas
 
 		float Peso { get; }
 	}
-
 }

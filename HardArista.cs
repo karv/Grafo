@@ -26,20 +26,19 @@
 		{
 			get
 			{
-				return Origen.Vecindad.Contains(Destino) ? 1 : 0;
+				return Origen.Vecindad.Contains (Destino) ? 1 : 0;
 			}
 		}
 
-		public override string ToString()
+		public override string ToString ()
 		{
-			return string.Format("[HardArista: Origen={0}, Destino={1}, Peso={2}]", Origen.Objeto, Destino.Objeto, Peso);
+			return string.Format ("[HardArista: Origen={0}, Destino={1}, Peso={2}]", Origen.Objeto, Destino.Objeto, Peso);
 		}
 
-		public HardArista(Nodo<T> desde, Nodo<T> hasta)
+		public HardArista (Nodo<T> desde, Nodo<T> hasta)
 		{
 			Origen = desde;
 			Destino = hasta;
 		}
 	}
 }
-
