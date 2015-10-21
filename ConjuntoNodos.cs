@@ -69,7 +69,7 @@ namespace Graficas.Nodos
 				var nodoX = ret.AsNodo(x);
 				foreach (var y in AsNodo(x).Vecindad)
 				{
-					if (conjunto.Contains(y))
+					if (conjunto.Contains(y.Objeto))
 					{
 						nodoX.Vecindad.Add(y);
 					}
@@ -116,7 +116,10 @@ namespace Graficas.Nodos
 			}
 			set
 			{
-				AsNodo(desde).Vecindad.Add(AsNodo(hasta));
+				if (value)
+					AsNodo(desde).Vecindad.Add(AsNodo(hasta));
+				else
+					AsNodo(desde).Vecindad.Remove(AsNodo(hasta));
 			}
 		}
 
