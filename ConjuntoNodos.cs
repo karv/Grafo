@@ -1,16 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using Graficas;
+using Graficas.Rutas;
 
 namespace Graficas.Nodos
 {
 	/// <summary>
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>
-	public class ConjuntoNodos<T> :  IEnumerable<IHardNodo<T>>, IGrafica<T>, ICollection<T>
-	// where T : IEquatable<T>
+	public class ConjuntoNodos<T> :  IGrafo<T>
+		where T : IEquatable<T>
 	{
-		List<IHardNodo<T>> _dat = new List<IHardNodo<T>>();
+		HashSet<Nodo<T>> _dat = new HashSet<Nodo<T>>();
+
+		Nodo<T> AsNodo(T obj)
+		{
+			foreach (var x in _dat)
+			{
+				if (x.Obj.Equals(obj))
+					return x;
+			}
+			throw new Exception("Nodo inexistente.");
+		}
+
+		public ICollection<IArista<T>> Aristas()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IRuta<T> ToRuta(IEnumerable<T> seq)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ILecturaGrafo<T> Subgrafo(IEnumerable<T> conjunto)
+		{
+			throw new NotImplementedException();
+		}
 
 		public ConjuntoNodos()
 		{
@@ -18,19 +44,31 @@ namespace Graficas.Nodos
 		}
 
 		/// <param name="graf">Gráfica de dónde copiar la información.</param>
-		public ConjuntoNodos(IGrafica<T> graf) : this()
+		public ConjuntoNodos(IGrafo<T> graf) : this()
 		{
 			// Primero crear los nodos
 			foreach (var x in graf.Nodos)
 			{
 				Add(x);
 			}
-			foreach (var x in _dat)
+
+			// TODO
+		}
+
+		public bool this [T desde, T hasta]
+		{
+			get
 			{
-				foreach (var y in graf.Vecinos(x.getObjeto))
+				foreach (var x in AsNodo(desde).Vecindad)
 				{
-					x.getSucc.Add(this[y]);
+					if (x.Objeto.Equals(hasta))
+						return true;
 				}
+				return false;
+			}
+			set
+			{
+				AsNodo(desde).Vecindad.Add(AsNodo(hasta));
 			}
 		}
 
@@ -38,77 +76,38 @@ namespace Graficas.Nodos
 
 		#region IGrafica implementation
 
-		ICollection<T> IGrafica<T>.Vecinos(T nodo)
+		ICollection<T> ILecturaGrafo<T>.Vecinos(T nodo)
 		{
 			var ret = new List<T>();
-			foreach (var x in this[nodo].getSucc)
+			foreach (var x in this[nodo].Vecindad)
 			{
-				ret.Add(x.getObjeto);
+				ret.Add(x.Objeto);
 			}
 			return ret;
 		}
 
-		ICollection<T> IGrafica<T>.Nodos
+		public ICollection<T> Nodos
 		{
 			get
 			{
-				return _dat.ConvertAll(x => x.getObjeto);
+				var ret = new List<T>(_dat.Count);
+				foreach (var x in _dat)
+				{
+					ret.Add(x.Obj);
+				}
+				return ret;
 			}
 		}
 
-		bool IGrafica<T>.ExisteArista(T desde, T hasta)
-		{
-			throw new NotImplementedException();
-		}
 
-		void IGrafica<T>.AgregaArista(T desde, T hasta)
-		{
-			throw new NotImplementedException();
-		}
+		#endregion
 
-		Graficas.Rutas.IRuta<T> IGrafica<T>.ToRuta(IEnumerable<T> seq)
-		{
-			throw new NotImplementedException();
-		}
 
-		bool IGrafica<T>.EsSimétrico
+		public INodo<T> this [T Key]
 		{
 			get
 			{
-				throw new NotImplementedException();
-			}
-		}
-
-		#endregion
-
-		#region IEnumerable implementation
-
-		public IEnumerator<IHardNodo<T>> GetEnumerator()
-		{
-			return _dat.GetEnumerator();
-		}
-
-		IEnumerator<T> IEnumerable<T>.GetEnumerator()
-		{
-			return _dat.ConvertAll(x => x.getObjeto).GetEnumerator();
-		}
-
-		#endregion
-
-		#region IEnumerable implementation
-
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return _dat.GetEnumerator();
-		}
-
-		#endregion
-
-		public IHardNodo<T> this [T Key]
-		{
-			get
-			{
-				return _dat.Find(x => x.getObjeto.Equals(Key));
+				return AsNodo(Key);
 			}
 		}
 
@@ -120,7 +119,7 @@ namespace Graficas.Nodos
 			if (Contains(item))
 				throw new Exception("Ya se encuentra nodo.");
 
-			_dat.Add(new HardNodo<T>(item));
+			_dat.Add(new Nodo<T>(item));
 		}
 
 		public void Clear()
@@ -130,7 +129,12 @@ namespace Graficas.Nodos
 
 		public bool Contains(T item)
 		{
-			return _dat.Exists(x => x.getObjeto.Equals(item));
+			foreach (var x in _dat)
+			{
+				if (x.Obj.Equals(item))
+					return true;
+			}
+			return false;
 		}
 
 		public void CopyTo(T[] array, int arrayIndex)
@@ -138,9 +142,9 @@ namespace Graficas.Nodos
 			throw new NotImplementedException();
 		}
 
-		public bool Remove(T item)
+		public void Remove(T item)
 		{
-			return _dat.RemoveAll(x => x.getObjeto.Equals(item)) > 0;
+			_dat.Remove(AsNodo(item));
 		}
 
 		public int Count
@@ -162,10 +166,5 @@ namespace Graficas.Nodos
 		#endregion
 	}
 
-	public interface IHardNodo<T> : INodo<T>
-	{
-		new ICollection<IHardNodo<T>> getSucc { get; }
-		//void SetSucc (IEnumerator<IHardNodo> )
-	}
 }
 

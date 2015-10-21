@@ -7,41 +7,33 @@ namespace Graficas
 	{
 		public Nodo(T obj)
 		{
-			_obj = obj;
-			_succ = new List<T>();
+			Obj = obj;
+			Vecindad = new List<INodo<T>>();
 		}
 
-		/// <summary>
-		/// Construye un nodo que esté sincronizado a un "nodo" de una gráfica dada.
-		/// </summary>
-		/// <param name="obj">Objeto del nodo.</param>
-		/// <param name="graf">Gráfica donde se encuentra el nodo.</param>
-		public Nodo(T obj, IGrafica<T> graf)
-		{
-			_obj = obj;
-			_succ = graf.Vecinos(obj);
-		}
+		public T Obj { get; }
 
-		T _obj;
-		IEnumerable<T> _succ;
+		public List<INodo<T>> Vecindad;
 
 		#region INodo implementation
 
-		T INodo<T>.getObjeto
+		T INodo<T>.Objeto
 		{
 			get
 			{
-				return _obj;
+				return Obj;
 			}
 		}
 
-		System.Collections.Generic.IEnumerable<T> INodo<T>.getSucc
+		IEnumerable<INodo<T>> INodo<T>.Vecindad
 		{
 			get
 			{
-				return (IEnumerable<T>)_succ;
+				return Vecindad;
 			}
 		}
+
+
 
 		#endregion
 	}
