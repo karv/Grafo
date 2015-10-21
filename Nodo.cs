@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Graficas
 {
@@ -7,13 +6,13 @@ namespace Graficas
 	{
 		public Nodo(T obj)
 		{
-			Obj = obj;
-			Vecindad = new List<INodo<T>>();
+			Objeto = obj;
+			Vecindad = new List<Nodo<T>>();
 		}
 
-		public T Obj { get; }
+		public T Objeto { get; }
 
-		public List<INodo<T>> Vecindad;
+		public List<Nodo<T>> Vecindad;
 
 		#region INodo implementation
 
@@ -21,7 +20,7 @@ namespace Graficas
 		{
 			get
 			{
-				return Obj;
+				return Objeto;
 			}
 		}
 

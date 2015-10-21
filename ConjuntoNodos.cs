@@ -17,7 +17,7 @@ namespace Graficas.Nodos
 		{
 			foreach (var x in _nodos)
 			{
-				if (x.Obj.Equals(obj))
+				if (x.Objeto.Equals(obj))
 					return x;
 			}
 			// Si existe, lo agrego
@@ -26,9 +26,23 @@ namespace Graficas.Nodos
 			return ret;
 		}
 
-		public ICollection<IArista<T>> Aristas()
+		public ICollection<HardArista<T>> Aristas()
 		{
-			throw new NotImplementedException();
+			var ret = new List<HardArista<T>>();
+			foreach (var x in _nodos)
+			{
+				foreach (var y in x.Vecindad)
+				{
+					ret.Add(new HardArista<T>(x, y));
+				}
+			}
+
+			return ret;
+		}
+
+		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas()
+		{
+			return Aristas() as ICollection<IArista<T>>;
 		}
 
 		public IRuta<T> ToRuta(IEnumerable<T> seq)
@@ -104,7 +118,7 @@ namespace Graficas.Nodos
 				var ret = new List<T>(_nodos.Count);
 				foreach (var x in _nodos)
 				{
-					ret.Add(x.Obj);
+					ret.Add(x.Objeto);
 				}
 				return ret;
 			}
@@ -142,7 +156,7 @@ namespace Graficas.Nodos
 		{
 			foreach (var x in _nodos)
 			{
-				if (x.Obj.Equals(item))
+				if (x.Objeto.Equals(item))
 					return true;
 			}
 			return false;

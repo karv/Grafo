@@ -6,6 +6,22 @@
 
 		public Nodo<T> Destino { get; }
 
+		T IArista<T>.Origen
+		{
+			get
+			{
+				return Origen.Objeto;
+			}
+		}
+
+		T IArista<T>.Destino
+		{
+			get
+			{
+				return Destino.Objeto;
+			}
+		}
+
 		public float Peso
 		{
 			get
