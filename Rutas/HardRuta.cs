@@ -4,13 +4,14 @@ using System.Collections.Generic;
 
 namespace Graficas
 {
-	public class HardRuta<T> : IRuta<T> //TEST todo
+	public class HardRuta<T> : IRuta<T>
 	{
 		List<Nodo<T>> _pasos { get; set; }
 
-		public HardRuta ()
+		public HardRuta (Nodo<T> inicial)
 		{
 			_pasos = new List<Nodo<T>> ();
+			_pasos.Add (inicial);
 		}
 
 		public HardRuta (IEnumerable<Nodo<T>> pasos)
@@ -18,12 +19,17 @@ namespace Graficas
 			_pasos = new List<Nodo<T>> (pasos);
 		}
 
-		public IRuta<T> Reversa ()
+		public HardRuta<T> Reversa ()
 		{
-			var ret = new HardRuta<T> ();
+			var ret = new HardRuta<T> (NodoFinal);
 			ret._pasos = new List<Nodo<T>> (_pasos);
 			ret._pasos.Reverse ();
 			return ret;
+		}
+
+		IRuta<T> IRuta<T>.Reversa ()
+		{
+			return Reversa ();
 		}
 
 		public Nodo<T> NodoFinal
@@ -36,19 +42,20 @@ namespace Graficas
 
 		public void Concat (IPaso<T> paso)
 		{
-			if (NodoFinal.Equals (paso.Origen))
+			if (NodoFinal.Objeto.Equals (paso.Origen))
 			{
 				var agrega = NodoFinal.Vecindad.Find (x => x.Objeto.Equals (paso.Destino));
 				if (agrega == null)
 					throw new Exception ("Paso inexsistente en grafo.");
 				_pasos.Add (agrega);
+				return;
 			}
 			throw new Exception ("Nodo final de la ruta no concide con origen del paso.");
 		}
 
 		public void Concat (IRuta<T> ruta)
 		{
-			if (!NodoFinal.Objeto.Equals (ruta.NodoFinal))
+			if (!NodoFinal.Objeto.Equals (ruta.NodoInicial))
 				throw new Exception ("Nodo final de la ruta no concide con origen del paso.");
 			foreach (var x in ruta.Pasos)
 			{
@@ -58,7 +65,6 @@ namespace Graficas
 
 		public void Concat (T nodo)
 		{
-			
 			var agrega = NodoFinal.Vecindad.Find (x => x.Objeto.Equals (nodo));
 			if (agrega == null)
 				throw new Exception ("Paso inexsistente en grafo.");
@@ -123,4 +129,3 @@ namespace Graficas
 		}
 	}
 }
-

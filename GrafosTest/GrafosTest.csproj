@@ -42,6 +42,7 @@
     <Compile Include="GeneralTest.cs" />
     <Compile Include="Continuo.cs" />
     <Compile Include="TestHardGrafo.cs" />
+    <Compile Include="Rutas.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

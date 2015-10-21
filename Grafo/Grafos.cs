@@ -34,6 +34,11 @@ namespace Graficas
 
 		#region IGrafica
 
+		public void Clear ()
+		{
+			Vecinos.Clear ();
+		}
+
 		bool IGrafo<T>.this [T desde, T hasta]
 		{ 
 			get
@@ -343,7 +348,7 @@ namespace Graficas
 			get
 			{
 				return EsSimétrico ? Math.Min (Vecinos [new Tuple<T, T> (x, y)], Vecinos [new Tuple<T, T> (y, x)]) : Vecinos [new Tuple<T, T> (x,
-				                                                                                                                        y)];
+				                                                                                                                               y)];
 			}
 			set
 			{
