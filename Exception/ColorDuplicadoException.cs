@@ -8,21 +8,25 @@ namespace Graficas
 	[Serializable]
 	public class ColorDuplicadoException : Exception
 	{
-		public ColorDuplicadoException()
+		public ColorDuplicadoException ()
 		{
 		}
 
-		public ColorDuplicadoException(string message) : base(message)
+		public ColorDuplicadoException (string message)
+			: base (message)
 		{
 		}
 
-		public ColorDuplicadoException(string message, Exception inner) : base(message, inner)
+		public ColorDuplicadoException (string message, Exception inner)
+			: base (message, inner)
 		{
 		}
 
-		protected ColorDuplicadoException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
+		protected ColorDuplicadoException (System.Runtime.Serialization.SerializationInfo info,
+		                                   System.Runtime.Serialization.StreamingContext context)
+			: base (info,
+			        context)
 		{
 		}
 	}
 }
-

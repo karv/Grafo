@@ -9,23 +9,20 @@ namespace Graficas
 	/// </summary>
 	public interface ILecturaGrafo<T>
 	{
-		ICollection<T> Nodos
-		{
-			get;
-		}
+		ICollection<T> Nodos { get; }
 
-		bool this [T desde, T hasta]{ get; }
+		bool this [T desde, T hasta] { get; }
 
-		ICollection<IArista<T>> Aristas();
+		ICollection<IArista<T>> Aristas ();
 
-		ICollection<T> Vecinos(T nodo);
+		ICollection<T> Vecinos (T nodo);
 
-		IRuta<T> ToRuta(IEnumerable<T> seq);
+		IRuta<T> ToRuta (IEnumerable<T> seq);
 
 		/// <summary>
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		ILecturaGrafo<T> Subgrafo(IEnumerable<T> conjunto);
+		ILecturaGrafo<T> Subgrafo (IEnumerable<T> conjunto);
 	}
 }

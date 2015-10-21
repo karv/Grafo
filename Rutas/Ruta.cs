@@ -10,45 +10,46 @@ namespace Graficas.Rutas
 			public T Nodo;
 			public float Peso;
 
-			public NodoPeso(T nodo, float peso)
+			public NodoPeso (T nodo, float peso)
 			{
 				Nodo = nodo;
 				Peso = peso;
 			}
 		}
 
-		public Ruta()
+		public Ruta ()
 		{
 			
 		}
 
-		public Ruta(T origen)
+		public Ruta (T origen)
 		{
-			Paso.Add(new NodoPeso(origen, 0));
+			Paso.Add (new NodoPeso (origen, 0));
 		}
 
-		public Ruta(IRuta<T> ruta) : this(ruta.NodoInicial)
+		public Ruta (IRuta<T> ruta)
+			: this (ruta.NodoInicial)
 		{
 			foreach (var x in ruta.Pasos)
 			{
-				Paso.Add(new NodoPeso(x.Destino, x.Peso));
+				Paso.Add (new NodoPeso (x.Destino, x.Peso));
 			}
 		}
 
-		public Ruta(IArista<T> aris)
+		public Ruta (IArista<T> aris)
 		{
-			Paso.Add(new NodoPeso(aris.Origen, 0));
-			Paso.Add(new NodoPeso(aris.Destino, aris.Peso));
+			Paso.Add (new NodoPeso (aris.Origen, 0));
+			Paso.Add (new NodoPeso (aris.Destino, aris.Peso));
 		}
 
-		readonly protected IList<NodoPeso> Paso = new List<NodoPeso>();
+		readonly protected IList<NodoPeso> Paso = new List<NodoPeso> ();
 
-		public override string ToString()
+		public override string ToString ()
 		{
-			string ret = string.Format("[{0}]: ", NumPasos);
+			string ret = string.Format ("[{0}]: ", NumPasos);
 			foreach (var x in Paso)
 			{
-				ret += string.Format(" {0} ", x.Nodo);
+				ret += string.Format (" {0} ", x.Nodo);
 
 			}
 			return ret;
@@ -58,69 +59,69 @@ namespace Graficas.Rutas
 		{ 
 			get
 			{ 
-				var ret = new List<IPaso<T>>();
+				var ret = new List<IPaso<T>> ();
 				for (int i = 0; i < Paso.Count - 1; i++)
 				{
-					ret.Add(new Paso<T>(Paso[i].Nodo, Paso[i + 1].Nodo, Paso[i + 1].Peso));
+					ret.Add (new Paso<T> (Paso [i].Nodo, Paso [i + 1].Nodo, Paso [i + 1].Peso));
 				}
 				return ret;
 			} 
 		}
 
-		public void Concat(IPaso<T> paso)
+		public void Concat (IPaso<T> paso)
 		{
 			if (paso == null)
-				throw new NullReferenceException();
+				throw new NullReferenceException ();
 			if (NumPasos == 0)
 			{
-				Paso.Add(new NodoPeso(paso.Origen, 0));
-				Paso.Add(new NodoPeso(paso.Destino, paso.Peso));
+				Paso.Add (new NodoPeso (paso.Origen, 0));
+				Paso.Add (new NodoPeso (paso.Destino, paso.Peso));
 			}
 			else
 			{
-				if (NodoFinal.Equals(paso.Origen))
+				if (NodoFinal.Equals (paso.Origen))
 				{
-					Paso.Add(new NodoPeso(paso.Destino, paso.Peso));
+					Paso.Add (new NodoPeso (paso.Destino, paso.Peso));
 				}
 				else
 				{
-					throw new Exception("El nodo final debe coincidir con el origen de el paso para poder concatenar.");
+					throw new Exception ("El nodo final debe coincidir con el origen de el paso para poder concatenar.");
 				}
 			}
 		}
 
-		public void Concat(IRuta<T> ruta)
+		public void Concat (IRuta<T> ruta)
 		{
-			if (!NodoFinal.Equals(ruta.NodoInicial))
-				throw new Exception("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
+			if (!NodoFinal.Equals (ruta.NodoInicial))
+				throw new Exception ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 
 			foreach (var paso in ruta.Pasos)
 			{
-				Paso.Add(new NodoPeso(paso.Destino, paso.Peso));
+				Paso.Add (new NodoPeso (paso.Destino, paso.Peso));
 			}
 		}
 
-		public void Concat(T nodo, float peso)
+		public void Concat (T nodo, float peso)
 		{
-			Paso.Add(new NodoPeso(nodo, peso));
+			Paso.Add (new NodoPeso (nodo, peso));
 		}
 
 		/// <summary>
 		/// Construye uan ruta como ésta, en sentido inverso.
 		/// </summary>
-		public Ruta<T> Reversa()
+		public Ruta<T> Reversa ()
 		{
-			var ret = new Ruta<T>();
+			var ret = new Ruta<T> ();
 			for (int i = Paso.Count - 1; i >= 0; i--)
 			{
-				ret.Paso.Add(Paso[i]);
+				ret.Paso.Add (Paso [i]);
 			}
 			return ret;
 		}
 
-		IRuta<T> IRuta<T>.Reversa()
+		IRuta<T> IRuta<T>.Reversa ()
 		{
-			return Reversa();
+			return Reversa ();
 		}
 
 		/// <summary>
@@ -131,7 +132,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return Paso[0].Nodo;
+				return Paso [0].Nodo;
 			}
 		}
 
@@ -144,8 +145,8 @@ namespace Graficas.Rutas
 			get
 			{
 				if (NumPasos < 0)
-					throw new Exception("No existe el nodo final en un path vacío.");
-				return Paso[NumPasos].Nodo;
+					throw new Exception ("No existe el nodo final en un path vacío.");
+				return Paso [NumPasos].Nodo;
 			}
 		}
 
@@ -177,7 +178,5 @@ namespace Graficas.Rutas
 				return Paso.Count - 1;
 			}
 		}
-
 	}
 }
-

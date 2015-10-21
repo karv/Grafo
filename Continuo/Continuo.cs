@@ -1,24 +1,4 @@
-﻿//
-//  Continuo.cs
-//
-//  Author:
-//       Edgar Carballo <karvayoEdgar@gmail.com>
-//
-//  Copyright (c) 2015 edgar
-//
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Graficas;
 using Graficas.Rutas;
@@ -40,17 +20,17 @@ namespace Graficas.Continuo
 		{
 			#region General
 
-			public override string ToString()
+			public override string ToString ()
 			{
-				return EnOrigen ? A.ToString() : string.Format("[{0}, {1}]@{2}", A, B, Loc);
+				return EnOrigen ? A.ToString () : string.Format ("[{0}, {1}]@{2}", A, B, Loc);
 			}
 
 			/// <summary>
 			/// Devuelve un clón (aún como elemento de la gráfica base) de este punto.
 			/// </summary>
-			public ContinuoPunto Clonar()
+			public ContinuoPunto Clonar ()
 			{
-				var ret = new ContinuoPunto(Universo);
+				var ret = new ContinuoPunto (Universo);
 				ret.A = A;
 				ret.B = B;
 				ret.Loc = Loc;
@@ -60,9 +40,9 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Elimina este punto de la gráfica y se libera.
 			/// </summary>
-			public void Remove()
+			public void Remove ()
 			{
-				Universo.Puntos.Remove(this);
+				Universo.Puntos.Remove (this);
 				A = default(T);
 				B = default(T);
 			}
@@ -71,15 +51,16 @@ namespace Graficas.Continuo
 
 			#region Ctor
 
-			public ContinuoPunto(Continuo<T> universo, T nodo) : this(universo)
+			public ContinuoPunto (Continuo<T> universo, T nodo)
+				: this (universo)
 			{
 				A = nodo;
 			}
 
-			public ContinuoPunto(Continuo<T> universo)
+			public ContinuoPunto (Continuo<T> universo)
 			{
 				Universo = universo;
-				Universo.Puntos.Add(this);
+				Universo.Puntos.Add (this);
 			}
 
 			#endregion
@@ -110,9 +91,9 @@ namespace Graficas.Continuo
 				{ 
 					_loc = value; 
 					if (_loc < 0)
-						FromGrafica(A);
+						FromGrafica (A);
 					if (Aloc < 0)
-						FromGrafica(B);
+						FromGrafica (B);
 				}
 			}
 
@@ -123,16 +104,16 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-					return Universo.GráficaBase[A, B] - Loc;
+					return Universo.GráficaBase [A, B] - Loc;
 				}
 			}
 
 			/// <summary>
 			/// Revisa si dos puntos están en un mismo intervalo
 			/// </summary>
-			public static bool EnMismoIntervalo(ContinuoPunto punto1, ContinuoPunto punto2)
+			public static bool EnMismoIntervalo (ContinuoPunto punto1, ContinuoPunto punto2)
 			{
-				if (punto1.A.Equals(punto2.A) && punto1.B.Equals(punto2.B))
+				if (punto1.A.Equals (punto2.A) && punto1.B.Equals (punto2.B))
 					return true;
 				
 				return false;
@@ -141,7 +122,7 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Invierte, si es posible, A con B
 			/// </summary>
-			protected void Invertir()
+			protected void Invertir ()
 			{
 				if (!EnOrigen)
 				{
@@ -157,30 +138,30 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Revisa si este punto coincide (están en un mismo intervalo) con otro
 			/// </summary>
-			public bool CoincideCon(ContinuoPunto punto)
+			public bool CoincideCon (ContinuoPunto punto)
 			{
 				if (EnOrigen)
 				{
-					return punto.EnOrigen ? A.Equals(punto.A) : punto.CoincideCon(this);
+					return punto.EnOrigen ? A.Equals (punto.A) : punto.CoincideCon (this);
 				}
 				if (punto.EnOrigen)
-					return A.Equals(punto.A) || B.Equals(punto.B);
-				return Extremos.Equals(punto.Extremos);
+					return A.Equals (punto.A) || B.Equals (punto.B);
+				return Extremos.Equals (punto.Extremos);
 			}
 
 			/// <summary>
 			/// Devuelve la distancia a uno de sus dos extremos
 			/// </summary>
-			public float DistanciaAExtremo(T extremo)
+			public float DistanciaAExtremo (T extremo)
 			{
-				if (extremo.Equals(A))
+				if (extremo.Equals (A))
 					return Loc;
-				if (extremo.Equals(B))
+				if (extremo.Equals (B))
 					return Aloc;
-				if (EnOrigen && !float.IsInfinity(Universo.GráficaBase[A, extremo]))
-					return Universo.GráficaBase[A, extremo];
+				if (EnOrigen && !float.IsInfinity (Universo.GráficaBase [A, extremo]))
+					return Universo.GráficaBase [A, extremo];
 
-				throw new IndexOutOfRangeException(string.Format("{0} no es un extremo de {1}", extremo, this));
+				throw new IndexOutOfRangeException (string.Format ("{0} no es un extremo de {1}", extremo, this));
 				
 			}
 
@@ -202,12 +183,12 @@ namespace Graficas.Continuo
 			public ParNoOrdenado<T> Extremos
 			{
 				get
-				{ return new ParNoOrdenado<T>(A, B); }
+				{ return new ParNoOrdenado<T> (A, B); }
 			}
 
-			public bool EnMismoIntervalo(ContinuoPunto punto)
+			public bool EnMismoIntervalo (ContinuoPunto punto)
 			{
-				return Extremos.Equals(punto.Extremos);
+				return Extremos.Equals (punto.Extremos);
 			}
 
 			/// <summary>
@@ -216,37 +197,37 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si el punto está en el intervalo, <c>false</c> otherwise.</returns>
 			/// <param name="p1">Un extremo del intervalo.</param>
 			/// <param name="p2">El otro extramo del intervalo.</param>
-			public bool EnIntervaloInmediato(T p1, T p2)
+			public bool EnIntervaloInmediato (T p1, T p2)
 			{
 				if (EnOrigen)
 				{
-					return A.Equals(p1) || A.Equals(p2);
+					return A.Equals (p1) || A.Equals (p2);
 				}
-				return new ParNoOrdenado<T>(p1, p2).Equals(Extremos);
+				return new ParNoOrdenado<T> (p1, p2).Equals (Extremos);
 			}
 
 			/// <summary>
 			/// Devuelve la lista de terrenos contiguos a esta pseudoposición.
 			/// </summary>
 			/// <returns>Una nueva lista.</returns>
-			public ICollection<ContinuoPunto> Vecindad()
+			public ICollection<ContinuoPunto> Vecindad ()
 			{
 				if (EnOrigen)
 				{
 					T orig = A; // Posición de este punto.
-					var ret = new List<ContinuoPunto>();
+					var ret = new List<ContinuoPunto> ();
 					// Si estoy en terreno
 					foreach (var x in Universo.GráficaBase.Vecinos(orig))
 					{
 						foreach (var y in Universo.PuntosEnIntervalo(orig, x))
 						{
-							if (!ret.Contains(y))
-								ret.Add(y);
+							if (!ret.Contains (y))
+								ret.Add (y);
 						}
 					}
 					return ret;
 				}
-				return Universo.PuntosEnIntervalo(A, B);
+				return Universo.PuntosEnIntervalo (A, B);
 			}
 
 			#endregion
@@ -259,14 +240,14 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si llegó <c>false</c> otherwise.</returns>
 			/// <param name="destino">Destino.</param>
 			/// <param name="dist">Distancia.</param>
-			bool AvanzarHacia(T destino, ref float dist)
+			bool AvanzarHacia (T destino, ref float dist)
 			{
-				var restante = DistanciaAExtremo(destino);
-				var anterior = Clonar();
+				var restante = DistanciaAExtremo (destino);
+				var anterior = Clonar ();
 
 				if (restante > dist) // No llega
 				{
-					if (destino.Equals(A))
+					if (destino.Equals (A))
 					{
 						Loc -= dist;
 					}
@@ -276,38 +257,38 @@ namespace Graficas.Continuo
 						Loc += dist;
 					}
 					dist = 0;
-					AlDesplazarse?.Invoke();
+					AlDesplazarse?.Invoke ();
 
-					VerificaColisión(anterior);
+					VerificaColisión (anterior);
 					return false;
 				}
 
 				dist = dist - restante;
-				AlDesplazarse?.Invoke();
-				AlLlegarANodo?.Invoke();
-				FromGrafica(destino);
-				VerificaColisión(anterior);
+				AlDesplazarse?.Invoke ();
+				AlLlegarANodo?.Invoke ();
+				FromGrafica (destino);
+				VerificaColisión (anterior);
 				return true;
 			}
 
-			void VerificaColisión(ContinuoPunto anterior)
+			void VerificaColisión (ContinuoPunto anterior)
 			{
 				var extremoBase = anterior.A;
-				var minDist = anterior.DistanciaAExtremo(extremoBase);
-				var maxDist = DistanciaAExtremo(extremoBase);
-				Debug.WriteLineIf(maxDist < minDist, "¡Pasó algo raro!");
+				var minDist = anterior.DistanciaAExtremo (extremoBase);
+				var maxDist = DistanciaAExtremo (extremoBase);
+				Debug.WriteLineIf (maxDist < minDist, "¡Pasó algo raro!");
 				foreach (var x in Universo.PuntosArista(A, B))
 				{
-					if (!ReferenceEquals(x, this) &&
-					    !ReferenceEquals(x, anterior) &&
-					    minDist <= x.DistanciaAExtremo(extremoBase) &&
-					    maxDist >= x.DistanciaAExtremo(extremoBase))
+					if (!ReferenceEquals (x, this) &&
+					    !ReferenceEquals (x, anterior) &&
+					    minDist <= x.DistanciaAExtremo (extremoBase) &&
+					    maxDist >= x.DistanciaAExtremo (extremoBase))
 					{
-						AlColisionar?.Invoke(x);
-						x.AlColisionar?.Invoke(this);
+						AlColisionar?.Invoke (x);
+						x.AlColisionar?.Invoke (this);
 					}
 				}
-				anterior.Remove();
+				anterior.Remove ();
 			}
 
 			/// <summary>
@@ -316,23 +297,23 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si llegó <c>false</c> otherwise.</returns>
 			/// <param name="destino">Destino.</param>
 			/// <param name="dist">Distancia.</param>
-			public bool AvanzarHacia(T destino, float dist)
+			public bool AvanzarHacia (T destino, float dist)
 			{
 				float Ref = dist;
-				return AvanzarHacia(destino, ref Ref);
+				return AvanzarHacia (destino, ref Ref);
 			}
 
-			public bool AvanzarHacia(Ruta ruta, float dist)
+			public bool AvanzarHacia (Ruta ruta, float dist)
 			{
 				foreach (var r in ruta.Pasos)
 				{
-					if (r.Destino.Equals(this))
+					if (r.Destino.Equals (this))
 						continue;
-					if (!AvanzarHacia(r.Destino, ref dist))
+					if (!AvanzarHacia (r.Destino, ref dist))
 						return false;
-					ruta.EliminarPrimero();
+					ruta.EliminarPrimero ();
 				}
-				AlTerminarRuta?.Invoke();
+				AlTerminarRuta?.Invoke ();
 				return true;
 			}
 
@@ -342,25 +323,25 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si llegó, <c>false</c> otherwise.</returns>
 			/// <param name="destino">Destino.</param>
 			/// <param name="dist">Distancia</param>
-			public bool AvanzarHacia(ContinuoPunto destino, ref float dist)
+			public bool AvanzarHacia (ContinuoPunto destino, ref float dist)
 			{
-				if (!CoincideCon(destino))
-					throw new Exception("No se puede avanzar si no coinciden");
+				if (!CoincideCon (destino))
+					throw new Exception ("No se puede avanzar si no coinciden");
 
-				var relRestante = DistanciaAExtremo(A) - destino.DistanciaAExtremo(A);
-				var absRestante = Math.Abs(relRestante);
-				var avance = Math.Min(dist, absRestante);
+				var relRestante = DistanciaAExtremo (A) - destino.DistanciaAExtremo (A);
+				var absRestante = Math.Abs (relRestante);
+				var avance = Math.Min (dist, absRestante);
 				dist -= avance;
 
 				if (relRestante < 0)
 				{
-					AvanzarHacia(B, ref avance);
+					AvanzarHacia (B, ref avance);
 				}
 				else
 				{
-					AvanzarHacia(A, ref avance);
+					AvanzarHacia (A, ref avance);
 				}
-				return Equals(destino);
+				return Equals (destino);
 			}
 
 			#endregion
@@ -394,7 +375,7 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Pone a este punto en un punto de la gráfica.
 			/// </summary>
-			public void FromGrafica(T punto)
+			public void FromGrafica (T punto)
 			{
 				A = punto;
 				B = default(T);
@@ -405,21 +386,21 @@ namespace Graficas.Continuo
 
 			#region IEquatable implementation
 
-			public bool Equals(ContinuoPunto other)
+			public bool Equals (ContinuoPunto other)
 			{
 				if (EnOrigen)
-					return (A.Equals(other.A) && other.Loc == 0);
-				return (A.Equals(other.A) && B.Equals(other.B) && Loc == other.Loc) ||
-				(A.Equals(other.B) && B.Equals(other.A) && Loc == other.Aloc);
+					return (A.Equals (other.A) && other.Loc == 0);
+				return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
+				(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
 			}
 
 			#endregion
 
 			#region IDisposable implementation
 
-			void IDisposable.Dispose()
+			void IDisposable.Dispose ()
 			{
-				Universo.Puntos.Remove(this);
+				Universo.Puntos.Remove (this);
 			}
 
 			#endregion
@@ -446,21 +427,21 @@ namespace Graficas.Continuo
 			/// Initializes a new instance of the class
 			/// </summary>
 			/// <param name="inicial">Punto de origen</param>
-			public Ruta(ContinuoPunto inicial)
+			public Ruta (ContinuoPunto inicial)
 			{
 				NodoInicial = inicial;
 			}
 
-			public void EliminarPrimero()
+			public void EliminarPrimero ()
 			{
-				Paso.RemoveAt(0);
+				Paso.RemoveAt (0);
 			}
 
 			/// <summary>
 			/// Concatena finalmente con un punto
 			/// </summary>
 			/// <param name="final">Final.</param>
-			public void ConcatFinal(ContinuoPunto final)
+			public void ConcatFinal (ContinuoPunto final)
 			{
 				NodoFinal = final;
 			}
@@ -494,7 +475,7 @@ namespace Graficas.Continuo
 			/// Revisa si un punto dado pertenece a esta ruta.
 			/// </summary>
 			/// <param name="punto">Punto.</param>
-			public bool Contiene(ContinuoPunto punto)
+			public bool Contiene (ContinuoPunto punto)
 			{
 				// Hay de tres:
 				// 0) Está en el semiintervalo inicial
@@ -502,25 +483,25 @@ namespace Graficas.Continuo
 				// 2) Está en un intervalo intermedio
 			
 				// 0)
-				if (NodoInicial.CoincideCon(punto))
+				if (NodoInicial.CoincideCon (punto))
 				{
 					T MyA = punto.A;
-					if (NodoInicial.DistanciaAExtremo(MyA) <= punto.Loc)
+					if (NodoInicial.DistanciaAExtremo (MyA) <= punto.Loc)
 						return true;
 				}
 
 				// 2)
 				foreach (var x in Pasos)
 				{
-					if (punto.EnIntervaloInmediato(x.Origen, x.Destino))
+					if (punto.EnIntervaloInmediato (x.Origen, x.Destino))
 						return true;
 				}
 
 				// 1)
-				if (NodoFinal.CoincideCon(punto))
+				if (NodoFinal.CoincideCon (punto))
 				{
 					T MyB = punto.B;
-					if (NodoFinal.DistanciaAExtremo(MyB) < punto.Aloc)
+					if (NodoFinal.DistanciaAExtremo (MyB) < punto.Aloc)
 						return true;
 				}
 
@@ -530,16 +511,16 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Devuelve una enumeración de los puntos contenidos en esta ruta
 			/// </summary>
-			public List<ContinuoPunto> PuntosEnRuta(Continuo<T> gr)
+			public List<ContinuoPunto> PuntosEnRuta (Continuo<T> gr)
 			{
-				return gr.Puntos.FindAll(Contiene);
+				return gr.Puntos.FindAll (Contiene);
 			}
 		}
 
 		public readonly ILecturaGrafoPeso<T> GráficaBase;
-		public readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto>();
+		public readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto> ();
 
-		public Continuo(ILecturaGrafoPeso<T> grafica)
+		public Continuo (ILecturaGrafoPeso<T> grafica)
 		{
 			GráficaBase = grafica;
 		}
@@ -550,13 +531,13 @@ namespace Graficas.Continuo
 		/// <param name="inicial">Punto inicial.</param>
 		/// <param name="final">Punto final.</param>
 		/// <param name="rutas">Rutas</param>
-		public Ruta RutaÓptima(ContinuoPunto inicial, ContinuoPunto final, ConjuntoRutasÓptimas<T> rutas)
+		public Ruta RutaÓptima (ContinuoPunto inicial, ContinuoPunto final, ConjuntoRutasÓptimas<T> rutas)
 		{
-			var ruta = rutas.CaminoÓptimo(inicial.A, final.A);
-			var ret = new Ruta(inicial);
-			ret.Concat(inicial.A, 0);
-			ret.Concat(ruta);
-			ret.ConcatFinal(final);
+			var ruta = rutas.CaminoÓptimo (inicial.A, final.A);
+			var ret = new Ruta (inicial);
+			ret.Concat (inicial.A, 0);
+			ret.Concat (ruta);
+			ret.ConcatFinal (final);
 			return ret;
 		}
 
@@ -564,9 +545,9 @@ namespace Graficas.Continuo
 		/// <summary>
 		/// Devuelve una nueva lista de los puntos que hay en dos nodos consecutivos.
 		/// </summary>
-		public ICollection<ContinuoPunto> PuntosEnIntervalo(T p1, T p2)
+		public ICollection<ContinuoPunto> PuntosEnIntervalo (T p1, T p2)
 		{
-			return Puntos.FindAll(x => x.EnIntervaloInmediato(p1, p2));
+			return Puntos.FindAll (x => x.EnIntervaloInmediato (p1, p2));
 		}
 
 		/// <summary>
@@ -575,9 +556,9 @@ namespace Graficas.Continuo
 		/// <param name="a">Un extremo del intervalo</param>
 		/// <param name="b">Otro extremo del intervalo</param>
 		/// <param name="loc">Distancia de este punto a el primer punto dado, a</param>
-		public ContinuoPunto AgregaPunto(T a, T b, float loc)
+		public ContinuoPunto AgregaPunto (T a, T b, float loc)
 		{
-			var ret = new ContinuoPunto(this);
+			var ret = new ContinuoPunto (this);
 			ret.A = a;
 			ret.B = b;
 			ret.Loc = loc;
@@ -588,16 +569,16 @@ namespace Graficas.Continuo
 		/// Agrega un punto al grafo y lo devuelve
 		/// </summary>
 		/// <param name="a">Punto en el grafo</param>
-		public ContinuoPunto AgregaPunto(T a)
+		public ContinuoPunto AgregaPunto (T a)
 		{
-			return new ContinuoPunto(this, a);
+			return new ContinuoPunto (this, a);
 		}
 
-		IEnumerable<ContinuoPunto> PuntosArista(ParNoOrdenado<T> arista)
+		IEnumerable<ContinuoPunto> PuntosArista (ParNoOrdenado<T> arista)
 		{
 			foreach (var x in Puntos)
 			{
-				if (x.Extremos.Equals(arista))
+				if (x.Extremos.Equals (arista))
 				{
 					yield return x;
 				}
@@ -610,22 +591,20 @@ namespace Graficas.Continuo
 		/// </summary>
 		/// <param name="origen">Un extemo de la arista</param>
 		/// <param name="destino">Segundo extremo de la arista</param>
-		public IEnumerable<ContinuoPunto> PuntosArista(T origen, T destino)
+		public IEnumerable<ContinuoPunto> PuntosArista (T origen, T destino)
 		{
-			var aris = new ParNoOrdenado<T>(origen, destino);
-			return PuntosArista(aris);
+			var aris = new ParNoOrdenado<T> (origen, destino);
+			return PuntosArista (aris);
 		}
 
 		/// <summary>
 		/// Enumera los puntos existentes en una arista
 		/// </summary>
 		/// <param name="arista">Arista.</param>
-		public IEnumerable<ContinuoPunto> PuntosArista(IArista<T> arista)
+		public IEnumerable<ContinuoPunto> PuntosArista (IArista<T> arista)
 		{
-			var aris = new ParNoOrdenado<T>(arista.Origen, arista.Destino);
-			return PuntosArista(aris);
+			var aris = new ParNoOrdenado<T> (arista.Origen, arista.Destino);
+			return PuntosArista (aris);
 		}
-
 	}
-
 }

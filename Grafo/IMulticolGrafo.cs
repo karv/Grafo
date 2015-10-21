@@ -7,13 +7,12 @@ namespace Graficas
 	/// </summary>
 	public interface IMulticolGrafo<TNodo, TColor>: ILecturaGrafo<TNodo>
 	{
-		ICollection<TNodo> Vecinos(TNodo nodo, TColor color);
+		ICollection<TNodo> Vecinos (TNodo nodo, TColor color);
 
-		void AgregaColor(TColor color, ILecturaGrafo<TNodo> grafo);
+		void AgregaColor (TColor color, ILecturaGrafo<TNodo> grafo);
 
-		ILecturaGrafo<TNodo> GrafoColor(TColor color);
+		ILecturaGrafo<TNodo> GrafoColor (TColor color);
 
-		IEnumerable<TColor> ColoresArista(IArista<TNodo> aris);
+		IEnumerable<TColor> ColoresArista (IArista<TNodo> aris);
 	}
 }
-
