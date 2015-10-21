@@ -8,19 +8,22 @@ namespace Graficas.Nodos
 	/// <summary>
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>
-	public class ConjuntoNodos<T> :  IGrafo<T>
+	public class ConjuntoNodos<T> :  IGrafo<T> // TEST todo
 		where T : IEquatable<T>
 	{
-		HashSet<Nodo<T>> _dat = new HashSet<Nodo<T>>();
+		HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>>();
 
 		Nodo<T> AsNodo(T obj)
 		{
-			foreach (var x in _dat)
+			foreach (var x in _nodos)
 			{
 				if (x.Obj.Equals(obj))
 					return x;
 			}
-			throw new Exception("Nodo inexistente.");
+			// Si existe, lo agrego
+			var ret = new Nodo<T>(obj);
+			_nodos.Add(ret);
+			return ret;
 		}
 
 		public ICollection<IArista<T>> Aristas()
@@ -52,7 +55,15 @@ namespace Graficas.Nodos
 				Add(x);
 			}
 
-			// TODO
+			// Hacer la topología
+			foreach (var item in graf.Nodos)
+			{
+				Nodo<T> nodoDeItem = AsNodo(item);
+				foreach (var x in graf.Vecinos(item))
+				{
+					nodoDeItem.Vecindad.Add(AsNodo(x));
+				}
+			}
 		}
 
 		public bool this [T desde, T hasta]
@@ -90,8 +101,8 @@ namespace Graficas.Nodos
 		{
 			get
 			{
-				var ret = new List<T>(_dat.Count);
-				foreach (var x in _dat)
+				var ret = new List<T>(_nodos.Count);
+				foreach (var x in _nodos)
 				{
 					ret.Add(x.Obj);
 				}
@@ -119,17 +130,17 @@ namespace Graficas.Nodos
 			if (Contains(item))
 				throw new Exception("Ya se encuentra nodo.");
 
-			_dat.Add(new Nodo<T>(item));
+			_nodos.Add(new Nodo<T>(item));
 		}
 
 		public void Clear()
 		{
-			_dat.Clear();
+			_nodos.Clear();
 		}
 
 		public bool Contains(T item)
 		{
-			foreach (var x in _dat)
+			foreach (var x in _nodos)
 			{
 				if (x.Obj.Equals(item))
 					return true;
@@ -144,14 +155,14 @@ namespace Graficas.Nodos
 
 		public void Remove(T item)
 		{
-			_dat.Remove(AsNodo(item));
+			_nodos.Remove(AsNodo(item));
 		}
 
 		public int Count
 		{
 			get
 			{
-				return _dat.Count;
+				return _nodos.Count;
 			}
 		}
 
