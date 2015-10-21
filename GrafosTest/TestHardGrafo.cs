@@ -65,5 +65,13 @@ namespace Test
 			Assert.AreEqual (MaxSize * (MaxSize - 1) / 2, aris.Count);
 
 		}
+
+		[Test]
+		public void ToRuta ()
+		{
+			var gr = new HardGrafo<int> ();
+			GeneralTest.GeneraGraficaConexa (gr);
+			GeneralTest.TestToRuta (gr);
+		}
 	}
 }
