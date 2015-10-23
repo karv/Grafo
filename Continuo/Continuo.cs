@@ -57,6 +57,11 @@ namespace Graficas.Continuo
 				A = nodo;
 			}
 
+			internal ContinuoPunto (T nodo)
+			{
+				A = nodo;
+			}
+
 			public ContinuoPunto (Continuo<T> universo)
 			{
 				Universo = universo;
@@ -555,9 +560,9 @@ namespace Graficas.Continuo
 			ContinuoPunto ret;
 			if (puntosFijos.TryGetValue (punto, out ret))
 				return ret;
-			throw new Exception (string.Format ("El objeto {0} no pertenece al grafo base {1}.\nNo se puede obtener su punto fijo.",
-			                                    punto,
-			                                    GráficaBase));
+			ret = new ContinuoPunto (punto);
+			puntosFijos.Add (punto, ret);
+			return ret;
 		}
 
 		public Continuo (ILecturaGrafoPeso<T> grafica)
