@@ -544,10 +544,29 @@ namespace Graficas.Continuo
 
 		public readonly ILecturaGrafoPeso<T> GráficaBase;
 		public readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto> ();
+		readonly Dictionary<T, ContinuoPunto> puntosFijos = new Dictionary<T, ContinuoPunto> ();
+
+		/// <summary>
+		/// Devuelve el punto en el continuo equivalente a un nodo del grafo.
+		/// </summary>
+		/// <param name="punto">Nodo en el grafo</param>
+		public ContinuoPunto PuntoFijo (T punto)
+		{
+			ContinuoPunto ret;
+			if (puntosFijos.TryGetValue (punto, out ret))
+				return ret;
+			throw new Exception (string.Format ("El objeto {0} no pertenece al grafo base {1}.\nNo se puede obtener su punto fijo.",
+			                                    punto,
+			                                    GráficaBase));
+		}
 
 		public Continuo (ILecturaGrafoPeso<T> grafica)
 		{
 			GráficaBase = grafica;
+			foreach (var x in grafica.Nodos)
+			{
+				puntosFijos.Add (x, AgregaPunto (x));
+			}
 		}
 
 		/// <summary>
