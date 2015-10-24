@@ -74,6 +74,10 @@ namespace Test
 			p3.Loc = 4;
 			Assert.AreEqual (3, pt.Vecindad ().Count);
 			Assert.AreEqual (3, Gr.Puntos.Count);
+
+			// Los puntos fijos
+			var pf1 = Gr.PuntoFijo (1);
+			Assert.True (ReferenceEquals (pf1, Gr.PuntoFijo (1)));
 		}
 
 		[Test]

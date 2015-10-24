@@ -57,6 +57,11 @@ namespace Graficas.Continuo
 				A = nodo;
 			}
 
+			internal ContinuoPunto (T nodo)
+			{
+				A = nodo;
+			}
+
 			public ContinuoPunto (Continuo<T> universo)
 			{
 				Universo = universo;
@@ -546,10 +551,29 @@ namespace Graficas.Continuo
 
 		public readonly ILecturaGrafoPeso<T> GráficaBase;
 		public readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto> ();
+		readonly Dictionary<T, ContinuoPunto> puntosFijos = new Dictionary<T, ContinuoPunto> ();
+
+		/// <summary>
+		/// Devuelve el punto en el continuo equivalente a un nodo del grafo.
+		/// </summary>
+		/// <param name="punto">Nodo en el grafo</param>
+		public ContinuoPunto PuntoFijo (T punto)
+		{
+			ContinuoPunto ret;
+			if (puntosFijos.TryGetValue (punto, out ret))
+				return ret;
+			ret = new ContinuoPunto (punto);
+			puntosFijos.Add (punto, ret);
+			return ret;
+		}
 
 		public Continuo (ILecturaGrafoPeso<T> grafica)
 		{
 			GráficaBase = grafica;
+			foreach (var x in grafica.Nodos)
+			{
+				puntosFijos.Add (x, AgregaPunto (x));
+			}
 		}
 
 		/// <summary>
