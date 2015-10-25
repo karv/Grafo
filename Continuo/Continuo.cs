@@ -359,6 +359,7 @@ namespace Graficas.Continuo
 					throw new Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
 					                                    this,
 					                                    destino,
+					                                    dist));
 
 				var relRestante = DistanciaAExtremo (A) - destino.DistanciaAExtremo (A);
 				var absRestante = Math.Abs (relRestante);
