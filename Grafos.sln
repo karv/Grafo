@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Grafos", "Grafos.csproj", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrafosTest", "GrafosTest\GrafosTest.csproj", "{1145A7FB-2B97-404D-929C-5440FD7396D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListaExtras", "ListaExtras\ListaExtras.csproj", "{B9F315AE-47F8-4629-83FC-3B4D70087083}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,10 +18,6 @@ Global
 		{AF2E2C37-9F1D-4D32-AE62-8484B0A9DD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF2E2C37-9F1D-4D32-AE62-8484B0A9DD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF2E2C37-9F1D-4D32-AE62-8484B0A9DD50}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B9F315AE-47F8-4629-83FC-3B4D70087083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B9F315AE-47F8-4629-83FC-3B4D70087083}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B9F315AE-47F8-4629-83FC-3B4D70087083}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B9F315AE-47F8-4629-83FC-3B4D70087083}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

@@ -31,6 +31,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="ListaExtras">
+      <HintPath>packages\ListaExtras.0.2.4.2\lib\ListaExtras.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +65,7 @@
     <Compile Include="Rutas\HardRuta.cs" />
     <Compile Include="Aristas\INodo.cs" />
     <Compile Include="Aristas\Nodo.cs" />
+    <Compile Include="Grafo\AristaColGrafo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -86,9 +90,6 @@
     <Folder Include="Grafo\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="ListaExtras\ListaExtras.csproj">
-      <Project>{B9F315AE-47F8-4629-83FC-3B4D70087083}</Project>
-      <Name>ListaExtras</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
