@@ -65,7 +65,7 @@
     <Compile Include="Rutas\HardRuta.cs" />
     <Compile Include="Aristas\INodo.cs" />
     <Compile Include="Aristas\Nodo.cs" />
-    <Compile Include="Grafo\AristaColGrafo.cs" />
+    <Compile Include="Grafo\GrafoArista.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

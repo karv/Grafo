@@ -3,17 +3,55 @@ using Graficas;
 using System.Collections.Generic;
 using Graficas.Rutas;
 
-namespace Graficas
+namespace Graficas.Grafo
 {
 	/// <summary>
 	/// Representa un grafo como una colección de aristas
 	/// </summary>
 	public class GrafoAristas<T> : IGrafoPeso<T>
-		where T : IEquatable<T>
+		where T:IEquatable<T>
 	{
 		public GrafoAristas ()
 		{
 			AristasColección = new List<IArista<T>> ();
+		}
+
+		/// <summary>
+		/// Devuelve los nodos que son apuntados por un nodo dado.
+		/// </summary>
+		/// <returns>The exterior.</returns>
+		public ICollection<T> VecindadExterior (T nodo)
+		{
+			if (!Nodos.Contains (nodo))
+				throw new InvalidOperationException (string.Format (
+					"Nodo {0} no pertenece a gráfica",
+					nodo));
+
+			var ret = new HashSet<T> ();
+			foreach (var a in AristasColección)
+				if (a.Origen.Equals (nodo))
+					ret.Add (a.Destino);
+
+			return ret;
+		}
+
+		/// <summary>
+		/// Devuelve los nodos que apuntan a un nodo dado.
+		/// </summary>
+		/// <returns>The interior.</returns>
+		public ICollection<T> VecindadInterior (T nodo)
+		{
+			if (!Nodos.Contains (nodo))
+				throw new InvalidOperationException (string.Format (
+					"Nodo {0} no pertenece a gráfica",
+					nodo));
+
+			var ret = new HashSet<T> ();
+			foreach (var a in AristasColección)
+				if (a.Destino.Equals (nodo))
+					ret.Add (a.Origen);
+
+			return ret;
 		}
 
 		protected ICollection<IArista<T>> AristasColección;
@@ -32,6 +70,11 @@ namespace Graficas
 
 		public ICollection<T> Vecinos (T nodo)
 		{
+			if (!Nodos.Contains (nodo))
+				throw new InvalidOperationException (string.Format (
+					"Nodo {0} no pertenece a gráfica",
+					nodo));
+			
 			var ret = new HashSet<T> ();
 			foreach (var x in AristasColección)
 			{
@@ -178,13 +221,15 @@ namespace Graficas
 		}
 
 		public AristaInexistenteException (string message, Exception inner)
-			: base (message, inner)
+			: base (message,
+			        inner)
 		{
 		}
 
 		protected AristaInexistenteException (System.Runtime.Serialization.SerializationInfo info,
 		                                      System.Runtime.Serialization.StreamingContext context)
-			: base (info, context)
+			: base (info,
+			        context)
 		{
 		}
 	}
