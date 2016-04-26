@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Graficas.Aristas;
 
 namespace Graficas.Rutas
 {
-	public class Ruta<T>: IRuta<T>
+	/// <summary>
+	/// Representa una ruta
+	/// </summary>
+	public class Ruta<T> : IRuta<T>
 	{
 		protected struct NodoPeso
 		{
@@ -19,14 +23,18 @@ namespace Graficas.Rutas
 
 		public Ruta ()
 		{
-			
 		}
 
+		/// <param name="origen">Origen</param>
 		public Ruta (T origen)
 		{
 			Paso.Add (new NodoPeso (origen, 0));
 		}
 
+		/// <summary>
+		/// Construye una implementación de esta ruta, dada una ruta abstracta
+		/// </summary>
+		/// <param name="ruta">Ruta a imitar</param>
 		public Ruta (IRuta<T> ruta)
 			: this (ruta.NodoInicial)
 		{
@@ -36,12 +44,16 @@ namespace Graficas.Rutas
 			}
 		}
 
+		/// <param name="aris">Arista inicial</param>
 		public Ruta (IArista<T> aris)
 		{
 			Paso.Add (new NodoPeso (aris.Origen, 0));
 			Paso.Add (new NodoPeso (aris.Destino, aris.Peso));
 		}
 
+		/// <summary>
+		/// Lista de pasos de esta ruta.
+		/// </summary>
 		readonly protected IList<NodoPeso> Paso = new List<NodoPeso> ();
 
 		public override string ToString ()
@@ -55,6 +67,9 @@ namespace Graficas.Rutas
 			return ret;
 		}
 
+		/// <summary>
+		/// Enumera los pasos de la ruta
+		/// </summary>
 		public IEnumerable<IPaso<T>> Pasos
 		{ 
 			get
@@ -68,6 +83,10 @@ namespace Graficas.Rutas
 			} 
 		}
 
+		/// <summary>
+		/// Concatena con un paso una ruta
+		/// </summary>
+		/// <param name="paso">Paso con qué concatenar</param>
 		public void Concat (IPaso<T> paso)
 		{
 			if (paso == null)
@@ -85,15 +104,19 @@ namespace Graficas.Rutas
 				}
 				else
 				{
-					throw new Exception ("El nodo final debe coincidir con el origen de el paso para poder concatenar.");
+					throw new System.Exception ("El nodo final debe coincidir con el origen de el paso para poder concatenar.");
 				}
 			}
 		}
 
+		/// <summary>
+		/// Concatena esta ruta
+		/// </summary>
+		/// <param name="ruta">Ruta.</param>
 		public void Concat (IRuta<T> ruta)
 		{
 			if (!NodoFinal.Equals (ruta.NodoInicial))
-				throw new Exception ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
+				throw new System.Exception ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 
 			foreach (var paso in ruta.Pasos)
 			{
@@ -101,6 +124,11 @@ namespace Graficas.Rutas
 			}
 		}
 
+		/// <summary>
+		/// Concatena esta ruta
+		/// </summary>
+		/// <param name="nodo">Nodo con qué concatenar</param>
+		/// <param name="peso">distancia de el Nodo final a este nuevo nodo</param>
 		public void Concat (T nodo, float peso)
 		{
 			Paso.Add (new NodoPeso (nodo, peso));
@@ -145,7 +173,7 @@ namespace Graficas.Rutas
 			get
 			{
 				if (NumPasos < 0)
-					throw new Exception ("No existe el nodo final en un path vacío.");
+					throw new System.Exception ("No existe el nodo final en un path vacío.");
 				return Paso [NumPasos].Nodo;
 			}
 		}

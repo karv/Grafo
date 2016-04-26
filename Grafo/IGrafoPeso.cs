@@ -1,4 +1,4 @@
-﻿namespace Graficas
+﻿namespace Graficas.Grafo
 {
 	public interface IGrafoPeso<T> : ILecturaGrafoPeso<T>
 	{
@@ -11,4 +11,3 @@
 		new float this [T desde, T hasta]{ get; set; }
 	}
 }
-

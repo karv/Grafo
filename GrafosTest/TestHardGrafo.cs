@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Graficas;
 using System;
+using Graficas.Grafo;
 
 namespace Test
 {

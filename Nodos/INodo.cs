@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace Graficas
+namespace Graficas.Nodos
 {
+	/// <summary>
+	/// Un nodo de un grafo
+	/// </summary>
 	public interface INodo<T>
 	{
 		/// <summary>

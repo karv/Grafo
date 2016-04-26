@@ -2,6 +2,9 @@
 
 namespace Graficas.Rutas
 {
+	/// <summary>
+	/// Una ruta de un grafo
+	/// </summary>
 	public interface IRuta<T>
 	{
 		/// <summary>
@@ -31,13 +34,13 @@ namespace Graficas.Rutas
 		IRuta<T> Reversa ();
 
 		/// <summary>
-		/// Concatena esta ruta
+		/// Concatena esta ruta con un paso
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
 		void Concat (IPaso<T> paso);
 
 		/// <summary>
-		/// Concat the specified ruta.
+		/// Concatena esta ruta con otra ruta
 		/// </summary>
 		/// <param name="ruta">Ruta con qué concatenar</param>
 		void Concat (IRuta<T> ruta);
