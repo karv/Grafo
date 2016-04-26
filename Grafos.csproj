@@ -66,6 +66,7 @@
     <Compile Include="Aristas\INodo.cs" />
     <Compile Include="Aristas\Nodo.cs" />
     <Compile Include="Grafo\GrafoArista.cs" />
+    <Compile Include="Aristas\AristaNombrada.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
