@@ -7,6 +7,7 @@ using Graficas.Aristas;
 
 namespace Graficas.Rutas
 {
+	[Serializable]
 	/// <summary>
 	/// Representa un conjunto de mejores rutas en una gráfica
 	/// </summary>

@@ -4,11 +4,13 @@ using Graficas.Aristas;
 
 namespace Graficas.Rutas
 {
+	[Serializable]
 	/// <summary>
 	/// Representa una ruta
 	/// </summary>
 	public class Ruta<T> : IRuta<T>
 	{
+		[Serializable]
 		protected struct NodoPeso
 		{
 			public T Nodo;

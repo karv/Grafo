@@ -8,12 +8,14 @@ using Graficas.Grafo;
 
 namespace Graficas.Continuo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa un continuo producido por una IGrafica
 	/// </summary>
 	public class Continuo<T>
 		where T : IEquatable<T>
 	{
+		[Serializable]
 		/// <summary>
 		/// Representa un punto en un continuo.
 		/// </summary>
