@@ -1,5 +1,8 @@
-﻿namespace Graficas.Aristas
+﻿using System;
+
+namespace Graficas.Aristas
 {
+	[Serializable]
 	public class Arista<T> : IArista<T>
 	{
 		/// <summary>

@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using Graficas.Aristas;
+using System.Runtime.Serialization;
 
 namespace Graficas.Grafo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
-	public class GrafoClan<T>: IGrafoRutas<T>
-		where T:IEquatable<T>
+	public class GrafoClan<T> : IGrafoRutas<T>
+		where T : IEquatable<T>
 	{
+		[Serializable]
 		class Clan : HashSet<T>
 		{
 			public Clan ()
+			{
+			}
+
+			public Clan (SerializationInfo info, StreamingContext context)
+				: base (info, context)
 			{
 			}
 

@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace Graficas.Nodos
 {
+	[Serializable]
 	/// <summary>
 	/// Representa un nodo que vincula a su vecindad
 	/// </summary>

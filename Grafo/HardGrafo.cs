@@ -7,6 +7,7 @@ using Graficas.Aristas;
 
 namespace Graficas.Grafo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>

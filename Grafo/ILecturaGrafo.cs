@@ -4,10 +4,6 @@ using Graficas.Aristas;
 
 namespace Graficas.Grafo
 {
-
-	/// <summary>
-	/// Una grafo sólo lectura
-	/// </summary>
 	public interface ILecturaGrafo<T>
 	{
 		/// <summary>

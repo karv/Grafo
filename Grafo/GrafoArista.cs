@@ -5,6 +5,7 @@ using Graficas.Aristas;
 
 namespace Graficas.Grafo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa un grafo como una colección de aristas
 	/// </summary>
@@ -173,6 +174,18 @@ namespace Graficas.Grafo
 					ret.Add (a.Destino);
 				}
 				return ret;
+			}
+		}
+
+		bool IGrafo<T>.this [T desde, T hasta]
+		{
+			get
+			{
+				throw new NotImplementedException ();
+			}
+			set
+			{
+				throw new NotImplementedException ();
 			}
 		}
 

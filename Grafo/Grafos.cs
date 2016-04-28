@@ -6,6 +6,7 @@ using Graficas.Aristas;
 
 namespace Graficas.Grafo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa una gráfica, en el sentido abstracto.
 	/// Los nodos son del tipo <c>T</c>.

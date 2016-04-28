@@ -1,6 +1,6 @@
 ﻿namespace Graficas.Grafo
 {
-	public interface IGrafoPeso<T> : ILecturaGrafoPeso<T>
+	public interface IGrafoPeso<T> : ILecturaGrafoPeso<T>, IGrafo<T>
 	{
 		/// <summary>
 		/// El peso de una arista.

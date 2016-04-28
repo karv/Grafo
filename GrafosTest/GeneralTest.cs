@@ -1,5 +1,4 @@
-﻿using Graficas;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using Graficas.Rutas;
 using Graficas.Extensiones;
