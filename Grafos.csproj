@@ -9,7 +9,7 @@
     <AssemblyName>Grafos</AssemblyName>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ReleaseVersion>0.1.5</ReleaseVersion>
+    <ReleaseVersion>0.1.6</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,7 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="ListaExtras">
-      <HintPath>packages\ListaExtras.0.2.4.2\lib\ListaExtras.dll</HintPath>
+      <HintPath>packages\ListaExtras.0.2.6\lib\ListaExtras.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -46,7 +46,6 @@
     <Compile Include="Rutas\Paso.cs" />
     <Compile Include="Rutas\Ruta.cs" />
     <Compile Include="Exception\NodoInexistenteException.cs" />
-    <Compile Include="General\ParNoOrdenado.cs" />
     <Compile Include="Exception\ColorDuplicadoException.cs" />
     <Compile Include="Grafo\GrafoClan.cs" />
     <Compile Include="Grafo\GrafoNoPeso.cs" />
@@ -58,14 +57,15 @@
     <Compile Include="Grafo\MulticolGrafica.cs" />
     <Compile Include="Grafo\IGrafo.cs" />
     <Compile Include="Grafo\IGrafoPeso.cs" />
-    <Compile Include="Grafo\Extensiones.cs" />
     <Compile Include="Grafo\HardGrafo.cs" />
     <Compile Include="Aristas\HardArista.cs" />
     <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
     <Compile Include="Rutas\HardRuta.cs" />
-    <Compile Include="Aristas\INodo.cs" />
-    <Compile Include="Aristas\Nodo.cs" />
     <Compile Include="Grafo\GrafoArista.cs" />
+    <Compile Include="Aristas\AristaNombrada.cs" />
+    <Compile Include="Nodos\INodo.cs" />
+    <Compile Include="Nodos\Nodo.cs" />
+    <Compile Include="Extensiones\Extensiones.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -78,6 +78,8 @@
           <TextStylePolicy inheritsSet="null" scope="application/xml" />
           <XmlFormattingPolicy inheritsSet="Mono" inheritsScope="application/xml" scope="application/xml" />
           <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="FileName" />
+          <TextStylePolicy TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentSwitchBody="True" AutoPropertyFormatting="ForceOneLine" AnonymousMethodBraceStyle="NextLine" PropertyBraceStyle="NextLine" PropertyGetBraceStyle="NextLine" PropertySetBraceStyle="NextLine" EventBraceStyle="NextLine" EventAddBraceStyle="NextLine" EventRemoveBraceStyle="NextLine" StatementBraceStyle="NextLine" ElseNewLinePlacement="NewLine" CatchNewLinePlacement="NewLine" FinallyNewLinePlacement="NewLine" WhileNewLinePlacement="NewLine" ArrayInitializerBraceStyle="NextLine" NewLineBeforeConstructorInitializerColon="NewLine" NewLineAfterConstructorInitializerColon="SameLine" AfterDelegateDeclarationParameterComma="True" BeforeSizeOfParentheses="True" BeforeTypeOfParentheses="True" SpacesBeforeArrayDeclarationBrackets="True" MethodCallArgumentWrapping="WrapIfTooLong" MethodDeclarationParameterWrapping="WrapIfTooLong" IndexerDeclarationParameterWrapping="WrapIfTooLong" IndexerArgumentWrapping="WrapIfTooLong" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
         </Policies>
       </Properties>
     </MonoDevelop>
@@ -87,8 +89,9 @@
     <Folder Include="Continuo\" />
     <Folder Include="Rutas\" />
     <Folder Include="Exception\" />
-    <Folder Include="General\" />
     <Folder Include="Grafo\" />
+    <Folder Include="Nodos\" />
+    <Folder Include="Extensiones\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

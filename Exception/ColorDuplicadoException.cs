@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Graficas
+namespace Graficas.Exception
 {
 	/// <summary>
 	/// Color duplicado expection.
 	/// </summary>
 	[Serializable]
-	public class ColorDuplicadoException : Exception
+	public class ColorDuplicadoException : System.Exception
 	{
 		public ColorDuplicadoException ()
 		{
@@ -17,7 +17,7 @@ namespace Graficas
 		{
 		}
 
-		public ColorDuplicadoException (string message, Exception inner)
+		public ColorDuplicadoException (string message, System.Exception inner)
 			: base (message, inner)
 		{
 		}

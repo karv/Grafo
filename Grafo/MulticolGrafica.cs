@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Graficas.Rutas;
+using Graficas.Aristas;
+using Graficas.Exception;
 
-namespace Graficas
+namespace Graficas.Grafo
 {
 	/// <summary>
 	/// Modela una IMulticolGrafica que es la superposición de varias IGráficas
@@ -18,6 +20,10 @@ namespace Graficas
 
 		#region IGrafica
 
+		/// <summary>
+		/// Calcula el subgrafo generado por un subconjutno de Nodos
+		/// </summary>
+		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
 		public ILecturaGrafo<TNodo> Subgrafo (IEnumerable<TNodo> conjunto)
 		{
 			throw new NotImplementedException ();
@@ -46,7 +52,7 @@ namespace Graficas
 		public IRuta<TNodo> ToRuta (IEnumerable<TNodo> seq)
 		{
 			IRuta<TNodo> ret = new Ruta<TNodo> ();
-			TNodo[] arr = seq.ToArray ();
+			TNodo [] arr = seq.ToArray ();
 			Paso<TNodo> mejorPaso;
 			for (int i = 0; i < arr.Count () - 1; i++)
 			{
@@ -77,6 +83,11 @@ namespace Graficas
 			return _asignación.Any (z => z.Value [desde, hasta]);
 		}
 
+		/// <summary>
+		/// Devuelve los colores existentes
+		/// </summary>
+		/// <returns>The arista.</returns>
+		/// <param name="aris">Aris.</param>
 		public IEnumerable<TColor> ColoresArista (IArista<TNodo> aris)
 		{
 			var ret = new List<TColor> ();
@@ -100,14 +111,24 @@ namespace Graficas
 			_asignación.Add (color, grafo);
 		}
 
+		/// <summary>
+		/// Devuelve el grafo de un color dado.
+		/// </summary>
+		/// <returns>The color.</returns>
+		/// <param name="color">Color.</param>
 		public ILecturaGrafo<TNodo> GrafoColor (TColor color)
 		{
 			ILecturaGrafo<TNodo> ret;
 			if (_asignación.TryGetValue (color, out ret))
 				return ret;
-			throw new Exception (string.Format ("Color {0} no existe.", color));
+			throw new System.Exception (string.Format ("Color {0} no existe.", color));
 		}
 
+		/// <summary>
+		/// Vecinos de un nodo y color específicos
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
+		/// <param name="color">Color.</param>
 		public ICollection<TNodo> Vecinos (TNodo nodo, TColor color)
 		{
 			ILecturaGrafo<TNodo> graf;

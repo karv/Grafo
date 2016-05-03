@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
+using Graficas.Grafo;
 using Graficas;
+using Graficas.Rutas;
 
 namespace Test
 {

@@ -1,8 +1,8 @@
-﻿using Graficas;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using Graficas.Rutas;
 using Graficas.Extensiones;
+using Graficas.Grafo;
 
 namespace Test
 {
@@ -59,7 +59,10 @@ namespace Test
 			Assert.AreEqual (ruta.NodoInicial, reversa.NodoFinal);
 			Assert.AreEqual (reversa.NodoInicial, ruta.NodoFinal);
 
-			Console.WriteLine (string.Format ("Normal: \t{0}\nReversa:\t{1}", ruta, reversa));
+			Console.WriteLine (string.Format (
+				"Normal: \t{0}\nReversa:\t{1}",
+				ruta,
+				reversa));
 		}
 
 		static public void TestToRuta (ILecturaGrafo<int> gr)
@@ -154,7 +157,7 @@ namespace Test
 			gr [7, 4] = true;
 			gr [7, 5] = true;
 
-			int[] sub = { 1, 3, 5, 7 };
+			int [] sub = { 1, 3, 5, 7 };
 			var subg = gr.Subgrafo (sub);
 
 			foreach (var x in sub)

@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas;
+using Graficas.Nodos;
 using Graficas.Rutas;
 using System.Linq;
+using Graficas.Aristas;
 
-namespace Graficas
+namespace Graficas.Grafo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>
 	public class HardGrafo<T> :  IGrafo<T>
 		where T : IEquatable<T>
 	{
-		HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>> ();
+		readonly HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>> ();
 
+		/// <summary>
+		/// Devuelve el nodo correspondiente a un objeto.
+		/// </summary>
 		public Nodo<T> AsNodo (T obj)
 		{
 			foreach (var x in _nodos)
@@ -27,6 +32,9 @@ namespace Graficas
 			return ret;
 		}
 
+		/// <summary>
+		/// Devuelve una copia de la colección de las aristas.
+		/// </summary>
 		public ICollection<HardArista<T>> Aristas ()
 		{
 			var ret = new List<HardArista<T>> ();
@@ -46,6 +54,9 @@ namespace Graficas
 			return Aristas () as ICollection<IArista<T>>;
 		}
 
+		/// <summary>
+		/// Convierte una sucesión coherente en ruta
+		/// </summary>
 		public IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
 			var Nods = new List<Nodo<T>> ();
@@ -56,6 +67,10 @@ namespace Graficas
 			return new HardRuta<T> (Nods);
 		}
 
+		/// <summary>
+		/// Calcula el subgrafo generado por un subconjutno de Nodos
+		/// </summary>
+		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
 		public HardGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new HardGrafo<T> ();
@@ -109,6 +124,11 @@ namespace Graficas
 			}
 		}
 
+		/// <summary>
+		/// Revisa si existe arista entre dos nodos
+		/// </summary>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
 		public bool this [T desde, T hasta]
 		{
 			get
@@ -142,6 +162,10 @@ namespace Graficas
 			return ret;
 		}
 
+		/// <summary>
+		/// Devuelve una colección con los nodos de la gráfica
+		/// </summary>
+		/// <value>The nodos.</value>
 		public ICollection<T> Nodos
 		{
 			get
@@ -158,7 +182,9 @@ namespace Graficas
 
 		#endregion
 
-
+		/// <summary>
+		/// Devuelve el nodo correspondiente a un valor
+		/// </summary>
 		public INodo<T> this [T key]
 		{
 			get
@@ -169,20 +195,30 @@ namespace Graficas
 
 		#region ICollection
 
+		/// <summary>
+		/// Agrega un nodo a la gráfica
+		/// </summary>
 		public void Add (T item)
 		{
 			
 			if (Contains (item))
-				throw new Exception ("Ya se encuentra nodo.");
+				throw new System.Exception ("Ya se encuentra nodo.");
 
 			_nodos.Add (new Nodo<T> (item));
 		}
 
+		/// <summary>
+		/// Elimina cada nodo de la gráfica
+		/// </summary>
 		public void Clear ()
 		{
 			_nodos.Clear ();
 		}
 
+		/// <summary>
+		/// Contains the specified node..
+		/// </summary>
+		/// <param name="item">Item.</param>
 		public bool Contains (T item)
 		{
 			foreach (var x in _nodos)
@@ -193,11 +229,19 @@ namespace Graficas
 			return false;
 		}
 
+		/// <summary>
+		/// Remove the specified node,
+		/// </summary>
+		/// <param name="item">Item.</param>
 		public void Remove (T item)
 		{
 			_nodos.Remove (AsNodo (item));
 		}
 
+		/// <summary>
+		/// Devuelve el número de nodos.
+		/// </summary>
+		/// <value>The count.</value>
 		public int Count
 		{
 			get
@@ -206,15 +250,6 @@ namespace Graficas
 			}
 		}
 
-		public bool IsReadOnly
-		{
-			get
-			{
-				return false;
-			}
-		}
-
 		#endregion
 	}
-
 }

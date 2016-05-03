@@ -1,10 +1,9 @@
 using System;
 
-namespace Graficas
+namespace Graficas.Exception
 {
-
 	[Serializable]
-	public class NodoInexistenteException : Exception
+	public class NodoInexistenteException : System.Exception
 	{
 		public NodoInexistenteException ()
 		{
@@ -15,7 +14,7 @@ namespace Graficas
 		{
 		}
 
-		public NodoInexistenteException (string message, Exception inner)
+		public NodoInexistenteException (string message, System.Exception inner)
 			: base (message, inner)
 		{
 		}

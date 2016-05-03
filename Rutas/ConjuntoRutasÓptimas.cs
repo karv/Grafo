@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Rutas;
 using ListasExtra;
 using System.Diagnostics;
+using Graficas.Grafo;
+using Graficas.Aristas;
 
-namespace Graficas
+namespace Graficas.Rutas
 {
+	[Serializable]
 	/// <summary>
 	/// Representa un conjunto de mejores rutas en una gráfica
 	/// </summary>
@@ -52,9 +54,6 @@ namespace Graficas
 			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>> (null, null);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the class.
-		/// </summary>
 		/// <param name="gr">Gráfica asociada</param>
 		public ConjuntoRutasÓptimas (ILecturaGrafo<TNodo> gr)
 			: this ()
@@ -84,8 +83,7 @@ namespace Graficas
 						}
 					}
 					// Tomar a los que tienen como origen a x.Destino y concatenarlos con y
-					else
-					if (y.Key.Item1.Equals (x.Destino))
+					else if (y.Key.Item1.Equals (x.Destino))
 					{
 						var path = new Ruta<TNodo> (x);
 						path.Concat (y.Value);

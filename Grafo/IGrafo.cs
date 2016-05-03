@@ -1,4 +1,4 @@
-﻿namespace Graficas
+﻿namespace Graficas.Grafo
 {
 	public interface IGrafo<T> : ILecturaGrafo<T>
 	{
