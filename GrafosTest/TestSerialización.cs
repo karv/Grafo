@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Graficas.Grafo;
 using Graficas.Aristas;
-using System.Globalization;
 using Graficas.Continuo;
 using Graficas.Rutas;
 
