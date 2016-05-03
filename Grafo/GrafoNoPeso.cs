@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Graficas.Rutas;
+using Graficas.Aristas;
 
-namespace Graficas
+namespace Graficas.Grafo
 {
 
 	public class GrafoNoPeso<T> : IGrafo<T> where T : IEquatable<T>
@@ -39,8 +40,9 @@ namespace Graficas
 			return Subgrafo (conjunto);
 		}
 
-
-		bool ILecturaGrafo<T>.this [T desde, T hasta]{ get { return ExisteArista (desde, hasta); } }
+		bool ILecturaGrafo<T>.this [T desde, T hasta]{ get { return ExisteArista (
+				desde,
+				hasta); } }
 
 		bool IGrafo<T>.this [T desde, T hasta]
 		{ 
@@ -142,24 +144,33 @@ namespace Graficas
 			}
 		}
 
+		/// <summary>
+		/// Revisa si existe una arista compatible a otra dada
+		/// </summary>
+		/// <param name="aris">Arista.</param>
 		public bool ExisteArista (IArista<T> aris)
 		{
 			return getNodo (aris.Origen).Vecinos.Contains (aris.Destino);
 		}
 
+		/// <summary>
+		/// Agrega una arista
+		/// </summary>
 		public void AgregaArista (IArista<T> aris)
 		{
 			getNodo (aris.Origen).Vecinos.Add (aris.Destino);
 		}
 
+		/// <summary>
+		/// Agrega un nodo
+		/// </summary>
 		public void AgregaNodo (T nodo)
 		{
 			// Resiva si existe
 			if (nodos.Exists (x => x.Obj.Equals (nodo)))
-				throw new Exception ("Nodo ya existente.");
+				throw new System.Exception ("Nodo ya existente.");
 			nodos.Add (new Nodo (nodo));
 		}
-
 
 		#endregion
 
@@ -181,11 +192,8 @@ namespace Graficas
 
 		#region ctor
 
-		/// <summary>
-		/// Ctor
-		/// </summary>
 		/// <param name="nods">Nodos de la gráfica.</param>
-		public GrafoNoPeso (T[] nods)
+		public GrafoNoPeso (T [] nods)
 			: this ()
 		{
 			foreach (var x in nods)

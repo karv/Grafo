@@ -1,4 +1,4 @@
-﻿namespace Graficas
+﻿namespace Graficas.Grafo
 {
 	/// <summary>
 	/// Promete la habilidad de decidir el peso de cada arista en una gráfica.

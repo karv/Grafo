@@ -1,5 +1,8 @@
 ﻿namespace Graficas.Aristas
 {
+	/// <summary>
+	/// Representa una arista con nombre en lugar de peso.
+	/// </summary>
 	public class AristaNombrada<TNodo, TNombre>  : IArista<TNodo>
 	{
 		protected AristaNombrada ()

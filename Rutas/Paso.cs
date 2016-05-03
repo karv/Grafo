@@ -1,7 +1,13 @@
 ﻿namespace Graficas.Rutas
 {
-	public struct Paso<T>: IPaso<T>
+	/// <summary>
+	/// Un paso como estructura independiente y de sólo lectura
+	/// </summary>
+	public struct Paso<T> : IPaso<T>
 	{
+		/// <param name="origen">Origen.</param>
+		/// <param name="destino">Destino.</param>
+		/// <param name="peso">Peso.</param>
 		public Paso (T origen, T destino, float peso)
 		{
 			Origen = origen;
@@ -14,7 +20,7 @@
 			return string.Format ("{0} --[{1}]--> {2}", Origen, Peso, Destino);
 		}
 
-		#region IMultiPaso implementation
+		#region Paso
 
 		public T Origen { get; }
 

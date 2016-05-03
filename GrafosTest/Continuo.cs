@@ -2,6 +2,8 @@
 using System;
 using Graficas.Continuo;
 using Graficas;
+using Graficas.Grafo;
+using Graficas.Rutas;
 
 namespace Test
 {
@@ -157,7 +159,7 @@ namespace Test
 
 			var rutas = new ConjuntoRutasÓptimas<int> (Gr.GráficaBase);
 
-			var r = Gr.RutaÓptima (inicial, final, rutas);
+			var r = Continuo<int>.RutaÓptima (inicial, final, rutas);
 
 			Assert.False (inicial.AvanzarHacia (r, 0));
 			Console.WriteLine (inicial);
@@ -189,7 +191,11 @@ namespace Test
 			var p1 = Gr.AgregaPunto (0);
 			var p2 = Gr.AgregaPunto (1);
 
-			p1.AlColisionar += obj => Console.WriteLine (string.Format ("Colisión: {0} con {1}; tiempo {2}", p1, obj, i));
+			p1.AlColisionar += obj => Console.WriteLine (string.Format (
+				"Colisión: {0} con {1}; tiempo {2}",
+				p1,
+				obj,
+				i));
 
 			for (i = 0; i < 100; i++)
 			{

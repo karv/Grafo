@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas;
+using Graficas.Aristas;
+using System.Runtime.Serialization;
 
-namespace Graficas
+namespace Graficas.Grafo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
-	public class GrafoClan<T>: IGrafoRutas<T>
-		where T:IEquatable<T>
+	public class GrafoClan<T> : IGrafoRutas<T>
+		where T : IEquatable<T>
 	{
+		[Serializable]
 		class Clan : HashSet<T>
 		{
 			public Clan ()
+			{
+			}
+
+			public Clan (SerializationInfo info, StreamingContext context)
+				: base (info, context)
 			{
 			}
 
@@ -97,9 +105,32 @@ namespace Graficas
 			throw new NotImplementedException ();
 		}
 
+		/// <summary>
+		/// Existe una arista con origen y destino dados
+		/// </summary>
+		/// <param name="desde">Origen</param>
+		/// <param name="hasta">Destino</param>
 		public bool ExisteArista (T desde, T hasta)
 		{
 			return ExisteArista (new Arista<T> (desde, hasta, 1));
+		}
+
+		/// <summary>
+		/// /// Existe una arista consistente con una arista dada
+		/// </summary>
+		/// <returns><c>true</c>, if arista was existed, <c>false</c> otherwise.</returns>
+		/// <param name="aris">Arista</param>
+		public bool ExisteArista (IArista<T> aris)
+		{
+			ISet<T> ar = new HashSet<T> ();
+			ar.Add (aris.Origen);
+			ar.Add (aris.Destino);
+			foreach (var c in clanes)
+			{
+				if (c.IsSupersetOf (ar))
+					return true;
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -136,6 +167,10 @@ namespace Graficas
 			}
 		}
 
+		/// <summary>
+		/// Colección de vecinos de un nodo
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
 		public ICollection<T> Vecinos (T nodo)
 		{
 			var ret = new HashSet<T> ();
@@ -147,36 +182,40 @@ namespace Graficas
 			return ret;
 		}
 
-		public bool ExisteArista (IArista<T> aris)
-		{
-			ISet<T> ar = new HashSet<T> ();
-			ar.Add (aris.Origen);
-			ar.Add (aris.Destino);
-			foreach (var c in clanes)
-			{
-				if (c.IsSupersetOf (ar))
-					return true;
-			}
-			return false;
-		}
-
+		/// <summary>
+		/// Convierte una sucesión consistente de nodos a una ruta
+		/// </summary>
+		/// <returns>The ruta.</returns>
+		/// <param name="seq">Sucesión consistente.</param>
 		public Graficas.Rutas.IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
 			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T> ();
 			var lst = new List<T> (seq);
 			for (int i = 0; i < lst.Count - 1; i++)
 			{
-				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T> (lst [i], lst [i + 1], 1);
+				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T> (
+					                          lst [i],
+					                          lst [i + 1],
+					                          1);
 				ret.Concat (nuevoPaso);
 			}
 			return ret;
 		}
 
+		/// <summary>
+		/// Devuelve una ruta óptima dado dos nodos
+		/// </summary>
+		/// <returns>The óptima.</returns>
+		/// <param name="x">Origen</param>
+		/// <param name="y">Destino</param>
 		public Graficas.Rutas.IRuta<T> RutaÓptima (T x, T y)
 		{
 			throw new NotImplementedException ();
 		}
 
+		/// <summary>
+		/// Devuelve una colección de los nodos
+		/// </summary>
 		public ICollection<T> Nodos
 		{
 			get

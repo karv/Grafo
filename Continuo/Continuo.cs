@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas;
 using Graficas.Rutas;
 using ListasExtra;
 using System.Diagnostics;
+using Graficas.Aristas;
+using Graficas.Grafo;
 
 namespace Graficas.Continuo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa un continuo producido por una IGrafica
 	/// </summary>
 	public class Continuo<T>
 		where T : IEquatable<T>
 	{
+		[Serializable]
 		/// <summary>
 		/// Representa un punto en un continuo.
 		/// </summary>
@@ -22,7 +25,11 @@ namespace Graficas.Continuo
 
 			public override string ToString ()
 			{
-				return EnOrigen ? A.ToString () : string.Format ("[{0}, {1}]@{2}", A, B, Loc);
+				return EnOrigen ? A.ToString () : string.Format (
+					"[{0}, {1}]@{2}",
+					A,
+					B,
+					Loc);
 			}
 
 			/// <summary>
@@ -74,8 +81,6 @@ namespace Graficas.Continuo
 
 			float _loc;
 
-			//public ParNoOrdenado<T> Extremos { get; protected set; }
-
 			/// <summary>
 			/// Posición A
 			/// </summary>
@@ -116,7 +121,8 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Revisa si dos puntos están en un mismo intervalo
 			/// </summary>
-			public static bool EnMismoIntervalo (ContinuoPunto punto1, ContinuoPunto punto2)
+			public static bool EnMismoIntervalo (ContinuoPunto punto1,
+			                                     ContinuoPunto punto2)
 			{
 				if (punto1.A.Equals (punto2.A) && punto1.B.Equals (punto2.B))
 					return true;
@@ -138,23 +144,6 @@ namespace Graficas.Continuo
 				}
 			}
 
-			#endregion
-
-			/// <summary>
-			/// Revisa si este punto coincide (están en un mismo intervalo) con otro
-			/// </summary>
-			[Obsolete ("Usar EnMismoIntervalo()")]
-			public bool CoincideCon (ContinuoPunto punto)
-			{
-				if (EnOrigen)
-				{
-					return punto.EnOrigen ? A.Equals (punto.A) : punto.CoincideCon (this);
-				}
-				if (punto.EnOrigen)
-					return A.Equals (punto.A) || B.Equals (punto.B);
-				return Extremos.Equals (punto.Extremos);
-			}
-
 			/// <summary>
 			/// Devuelve la distancia a uno de sus dos extremos
 			/// </summary>
@@ -167,12 +156,21 @@ namespace Graficas.Continuo
 				if (EnOrigen && !float.IsInfinity (Universo.GráficaBase [A, extremo]))
 					return Universo.GráficaBase [A, extremo];
 
-				throw new IndexOutOfRangeException (string.Format ("{0} no es un extremo de {1}", extremo, this));
-				
+				throw new IndexOutOfRangeException (string.Format (
+					"{0} no es un extremo de {1}",
+					extremo,
+					this));
+
 			}
+
+
+			#endregion
 
 			#region Topología
 
+			/// <summary>
+			/// El universo donde habita este continuo
+			/// </summary>
 			protected readonly Continuo<T> Universo;
 
 			/// <summary>
@@ -186,6 +184,9 @@ namespace Graficas.Continuo
 				}
 			}
 
+			/// <summary>
+			/// Extremos más próximos a este punto en la gráfica Universo.
+			/// </summary>
 			public ParNoOrdenado<T> Extremos
 			{
 				get
@@ -205,7 +206,9 @@ namespace Graficas.Continuo
 					if (punto.EnOrigen)
 					{
 						// True si son vecinos según Universo
-						return A.Equals (punto.A) || (!float.IsPositiveInfinity (Universo.GráficaBase [A, punto.A]));
+						return A.Equals (punto.A) || (!float.IsPositiveInfinity (Universo.GráficaBase [
+							A,
+							punto.A]));
 					}
 					else
 					{
@@ -333,6 +336,12 @@ namespace Graficas.Continuo
 				return AvanzarHacia (destino, ref Ref);
 			}
 
+			/// <summary>
+			/// Avanza por una ruta una distancia específica
+			/// </summary>
+			/// <returns><c>true</c>, si termina la ruta; <c>false</c> otherwise.</returns>
+			/// <param name="ruta">Ruta.</param>
+			/// <param name="dist">Dist.</param>
 			public bool AvanzarHacia (Ruta ruta, float dist)
 			{
 				foreach (var r in ruta.Pasos)
@@ -356,10 +365,10 @@ namespace Graficas.Continuo
 			public bool AvanzarHacia (ContinuoPunto destino, ref float dist)
 			{
 				if (!EnMismoIntervalo (destino))
-					throw new Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
-					                                    this,
-					                                    destino,
-					                                    dist));
+					throw new System.Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
+						this,
+						destino,
+						dist));
 
 				var relRestante = DistanciaAExtremo (A) - destino.DistanciaAExtremo (A);
 				var absRestante = Math.Abs (relRestante);
@@ -550,8 +559,16 @@ namespace Graficas.Continuo
 			}
 		}
 
+		/// <summary>
+		/// Gráfica donde vive este contnuo
+		/// </summary>
 		public readonly ILecturaGrafoPeso<T> GráficaBase;
+
+		/// <summary>
+		/// Conjuntos de puntos asociados a este continuo
+		/// </summary>
 		public readonly List<ContinuoPunto> Puntos = new List<ContinuoPunto> ();
+
 		readonly Dictionary<T, ContinuoPunto> puntosFijos = new Dictionary<T, ContinuoPunto> ();
 
 		/// <summary>
@@ -568,10 +585,14 @@ namespace Graficas.Continuo
 			return ret;
 		}
 
-		public Continuo (ILecturaGrafoPeso<T> grafica)
+		/// <summary>
+		/// Construye una instancia de esta clase con una grafica dada como base.
+		/// </summary>
+		/// <param name="gráfica">Grafica base</param>
+		public Continuo (ILecturaGrafoPeso<T> gráfica)
 		{
-			GráficaBase = grafica;
-			foreach (var x in grafica.Nodos)
+			GráficaBase = gráfica;
+			foreach (var x in gráfica.Nodos)
 			{
 				puntosFijos.Add (x, AgregaPunto (x));
 			}
@@ -582,8 +603,10 @@ namespace Graficas.Continuo
 		/// </summary>
 		/// <param name="inicial">Punto inicial.</param>
 		/// <param name="final">Punto final.</param>
-		/// <param name="rutas">Rutas</param>
-		public Ruta RutaÓptima (ContinuoPunto inicial, ContinuoPunto final, ConjuntoRutasÓptimas<T> rutas)
+		/// <param name="rutas">Conjunto de rutas óptimas previamente calculadas.</param>
+		public static Ruta RutaÓptima (ContinuoPunto inicial,
+		                               ContinuoPunto final,
+		                               ConjuntoRutasÓptimas<T> rutas)
 		{
 			var ruta = rutas.CaminoÓptimo (inicial.A, final.A);
 			var ret = new Ruta (inicial);

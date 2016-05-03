@@ -1,6 +1,6 @@
 using Graficas.Rutas;
 
-namespace Graficas
+namespace Graficas.Grafo
 {
 	/// <summary>
 	/// Provee método para encontrar ruta óptima entre puntos

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ListasExtra.Extensiones;
+using Graficas.Grafo;
 
 namespace Graficas.Extensiones
 {
@@ -39,7 +40,8 @@ namespace Graficas.Extensiones
 					}
 					nubeActual.UnionWith (Verdes);
 					Verdes = new HashSet<T> (nubeAgregando);
-				} while (Verdes.Count > 0);
+				}
+				while (Verdes.Count > 0);
 
 				ret.Add (gr.Subgrafo (nubeActual));
 				nodosRestantes.ExceptWith (nubeActual);
@@ -50,4 +52,3 @@ namespace Graficas.Extensiones
 
 	}
 }
-

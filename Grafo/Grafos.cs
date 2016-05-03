@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
+using Graficas.Aristas;
 
-namespace Graficas
+namespace Graficas.Grafo
 {
+	[Serializable]
 	/// <summary>
 	/// Representa una gráfica, en el sentido abstracto.
 	/// Los nodos son del tipo <c>T</c>.
@@ -20,7 +22,7 @@ namespace Graficas
 		}
 
 		/// <param name="nods">Nodos de la gráfica</param>
-		public Grafo (T[] nods)
+		public Grafo (T [] nods)
 			: this ()
 		{
 			var r = new Random ();
@@ -34,6 +36,9 @@ namespace Graficas
 
 		#region IGrafica
 
+		/// <summary>
+		/// Clear this instance.
+		/// </summary>
 		public void Clear ()
 		{
 			Vecinos.Clear ();
@@ -83,6 +88,9 @@ namespace Graficas
 			get { return ExisteArista (desde, hasta); }
 		}
 
+		/// <summary>
+		/// Devuelve una colección con las aristas
+		/// </summary>
 		public ICollection<IArista<T>> Aristas ()
 		{
 			var ret = new List<IArista<T>> ();
@@ -130,6 +138,12 @@ namespace Graficas
 			return Vecino (nodo);
 		}
 
+		/// <summary>
+		/// Revisa si existe una arista entre dos nodos.
+		/// </summary>
+		/// <returns><c>true</c>, si existe una arista, <c>false</c> otherwise.</returns>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
 		public bool ExisteArista (T desde, T hasta)
 		{
 			return this [desde, hasta] < float.PositiveInfinity;
@@ -202,11 +216,21 @@ namespace Graficas
 			}
 		}
 
+		/// <summary>
+		/// Revisa si existe una arista consistente a una dada.
+		/// </summary>
+		/// <returns><c>true</c>, if arista was existed, <c>false</c> otherwise.</returns>
+		/// <param name="aris">Aris.</param>
 		public bool ExisteArista (IArista<T> aris)
 		{
 			return (this [aris.Origen, aris.Destino] < float.PositiveInfinity);
 		}
 
+		/// <summary>
+		/// Convierte una sucesión consistente de nodos en una ruta.
+		/// </summary>
+		/// <returns>The ruta.</returns>
+		/// <param name="seq">Sucesión consistente</param>
 		public IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
 			IRuta<T> ret = new Ruta<T> ();
@@ -260,7 +284,10 @@ namespace Graficas
 				foreach (var y in Vecino(x))
 				{
 					if (this [x, y] == 0)
-						throw new Exception (string.Format ("La distancia entro {0} y {1} es cero", x, y));
+						throw new System.Exception (string.Format (
+							"La distancia entro {0} y {1} es cero",
+							x,
+							y));
 					Prob [x] += this [x, y];
 				}
 				Prob [x] = 1 / (Prob [x] + 1);
@@ -299,9 +326,13 @@ namespace Graficas
 					return x;
 				q -= prob [x];
 			}
-			throw new Exception ("No sé cómo llegó el algoritmo aquí D:");
+			throw new System.Exception ("No sé cómo llegó el algoritmo aquí D:");
 		}
 
+		/// <summary>
+		/// Es simétrico
+		/// </summary>
+		/// <value><c>true</c> si es simétrico; otherwise, <c>false</c>.</value>
 		public bool EsSimétrico { get; set; }
 
 		/// <summary>
@@ -347,8 +378,13 @@ namespace Graficas
 		{
 			get
 			{
-				return EsSimétrico ? Math.Min (Vecinos [new Tuple<T, T> (x, y)], Vecinos [new Tuple<T, T> (y, x)]) : Vecinos [new Tuple<T, T> (x,
-				                                                                                                                               y)];
+				return EsSimétrico ? Math.Min (
+					Vecinos [new Tuple<T, T> (x, y)],
+					Vecinos [new Tuple<T, T> (
+						y,
+						x)]) : Vecinos [new Tuple<T, T> (
+					x,
+					y)];
 			}
 			set
 			{
@@ -356,7 +392,12 @@ namespace Graficas
 			}
 		}
 
-
+		/// <summary>
+		/// Devuelve a ruta de menor longitud entre dos puntos.
+		/// </summary>
+		/// <returns>The óptimo.</returns>
+		/// <param name="x">Origen</param>
+		/// <param name="y">Destino</param>
 		public IRuta<T> CaminoÓptimo (T x, T y)
 		{
 			return CaminoÓptimo (x, y, new HashSet<T> ());
@@ -369,7 +410,8 @@ namespace Graficas
 		/// <param name="y">Nodo final.</param>
 		/// <param name="ignorar">Lista de nodos a evitar.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
-		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
+		// TODO: Arreglar esto:
+		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> 
 		IRuta<T> CaminoÓptimo (T x, T y, ISet<T> ignorar)
 		{
 			//List<T> retLista = new List<T>();
@@ -469,7 +511,7 @@ namespace Graficas
 		{
 			var r = new Random ();
 			if (nods.Count < 2)
-				throw new Exception ("No se puede generar una gráfica aleatoria con menos de dos elementos.");
+				throw new System.Exception ("No se puede generar una gráfica aleatoria con menos de dos elementos.");
 			var ret = new Grafo<T> ();
 
 			T v0, v1;
@@ -488,7 +530,5 @@ namespace Graficas
 		}
 
 		#endregion
-
 	}
-		
 }
