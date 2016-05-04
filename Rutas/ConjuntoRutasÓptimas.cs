@@ -4,6 +4,8 @@ using ListasExtra;
 using System.Diagnostics;
 using Graficas.Grafo;
 using Graficas.Aristas;
+using Graficas.Extensiones;
+using Graficas.Nodos;
 
 namespace Graficas.Rutas
 {
@@ -13,7 +15,7 @@ namespace Graficas.Rutas
 	/// </summary>
 	public class ConjuntoRutasÓptimas<TNodo>
 	{
-		ListaPeso<TNodo, TNodo, IRuta<TNodo>> RutasDict { get; }
+		Dictionary<Tuple <TNodo, TNodo>, IRuta<TNodo>> RutasDict { get; }
 
 		/// <summary>
 		/// Devuelve el camino óptimo entre dos puntos.
@@ -23,17 +25,19 @@ namespace Graficas.Rutas
 		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
-			return RutasDict [x, y];
+			return x.Equals (y) ? 
+				new Ruta<TNodo> (x) : 
+				RutasDict.GetValueOrDefault (new Tuple<TNodo, TNodo> (x, y));
 		}
 
 		bool IntentaAgregarArista (TNodo origen, TNodo destino, float peso)
 		{
-			if (!(RutasDict [origen, destino]?.Longitud < peso))
+			if (!(RutasDict.GetValueOrDefault (origen, destino)?.Longitud < peso))
 			{
 				var addRuta = new Ruta<TNodo> ();
 				addRuta.Concat (origen, 0);
 				addRuta.Concat (destino, peso);
-				RutasDict [origen, destino] = addRuta;
+				RutasDict.SetValue (origen, destino, addRuta);
 				return true;
 			}
 			return false;
@@ -41,9 +45,9 @@ namespace Graficas.Rutas
 
 		bool IntentaAgregarArista (IRuta<TNodo> ruta)
 		{
-			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud < ruta.Longitud))
+			if (!(RutasDict.GetValueOrDefault (ruta.NodoInicial, ruta.NodoFinal)?.Longitud < ruta.Longitud))
 			{
-				RutasDict [ruta.NodoInicial, ruta.NodoFinal] = ruta;
+				RutasDict.SetValue (ruta.NodoInicial, ruta.NodoFinal, ruta);
 				return true;
 			}
 			return false;
@@ -51,7 +55,7 @@ namespace Graficas.Rutas
 
 		protected ConjuntoRutasÓptimas ()
 		{
-			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>> (null, null);
+			RutasDict = new Dictionary<Tuple <TNodo, TNodo>, IRuta<TNodo>> ();
 		}
 
 		/// <param name="gr">Gráfica asociada</param>
