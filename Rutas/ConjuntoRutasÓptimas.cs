@@ -25,7 +25,9 @@ namespace Graficas.Rutas
 		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
-			return RutasDict.GetValueOrDefault (new Tuple<TNodo, TNodo> (x, y));
+			return x.Equals (y) ? 
+				new Ruta<TNodo> (x) : 
+				RutasDict.GetValueOrDefault (new Tuple<TNodo, TNodo> (x, y));
 		}
 
 		bool IntentaAgregarArista (TNodo origen, TNodo destino, float peso)
