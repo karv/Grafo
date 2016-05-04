@@ -19,7 +19,7 @@ namespace Graficas.Grafo
 			{
 			}
 
-			public Clan (SerializationInfo info, StreamingContext context)
+			protected Clan (SerializationInfo info, StreamingContext context)
 				: base (info, context)
 			{
 			}

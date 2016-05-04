@@ -65,6 +65,19 @@ namespace Test
 			var rut = new ConjuntoRutasÓptimas<int> (gr);
 			Store.BinarySerialization.WriteToBinaryFile ("rutas", rut);
 			var rut2 = Store.BinarySerialization.ReadFromBinaryFile <ConjuntoRutasÓptimas<int>> ("rutas");
+			Assert.NotNull (rut2);
+			foreach (var x in gr.Nodos)
+			{
+				foreach (var y in gr.Nodos)
+				{
+					var rr = rut2.CaminoÓptimo (x, y);
+					Assert.NotNull (rr);
+					Assert.AreEqual (x, rr.NodoInicial);
+					Assert.AreEqual (y, rr.NodoFinal);
+					if (x == y)
+						Assert.AreEqual (0, rr.NumPasos);
+				}
+			}
 		}
 	}
 }
