@@ -7,10 +7,10 @@ using Graficas.Extensiones;
 
 namespace Graficas.Rutas
 {
-	[Serializable]
 	/// <summary>
 	/// Representa un conjunto de mejores rutas en una gráfica
 	/// </summary>
+	[Serializable]
 	public class ConjuntoRutasÓptimas<TNodo>
 	{
 		Dictionary<Tuple <TNodo, TNodo>, IRuta<TNodo>> RutasDict { get; }
@@ -51,6 +51,9 @@ namespace Graficas.Rutas
 			return false;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		protected ConjuntoRutasÓptimas ()
 		{
 			RutasDict = new Dictionary<Tuple <TNodo, TNodo>, IRuta<TNodo>> ();

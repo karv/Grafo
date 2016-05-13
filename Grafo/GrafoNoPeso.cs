@@ -5,8 +5,11 @@ using Graficas.Aristas;
 
 namespace Graficas.Grafo
 {
-
-	public class GrafoNoPeso<T> : IGrafo<T> where T : IEquatable<T>
+	/// <summary>
+	/// Un grafo cuyas aristas no guardan peso
+	/// </summary>
+	public class GrafoNoPeso<T> : IGrafo<T>
+		where T : IEquatable<T>
 	{
 		class Nodo
 		{
@@ -19,6 +22,9 @@ namespace Graficas.Grafo
 			}
 		}
 
+		/// <summary>
+		/// Elimina cada nodo y aristas
+		/// </summary>
 		public void Clear ()
 		{
 			nodos.Clear ();
@@ -68,6 +74,11 @@ namespace Graficas.Grafo
 			throw new NotImplementedException ();
 		}
 
+		/// <summary>
+		/// Convierte una sucesión consistente de nodos a una ruta
+		/// </summary>
+		/// <returns>The ruta.</returns>
+		/// <param name="seq">Sucesión consistente.</param>
 		public IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
 			var ret = new Ruta<T> ();
@@ -202,6 +213,9 @@ namespace Graficas.Grafo
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public GrafoNoPeso ()
 		{
 		}

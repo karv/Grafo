@@ -2,6 +2,9 @@
 
 namespace Graficas.Aristas
 {
+	/// <summary>
+	/// Arista que conserva los nodos por referencia
+	/// </summary>
 	public class HardArista<T> : IArista<T>
 	{
 		/// <summary>
@@ -41,6 +44,9 @@ namespace Graficas.Aristas
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public override string ToString ()
 		{
 			return string.Format (

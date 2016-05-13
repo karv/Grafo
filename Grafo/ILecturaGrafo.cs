@@ -4,6 +4,9 @@ using Graficas.Aristas;
 
 namespace Graficas.Grafo
 {
+	/// <summary>
+	/// Representa un grafo en el que se pueden leer los nodos y aristas
+	/// </summary>
 	public interface ILecturaGrafo<T>
 	{
 		/// <summary>

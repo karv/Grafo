@@ -7,16 +7,18 @@ using ListasExtra.Extensiones;
 
 namespace Graficas.Grafo
 {
-	[Serializable]
 	/// <summary>
 	/// Representa una gráfica, en el sentido abstracto.
 	/// Los nodos son del tipo <c>T</c>.
-	/// <Vecinosy>
+	/// </summary>
+	[Serializable]
 	public class Grafo<T> : IGrafoPeso<T>, IGrafoRutas<T> , IGrafo<T>
 		where T : IEquatable<T>
 	{
 		#region ctor
 
+		/// <summary>
+		/// </summary>
 		public Grafo ()
 		{
 		}
@@ -405,9 +407,8 @@ namespace Graficas.Grafo
 		/// <param name="y">Nodo final.</param>
 		/// <param name="ignorar">Lista de nodos a evitar.</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
-		// TODO: Arreglar esto:
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> 
-		IRuta<T> CaminoÓptimo (T x, T y, ISet<T> ignorar)
+		IRuta<T> CaminoÓptimo (T x, T y, ISet<T> ignorar) // FIX
 		{
 			//List<T> retLista = new List<T>();
 			IRuta<T> ret = new Ruta<T> ();

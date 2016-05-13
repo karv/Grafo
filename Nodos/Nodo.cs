@@ -3,10 +3,10 @@ using System;
 
 namespace Graficas.Nodos
 {
-	[Serializable]
 	/// <summary>
 	/// Representa un nodo que vincula a su vecindad
 	/// </summary>
+	[Serializable]
 	public class Nodo<T> : INodo<T>
 	{
 		/// <param name="obj">Objecto del nodo</param>
