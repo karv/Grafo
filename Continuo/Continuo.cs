@@ -496,8 +496,7 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-
-					return base.Longitud + NodoInicial.Aloc + NodoFinal.Loc;
+					return base.Longitud + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
 				}
 			}
 
