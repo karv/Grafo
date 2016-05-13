@@ -49,6 +49,11 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
+		/// <summary>
+		/// Convierte una sucesión consistente de nodos a una ruta
+		/// </summary>
+		/// <returns>The ruta.</returns>
+		/// <param name="seq">Sucesión consistente.</param>
 		public IRuta<TNodo> ToRuta (IEnumerable<TNodo> seq)
 		{
 			IRuta<TNodo> ret = new Ruta<TNodo> ();

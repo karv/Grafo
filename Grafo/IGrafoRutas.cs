@@ -7,6 +7,12 @@ namespace Graficas.Grafo
 	/// </summary>
 	public interface IGrafoRutas<T> : ILecturaGrafo<T>
 	{
+		/// <summary>
+		/// Devuelve la ruta óptima entre dos nodos
+		/// </summary>
+		/// <returns>Devuelve una ruta de menor longitud</returns>
+		/// <param name="x">Origen</param>
+		/// <param name="y">Final</param>
 		IRuta<T> RutaÓptima (T x, T y);
 	}
 }

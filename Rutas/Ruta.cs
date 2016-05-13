@@ -4,18 +4,30 @@ using Graficas.Aristas;
 
 namespace Graficas.Rutas
 {
-	[Serializable]
 	/// <summary>
 	/// Representa una ruta
 	/// </summary>
+	[Serializable]
 	public class Ruta<T> : IRuta<T>
 	{
+		/// <summary>
+		/// Una pareja Nodo-peso
+		/// </summary>
 		[Serializable]
 		protected struct NodoPeso
 		{
+			/// <summary>
+			/// El nodo
+			/// </summary>
 			public T Nodo;
+
+			/// <summary>
+			/// El peso
+			/// </summary>
 			public float Peso;
 
+			/// <param name="nodo">Nodo.</param>
+			/// <param name="peso">Peso.</param>
 			public NodoPeso (T nodo, float peso)
 			{
 				Nodo = nodo;
@@ -23,6 +35,9 @@ namespace Graficas.Rutas
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public Ruta ()
 		{
 		}
@@ -58,6 +73,9 @@ namespace Graficas.Rutas
 		/// </summary>
 		readonly protected IList<NodoPeso> Paso = new List<NodoPeso> ();
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public override string ToString ()
 		{
 			string ret = string.Format ("[{0}]: ", NumPasos);

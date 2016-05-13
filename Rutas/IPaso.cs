@@ -18,6 +18,9 @@
 		/// <value>The destino.</value>
 		T Destino { get; }
 
+		/// <summary>
+		/// Devuelve el peso o longitud del paso
+		/// </summary>
 		float Peso { get; }
 	}
 }
