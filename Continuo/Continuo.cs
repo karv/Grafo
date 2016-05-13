@@ -440,6 +440,8 @@ namespace Graficas.Continuo
 			/// <param name="other">Comparando/>.</param>
 			public bool Equals (ContinuoPunto other)
 			{
+				if (other == null)
+					return false;
 				if (EnOrigen)
 					return (A.Equals (other.A) && other.Loc == 0);
 				return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||

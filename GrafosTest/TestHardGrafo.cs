@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using Graficas;
 using System;
 using Graficas.Grafo;
 
@@ -16,14 +15,8 @@ namespace Test
 			var gr = new HardGrafo<int> ();
 
 			for (int i = 1; i < MaxSize; i++)
-			{
 				for (int j = i + 1; j < MaxSize; j++)
-				{
-					if (j % i == 0)
-						gr [i, j] = true;
-				}
-			}
-
+					gr [i, j] = j % i == 0;
 			Console.WriteLine (gr);
 
 			var r = new Random ();
@@ -31,7 +24,10 @@ namespace Test
 			{
 				int a = r.Next (MaxSize - 1) + 1;
 				int b = r.Next (MaxSize - 1) + 1;
-				Assert.AreEqual (b % a == 0, gr [a, b]);
+				var max = Math.Max (a, b);
+				var min = Math.Min (a, b);
+
+				Assert.AreEqual (max % min == 0, gr [a, b]);
 			}
 		}
 
