@@ -8,17 +8,17 @@ using Graficas.Grafo;
 
 namespace Graficas.Continuo
 {
-	[Serializable]
 	/// <summary>
 	/// Representa un continuo producido por una IGrafica
 	/// </summary>
+	[Serializable]
 	public class Continuo<T>
 		where T : IEquatable<T>
 	{
-		[Serializable]
 		/// <summary>
 		/// Representa un punto en un continuo.
 		/// </summary>
+		[Serializable]
 		public class ContinuoPunto : IEquatable<ContinuoPunto>, IDisposable
 		{
 			#region General
@@ -451,6 +451,7 @@ namespace Graficas.Continuo
 		/// <summary>
 		/// Una ruta de ContinuoPuntos
 		/// </summary>
+		[Serializable]
 		public class Ruta : Ruta<T>
 		{
 			/// <summary>
