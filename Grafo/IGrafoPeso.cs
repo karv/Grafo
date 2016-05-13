@@ -1,5 +1,8 @@
 ﻿namespace Graficas.Grafo
 {
+	/// <summary>
+	/// Un grafo en la que sus aristas poseen un peso.
+	/// </summary>
 	public interface IGrafoPeso<T> : ILecturaGrafoPeso<T>, IGrafo<T>
 	{
 		/// <summary>

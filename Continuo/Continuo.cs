@@ -23,6 +23,9 @@ namespace Graficas.Continuo
 		{
 			#region General
 
+			/// <summary>
+			/// 
+			/// </summary>
 			public override string ToString ()
 			{
 				return EnOrigen ? A.ToString () : string.Format (
@@ -58,6 +61,8 @@ namespace Graficas.Continuo
 
 			#region Ctor
 
+			/// <param name="universo">Continuo donde vive este punto</param>
+			/// <param name="nodo">Nodo donde 'poner' el punto</param>
 			public ContinuoPunto (Continuo<T> universo, T nodo)
 				: this (universo)
 			{
@@ -69,6 +74,7 @@ namespace Graficas.Continuo
 				A = nodo;
 			}
 
+			/// <param name="universo">Continuo donde vive este punto</param>
 			public ContinuoPunto (Continuo<T> universo)
 			{
 				Universo = universo;
@@ -428,6 +434,10 @@ namespace Graficas.Continuo
 
 			#region IEquatable implementation
 
+			/// <summary>
+			/// Dos puntos se dicen iguales si representan el mismo punto encajado en el grafo.
+			/// </summary>
+			/// <param name="other">Comparando/>.</param>
 			public bool Equals (ContinuoPunto other)
 			{
 				if (EnOrigen)
@@ -475,6 +485,9 @@ namespace Graficas.Continuo
 				NodoInicial = inicial;
 			}
 
+			/// <summary>
+			/// Elimina el primer paso.
+			/// </summary>
 			public void EliminarPrimero ()
 			{
 				Paso.RemoveAt (0);

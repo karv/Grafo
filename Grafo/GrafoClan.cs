@@ -5,10 +5,10 @@ using System.Runtime.Serialization;
 
 namespace Graficas.Grafo
 {
-	[Serializable]
 	/// <summary>
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
+	[Serializable]
 	public class GrafoClan<T> : IGrafoRutas<T>
 		where T : IEquatable<T>
 	{

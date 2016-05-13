@@ -35,6 +35,9 @@ namespace Graficas.Rutas
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public Ruta ()
 		{
 		}
@@ -70,6 +73,9 @@ namespace Graficas.Rutas
 		/// </summary>
 		readonly protected IList<NodoPeso> Paso = new List<NodoPeso> ();
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public override string ToString ()
 		{
 			string ret = string.Format ("[{0}]: ", NumPasos);

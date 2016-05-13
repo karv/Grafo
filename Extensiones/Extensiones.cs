@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using ListasExtra.Extensiones;
 using Graficas.Grafo;
-using System.Threading.Tasks;
 using System;
-using System.Security.Cryptography;
 
 namespace Graficas.Extensiones
 {
@@ -54,6 +52,9 @@ namespace Graficas.Extensiones
 		}
 	}
 
+	/// <summary>
+	/// Extensión de objetos tipo diccionario.
+	/// </summary>
 	public static class DictExt
 	{
 		/// <summary>

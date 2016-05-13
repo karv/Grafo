@@ -5,13 +5,16 @@ using Graficas.Aristas;
 
 namespace Graficas.Grafo
 {
-	[Serializable]
 	/// <summary>
 	/// Representa un grafo como una colección de aristas
 	/// </summary>
+	[Serializable]
 	public class GrafoAristas<T> : IGrafoPeso<T>
 		where T:IEquatable<T>
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		public GrafoAristas ()
 		{
 			AristasColección = new List<IArista<T>> ();
@@ -254,18 +257,37 @@ namespace Graficas.Grafo
 		}
 	}
 
-
+	/// <summary>
+	/// Arista inexistente exception.
+	/// </summary>
 	[Serializable]
 	public class AristaInexistenteException<T> : System.Exception
 	{
+		/// <summary>
+		/// Origen de la arista
+		/// </summary>
 		public T Origen;
+
+		/// <summary>
+		/// Nodo final
+		/// </summary>
 		public T Destino;
+
+		/// <summary>
+		/// Grafo que causó la excepction
+		/// </summary>
 		public ILecturaGrafo<T> Grafo;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public AristaInexistenteException ()
 		{
 		}
 
+		/// <param name="origen">Origen.</param>
+		/// <param name="destino">Destino.</param>
+		/// <param name="grafo">Grafo.</param>
 		public AristaInexistenteException (T origen,
 		                                   T destino,
 		                                   ILecturaGrafo<T> grafo)
@@ -275,17 +297,22 @@ namespace Graficas.Grafo
 			Grafo = grafo;
 		}
 
+		/// <param name="message">Message.</param>
 		public AristaInexistenteException (string message)
 			: base (message)
 		{
 		}
 
+		/// <param name="message">Message.</param>
+		/// <param name="inner">Inner.</param>
 		public AristaInexistenteException (string message, System.Exception inner)
 			: base (message,
 			        inner)
 		{
 		}
 
+		/// <param name="info">Info.</param>
+		/// <param name="context">Context.</param>
 		protected AristaInexistenteException (System.Runtime.Serialization.SerializationInfo info,
 		                                      System.Runtime.Serialization.StreamingContext context)
 			: base (info,

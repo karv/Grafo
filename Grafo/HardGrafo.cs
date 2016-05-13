@@ -7,10 +7,10 @@ using Graficas.Aristas;
 
 namespace Graficas.Grafo
 {
-	[Serializable]
 	/// <summary>
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>
+	[Serializable]
 	public class HardGrafo<T> :  IGrafo<T>
 		where T : IEquatable<T>
 	{
@@ -99,6 +99,9 @@ namespace Graficas.Grafo
 			return Subgrafo (conjunto);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public HardGrafo ()
 		{
 		}
