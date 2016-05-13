@@ -27,6 +27,13 @@ namespace Graficas.Nodos
 		/// </summary>
 		public List<Nodo<T>> Vecindad;
 
+		/// <summary>
+		/// </summary>
+		public override string ToString ()
+		{
+			return Objeto.ToString ();
+		}
+
 		#region INodo implementation
 
 		T INodo<T>.Objeto
