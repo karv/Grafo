@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using ListasExtra;
 using System.Diagnostics;
 using Graficas.Grafo;
 using Graficas.Aristas;
 using Graficas.Extensiones;
-using Graficas.Nodos;
 
 namespace Graficas.Rutas
 {

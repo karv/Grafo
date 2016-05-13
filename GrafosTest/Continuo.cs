@@ -4,6 +4,7 @@ using Graficas.Continuo;
 using Graficas;
 using Graficas.Grafo;
 using Graficas.Rutas;
+using Graficas.Aristas;
 
 namespace Test
 {
@@ -203,6 +204,22 @@ namespace Test
 				p2.AvanzarHacia (0, 0.001f);
 			}
 			Assert.AreEqual (2, Gr.Puntos.Count);
+		}
+
+		[Test]
+		public void RecrearError ()
+		{
+			Iniciar ();
+			for (int i = 0; i < 10; i++)
+				Graf [i, i + 1] = 1;
+
+			var cont = new Continuo<int> (Graf);
+			var p0 = cont.AgregaPunto (0, 1, 0);
+			var p1 = cont.AgregaPunto (1, 2, 0);
+			var cc = new ConjuntoRutasÓptimas<int> (Graf);
+			var rr = Continuo<int>.RutaÓptima (p0, p1, cc);
+			var lon = rr.Longitud;
+			Assert.IsFalse (float.IsInfinity (lon));
 		}
 	}
 }
