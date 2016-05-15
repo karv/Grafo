@@ -101,16 +101,13 @@ namespace Test
 
 			Assert.AreEqual (0, pt2.DistanciaAExtremo (0));
 		
-			var p3 = new Continuo<TestClassIns>.ContinuoPunto (Gr);
-			p3.A = 0;
-			p3.B = 1;
-			p3.Loc = 4;
-			Assert.AreEqual (3, pt.Vecindad ().Count);
-			Assert.AreEqual (3, Gr.Puntos.Count);
+			Assert.AreEqual (2, pt.Vecindad ().Count);
+			Assert.AreEqual (2, Gr.Puntos.Count); // No es 3, porque no debe calcular que se agregó el nodo '1'
 
 			// Los puntos fijos
 			var pf1 = Gr.PuntoFijo (1);
 			Assert.True (ReferenceEquals (pf1, Gr.PuntoFijo (1)));
+			Assert.AreEqual (2, Gr.Puntos.Count); // No es 3, porque no debe calcular que se agregó el nodo '1'
 		}
 
 		[Test]
@@ -145,6 +142,7 @@ namespace Test
 			for (int i = 0; i < 10; i++)
 			{
 				Graf [i, i + 1] = 1;
+				Assert.AreEqual (1, Graf [i, i + 1]);
 			}
 
 			var p = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
@@ -158,6 +156,7 @@ namespace Test
 				Console.WriteLine ("Nodo");
 			};
 
+			var rr = Graf [0, 1];
 			Assert.False (p.AvanzarHacia (1, 0.7f));
 			Assert.True (p.AvanzarHacia (1, 0.7f));
 		}
@@ -171,8 +170,7 @@ namespace Test
 				Graf [i, i + 1] = 1;
 			}
 
-			var inicial = new Continuo<TestClassIns>.ContinuoPunto (Gr);
-			inicial.FromGrafica (0);
+			var inicial = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
 
 			inicial.AlDesplazarse += delegate
 			{
@@ -187,8 +185,7 @@ namespace Test
 				Console.WriteLine ("Ruta terminada: " + inicial);
 			};
 
-			var final = new Continuo<TestClassIns>.ContinuoPunto (Gr);
-			final.FromGrafica (10);
+			var final = new Continuo<TestClassIns>.ContinuoPunto (Gr, 10);
 
 			var rutas = new ConjuntoRutasÓptimas<TestClassIns> (Gr.GráficaBase);
 
@@ -251,8 +248,6 @@ namespace Test
 			var rr = Continuo<TestClassIns>.RutaÓptima (p0, p1, cc);
 			var lon = rr.Longitud;
 			Assert.IsFalse (float.IsInfinity (lon));
-
-			var pt = new Continuo<TestClassIns>.ContinuoPunto (Gr);
 		}
 	}
 }
