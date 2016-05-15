@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
-using Graficas.Extensiones;
-using ListasExtra.Extensiones;
 using System.Linq;
 
 namespace Graficas.Grafo
@@ -261,7 +259,8 @@ namespace Graficas.Grafo
 
 		#region Interno
 
-		ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>> ();
+
+		ListaPesoFloat<T, T> Vecinos = new ListaPesoFloat<T, T> ();
 
 		#endregion
 
@@ -383,16 +382,12 @@ namespace Graficas.Grafo
 			get
 			{
 				return EsSimétrico ? Math.Min (
-					Vecinos [new Tuple<T, T> (x, y)],
-					Vecinos [new Tuple<T, T> (
-						y,
-						x)]) : Vecinos [new Tuple<T, T> (
-					x,
-					y)];
+					Vecinos [x, y],
+					Vecinos [y, x]) : Vecinos [x, y];
 			}
 			set
 			{
-				Vecinos [new Tuple<T, T> (x, y)] = value;
+				Vecinos [x, y] = value;
 			}
 		}
 
