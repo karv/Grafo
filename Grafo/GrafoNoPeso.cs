@@ -74,6 +74,7 @@ namespace Graficas.Grafo
 			throw new NotImplementedException ();
 		}
 
+
 		public bool ContieneArista (T origen, T destino)
 		{
 			return getNodo (origen).Vecinos.Contains (destino);

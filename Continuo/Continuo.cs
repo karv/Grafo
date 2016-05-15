@@ -160,14 +160,13 @@ namespace Graficas.Continuo
 					return Loc;
 				if (extremo.Equals (B))
 					return Aloc;
-				if (EnOrigen && !float.IsInfinity (Universo.GráficaBase [A, extremo]))
+				if (EnOrigen && Universo.GráficaBase.ExisteArista (A, extremo))
 					return Universo.GráficaBase [A, extremo];
 
 				throw new IndexOutOfRangeException (string.Format (
 					"{0} no es un extremo de {1}",
 					extremo,
 					this));
-
 			}
 
 

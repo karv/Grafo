@@ -12,6 +12,7 @@ namespace Graficas.Rutas
 	/// </summary>
 	[Serializable]
 	public class ConjuntoRutasÓptimas<TNodo>
+		where TNodo : IEquatable<TNodo>
 	{
 		ListaPeso<TNodo, TNodo, IRuta<TNodo>> RutasDict { get; }
 
