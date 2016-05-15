@@ -71,6 +71,11 @@ namespace Graficas.Continuo
 
 
 			/// <param name="universo">Continuo donde vive este punto</param>
+			/// <param name="p0">Un punto fijo adyacence a este nuevo punto</param>
+			/// <param name="p1">El otro punto fijo adyacence a este nuevo punto</param>
+			/// <param name="dist">Distancia de este punto al primer punto fijo dado</param>
+			/// <remarks>Hacer p1 == null hace que este punto nuevo coincida con el primer punto. 
+			/// Hacer a p0 == null tira exception.</remarks>
 			public ContinuoPunto (Continuo<T> universo, T p0, T p1, float dist)
 			{
 				Universo = universo;
