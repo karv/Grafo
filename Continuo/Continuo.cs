@@ -5,6 +5,7 @@ using ListasExtra;
 using System.Diagnostics;
 using Graficas.Aristas;
 using Graficas.Grafo;
+using System.Globalization;
 
 namespace Graficas.Continuo
 {
@@ -212,9 +213,8 @@ namespace Graficas.Continuo
 					if (punto.EnOrigen)
 					{
 						// True si son vecinos según Universo
-						return A.Equals (punto.A) || (!float.IsPositiveInfinity (Universo.GráficaBase [
-							A,
-							punto.A]));
+						return A.Equals (punto.A) ||
+						Universo.GráficaBase.ExisteArista (A, punto.A);
 					}
 					else
 					{
@@ -440,13 +440,39 @@ namespace Graficas.Continuo
 			/// <param name="other">Comparando/>.</param>
 			public bool Equals (ContinuoPunto other)
 			{
-				if (other == null)
-					return false;
-				if (EnOrigen)
-					return (A.Equals (other.A) && other.Loc == 0);
-				return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
-				(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
+				try
+				{
+					if (other == null)
+						return false;
+					if (EnOrigen)
+						return (A.Equals (other.A) && other.Loc == 0);
+					return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
+					(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
+				}
+				catch (System.Exception ex)
+				{
+					var salida = string.Format (
+						             "Se produce exception al comparar Puntos en Contiinuo\nthis:  {0}\nother: {1}",
+						             Mostrar (),
+						             other.Mostrar ());
+					throw new System.Exception (salida, ex);
+				}
 			}
+
+			string Mostrar ()
+			{
+				return string.Format (
+					"[ContinuoPunto: _loc={0}, Universo={1}, A={2}, B={3}, Loc={4}, Aloc={5}, EnOrigen={6}, Extremos={7}]",
+					_loc,
+					Universo,
+					A,
+					B,
+					Loc,
+					Aloc,
+					EnOrigen,
+					Extremos);
+			}
+
 
 			#endregion
 

@@ -28,6 +28,14 @@ namespace Graficas.Grafo
 		ICollection<IArista<T>> Aristas ();
 
 		/// <summary>
+		/// Revisa si existe una arista entre dos nodos
+		/// </summary>
+		/// <returns><c>true</c>, si existe una arista<c>false</c> otherwise.</returns>
+		/// <param name="origen">Origen.</param>
+		/// <param name="destino">Destino.</param>
+		bool ExisteArista (T origen, T destino);
+
+		/// <summary>
 		/// Colección de vecinos de un nodo
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>

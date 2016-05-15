@@ -2,6 +2,7 @@
 using ListasExtra.Extensiones;
 using Graficas.Grafo;
 using System;
+using System.Linq;
 
 namespace Graficas.Extensiones
 {
@@ -65,6 +66,7 @@ namespace Graficas.Extensiones
 		/// <param name="key">Key.</param>
 		public static TVal GetValueOrDefault<TKey, TVal> (this IDictionary<TKey, TVal> dict,
 		                                                  TKey key)
+			where TKey : IEquatable<TKey>
 		{
 			TVal ret;
 			return dict.TryGetValue (key, out ret) ? ret : default(TVal);

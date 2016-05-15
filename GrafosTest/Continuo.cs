@@ -1,23 +1,52 @@
 ﻿using NUnit.Framework;
 using System;
 using Graficas.Continuo;
-using Graficas;
 using Graficas.Grafo;
 using Graficas.Rutas;
-using Graficas.Aristas;
 
 namespace Test
 {
+	public class TestClassIns:IEquatable<TestClassIns>
+	{
+		public int? Val;
+
+		public bool Equals (TestClassIns other)
+		{
+			if (other == null)
+				return false;
+			return Val.HasValue && other.Val.HasValue && Val.Value == other.Val.Value;
+		}
+
+		public TestClassIns (int val)
+		{
+			Val = val;
+		}
+
+		public TestClassIns ()
+		{
+		}
+
+		public static implicit operator TestClassIns (int i)
+		{
+			return new TestClassIns (i);
+		}
+
+		public override string ToString ()
+		{
+			return Val.ToString ();
+		}
+	}
+
 	[TestFixture]
 	public class ContinuoTest
 	{
-		public Grafo<int> Graf;
-		Continuo<int> Gr;
+		public Grafo<TestClassIns> Graf;
+		Continuo<TestClassIns> Gr;
 
 		public void Iniciar ()
 		{
-			Graf = new Grafo<int> ();
-			Gr = new Continuo<int> (Graf);
+			Graf = new Grafo<TestClassIns> ();
+			Gr = new Continuo<TestClassIns> (Graf);
 			Graf.EsSimétrico = true;
 		}
 
@@ -26,6 +55,7 @@ namespace Test
 		{
 			Iniciar ();
 			Graf [0, 1] = 1;
+			Assert.True (Graf [0, 1] == 1);
 			Graf [1, 2] = 1;
 			var p1 = Gr.AgregaPunto (0);
 			var p2 = Gr.AgregaPunto (1);
@@ -54,8 +84,8 @@ namespace Test
 			Iniciar ();
 			Graf.AgregaArista (0, 1, 10);
 
-			var pt = new Continuo<int>.ContinuoPunto (Gr, 0);
-			var pt2 = new Continuo<int>.ContinuoPunto (Gr, 0);
+			var pt = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
+			var pt2 = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
 			pt.A = 0;
 			pt.B = 1;
 			pt.Loc = 1;
@@ -71,7 +101,7 @@ namespace Test
 
 			Assert.AreEqual (0, pt2.DistanciaAExtremo (0));
 		
-			var p3 = new Continuo<int>.ContinuoPunto (Gr);
+			var p3 = new Continuo<TestClassIns>.ContinuoPunto (Gr);
 			p3.A = 0;
 			p3.B = 1;
 			p3.Loc = 4;
@@ -91,17 +121,19 @@ namespace Test
 			{
 				Graf [i, i + 1] = 1;
 			}
-			Continuo<int>.Ruta rta;
-			rta = new Continuo<int>.Ruta (new Continuo<int>.ContinuoPunto (Gr, 0));
+			Continuo<TestClassIns>.Ruta rta;
+			rta = new Continuo<TestClassIns>.Ruta (new Continuo<TestClassIns>.ContinuoPunto (
+				Gr,
+				0));
 			//rta.NodoInicial = new Continuo<int>.ContinuoPunto(Gr, 0);
 			for (int i = 1; i < 9; i++)
 			{
 				rta.Concat (i, 1);
 			}
-			rta.ConcatFinal (new Continuo<int>.ContinuoPunto (Gr, 10));
+			rta.ConcatFinal (new Continuo<TestClassIns>.ContinuoPunto (Gr, 10));
 			rta.NodoFinal.Loc = 0.5f;
 
-			Assert.True (rta.Contiene (new Continuo<int>.ContinuoPunto (Gr, 0)));
+			Assert.True (rta.Contiene (new Continuo<TestClassIns>.ContinuoPunto (Gr, 0)));
 			Console.WriteLine (Gr.Puntos.Count);
 		}
 
@@ -115,7 +147,7 @@ namespace Test
 				Graf [i, i + 1] = 1;
 			}
 
-			var p = new Continuo<int>.ContinuoPunto (Gr, 0);
+			var p = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
 
 			p.AlDesplazarse += delegate
 			{
@@ -139,7 +171,7 @@ namespace Test
 				Graf [i, i + 1] = 1;
 			}
 
-			var inicial = new Continuo<int>.ContinuoPunto (Gr);
+			var inicial = new Continuo<TestClassIns>.ContinuoPunto (Gr);
 			inicial.FromGrafica (0);
 
 			inicial.AlDesplazarse += delegate
@@ -155,12 +187,12 @@ namespace Test
 				Console.WriteLine ("Ruta terminada: " + inicial);
 			};
 
-			var final = new Continuo<int>.ContinuoPunto (Gr);
+			var final = new Continuo<TestClassIns>.ContinuoPunto (Gr);
 			final.FromGrafica (10);
 
-			var rutas = new ConjuntoRutasÓptimas<int> (Gr.GráficaBase);
+			var rutas = new ConjuntoRutasÓptimas<TestClassIns> (Gr.GráficaBase);
 
-			var r = Continuo<int>.RutaÓptima (inicial, final, rutas);
+			var r = Continuo<TestClassIns>.RutaÓptima (inicial, final, rutas);
 
 			Assert.False (inicial.AvanzarHacia (r, 0));
 			Console.WriteLine (inicial);
@@ -213,13 +245,14 @@ namespace Test
 			for (int i = 0; i < 10; i++)
 				Graf [i, i + 1] = 1;
 
-			var cont = new Continuo<int> (Graf);
-			var p0 = cont.AgregaPunto (0, 1, 0);
-			var p1 = cont.AgregaPunto (1, 2, 0);
-			var cc = new ConjuntoRutasÓptimas<int> (Graf);
-			var rr = Continuo<int>.RutaÓptima (p0, p1, cc);
+			var p0 = Gr.AgregaPunto (0, 1, 0);
+			var p1 = Gr.AgregaPunto (1, 2, 0);
+			var cc = new ConjuntoRutasÓptimas<TestClassIns> (Graf);
+			var rr = Continuo<TestClassIns>.RutaÓptima (p0, p1, cc);
 			var lon = rr.Longitud;
 			Assert.IsFalse (float.IsInfinity (lon));
+
+			var pt = new Continuo<TestClassIns>.ContinuoPunto (Gr);
 		}
 	}
 }

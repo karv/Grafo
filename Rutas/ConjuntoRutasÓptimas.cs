@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Graficas.Grafo;
 using Graficas.Aristas;
 using Graficas.Extensiones;
+using System.Linq;
 
 namespace Graficas.Rutas
 {
@@ -23,9 +24,14 @@ namespace Graficas.Rutas
 		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
-			return x.Equals (y) ? 
-				new Ruta<TNodo> (x) : 
-				RutasDict.GetValueOrDefault (new Tuple<TNodo, TNodo> (x, y));
+			try
+			{
+				return x.Equals (y) ? new Ruta<TNodo> (x) : RutasDict.First (z => z.Key.Item1.Equals (x) && z.Key.Item2.Equals (y)).Value;
+			}
+			catch (System.Exception ex)
+			{
+				return null;
+			}
 		}
 
 		bool IntentaAgregarArista (TNodo origen, TNodo destino, float peso)
@@ -78,7 +84,7 @@ namespace Graficas.Rutas
 				foreach (var y in clone)
 				{
 					// Tomar a los que tienen como destino a x.Origen y concatenarlos con y	
-					if (y.Key.Item2.Equals (x.Origen))
+					if (y.Key.Item2.Equals (x.Origen)) // ¿Por qué no entra incluso si la igualdad es true?
 					{
 						var path = new Ruta<TNodo> (y.Value);
 						path.Concat (new Ruta<TNodo> (x));

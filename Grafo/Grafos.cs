@@ -4,6 +4,7 @@ using Graficas.Rutas;
 using Graficas.Aristas;
 using Graficas.Extensiones;
 using ListasExtra.Extensiones;
+using System.Linq;
 
 namespace Graficas.Grafo
 {
@@ -254,7 +255,6 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-
 		#endregion
 
 		#region Interno
@@ -378,10 +378,39 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				return EsSimétrico ? Math.Min (
-					Vecinos.GetValueOrDefault (x, y, float.PositiveInfinity),
-					Vecinos.GetValueOrDefault (y, x, float.PositiveInfinity))
-					: Vecinos.GetValueOrDefault (x, y, float.PositiveInfinity);
+				if (!EsSimétrico)
+				{
+					try
+					{
+						var r0 = Vecinos.First (z => z.Key.Item1.Equals (x) & z.Key.Item2.Equals (y)).Value;
+						return r0;
+					}
+					catch (System.Exception ex)
+					{
+						return float.PositiveInfinity;
+					}
+				}
+				else
+				{
+					float r0, r1;
+					try
+					{
+						r0 = Vecinos.First (z => z.Key.Item1.Equals (x) & z.Key.Item2.Equals (y)).Value;
+					}
+					catch (System.Exception ex)
+					{
+						r0 = float.PositiveInfinity;
+					}
+					try
+					{
+						r1 = Vecinos.First (z => z.Key.Item1.Equals (y) & z.Key.Item2.Equals (x)).Value;
+					}
+					catch (System.Exception ex)
+					{
+						r1 = float.PositiveInfinity;
+					}
+					return Math.Min (r0, r1);
+				}
 			}
 			set
 			{

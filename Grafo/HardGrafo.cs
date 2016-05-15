@@ -182,6 +182,10 @@ namespace Graficas.Grafo
 			}
 		}
 
+		bool ILecturaGrafo<T>.ExisteArista (T origen, T destino)
+		{
+			return AsNodo (origen).Vecindad.Contains (AsNodo (destino));
+		}
 
 		#endregion
 
