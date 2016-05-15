@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Graficas.Rutas;
+using ListasExtra;
 using Graficas.Aristas;
 using Graficas.Extensiones;
 using ListasExtra.Extensiones;
@@ -22,6 +23,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		public Grafo ()
 		{
+			Vecinos.Nulo = float.PositiveInfinity;
 		}
 
 		/// <param name="nods">Nodos de la gráfica</param>
@@ -259,7 +261,7 @@ namespace Graficas.Grafo
 
 		#region Interno
 
-		Dictionary<Tuple<T, T>, float> Vecinos = new Dictionary<Tuple<T, T>, float> ();
+		ListaPeso<Tuple<T, T>> Vecinos = new ListaPeso<Tuple<T, T>> ();
 
 		#endregion
 
@@ -280,7 +282,7 @@ namespace Graficas.Grafo
 
 			// Genera la lista de probabilidad.
 			// Obtener los pesos
-			var Prob = new Dictionary<T, float> ();
+			var Prob = new ListaPeso<T> ();
 			foreach (var x in Nodos)
 			{
 				foreach (var y in Vecino(x))
@@ -290,17 +292,19 @@ namespace Graficas.Grafo
 							"La distancia entro {0} y {1} es cero",
 							x,
 							y));
-					Prob.SetValue (x, Prob.GetValueOrDefault (x) + this [x, y]);
+					Prob [x] += this [x, y];
 				}
 				Prob [x] = 1 / (Prob [x] + 1);
 			}
 			// Normalizar Prob
-			float S = Prob.Suma ();
+			float S = Prob.SumaTotal ();
 			// Clonar a Prob.keys
 			var P = new List<T> (Prob.Keys);
 
 			foreach (var x in P)
+			{
 				Prob [x] = Prob [x] / S;
+			}
 
 			// Seleccionar un vértice
 			T v = SelecciónAzar (Prob, r);
@@ -378,43 +382,17 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				if (!EsSimétrico)
-				{
-					try
-					{
-						var r0 = Vecinos.First (z => z.Key.Item1.Equals (x) & z.Key.Item2.Equals (y)).Value;
-						return r0;
-					}
-					catch (System.Exception ex)
-					{
-						return float.PositiveInfinity;
-					}
-				}
-				else
-				{
-					float r0, r1;
-					try
-					{
-						r0 = Vecinos.First (z => z.Key.Item1.Equals (x) & z.Key.Item2.Equals (y)).Value;
-					}
-					catch (System.Exception ex)
-					{
-						r0 = float.PositiveInfinity;
-					}
-					try
-					{
-						r1 = Vecinos.First (z => z.Key.Item1.Equals (y) & z.Key.Item2.Equals (x)).Value;
-					}
-					catch (System.Exception ex)
-					{
-						r1 = float.PositiveInfinity;
-					}
-					return Math.Min (r0, r1);
-				}
+				return EsSimétrico ? Math.Min (
+					Vecinos [new Tuple<T, T> (x, y)],
+					Vecinos [new Tuple<T, T> (
+						y,
+						x)]) : Vecinos [new Tuple<T, T> (
+					x,
+					y)];
 			}
 			set
 			{
-				Vecinos.SetValue (x, y, value);
+				Vecinos [new Tuple<T, T> (x, y)] = value;
 			}
 		}
 
@@ -479,10 +457,7 @@ namespace Graficas.Grafo
 		/// <param name="n">Número de elementos a seleccionar.</param>
 		/// <param name="lista">Lista de dónde seleccionar la sublista.</param>
 		/// <returns>Devuelve una lista con los elementos seleccionados.</returns>
-		[Obsolete]
-		List<object> SeleccionaPeso (Random r,
-		                             int n,
-		                             IDictionary<object, float> lista)
+		List<object> SeleccionaPeso (Random r, int n, ListaPeso<object> lista)
 		{
 			List<object> ret;
 			float Suma = 0;
@@ -500,7 +475,7 @@ namespace Graficas.Grafo
 
 				// Ahora seleecionar uno.
 				Suma = 0;
-				rn = (float)r.NextDouble () * lista.Suma ();
+				rn = (float)r.NextDouble () * lista.SumaTotal ();
 
 				foreach (var x in lista.Keys)
 				{

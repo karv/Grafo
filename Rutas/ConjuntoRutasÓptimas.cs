@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Graficas.Grafo;
 using Graficas.Aristas;
-using Graficas.Extensiones;
-using System.Linq;
+using ListasExtra;
 
 namespace Graficas.Rutas
 {
@@ -14,7 +13,7 @@ namespace Graficas.Rutas
 	[Serializable]
 	public class ConjuntoRutasÓptimas<TNodo>
 	{
-		Dictionary<Tuple <TNodo, TNodo>, IRuta<TNodo>> RutasDict { get; }
+		ListaPeso<TNodo, TNodo, IRuta<TNodo>> RutasDict { get; }
 
 		/// <summary>
 		/// Devuelve el camino óptimo entre dos puntos.
@@ -24,24 +23,17 @@ namespace Graficas.Rutas
 		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
-			try
-			{
-				return x.Equals (y) ? new Ruta<TNodo> (x) : RutasDict.First (z => z.Key.Item1.Equals (x) && z.Key.Item2.Equals (y)).Value;
-			}
-			catch (System.Exception ex)
-			{
-				return null;
-			}
+			return RutasDict [x, y];
 		}
 
 		bool IntentaAgregarArista (TNodo origen, TNodo destino, float peso)
 		{
-			if (!(RutasDict.GetValueOrDefault (origen, destino)?.Longitud < peso))
+			if (!(RutasDict [origen, destino]?.Longitud < peso))
 			{
 				var addRuta = new Ruta<TNodo> ();
 				addRuta.Concat (origen, 0);
 				addRuta.Concat (destino, peso);
-				RutasDict.SetValue (origen, destino, addRuta);
+				RutasDict [origen, destino] = addRuta;
 				return true;
 			}
 			return false;
@@ -49,9 +41,9 @@ namespace Graficas.Rutas
 
 		bool IntentaAgregarArista (IRuta<TNodo> ruta)
 		{
-			if (!(RutasDict.GetValueOrDefault (ruta.NodoInicial, ruta.NodoFinal)?.Longitud < ruta.Longitud))
+			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud < ruta.Longitud))
 			{
-				RutasDict.SetValue (ruta.NodoInicial, ruta.NodoFinal, ruta);
+				RutasDict [ruta.NodoInicial, ruta.NodoFinal] = ruta;
 				return true;
 			}
 			return false;
@@ -62,7 +54,7 @@ namespace Graficas.Rutas
 		/// </summary>
 		protected ConjuntoRutasÓptimas ()
 		{
-			RutasDict = new Dictionary<Tuple <TNodo, TNodo>, IRuta<TNodo>> ();
+			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>> (null, null);
 		}
 
 		/// <param name="gr">Gráfica asociada</param>
