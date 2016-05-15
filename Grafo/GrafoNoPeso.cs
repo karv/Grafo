@@ -75,6 +75,17 @@ namespace Graficas.Grafo
 		}
 
 		/// <summary>
+		/// Revisa si existe una arista dado los extremos
+		/// </summary>
+		/// <returns><c>true</c>, si existe una arista, <c>false</c> otherwise.</returns>
+		/// <param name="origen">Origen.</param>
+		/// <param name="destino">Destino.</param>
+		public bool ContieneArista (T origen, T destino)
+		{
+			return getNodo (origen).Vecinos.Contains (destino);
+		}
+
+		/// <summary>
 		/// Convierte una sucesión consistente de nodos a una ruta
 		/// </summary>
 		/// <returns>The ruta.</returns>

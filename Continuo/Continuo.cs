@@ -5,6 +5,7 @@ using ListasExtra;
 using System.Diagnostics;
 using Graficas.Aristas;
 using Graficas.Grafo;
+using System.Linq;
 
 namespace Graficas.Continuo
 {
@@ -40,11 +41,7 @@ namespace Graficas.Continuo
 			/// </summary>
 			public ContinuoPunto Clonar ()
 			{
-				var ret = new ContinuoPunto (Universo);
-				ret.A = A;
-				ret.B = B;
-				ret.Loc = Loc;
-				return ret;
+				return new ContinuoPunto (Universo, A, B, Loc);
 			}
 
 			/// <summary>
@@ -52,9 +49,8 @@ namespace Graficas.Continuo
 			/// </summary>
 			public void Remove ()
 			{
+				Universo.ProbarIntegridad ();
 				Universo.Puntos.Remove (this);
-				A = default(T);
-				B = default(T);
 			}
 
 			#endregion
@@ -64,9 +60,8 @@ namespace Graficas.Continuo
 			/// <param name="universo">Continuo donde vive este punto</param>
 			/// <param name="nodo">Nodo donde 'poner' el punto</param>
 			public ContinuoPunto (Continuo<T> universo, T nodo)
-				: this (universo)
+				: this (universo, nodo, default(T), 0)
 			{
-				A = nodo;
 			}
 
 			internal ContinuoPunto (T nodo)
@@ -74,12 +69,22 @@ namespace Graficas.Continuo
 				A = nodo;
 			}
 
+
 			/// <param name="universo">Continuo donde vive este punto</param>
-			public ContinuoPunto (Continuo<T> universo)
+			/// <param name="p0">Un punto fijo adyacence a este nuevo punto</param>
+			/// <param name="p1">El otro punto fijo adyacence a este nuevo punto</param>
+			/// <param name="dist">Distancia de este punto al primer punto fijo dado</param>
+			/// <remarks>Hacer p1 == null hace que este punto nuevo coincida con el primer punto. 
+			/// Hacer a p0 == null tira exception.</remarks>
+			public ContinuoPunto (Continuo<T> universo, T p0, T p1, float dist)
 			{
 				Universo = universo;
+				A = p0;
+				B = p1;
+				Loc = dist;
 				Universo.Puntos.Add (this);
 			}
+
 
 			#endregion
 
@@ -87,10 +92,24 @@ namespace Graficas.Continuo
 
 			float _loc;
 
+			T a;
+
 			/// <summary>
 			/// Posición A
 			/// </summary>
-			public T A { get; set; }
+			public T A
+			{
+				get
+				{
+					return a;
+				}
+				set
+				{
+					if (value == null)
+						throw new ArgumentNullException ("A no puede ser nulo.");
+					a = value;
+				}
+			}
 
 			/// <summary>
 			/// Posición B
@@ -159,14 +178,13 @@ namespace Graficas.Continuo
 					return Loc;
 				if (extremo.Equals (B))
 					return Aloc;
-				if (EnOrigen && !float.IsInfinity (Universo.GráficaBase [A, extremo]))
+				if (EnOrigen && Universo.GráficaBase.ExisteArista (A, extremo))
 					return Universo.GráficaBase [A, extremo];
 
 				throw new IndexOutOfRangeException (string.Format (
 					"{0} no es un extremo de {1}",
 					extremo,
 					this));
-
 			}
 
 
@@ -212,9 +230,8 @@ namespace Graficas.Continuo
 					if (punto.EnOrigen)
 					{
 						// True si son vecinos según Universo
-						return A.Equals (punto.A) || (!float.IsPositiveInfinity (Universo.GráficaBase [
-							A,
-							punto.A]));
+						return A.Equals (punto.A) ||
+						Universo.GráficaBase.ExisteArista (A, punto.A);
 					}
 					else
 					{
@@ -246,7 +263,7 @@ namespace Graficas.Continuo
 			}
 
 			/// <summary>
-			/// Devuelve la lista de terrenos contiguos a esta pseudoposición.
+			/// Devuelve la lista de nodos (estrictamente) contiguos a este punto
 			/// </summary>
 			/// <returns>Una nueva lista.</returns>
 			public ICollection<ContinuoPunto> Vecindad ()
@@ -440,13 +457,39 @@ namespace Graficas.Continuo
 			/// <param name="other">Comparando/>.</param>
 			public bool Equals (ContinuoPunto other)
 			{
-				if (other == null)
-					return false;
-				if (EnOrigen)
-					return (A.Equals (other.A) && other.Loc == 0);
-				return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
-				(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
+				try
+				{
+					if (other == null)
+						return false;
+					if (EnOrigen)
+						return (A.Equals (other.A) && other.Loc == 0);
+					return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
+					(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
+				}
+				catch (System.Exception ex)
+				{
+					var salida = string.Format (
+						             "Se produce exception al comparar Puntos en Continuo\nthis:  {0}\nother: {1}",
+						             Mostrar (),
+						             other.Mostrar ());
+					throw new System.Exception (salida, ex);
+				}
 			}
+
+			string Mostrar ()
+			{
+				return string.Format (
+					"[ContinuoPunto: _loc={0}, Universo={1}, A={2}, B={3}, Loc={4}, Aloc={5}, EnOrigen={6}, Extremos={7}]",
+					_loc,
+					Universo,
+					A,
+					B,
+					Loc,
+					Aloc,
+					EnOrigen,
+					Extremos);
+			}
+
 
 			#endregion
 
@@ -593,8 +636,8 @@ namespace Graficas.Continuo
 		public ContinuoPunto PuntoFijo (T punto)
 		{
 			ContinuoPunto ret;
-			if (puntosFijos.TryGetValue (punto, out ret))
-				return ret;
+			if (puntosFijos.Any (z => z.Key.Equals (punto)))
+				return puntosFijos.First (z => z.Key.Equals (punto)).Value;
 			ret = new ContinuoPunto (punto);
 			puntosFijos.Add (punto, ret);
 			return ret;
@@ -648,7 +691,9 @@ namespace Graficas.Continuo
 		/// <param name="loc">Distancia de este punto a el primer punto dado, a</param>
 		public ContinuoPunto AgregaPunto (T a, T b, float loc)
 		{
-			var ret = new ContinuoPunto (this);
+			if (a == null)
+				throw new ArgumentNullException ("El valor de un extremo no puede ser nulo.");
+			var ret = new ContinuoPunto (this, a, b, loc);
 			ret.A = a;
 			ret.B = b;
 			ret.Loc = loc;
@@ -695,6 +740,22 @@ namespace Graficas.Continuo
 		{
 			var aris = new ParNoOrdenado<T> (arista.Origen, arista.Destino);
 			return PuntosArista (aris);
+		}
+
+		[Conditional ("DEBUG")]
+		void ProbarIntegridad ()
+		{
+			string generalExcMsg = string.Format ("Fallo de integridad en {0}\n", this);
+			foreach (var p in Puntos)
+			{
+				if (p == null)
+					throw new ArgumentNullException (generalExcMsg + "Punto nulo en universo.");
+				if (typeof (T).IsClass)
+				{
+					if (p.A == null && p.B == null)
+						throw new ArgumentNullException (generalExcMsg + "Punto no nulo con extremos nulos.");
+				}
+			}
 		}
 	}
 }

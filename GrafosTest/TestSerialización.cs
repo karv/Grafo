@@ -75,7 +75,7 @@ namespace Test
 					Assert.AreEqual (x, rr.NodoInicial);
 					Assert.AreEqual (y, rr.NodoFinal);
 					if (x == y)
-						Assert.AreEqual (0, rr.NumPasos);
+						Assert.AreEqual (0, rr.Longitud);
 				}
 			}
 		}

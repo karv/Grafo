@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Graficas.Rutas;
+using ListasExtra;
 using Graficas.Aristas;
-using Graficas.Extensiones;
-using ListasExtra.Extensiones;
+using System.Linq;
 
 namespace Graficas.Grafo
 {
@@ -21,6 +21,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		public Grafo ()
 		{
+			Vecinos.Nulo = float.PositiveInfinity;
 		}
 
 		/// <param name="nods">Nodos de la gráfica</param>
@@ -254,12 +255,12 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-
 		#endregion
 
 		#region Interno
 
-		Dictionary<Tuple<T, T>, float> Vecinos = new Dictionary<Tuple<T, T>, float> ();
+
+		ListaPesoFloat<T, T> Vecinos = new ListaPesoFloat<T, T> ();
 
 		#endregion
 
@@ -280,7 +281,7 @@ namespace Graficas.Grafo
 
 			// Genera la lista de probabilidad.
 			// Obtener los pesos
-			var Prob = new Dictionary<T, float> ();
+			var Prob = new ListaPeso<T> ();
 			foreach (var x in Nodos)
 			{
 				foreach (var y in Vecino(x))
@@ -290,17 +291,19 @@ namespace Graficas.Grafo
 							"La distancia entro {0} y {1} es cero",
 							x,
 							y));
-					Prob.SetValue (x, Prob.GetValueOrDefault (x) + this [x, y]);
+					Prob [x] += this [x, y];
 				}
 				Prob [x] = 1 / (Prob [x] + 1);
 			}
 			// Normalizar Prob
-			float S = Prob.Suma ();
+			float S = Prob.SumaTotal ();
 			// Clonar a Prob.keys
 			var P = new List<T> (Prob.Keys);
 
 			foreach (var x in P)
+			{
 				Prob [x] = Prob [x] / S;
+			}
 
 			// Seleccionar un vértice
 			T v = SelecciónAzar (Prob, r);
@@ -379,13 +382,12 @@ namespace Graficas.Grafo
 			get
 			{
 				return EsSimétrico ? Math.Min (
-					Vecinos.GetValueOrDefault (x, y, float.PositiveInfinity),
-					Vecinos.GetValueOrDefault (y, x, float.PositiveInfinity))
-					: Vecinos.GetValueOrDefault (x, y, float.PositiveInfinity);
+					Vecinos [x, y],
+					Vecinos [y, x]) : Vecinos [x, y];
 			}
 			set
 			{
-				Vecinos.SetValue (x, y, value);
+				Vecinos [x, y] = value;
 			}
 		}
 
@@ -450,10 +452,7 @@ namespace Graficas.Grafo
 		/// <param name="n">Número de elementos a seleccionar.</param>
 		/// <param name="lista">Lista de dónde seleccionar la sublista.</param>
 		/// <returns>Devuelve una lista con los elementos seleccionados.</returns>
-		[Obsolete]
-		List<object> SeleccionaPeso (Random r,
-		                             int n,
-		                             IDictionary<object, float> lista)
+		List<object> SeleccionaPeso (Random r, int n, ListaPeso<object> lista)
 		{
 			List<object> ret;
 			float Suma = 0;
@@ -471,7 +470,7 @@ namespace Graficas.Grafo
 
 				// Ahora seleecionar uno.
 				Suma = 0;
-				rn = (float)r.NextDouble () * lista.Suma ();
+				rn = (float)r.NextDouble () * lista.SumaTotal ();
 
 				foreach (var x in lista.Keys)
 				{

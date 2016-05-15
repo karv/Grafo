@@ -78,6 +78,17 @@ namespace Graficas.Grafo
 		bool ILecturaGrafo<TNodo>.this [TNodo desde, TNodo hasta]
 		{ get { return ExisteArista (desde, hasta); } }
 
+		bool ILecturaGrafo<TNodo>.ExisteArista (TNodo origen, TNodo destino)
+		{
+			foreach (var c in _asignación)
+			{
+				if (c.Value.ExisteArista (origen, destino))
+					return true;
+			}
+			return false;
+		}
+
+
 		#endregion
 
 		#region IMulticolGrafica implementation
