@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ListasExtra.Extensiones;
 using Graficas.Grafo;
-using System;
 
 namespace Graficas.Extensiones
 {
@@ -50,99 +49,6 @@ namespace Graficas.Extensiones
 
 			return ret;
 		}
-	}
 
-	/// <summary>
-	/// Extensión de objetos tipo diccionario.
-	/// </summary>
-	public static class DictExt
-	{
-		/// <summary>
-		/// Devuelve el valor de una entrada en un diccionario, devulviendo su correspondiente en
-		/// el diccionario si existe, en caso contrario devuelve el valor predeterminado de TVal.
-		/// </summary>
-		/// <param name="dict">Diccionario.</param>
-		/// <param name="key">Key.</param>
-		public static TVal GetValueOrDefault<TKey, TVal> (this IDictionary<TKey, TVal> dict,
-		                                                  TKey key)
-		{
-			TVal ret;
-			return dict.TryGetValue (key, out ret) ? ret : default(TVal);
-		}
-
-		/// <summary>
-		/// Devuelve el valor de una entrada en un diccionario, devulviendo su correspondiente en
-		/// el diccionario si existe, en caso contrario devuelve un valor dado.
-		/// </summary>
-		/// <param name="dict">Diccionario.</param>
-		/// <param name="key">Key.</param>
-		/// <param name="def">Valor default</param>
-		public static TVal GetValueOrDefault<TKey, TVal> (this IDictionary<TKey, TVal> dict,
-		                                                  TKey key,
-		                                                  TVal def)
-		{
-			TVal ret;
-			return dict.TryGetValue (key, out ret) ? ret : def;
-		}
-
-		/// <summary>
-		/// Devuelve el valor de una entrada en un diccionario, devulviendo su correspondiente en
-		/// el diccionario si existe, en caso contrario devuelve un valor dado.
-		/// </summary>
-		/// <param name="dict">Diccionario.</param>
-		/// <param name="key1">Primera entrada</param>
-		/// <param name="key2">Segunda entrada</param>
-		/// <param name="def">Valor default</param>
-		public static TVal GetValueOrDefault<TKey, TVal> (this IDictionary<Tuple<TKey, TKey>, TVal> dict,
-		                                                  TKey key1,
-		                                                  TKey key2,
-		                                                  TVal def)
-		{
-			return dict.GetValueOrDefault (new Tuple<TKey, TKey> (key1, key2), def);
-		}
-
-		/// <summary>
-		/// Devuelve el valor de una entrada en un diccionario, devulviendo su correspondiente en
-		/// el diccionario si existe, en caso contrario devuelve el valor predeterminado
-		/// </summary>
-		/// <param name="dict">Diccionario.</param>
-		/// <param name="key1">Primera entrada</param>
-		/// <param name="key2">Segunda entrada</param>
-		public static TVal GetValueOrDefault<TKey, TVal> (this IDictionary<Tuple<TKey, TKey>, TVal> dict,
-		                                                  TKey key1,
-		                                                  TKey key2)
-		{
-			return dict.GetValueOrDefault (
-				new Tuple<TKey, TKey> (key1, key2),
-				default (TVal));
-		}
-
-		/// <summary>
-		/// Establece el valor de una entrada
-		/// </summary>
-		public static void SetValue<TKey, TVal> (this IDictionary<Tuple<TKey, TKey>, TVal> dict,
-		                                         TKey key1,
-		                                         TKey key2,
-		                                         TVal val)
-		{
-			var entrada = new Tuple<TKey, TKey> (key1, key2);
-			if (dict.ContainsKey (entrada))
-				dict [entrada] = val;
-			else
-				dict.Add (entrada, val);
-		}
-
-		/// <summary>
-		/// Establece el valor de una entrada
-		/// </summary>
-		public static void SetValue<TKey, TVal> (this IDictionary<TKey, TVal> dict,
-		                                         TKey key,
-		                                         TVal val)
-		{
-			if (dict.ContainsKey (key))
-				dict [key] = val;
-			else
-				dict.Add (key, val);
-		}
 	}
 }
