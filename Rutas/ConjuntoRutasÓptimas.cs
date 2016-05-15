@@ -68,6 +68,9 @@ namespace Graficas.Rutas
 			aris.Sort (comp);
 			Debug.WriteLine (aris);
 
+			foreach (var x in gr.Nodos)
+				IntentaAgregarArista (x, x, 0);
+
 			foreach (var x in aris)
 			{
 				IntentaAgregarArista (x.Origen, x.Destino, x.Peso);
