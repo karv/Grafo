@@ -9,7 +9,7 @@ namespace Graficas.Aristas
 	[Serializable]
 	public class AristaPeso<TNodo, TValor> : IArista<TNodo>
 	{
-		TValor _dalor;
+		TValor _valor;
 		TNodo _origen;
 		TNodo _destino;
 		bool _existe;
@@ -59,7 +59,7 @@ namespace Graficas.Aristas
 			get
 			{
 				if (Existe)
-					return _dalor;
+					return _valor;
 				else
 					throw new OperaciónAristaInválidaException ("No se puede acceder al peso de una arista no existente.");
 			}
@@ -69,7 +69,7 @@ namespace Graficas.Aristas
 					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
 				if (!Existe)
 					throw new OperaciónAristaInválidaException ("No se le puede asignar peso a una arista no existente.");
-				_dalor = value;
+				_valor = value;
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace Graficas.Aristas
 		{
 			_origen = origen;
 			_destino = destino;
-			_dalor = valor;
+			_valor = valor;
 			_existe = true;
 			SóloLectura = sóloLectura;
 		}
