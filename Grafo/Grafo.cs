@@ -21,6 +21,41 @@ namespace Graficas.Grafo
 		/// </summary>
 		public Grafo ()
 		{
+			SóloLectura = false;
+		}
+
+		/// <summary>
+		/// Inicializa un grafo, clonando sin referencias a otro dado
+		/// </summary>
+		/// <param name="grafo">Grafo a clonar</param>
+		/// <param name="hacerSóloLectura">Si es <c>true</c>, el grafo se contruirá en modo sólo lectura</param>
+		public Grafo (IGrafo<T> grafo, bool hacerSóloLectura = false)
+		{
+			foreach (var arista in grafo.Aristas ())
+				EncuentraArista (arista.Origen, arista.Destino).Existe = true;
+			SóloLectura = hacerSóloLectura;
+		}
+
+		/// <summary>
+		/// Clona un grafo y sus aristas.
+		/// </summary>
+		/// <returns>Devuelve un clon</returns>
+		/// <param name="grafo">Grafo a clonar</param>
+		/// <param name="hacerSóloLectura">Si es <c>true</c>, el grafo se contruirá en modo sólo lectura</param>
+		public static Grafo<T, TData> ClonarDesde (Grafo<T, TData> grafo,
+		                                           bool hacerSóloLectura = false) // TEST
+		{
+			var ret = new Grafo<T, TData> ();
+			foreach (var x in grafo._data)
+			{
+				ret._data.Add (new AristaPeso<T, TData> (
+					x.Origen,
+					x.Destino,
+					x.Data,
+					hacerSóloLectura));
+			}
+			ret.SóloLectura = hacerSóloLectura;
+			return ret;
 		}
 
 		#endregion
@@ -28,7 +63,7 @@ namespace Graficas.Grafo
 		#region IGrafica
 
 		/// <summary>
-		/// Clear this instance.
+		/// Elimina nodos y aristas. Referencias antiguas no se preservan
 		/// </summary>
 		public void Clear ()
 		{
@@ -239,7 +274,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Devuelve o establece si este grafo y sus aristas son de sólo lectura.
 		/// </summary>
-		public bool SóloLectura { get; set; }
+		public bool SóloLectura { get; protected set; }
 
 		/// <summary>
 		/// Devuelve la lista de vecinos de x (a todos los que apunta x)
