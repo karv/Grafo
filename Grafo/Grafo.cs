@@ -364,7 +364,7 @@ namespace Graficas.Grafo
 		IRuta<T> CaminoÓptimo (T x,
 		                       T y,
 		                       Func<AristaPeso<T, TData>, float> peso,
-		                       ISet<T> ignorar) // TODO FIX
+		                       ISet<T> ignorar)
 		{
 			//List<T> retLista = new List<T>();
 			IRuta<T> ret = new Ruta<T> ();
@@ -406,6 +406,8 @@ namespace Graficas.Grafo
 					}
 				}
 			}
+			if (ret == null)
+				throw new InvalidOperationException ("Imposible calcular ruta entre nodos de distinas componentes conexas.");
 			return ret;
 		}
 
@@ -450,9 +452,11 @@ namespace Graficas.Grafo
 		}
 
 		#endregion
-	
+
 		#region Eventos
+
 		public event Action AlLimpiar;
+
 		#endregion
 	}
 
@@ -796,7 +800,7 @@ namespace Graficas.Grafo
 		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
 		IRuta<T> CaminoÓptimo (T x,
 		                       T y,
-		                       ISet<T> ignorar) // TODO FIX
+		                       ISet<T> ignorar)
 		{
 			//List<T> retLista = new List<T>();
 			IRuta<T> ret = new Ruta<T> ();
@@ -838,6 +842,8 @@ namespace Graficas.Grafo
 					}
 				}
 			}
+			if (ret == null)
+				throw new InvalidOperationException ("Imposible calcular ruta entre nodos de distinas componentes conexas.");
 			return ret;
 		}
 
@@ -884,10 +890,12 @@ namespace Graficas.Grafo
 		#endregion
 
 		#region Eventos
+
 		/// <summary>
 		/// Ocurre al ejecutar Clear ()
 		/// </summary>
 		public event Action AlLimpiar;
+
 		#endregion
 	}
 }
