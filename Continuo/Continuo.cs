@@ -139,7 +139,7 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-					return Universo.GráficaBase [A, B].Data - Loc;
+					return Universo.GráficaBase [A, B] - Loc;
 				}
 			}
 
@@ -179,7 +179,7 @@ namespace Graficas.Continuo
 				if (extremo.Equals (B))
 					return Aloc;
 				if (EnOrigen && Universo.GráficaBase.ExisteArista (A, extremo))
-					return Universo.GráficaBase [A, extremo].Data;
+					return Universo.GráficaBase [A, extremo];
 
 				throw new IndexOutOfRangeException (string.Format (
 					"{0} no es un extremo de {1}",
@@ -238,7 +238,7 @@ namespace Graficas.Continuo
 						if (!punto.Extremos.Contiene (A))
 							return false;
 						var nodo = punto.Extremos.Excepto (A);
-						return !float.IsPositiveInfinity (Universo.GráficaBase [A, nodo].Data);
+						return !float.IsPositiveInfinity (Universo.GráficaBase [A, nodo]);
 					}
 				}
 				else

@@ -40,7 +40,7 @@ namespace Graficas.Grafo
 		{ 
 			get
 			{
-				return this [desde, hasta];
+				return EncuentraArista (desde, hasta);
 			}
 		}
 
@@ -100,7 +100,7 @@ namespace Graficas.Grafo
 		/// <param name="hasta">Hasta.</param>
 		public bool ExisteArista (T desde, T hasta)
 		{
-			return this [desde, hasta].Existe;
+			return EncuentraArista (desde, hasta).Existe;
 		}
 
 		/// <summary>
@@ -109,10 +109,10 @@ namespace Graficas.Grafo
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
 		/// <returns>>Devuelve la arista agregada</returns>
-		[Obsolete ("Usar this[,]")]
+		[Obsolete ("Usar EncuentraArista y asignarle valor.")]
 		public AristaPeso<T, TData> AgregaArista (T desde, T hasta)
 		{
-			return this [desde, hasta];
+			return EncuentraArista (desde, hasta);
 		}
 
 		/// <summary>
@@ -172,7 +172,7 @@ namespace Graficas.Grafo
 				}
 				else
 				{
-					ret.Concat (this [last, x]);
+					ret.Concat (EncuentraArista (last, x));
 				}
 				last = x;
 			}
@@ -278,18 +278,18 @@ namespace Graficas.Grafo
 		/// <param name="x">Vértice origen.</param>
 		/// <param name="y">Vértice destino.</param>
 		/// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
-		public AristaPeso<T, TData> this [T x, T y]
+		public TData this [T x, T y]
 		{
 			get
 			{
-				return EncuentraArista (x, y);
+				return EncuentraArista (x, y).Data;
 			}
 			set
 			{
 				AristaPeso<T ,TData> aris;
 				if (EncuentraArista (x, y, out aris))
 					_data.Remove (aris);
-				_data.Add (value);
+				_data.Add (new AristaPeso<T, TData> (x, y, value, SóloLectura));
 			}
 		}
 
@@ -388,7 +388,7 @@ namespace Graficas.Grafo
 						{
 							if (RutaBuscar.NumPasos >= 0)
 							{
-								RutaBuscar.Concat (this [RutaBuscar.NodoFinal, y]);
+								RutaBuscar.Concat (EncuentraArista (RutaBuscar.NodoFinal, y));
 								ret = RutaBuscar;
 							}
 						}
