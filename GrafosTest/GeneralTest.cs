@@ -14,8 +14,8 @@ namespace Test
 		{
 			for (int i = 1; i <= cant; i++)
 			{
-				gr [0, i].Existe = true;
-				gr [i, 0].Existe = true;
+				gr [0, i] = true;
+				gr [i, 0] = true;
 			}
 			Assert.AreEqual (cant + 1, gr.Nodos.Count);
 
@@ -71,7 +71,7 @@ namespace Test
 
 			for (int i = 0; i < maxNod - numComp; i++)
 			{
-				gr [i, i + numComp].Data = true;
+				gr [i, i + numComp] = true;
 			}
 
 			var comp = gr.ComponentesConexas ();

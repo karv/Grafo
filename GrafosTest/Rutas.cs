@@ -50,8 +50,8 @@ namespace Test
 			gr.Clear ();
 			for (int i = 0; i < 100; i++)
 			{
-				gr [0, i].Data = true;
-				gr [i, 0].Data = true;
+				gr [0, i] = true;
+				gr [i, 0] = true;
 			}
 		}
 

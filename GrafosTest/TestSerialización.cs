@@ -19,7 +19,7 @@ namespace Test
 		static void TestSerialPeso<T> (T gr)
 			where T : Grafo<int, float>
 		{
-			gr [0, 1].Data = 1;
+			gr [0, 1] = 1;
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
 			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
 			Assert.AreEqual (gr [0, 1], gr2 [0, 1]);
@@ -29,7 +29,7 @@ namespace Test
 		public void SerGraf ()
 		{
 			var gr = new Grafo<int, float> ();
-			gr [0, 1].Data = 1;
+			gr [0, 1] = 1;
 			TestSerial (gr);
 
 			var gr3 = new GrafoClan<int> ();
@@ -44,7 +44,7 @@ namespace Test
 		public void Cont ()
 		{
 			var gr = new Grafo<int, float> ();
-			gr [0, 1].Data = 1;
+			gr [0, 1] = 1;
 			var c = new Continuo<int> (gr);
 			c.AgregaPunto (0, 1, 0.3f);
 			Store.BinarySerialization.WriteToBinaryFile ("continuo", c);
