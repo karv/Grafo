@@ -41,35 +41,28 @@ namespace Graficas.Grafo
 			throw new NotImplementedException ();
 		}
 
-		ILecturaGrafo<T> ILecturaGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (conjunto);
 		}
 
-		bool ILecturaGrafo<T>.this [T desde, T hasta]{ get { return ExisteArista (
-				desde,
-				hasta); } }
-
-		bool IGrafo<T>.this [T desde, T hasta]
+		public AristaBool<T> this [T desde, T hasta]
 		{ 
 			get
 			{ 
-				return ExisteArista (desde, hasta); 
-			} 
-			set
-			{
-				if (value)
-				{
-					AgregaArista (desde, hasta);
-				}
-				else
-				{
-					getNodo (desde).Vecinos.Remove (hasta);
-				}
+				return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
 			}
 		}
 
-		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas ()
+		IArista<T> IGrafo<T>.this [T desde, T hasta]
+		{ 
+			get
+			{ 
+				return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
+			} 
+		}
+
+		ICollection<IArista<T>> IGrafo<T>.Aristas ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -95,10 +88,7 @@ namespace Graficas.Grafo
 			var ret = new Ruta<T> ();
 			var lst = new List<T> (seq);
 			for (int i = 0; i < lst.Count - 1; i++)
-			{
-				var nuevoPaso = new Paso<T> (lst [i], lst [i + 1], 1);
-				ret.Concat (nuevoPaso);
-			}
+				ret.Concat (this [lst [i], lst [i + 1]]);
 			return ret;
 		}
 

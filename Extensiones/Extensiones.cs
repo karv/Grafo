@@ -14,11 +14,11 @@ namespace Graficas.Extensiones
 		/// </summary>
 		/// <param name="gr">Gráfo</param>
 		/// <typeparam name="T">Tipo de nodos de la gráfica</typeparam>
-		public static ICollection<ILecturaGrafo<T>> ComponentesConexas<T> (this ILecturaGrafo<T> gr)
+		public static ICollection<IGrafo<T>> ComponentesConexas<T> (this IGrafo<T> gr)
 		{
 			var nodosRestantes = new HashSet<T> (gr.Nodos);
 			HashSet<T> Verdes;
-			var ret = new List<ILecturaGrafo<T>> ();
+			var ret = new List<IGrafo<T>> ();
 
 			while (nodosRestantes.Count > 0)
 			{

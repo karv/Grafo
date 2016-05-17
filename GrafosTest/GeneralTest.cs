@@ -10,12 +10,12 @@ namespace Test
 	public class GeneralTest
 	{
 		
-		static public void GeneraGraficaConexa (IGrafo<int> gr, int cant = 100)
+		static public void GeneraGraficaConexa (Grafo<int, bool> gr, int cant = 100)
 		{
 			for (int i = 1; i <= cant; i++)
 			{
-				gr [0, i] = true;
-				gr [i, 0] = true;
+				gr [0, i].Existe = true;
+				gr [i, 0].Existe = true;
 			}
 			Assert.AreEqual (cant + 1, gr.Nodos.Count);
 
@@ -24,48 +24,18 @@ namespace Test
 		[Test]
 		public void CaminoOptimo ()
 		{
-			var gr = new Grafo<int> ();
+			// TODO, rehacer 
+			var gr = new Grafo<int, float> ();
 			gr.EsSimétrico = true;
 
-			GeneraGraficaConexa (gr);
-			var ruta = gr.CaminoÓptimo (2, 3);
+			var ruta = gr.CaminoÓptimo (2, 3, z => z.Data);
 			Console.WriteLine (ruta);
-			Console.WriteLine (ruta.Longitud);
 
 			foreach (var x in ruta.Pasos)
-			{
 				Console.WriteLine (x);
-			}
 		}
 
-		[Test]
-		public void TestReversa ()
-		{
-			var gr = new Grafo<int> ();
-			gr.EsSimétrico = true;
-
-			GeneraGraficaConexa (gr);
-
-			var ruta = new Ruta<int> (0);
-			ruta.Concat (1, 1);
-			ruta.Concat (0, 1);
-			ruta.Concat (2, 1);
-			ruta.Concat (0, 1);
-			ruta.Concat (3, 1);
-
-			var reversa = ruta.Reversa ();
-			Assert.AreEqual (ruta.NumPasos, reversa.NumPasos);
-			Assert.AreEqual (ruta.Longitud, reversa.Longitud);
-			Assert.AreEqual (ruta.NodoInicial, reversa.NodoFinal);
-			Assert.AreEqual (reversa.NodoInicial, ruta.NodoFinal);
-
-			Console.WriteLine (string.Format (
-				"Normal: \t{0}\nReversa:\t{1}",
-				ruta,
-				reversa));
-		}
-
-		static public void TestToRuta (ILecturaGrafo<int> gr)
+		static public void TestToRuta (IGrafo<int> gr)
 		{
 			var enume = new System.Collections.Generic.List<int> ();
 			enume.Add (0);
@@ -77,7 +47,6 @@ namespace Test
 			var ruta = gr.ToRuta (enume);
 
 			Assert.AreEqual (5, ruta.NumPasos);
-			Assert.AreEqual (5, ruta.Longitud);
 			Assert.AreEqual (0, ruta.NodoInicial);
 			Assert.AreEqual (3, ruta.NodoFinal);
 
@@ -87,14 +56,14 @@ namespace Test
 		[Test]
 		public void TestEnumToRuta ()
 		{
-			var gr = new Grafo<int> ();
+			var gr = new Grafo<int, bool> ();
 			gr.EsSimétrico = true;
 
 			GeneraGraficaConexa (gr);
 			TestToRuta (gr);
 		}
 
-		static public void TestConexidad (IGrafo<int> gr)
+		static public void TestConexidad (Grafo<int, bool> gr)
 		{
 			
 			const int maxNod = 99;
@@ -102,7 +71,7 @@ namespace Test
 
 			for (int i = 0; i < maxNod - numComp; i++)
 			{
-				gr [i, i + numComp] = true;
+				gr [i, i + numComp].Data = true;
 			}
 
 			var comp = gr.ComponentesConexas ();
@@ -122,7 +91,7 @@ namespace Test
 		[Test]
 		public void TestGrafConexa ()
 		{
-			var gr = new Grafo<int> ();
+			var gr = new Grafo<int, bool> ();
 			gr.EsSimétrico = true;
 			TestConexidad (gr);
 		}

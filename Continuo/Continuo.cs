@@ -273,7 +273,7 @@ namespace Graficas.Continuo
 					T orig = A; // Posición de este punto.
 					var ret = new List<ContinuoPunto> ();
 					// Si estoy en terreno
-					foreach (var x in Universo.GráficaBase.Vecinos(orig))
+					foreach (var x in Universo.GráficaBase.Vecino(orig))
 					{
 						foreach (var y in Universo.PuntosEnIntervalo(orig, x))
 						{
@@ -551,11 +551,14 @@ namespace Graficas.Continuo
 			/// Devuelve el peso total de la ruta
 			/// </summary>
 			/// <value>The longitud.</value>
-			public new float Longitud
+			public float Longitud
 			{
 				get
 				{
-					return base.Longitud + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
+					var lbase = 0f;
+					foreach (var x in Paso)
+						lbase += ((AristaPeso<T, float>)x).Data;
+					return lbase + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
 				}
 			}
 
@@ -620,7 +623,7 @@ namespace Graficas.Continuo
 		/// <summary>
 		/// Gráfica donde vive este contnuo
 		/// </summary>
-		public readonly ILecturaGrafoPeso<T> GráficaBase;
+		public readonly Grafo<T, float> GráficaBase;
 
 		/// <summary>
 		/// Conjuntos de puntos asociados a este continuo
@@ -647,7 +650,7 @@ namespace Graficas.Continuo
 		/// Construye una instancia de esta clase con una grafica dada como base.
 		/// </summary>
 		/// <param name="gráfica">Grafica base</param>
-		public Continuo (ILecturaGrafoPeso<T> gráfica)
+		public Continuo (Grafo<T, float> gráfica)
 		{
 			GráficaBase = gráfica;
 			foreach (var x in gráfica.Nodos)
@@ -668,7 +671,6 @@ namespace Graficas.Continuo
 		{
 			var ruta = rutas.CaminoÓptimo (inicial.A, final.A);
 			var ret = new Ruta (inicial);
-			ret.Concat (inicial.A, 0);
 			ret.Concat (ruta);
 			ret.ConcatFinal (final);
 			return ret;

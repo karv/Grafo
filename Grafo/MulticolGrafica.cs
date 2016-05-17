@@ -16,7 +16,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// La asignación de color -> Gráfica
 		/// </summary>
-		readonly Dictionary <TColor, ILecturaGrafo<TNodo>> _asignación = new Dictionary<TColor, ILecturaGrafo<TNodo>> ();
+		readonly Dictionary <TColor, IGrafo<TNodo>> _asignación = new Dictionary<TColor, IGrafo<TNodo>> ();
 
 		#region IGrafica
 
@@ -24,12 +24,12 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public ILecturaGrafo<TNodo> Subgrafo (IEnumerable<TNodo> conjunto)
+		public IGrafo<TNodo> Subgrafo (IEnumerable<TNodo> conjunto)
 		{
 			throw new NotImplementedException ();
 		}
 
-		ICollection<IArista<TNodo>> ILecturaGrafo<TNodo>.Aristas ()
+		ICollection<IArista<TNodo>> IGrafo<TNodo>.Aristas ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -56,9 +56,11 @@ namespace Graficas.Grafo
 		/// <param name="seq">Sucesión consistente.</param>
 		public IRuta<TNodo> ToRuta (IEnumerable<TNodo> seq)
 		{
+			throw new NotImplementedException ();
+			/*
 			IRuta<TNodo> ret = new Ruta<TNodo> ();
 			TNodo [] arr = seq.ToArray ();
-			Paso<TNodo> mejorPaso;
+			IArista<TNodo> mejorPaso;
 			for (int i = 0; i < arr.Count () - 1; i++)
 			{
 				// Encontrar mejor paso
@@ -73,21 +75,21 @@ namespace Graficas.Grafo
 				ret.Concat (mejorPaso);
 			}
 			return ret;
+			*/
 		}
 
-		bool ILecturaGrafo<TNodo>.this [TNodo desde, TNodo hasta]
-		{ get { return ExisteArista (desde, hasta); } }
-
-		bool ILecturaGrafo<TNodo>.ExisteArista (TNodo origen, TNodo destino)
-		{
-			foreach (var c in _asignación)
+		IArista<TNodo> IGrafo<TNodo>.this [TNodo desde, TNodo hasta]
+		{ 
+			get
 			{
-				if (c.Value.ExisteArista (origen, destino))
-					return true;
+				throw new NotImplementedException ();
 			}
-			return false;
 		}
 
+		public void Clear ()
+		{
+			_asignación.Clear ();
+		}
 
 		#endregion
 
@@ -96,7 +98,7 @@ namespace Graficas.Grafo
 
 		bool ExisteArista (TNodo desde, TNodo hasta)
 		{
-			return _asignación.Any (z => z.Value [desde, hasta]);
+			return _asignación.Any (z => z.Value [desde, hasta].Existe);
 		}
 
 		/// <summary>
@@ -109,7 +111,7 @@ namespace Graficas.Grafo
 			var ret = new List<TColor> ();
 			foreach (var gr in _asignación)
 			{
-				if (gr.Value [aris.Origen, aris.Destino])
+				if (gr.Value [aris.Origen, aris.Destino].Existe)
 					ret.Add (gr.Key);
 			}
 			return ret;
@@ -120,7 +122,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <param name="color">Nombre del color</param>
 		/// <param name="grafo">Grafo que modela este color</param>
-		public void AgregaColor (TColor color, ILecturaGrafo<TNodo> grafo)
+		public void AgregaColor (TColor color, IGrafo<TNodo> grafo)
 		{
 			if (_asignación.ContainsKey (color))
 				throw new ColorDuplicadoException ("Ya existe el color " + color);
@@ -132,9 +134,9 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <returns>The color.</returns>
 		/// <param name="color">Color.</param>
-		public ILecturaGrafo<TNodo> GrafoColor (TColor color)
+		public IGrafo<TNodo> GrafoColor (TColor color)
 		{
-			ILecturaGrafo<TNodo> ret;
+			IGrafo<TNodo> ret;
 			if (_asignación.TryGetValue (color, out ret))
 				return ret;
 			throw new System.Exception (string.Format ("Color {0} no existe.", color));
@@ -147,7 +149,7 @@ namespace Graficas.Grafo
 		/// <param name="color">Color.</param>
 		public ICollection<TNodo> Vecinos (TNodo nodo, TColor color)
 		{
-			ILecturaGrafo<TNodo> graf;
+			IGrafo<TNodo> graf;
 			return _asignación.TryGetValue (color, out graf) ? graf.Vecinos (nodo) : new TNodo[0];
 		}
 

@@ -1,4 +1,5 @@
 ﻿using Graficas.Nodos;
+using System;
 
 namespace Graficas.Aristas
 {
@@ -65,6 +66,14 @@ namespace Graficas.Aristas
 		{
 			Origen = desde;
 			Destino = hasta;
+		}
+
+		public bool Existe
+		{
+			get
+			{
+				throw new NotImplementedException ();
+			}
 		}
 	}
 }

@@ -17,8 +17,9 @@ namespace Graficas.Aristas
 		T Destino { get; }
 
 		/// <summary>
-		/// Devuelve el peso de la arista
+		/// Existe la arista
 		/// </summary>
-		float Peso { get; }
+		/// <value><c>true</c> Si esta arista existe; si no <c>false</c>.</value>
+		bool Existe { get; }
 	}
 }

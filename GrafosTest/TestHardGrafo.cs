@@ -63,12 +63,5 @@ namespace Test
 
 		}
 
-		[Test]
-		public void ToRuta ()
-		{
-			var gr = new HardGrafo<int> ();
-			GeneralTest.GeneraGraficaConexa (gr);
-			GeneralTest.TestToRuta (gr);
-		}
 	}
 }

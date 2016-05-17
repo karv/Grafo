@@ -9,7 +9,7 @@ namespace Graficas.Grafo
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
 	[Serializable]
-	public class GrafoClan<T> : IGrafoRutas<T>
+	public class GrafoClan<T> : IGrafo<T>
 		where T : IEquatable<T>
 	{
 		[Serializable]
@@ -34,9 +34,15 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public ILecturaGrafo<T> Subgrafo (IEnumerable<T> conjunto)
+		public IGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			throw new NotImplementedException ();
+		}
+
+		public void Clear ()
+		{
+			_nodos.Clear ();
+			clanes.Clear ();
 		}
 
 		ICollection<T> _nodos = new HashSet<T> ();
@@ -92,15 +98,23 @@ namespace Graficas.Grafo
 
 		#region IGrafica implementation
 
-		bool ILecturaGrafo<T>.this [T desde, T hasta]
+		public AristaBool<T> this [T desde, T hasta]
 		{
 			get
 			{
-				return ExisteArista (desde, hasta);
+				return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
 			}
 		}
 
-		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas ()
+		IArista<T> IGrafo<T>.this [T desde, T hasta]
+		{
+			get
+			{
+				return this [desde, hasta];
+			}
+		}
+
+		ICollection<IArista<T>> IGrafo<T>.Aristas ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -112,7 +126,7 @@ namespace Graficas.Grafo
 		/// <param name="hasta">Destino</param>
 		public bool ExisteArista (T desde, T hasta)
 		{
-			return ExisteArista (new Arista<T> (desde, hasta, 1));
+			throw new NotImplementedException ();
 		}
 
 		/// <summary>
@@ -193,11 +207,7 @@ namespace Graficas.Grafo
 			var lst = new List<T> (seq);
 			for (int i = 0; i < lst.Count - 1; i++)
 			{
-				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T> (
-					                          lst [i],
-					                          lst [i + 1],
-					                          1);
-				ret.Concat (nuevoPaso);
+				ret.Concat (this [lst [i], lst [i + 1]]);
 			}
 			return ret;
 		}

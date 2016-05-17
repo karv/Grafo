@@ -1,5 +1,4 @@
 ﻿using System;
-using Graficas;
 using Graficas.Grafo;
 using Graficas.Aristas;
 
@@ -9,7 +8,7 @@ namespace GrafosTest
 	{
 		public static void Main2 (string [] args)
 		{
-			Grafo<int> g = new Grafo<int> ();
+			var g = new Grafo<int, float> ();
 			g.EsSimétrico = true;
 
 			GrafoClan<int> gr = new GrafoClan<int> ();
@@ -17,7 +16,7 @@ namespace GrafosTest
 			gr.AgregaArista (0, 2);
 			gr.AgregaArista (1, 2);
 			gr.AgregaArista (0, 4);
-			if (gr.ExisteArista (new Arista<int> (1, 2, 1)))
+			if (gr.ExisteArista (new AristaPeso<int, float> (1, 2, 1)))
 				Console.WriteLine ("Hi");
 		}
 	}
