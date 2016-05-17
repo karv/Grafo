@@ -18,8 +18,10 @@ namespace Graficas.Grafo
 
 		/// <summary>
 		/// </summary>
-		public Grafo ()
+		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
+		public Grafo (bool simétrico = false)
 		{
+			EsSimétrico = simétrico;
 		}
 
 		#endregion
@@ -217,25 +219,11 @@ namespace Graficas.Grafo
 			throw new System.Exception ("No sé cómo llegó el algoritmo aquí D:");
 		}
 
-		bool _esSimétrico;
-
 		/// <summary>
 		/// Es simétrico
 		/// </summary>
 		/// <value><c>true</c> si es simétrico; otherwise, <c>false</c>.</value>
-		public bool EsSimétrico
-		{
-			get
-			{
-				return _esSimétrico;
-			}
-			set
-			{
-				if (SóloLectura)
-					throw new InvalidOperationException ("Grafo es sólo lectura.");
-				_esSimétrico = value;
-			}
-		}
+		public bool EsSimétrico { get; }
 
 		/// <summary>
 		/// Devuelve o establece si este grafo y sus aristas son de sólo lectura.
