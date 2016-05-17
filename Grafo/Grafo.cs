@@ -48,6 +48,7 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
+		/// <remarks>Hace una copia referenciada de las aristas </remarks>
 		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new Grafo<T, TData> ();
@@ -60,7 +61,9 @@ namespace Graficas.Grafo
 			{
 				foreach (var y in new List<T> (conjunto))
 				{
-					ret [x, y] = this [x, y];
+					AristaPeso<T, TData> aris;
+					if (EncuentraArista (x, y, out aris))
+						ret._data.Add (aris);
 				}
 			}
 			return ret;

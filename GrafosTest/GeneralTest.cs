@@ -65,9 +65,9 @@ namespace Test
 
 		static public void TestConexidad (Grafo<int, bool> gr)
 		{
-			
-			const int maxNod = 99;
-			const int numComp = 3;
+			var r = new Random ();
+			int numComp = r.Next (5);
+			int maxNod = r.Next (20) * numComp;
 
 			for (int i = 0; i < maxNod - numComp; i++)
 			{
