@@ -21,7 +21,7 @@ namespace Graficas.Rutas
 		/// <param name="origen">Origen</param>
 		public Ruta (T origen)
 		{
-			throw new NotImplementedException ();
+			NodoInicial = origen;
 		}
 
 		/// <summary>
@@ -111,6 +111,8 @@ namespace Graficas.Rutas
 			}
 		}
 
+		T _nodoInicial;
+
 		/// <summary>
 		/// Devuelve el origen de la ruta
 		/// </summary>
@@ -119,9 +121,13 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				if (NumPasos < 0)
-					throw new System.Exception ("No existe el nodo final en un path vacío.");
-				return Paso [0].Origen;
+				return _nodoInicial;
+			}
+			protected set
+			{
+				if (NumPasos >= 1)
+					throw new  InvalidOperationException ("No se puede establecer NodoInicial si ya hay pasos en la trayectoria.");
+				_nodoInicial = value;
 			}
 		}
 
