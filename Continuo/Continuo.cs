@@ -105,8 +105,10 @@ namespace Graficas.Continuo
 				}
 				set
 				{
+					// Analysis disable CompareNonConstrainedGenericWithNull
 					if (value == null)
-						throw new ArgumentNullException ("A no puede ser nulo.");
+					// Analysis restore CompareNonConstrainedGenericWithNull
+						throw new ArgumentNullException ("value", "A no puede ser nulo.");
 					a = value;
 				}
 			}
@@ -126,9 +128,12 @@ namespace Graficas.Continuo
 				{ 
 					_loc = value; 
 					if (_loc < 0)
-						FromGrafica (A);
-					if (Aloc < 0)
-						FromGrafica (B);
+						throw new ArgumentException ("Loc no puede ser negativo", "value");
+					// Analysis disable CompareNonConstrainedGenericWithNull
+					if (B != null && Aloc < 0)
+						throw new ArgumentException (
+							"Loc no puede ser mayor que si distancia al otro extremo",
+							"value");
 				}
 			}
 
@@ -139,6 +144,10 @@ namespace Graficas.Continuo
 			{
 				get
 				{
+					// Analysis disable CompareNonConstrainedGenericWithNull
+					if (B == null)
+					// Analysis restore CompareNonConstrainedGenericWithNull
+						throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc si B es nulo.");
 					return Universo.GráficaBase [A, B] - Loc;
 				}
 			}
@@ -694,7 +703,9 @@ namespace Graficas.Continuo
 		public ContinuoPunto AgregaPunto (T a, T b, float loc)
 		{
 			if (a == null)
-				throw new ArgumentNullException ("El valor de un extremo no puede ser nulo.");
+				throw new ArgumentNullException (
+					"a",
+					"El valor de un extremo no puede ser nulo.");
 			var ret = new ContinuoPunto (this, a, b, loc);
 			ret.A = a;
 			ret.B = b;
