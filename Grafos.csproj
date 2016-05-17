@@ -45,7 +45,6 @@
     <Compile Include="Exception\ColorDuplicadoException.cs" />
     <Compile Include="Grafo\GrafoClan.cs" />
     <Compile Include="Grafo\GrafoNoPeso.cs" />
-    <Compile Include="Grafo\Grafos.cs" />
     <Compile Include="Grafo\IGrafoRutas.cs" />
     <Compile Include="Grafo\IMulticolGrafo.cs" />
     <Compile Include="Grafo\MulticolGrafica.cs" />
@@ -61,6 +60,7 @@
     <Compile Include="Aristas\AristaBool.cs" />
     <Compile Include="Aristas\OperaciónAristaInválida.cs" />
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
+    <Compile Include="Grafo\Grafo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
