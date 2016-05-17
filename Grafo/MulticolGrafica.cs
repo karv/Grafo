@@ -86,6 +86,9 @@ namespace Graficas.Grafo
 			}
 		}
 
+		/// <summary>
+		/// Elimina nodos y aristas.
+		/// </summary>
 		public void Clear ()
 		{
 			_asignación.Clear ();

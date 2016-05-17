@@ -43,8 +43,17 @@ namespace Graficas.Rutas
 		IEnumerable<IArista<T>> Pasos { get; }
 	}
 
+	/// <summary>
+	/// Extensiones para rutas
+	/// </summary>
 	public static class RutaExt
 	{
+		/// <summary>
+		/// Devuelve la longitud de esta ruta, dada una función de peso
+		/// </summary>
+		/// <param name="ruta">Ruta.</param>
+		/// <param name="peso">Función de peso</param>
+		/// <typeparam name="T">Nodos de ruta</typeparam>
 		public static float Longitud<T> (this IRuta<T> ruta,
 		                                 Func<IArista<T>, float> peso)
 		{

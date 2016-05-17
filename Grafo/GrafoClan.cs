@@ -39,6 +39,9 @@ namespace Graficas.Grafo
 			throw new NotImplementedException ();
 		}
 
+		/// <summary>
+		/// Elimina nodos y aristas de este grafo.
+		/// </summary>
 		public void Clear ()
 		{
 			_nodos.Clear ();
@@ -98,19 +101,36 @@ namespace Graficas.Grafo
 
 		#region IGrafica implementation
 
-		public AristaBool<T> this [T desde, T hasta]
+		/// <summary>
+		/// La arista correspondiente a un par de puntos
+		/// </summary>
+		/// <returns>Booleano indicando si existe una arista</returns>
+		/// <param name="desde">Origen</param>
+		/// <param name="hasta">Destino</param>
+		public bool this [T desde, T hasta]
 		{
 			get
 			{
-				return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
+				return ExisteArista (desde, hasta);
 			}
+		}
+
+		/// <summary>
+		/// Devuelve la arista existente entre dos nodos
+		/// </summary>
+		/// <returns>The arista.</returns>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
+		public AristaBool<T> EncuentraArista (T desde, T hasta)
+		{
+			return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
 		}
 
 		IArista<T> IGrafo<T>.this [T desde, T hasta]
 		{
 			get
 			{
-				return this [desde, hasta];
+				return EncuentraArista (desde, hasta);
 			}
 		}
 
@@ -207,7 +227,7 @@ namespace Graficas.Grafo
 			var lst = new List<T> (seq);
 			for (int i = 0; i < lst.Count - 1; i++)
 			{
-				ret.Concat (this [lst [i], lst [i + 1]]);
+				ret.Concat (EncuentraArista (lst [i], lst [i + 1]));
 			}
 			return ret;
 		}

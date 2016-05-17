@@ -73,8 +73,16 @@ namespace Graficas.Aristas
 			}
 		}
 
+		/// <summary>
+		/// Indica si este objeto es de sólo lectura
+		/// </summary>
+		/// <value><c>true</c> si es de sólo lectura; de otra forma, <c>false</c>.</value>
 		public bool SóloLectura { get; }
 
+		/// <summary>
+		/// Existe la arista
+		/// </summary>
+		/// <value><c>true</c> Si esta arista existe; si no <c>false</c>.</value>
 		public bool Existe
 		{
 			get
@@ -93,6 +101,7 @@ namespace Graficas.Aristas
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
 		/// <param name="valor">Peso.</param>
+		/// <param name="sóloLectura">El objeto se creará como sólo lectura</param>
 		public AristaPeso (TNodo origen,
 		                   TNodo destino,
 		                   TValor valor,
@@ -110,6 +119,7 @@ namespace Graficas.Aristas
 		/// </summary>
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
+		/// <param name="sóloLectura">El objeto se creará como sólo lectura</param>
 		public AristaPeso (TNodo origen, TNodo destino, bool sóloLectura = false)
 		{
 			_origen = origen;

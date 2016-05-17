@@ -2,7 +2,9 @@
 
 namespace Graficas.Aristas
 {
-	
+	/// <summary>
+	/// Exception que se tira cuando una operación con respecto a las aristas, operaciones, acceso, etc falla.
+	/// </summary>
 	[Serializable]
 	public class OperaciónAristaInválidaException : InvalidOperationException
 	{

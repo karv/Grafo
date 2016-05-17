@@ -10,7 +10,7 @@ namespace Graficas.Grafo
 	public interface IGrafo<T>
 	{
 		/// <summary>
-		/// Elimina nodos y aristas de este grafo.
+		/// Elimina nodos y aristas.
 		/// </summary>
 		void Clear ();
 

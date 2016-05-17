@@ -8,7 +8,7 @@ namespace Graficas.Grafo
 {
 	/// <summary>
 	/// Representa una gráfica, en el sentido abstracto.
-	/// Los nodos son del tipo <c>T</c>.
+	/// Los nodos son del tipo <c>T</c>; y las aristas almacenan un valor del tipo <c>TData</c>
 	/// </summary>
 	[Serializable]
 	public class Grafo<T, TData> : IGrafo<T>
@@ -451,6 +451,10 @@ namespace Graficas.Grafo
 		#endregion
 	}
 
+	/// <summary>
+	/// Representa una gráfica, en el sentido abstracto.
+	/// Los nodos son del tipo <c>T</c>.
+	/// </summary>
 	public class Grafo<T> : IGrafo<T>
 		where T : IEquatable<T>
 	{

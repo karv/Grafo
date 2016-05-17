@@ -68,6 +68,10 @@ namespace Graficas.Aristas
 			Destino = hasta;
 		}
 
+		/// <summary>
+		/// Existe la arista
+		/// </summary>
+		/// <value><c>true</c> Si esta arista existe; si no <c>false</c>.</value>
 		public bool Existe
 		{
 			get
