@@ -32,7 +32,7 @@ namespace Graficas.Grafo
 		ICollection<T> Nodos { get; }
 
 		/// <summary>
-		/// Colección de aristas
+		/// Colección de aristas existentes
 		/// </summary>
 		ICollection<IArista<T>> Aristas ();
 

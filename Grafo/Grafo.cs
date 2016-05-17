@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
+using System.Linq;
 
 namespace Graficas.Grafo
 {
@@ -182,7 +183,7 @@ namespace Graficas.Grafo
 
 		ICollection<IArista<T>> IGrafo<T>.Aristas ()
 		{
-			return new HashSet<IArista<T>> (_data);
+			return new HashSet<IArista<T>> (_data.Where (z => z.Existe));
 		}
 
 		#endregion
