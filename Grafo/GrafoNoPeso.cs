@@ -46,11 +46,20 @@ namespace Graficas.Grafo
 			return Subgrafo (conjunto);
 		}
 
-		public AristaBool<T> this [T desde, T hasta]
+		/// <summary>
+		/// La arista correspondiente a un par de puntos
+		/// </summary>
+		/// <returns>Una arista no nula</returns>
+		/// <param name="desde">Origen</param>
+		/// <param name="hasta">Destino</param>
+		/// <remarks>Debe devolver una (¿nueva?) arista en caso de que no exista como tal, 
+		/// diciendo que esa arista no existe.
+		/// NUNCA devuelve null</remarks>
+		public bool this [T desde, T hasta]
 		{ 
 			get
 			{ 
-				return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
+				return ExisteArista (desde, hasta);
 			}
 		}
 
@@ -88,8 +97,19 @@ namespace Graficas.Grafo
 			var ret = new Ruta<T> ();
 			var lst = new List<T> (seq);
 			for (int i = 0; i < lst.Count - 1; i++)
-				ret.Concat (this [lst [i], lst [i + 1]]);
+				ret.Concat (EncuentraArista (lst [i], lst [i + 1]));
 			return ret;
+		}
+
+		/// <summary>
+		/// Devuelve la arista entre dos nodos
+		/// </summary>
+		/// <returns>La AristaBool que representa el estado topológico entre estos dos nodos.</returns>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
+		public AristaBool<T> EncuentraArista (T desde, T hasta)
+		{
+			return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
 		}
 
 		/// <summary>

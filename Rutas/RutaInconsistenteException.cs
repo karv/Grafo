@@ -2,7 +2,9 @@
 
 namespace Graficas.Rutas
 {
-	
+	/// <summary>
+	/// Ocurre cuando una operación entre rutas no funciona.
+	/// </summary>
 	[Serializable]
 	public class RutaInconsistenteException : InvalidOperationException
 	{
