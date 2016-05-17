@@ -18,18 +18,11 @@ namespace Graficas.Rutas
 		{
 		}
 
-		/// <param name="origen">Origen</param>
-		public Ruta (T origen)
-		{
-			NodoInicial = origen;
-		}
-
 		/// <summary>
 		/// Construye una implementación de esta ruta, dada una ruta abstracta
 		/// </summary>
 		/// <param name="ruta">Ruta a imitar</param>
 		public Ruta (IRuta<T> ruta)
-			: this (ruta.NodoInicial)
 		{
 			foreach (var x in ruta.Pasos)
 				Paso.Add (x);
@@ -102,7 +95,7 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta.</param>
 		public void Concat (IRuta<T> ruta)
 		{
-			if (!NodoFinal.Equals (ruta.NodoInicial))
+			if (NumPasos > 0 && !NodoFinal.Equals (ruta.NodoInicial))
 				throw new RutaInconsistenteException ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 
 			foreach (var paso in ruta.Pasos)
@@ -110,8 +103,6 @@ namespace Graficas.Rutas
 				Paso.Add (paso);
 			}
 		}
-
-		T _nodoInicial;
 
 		/// <summary>
 		/// Devuelve el origen de la ruta
@@ -121,13 +112,9 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return _nodoInicial;
-			}
-			protected set
-			{
-				if (NumPasos >= 1)
-					throw new  InvalidOperationException ("No se puede establecer NodoInicial si ya hay pasos en la trayectoria.");
-				_nodoInicial = value;
+				if (Paso.Count == 0)
+					throw new InvalidOperationException ("Una ruta vacia no tiene definida un NodoInicial.");
+				return Paso [0].Origen;
 			}
 		}
 
@@ -139,7 +126,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				if (NumPasos < 0)
+				if (NumPasos < 1)
 					throw new System.Exception ("No existe el nodo final en un path vacío.");
 				return Paso [NumPasos - 1].Destino;
 			}

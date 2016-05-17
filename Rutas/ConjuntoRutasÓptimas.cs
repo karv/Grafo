@@ -84,7 +84,7 @@ namespace Graficas.Rutas
 				foreach (var y in clone)
 				{
 					// Tomar a los que tienen como destino a x.Origen y concatenarlos con y	
-					if (y.Key.Item2.Equals (x.Origen)) // ¿Por qué no entra incluso si la igualdad es true?
+					if (y.Key.Item2.Equals (x.Origen))
 					{
 						var path = new Ruta<TNodo> (y.Value);
 						path.Concat (new Ruta<TNodo> (x));

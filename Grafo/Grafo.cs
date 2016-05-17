@@ -171,7 +171,7 @@ namespace Graficas.Grafo
 				if (iniciando)
 				{
 					iniciando = false;
-					ret = new Ruta<T> (x);
+					ret = new Ruta<T> ();
 				}
 				else
 				{
@@ -583,6 +583,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <returns><c>true</c>, if arista was existed, <c>false</c> otherwise.</returns>
 		/// <param name="aris">Aris.</param>
+		[Obsolete ("Usar arista.Existe")]
 		public bool ExisteArista (IArista<T> aris)
 		{
 			return aris.Existe;
@@ -603,7 +604,7 @@ namespace Graficas.Grafo
 				if (iniciando)
 				{
 					iniciando = false;
-					ret = new Ruta<T> (x);
+					ret = new Ruta<T> ();
 				}
 				else
 				{
