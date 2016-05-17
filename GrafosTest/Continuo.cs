@@ -54,9 +54,9 @@ namespace Test
 		public void TestMismoIntervalo ()
 		{
 			Iniciar ();
-			Graf [0, 1].Data = 1;
-			Assert.True (Graf [0, 1].Data == 1);
-			Graf [1, 2].Data = 1;
+			Graf [0, 1] = 1;
+			Assert.True (Graf [0, 1] == 1);
+			Graf [1, 2] = 1;
 			var p1 = Gr.AgregaPunto (0);
 			var p2 = Gr.AgregaPunto (1);
 			var p3 = Gr.AgregaPunto (2);
@@ -82,7 +82,7 @@ namespace Test
 		public void TestPunto ()
 		{
 			Iniciar ();
-			Graf [0, 1].Data = 10;
+			Graf [0, 1] = 10;
 
 			var pt = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
 			var pt2 = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
@@ -116,17 +116,14 @@ namespace Test
 			Iniciar ();
 			for (int i = 0; i < 10; i++)
 			{
-				Graf [i, i + 1].Data = 1;
+				Graf [i, i + 1] = 1;
 			}
 			Continuo<TestClassIns>.Ruta rta;
 			rta = new Continuo<TestClassIns>.Ruta (new Continuo<TestClassIns>.ContinuoPunto (
 				Gr,
 				0));
-			//rta.NodoInicial = new Continuo<int>.ContinuoPunto(Gr, 0);
 			for (int i = 1; i < 9; i++)
-			{
-				rta.Concat (Graf [i - 1, i]);
-			}
+				rta.Concat (Graf.EncuentraArista (i - 1, i));
 			rta.ConcatFinal (new Continuo<TestClassIns>.ContinuoPunto (Gr, 10));
 			rta.NodoFinal.Loc = 0.5f;
 
@@ -141,7 +138,7 @@ namespace Test
 			Iniciar ();
 			for (int i = 0; i < 10; i++)
 			{
-				Graf [i, i + 1].Data = 1;
+				Graf [i, i + 1] = 1;
 				Assert.AreEqual (1, Graf [i, i + 1]);
 			}
 
@@ -167,7 +164,7 @@ namespace Test
 			Iniciar ();
 			for (int i = 0; i < 10; i++)
 			{
-				Graf [i, i + 1].Data = 1;
+				Graf [i, i + 1] = 1;
 			}
 
 			var inicial = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
@@ -215,7 +212,7 @@ namespace Test
 			int i;
 			for (i = 0; i < 10; i++)
 			{
-				Graf [0, i + 1].Data = 1;
+				Graf [0, i + 1] = 1;
 			}
 
 			var p1 = Gr.AgregaPunto (0);
@@ -240,7 +237,7 @@ namespace Test
 		{
 			Iniciar ();
 			for (int i = 0; i < 10; i++)
-				Graf [i, i + 1].Data = 1;
+				Graf [i, i + 1] = 1;
 
 			var p0 = Gr.AgregaPunto (0, 1, 0);
 			var p1 = Gr.AgregaPunto (1, 2, 0);
