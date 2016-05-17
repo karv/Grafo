@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Graficas.Aristas;
+using System;
 
 namespace Graficas.Rutas
 {
@@ -19,25 +21,15 @@ namespace Graficas.Rutas
 		T NodoFinal { get; }
 
 		/// <summary>
-		/// Devuelve la longitud, módulo su grafo subyacente, de esta ruta
-		/// </summary>
-		float Longitud { get; }
-
-		/// <summary>
 		/// Devuelve el número de pasos
 		/// </summary>
 		int NumPasos { get; }
 
 		/// <summary>
-		/// Construye uan ruta como ésta, en sentido inverso.
-		/// </summary>
-		IRuta<T> Reversa ();
-
-		/// <summary>
 		/// Concatena esta ruta con un paso
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		void Concat (IPaso<T> paso);
+		void Concat (IArista<T> paso);
 
 		/// <summary>
 		/// Concatena esta ruta con otra ruta
@@ -46,15 +38,22 @@ namespace Graficas.Rutas
 		void Concat (IRuta<T> ruta);
 
 		/// <summary>
-		/// Concatena esta ruta
-		/// </summary>
-		/// <param name="nodo">Nodo con qué concatenar</param>
-		/// <param name="peso">distancia de el Nodo final a este nuevo nodo</param>
-		void Concat (T nodo, float peso);
-
-		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		IEnumerable<IPaso<T>> Pasos { get; }
+		IEnumerable<IArista<T>> Pasos { get; }
+	}
+
+	public static class RutaExt
+	{
+		public static float Longitud<T> (this IRuta<T> ruta,
+		                                 Func<IArista<T>, float> peso)
+		{
+			float ret = 0;
+			foreach (var x in ruta.Pasos)
+			{
+				ret += peso (x);
+			}
+			return ret;
+		}
 	}
 }

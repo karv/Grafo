@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
-using System.Linq;
 
 namespace Graficas.Grafo
 {
@@ -12,7 +11,7 @@ namespace Graficas.Grafo
 	/// Los nodos son del tipo <c>T</c>.
 	/// </summary>
 	[Serializable]
-	public class Grafo<T> : IGrafoPeso<T>, IGrafoRutas<T> , IGrafo<T>
+	public class Grafo<T, TData> : IGrafo<T>
 		where T : IEquatable<T>
 	{
 		#region ctor
@@ -21,18 +20,6 @@ namespace Graficas.Grafo
 		/// </summary>
 		public Grafo ()
 		{
-			Vecinos.Nulo = float.PositiveInfinity;
-		}
-
-		/// <param name="nods">Nodos de la gráfica</param>
-		public Grafo (T [] nods)
-			: this ()
-		{
-			var r = new Random ();
-			foreach (var x in nods)
-			{
-				AgregaVerticeAzar (x, r);
-			}
 		}
 
 		#endregion
@@ -44,18 +31,16 @@ namespace Graficas.Grafo
 		/// </summary>
 		public void Clear ()
 		{
-			Vecinos.Clear ();
+			if (SóloLectura)
+				throw new InvalidOperationException ("Grafo es sólo lectura.");
+			_data.Clear ();
 		}
 
-		bool IGrafo<T>.this [T desde, T hasta]
+		IArista<T> IGrafo<T>.this [T desde, T hasta]
 		{ 
 			get
 			{
-				return this [desde, hasta] == 0;
-			}
-			set
-			{
-				this [desde, hasta] = (value ? 1 : 0);
+				return this [desde, hasta];
 			}
 		}
 
@@ -63,9 +48,9 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public Grafo<T> Subgrafo (IEnumerable<T> conjunto)
+		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto)
 		{
-			var ret = new Grafo<T> ();
+			var ret = new Grafo<T, TData> ();
 			foreach (var x in conjunto)
 			{
 				ret.Nodos.Add (x);
@@ -81,42 +66,20 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-		ILecturaGrafo<T> ILecturaGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (conjunto);
-		}
-
-		bool ILecturaGrafo<T>.this [T desde, T hasta]
-		{
-			get { return ExisteArista (desde, hasta); }
 		}
 
 		/// <summary>
 		/// Devuelve una colección con las aristas
 		/// </summary>
-		public ICollection<IArista<T>> Aristas ()
+		public ICollection<AristaPeso<T, TData>> Aristas ()
 		{
-			var ret = new List<IArista<T>> ();
-			foreach (var x in Vecinos)
-			{
-				ret.Add (new Arista<T> (x.Key.Item1, x.Key.Item2, x.Value));
-			}
-			return ret;
+			return new HashSet<AristaPeso<T, TData>> (_data);
 		}
 
-		float IGrafoPeso<T>.this [T desde, T hasta]
-		{ 
-			get
-			{
-				return this [desde, hasta];
-			}
-			set
-			{
-				this [desde, hasta] = value;
-			}
-		}
-
-		ICollection<T> ILecturaGrafo<T>.Nodos
+		ICollection<T> IGrafo<T>.Nodos
 		{
 			get
 			{
@@ -124,19 +87,7 @@ namespace Graficas.Grafo
 			}
 		}
 
-		/// <summary>
-		/// Calcula la ruta óptima de un nodo a otro.
-		/// </summary>
-		/// <param name="x">Nodo inicial.</param>
-		/// <param name="y">Nodo final.</param>
-		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
-		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> // TODO: Arreglar esto.
-		public IRuta<T> RutaÓptima (T x, T y)
-		{
-			return CaminoÓptimo (x, y, new HashSet<T> ());
-		}
-
-		ICollection<T> ILecturaGrafo<T>.Vecinos (T nodo)
+		ICollection<T> IGrafo<T>.Vecinos (T nodo)
 		{
 			return Vecino (nodo);
 		}
@@ -149,7 +100,7 @@ namespace Graficas.Grafo
 		/// <param name="hasta">Hasta.</param>
 		public bool ExisteArista (T desde, T hasta)
 		{
-			return this [desde, hasta] < float.PositiveInfinity;
+			return this [desde, hasta].Existe;
 		}
 
 		/// <summary>
@@ -157,9 +108,11 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
-		public void AgregaArista (T desde, T hasta)
+		/// <returns>>Devuelve la arista agregada</returns>
+		[Obsolete ("Usar this[,]")]
+		public AristaPeso<T, TData> AgregaArista (T desde, T hasta)
 		{
-			this [desde, hasta] = 1;
+			return this [desde, hasta];
 		}
 
 		/// <summary>
@@ -170,41 +123,12 @@ namespace Graficas.Grafo
 			get
 			{
 				var ret = new HashSet<T> ();
-				foreach (var x in Vecinos.Keys)
+				foreach (var x in _data)
 				{
-					if (!ret.Contains (x.Item1))
-					{
-						ret.Add (x.Item1);
-					}
-
-					if (!ret.Contains (x.Item2))
-					{
-						ret.Add (x.Item2);
-					}
+					ret.Add (x.Origen);
+					ret.Add (x.Destino);
 				}
 				return ret;
-			}
-		}
-
-		/// <summary>
-		/// Agrega una arista II
-		/// </summary>
-		/// <param name="aris">Aris.</param>
-		public void AgregaArista (IArista<T> aris)
-		{
-			this [aris.Origen, aris.Destino] = 1;
-		}
-
-		/// <summary>
-		/// Agrega una arista entre dos nodos existentes a la gráfica.
-		/// </summary>
-		/// <param name="x">Un nodo.</param>
-		/// <param name="y">Otro nodo.</param>
-		/// <param name="peso">El peso de la arista entre los nodos</param>
-		public void AgregaArista (T x, T y, float peso)
-		{
-			{
-				this [x, y] = peso;
 			}
 		}
 
@@ -226,7 +150,7 @@ namespace Graficas.Grafo
 		/// <param name="aris">Aris.</param>
 		public bool ExisteArista (IArista<T> aris)
 		{
-			return (this [aris.Origen, aris.Destino] < float.PositiveInfinity);
+			return aris.Existe;
 		}
 
 		/// <summary>
@@ -248,71 +172,28 @@ namespace Graficas.Grafo
 				}
 				else
 				{
-					ret.Concat (x, this [last, x]);
+					ret.Concat (this [last, x]);
 				}
 				last = x;
 			}
 			return ret;
 		}
 
+		ICollection<IArista<T>> IGrafo<T>.Aristas ()
+		{
+			return new HashSet<IArista<T>> (_data);
+		}
+
 		#endregion
 
 		#region Interno
 
-
-		ListaPesoFloat<T, T> Vecinos = new ListaPesoFloat<T, T> ();
+		HashSet<AristaPeso<T, TData>> _data = new HashSet<AristaPeso<T, TData>> ();
+		//ListaPeso<T, T, TArista> Vecinos  = new ListaPeso<T, T, TArista> (null, )
 
 		#endregion
 
 		#region Propios
-
-		/// <summary>
-		/// Agrega un vértice al grafo, generando aristas al azar a nodos antiguos.
-		/// </summary>
-		/// <param name="vértice">Vertice.</param>
-		/// <param name="r">Generador aleatorio </param>
-		public void AgregaVerticeAzar (T vértice, Random r)
-		{
-			if (NumNodos == 0)
-			{
-				this [vértice, vértice] = 0;
-				return;
-			}
-
-			// Genera la lista de probabilidad.
-			// Obtener los pesos
-			var Prob = new ListaPeso<T> ();
-			foreach (var x in Nodos)
-			{
-				foreach (var y in Vecino(x))
-				{
-					if (this [x, y] == 0)
-						throw new System.Exception (string.Format (
-							"La distancia entro {0} y {1} es cero",
-							x,
-							y));
-					Prob [x] += this [x, y];
-				}
-				Prob [x] = 1 / (Prob [x] + 1);
-			}
-			// Normalizar Prob
-			float S = Prob.SumaTotal ();
-			// Clonar a Prob.keys
-			var P = new List<T> (Prob.Keys);
-
-			foreach (var x in P)
-			{
-				Prob [x] = Prob [x] / S;
-			}
-
-			// Seleccionar un vértice
-			T v = SelecciónAzar (Prob, r);
-
-			// Pues entonces hay que agregar arista de x a P[i];
-			double p = r.NextDouble () + 0.5d;
-
-			AgregaArista (vértice, v, (float)p);
-		}
 
 		/// <summary>
 		/// Selecciona al azar un elemento.
@@ -320,6 +201,7 @@ namespace Graficas.Grafo
 		/// <param name="prob">La función de probabilidad. ¡Debe estar normalizada!</param>
 		/// /// <param name="r">Aleatorio</param>
 		/// <returns></returns>
+		[Obsolete]
 		static T SelecciónAzar (IDictionary<T, float> prob, Random r)
 		{
 			double q = r.NextDouble ();
@@ -332,11 +214,30 @@ namespace Graficas.Grafo
 			throw new System.Exception ("No sé cómo llegó el algoritmo aquí D:");
 		}
 
+		bool _esSimétrico;
+
 		/// <summary>
 		/// Es simétrico
 		/// </summary>
 		/// <value><c>true</c> si es simétrico; otherwise, <c>false</c>.</value>
-		public bool EsSimétrico { get; set; }
+		public bool EsSimétrico
+		{
+			get
+			{
+				return _esSimétrico;
+			}
+			set
+			{
+				if (SóloLectura)
+					throw new InvalidOperationException ("Grafo es sólo lectura.");
+				_esSimétrico = value;
+			}
+		}
+
+		/// <summary>
+		/// Devuelve o establece si este grafo y sus aristas son de sólo lectura.
+		/// </summary>
+		public bool SóloLectura { get; set; }
 
 		/// <summary>
 		/// Devuelve la lista de vecinos de x (a todos los que apunta x)
@@ -346,10 +247,10 @@ namespace Graficas.Grafo
 		{
 			ISet<T> ret = new HashSet<T> ();
 			IEnumerable<T> Nods = Nodos;
-			foreach (var y in Nods)
+			foreach (var y in _data)
 			{
-				if (!float.IsPositiveInfinity (this [x, y]))
-					ret.Add (y);
+				if (y.Origen.Equals (x))
+					ret.Add (y.Destino);
 			}
 			return ret;
 		}
@@ -363,10 +264,10 @@ namespace Graficas.Grafo
 		{
 			ISet<T> ret = new HashSet<T> ();
 			IEnumerable<T> Nods = Nodos;
-			foreach (var y in Nods)
+			foreach (var y in _data)
 			{
-				if (!float.IsPositiveInfinity (this [y, x]))
-					ret.Add (y);
+				if (y.Destino.Equals (x))
+					ret.Add (y.Origen);
 			}
 			return ret;
 		}
@@ -377,18 +278,62 @@ namespace Graficas.Grafo
 		/// <param name="x">Vértice origen.</param>
 		/// <param name="y">Vértice destino.</param>
 		/// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
-		public float this [T x, T y]
+		public AristaPeso<T, TData> this [T x, T y]
 		{
 			get
 			{
-				return EsSimétrico ? Math.Min (
-					Vecinos [x, y],
-					Vecinos [y, x]) : Vecinos [x, y];
+				return EncuentraArista (x, y);
 			}
 			set
 			{
-				Vecinos [x, y] = value;
+				AristaPeso<T ,TData> aris;
+				if (EncuentraArista (x, y, out aris))
+					_data.Remove (aris);
+				_data.Add (value);
 			}
+		}
+
+		/// <summary>
+		/// Devuelve la Arista? con extremos dados.
+		/// </summary>
+		/// <returns>Devuelve la arista, posiblemente inexistente.</returns>
+		/// <param name="origen">Origen.</param>
+		/// <param name="destino">Destino.</param>
+		public AristaPeso<T, TData> EncuentraArista (T origen, T destino)
+		{
+			AristaPeso<T ,TData> aris;
+			if (!EncuentraArista (origen, destino, out aris))
+				aris = new AristaPeso<T, TData> (origen, destino, SóloLectura);
+			return aris;
+		}
+
+		/// <summary>
+		/// Revisa si hay una arista, y la devuelve
+		/// </summary>
+		/// <returns><c>true</c>, si hay una arista en _data. <c>false</c> otherwise.</returns>
+		/// <param name="origen">Origen.</param>
+		/// <param name="destino">Destino.</param>
+		/// <param name="aris">Por aquí devuelve la arista si hay, null si no</param>
+		protected bool EncuentraArista (T origen,
+		                                T destino,
+		                                out AristaPeso<T, TData> aris)
+		{
+			foreach (var x in _data)
+			{
+				if (x.Origen.Equals (origen) && x.Destino.Equals (destino))
+				{
+					aris = x;
+					return true;
+				}				
+				if (EsSimétrico && (x.Origen.Equals (destino) && x.Destino.Equals (origen)))
+				{
+					aris = x;
+					return true;
+				}			
+			}
+			aris = null;
+			return false;
+
 		}
 
 		/// <summary>
@@ -397,9 +342,12 @@ namespace Graficas.Grafo
 		/// <returns>The óptimo.</returns>
 		/// <param name="x">Origen</param>
 		/// <param name="y">Destino</param>
-		public IRuta<T> CaminoÓptimo (T x, T y)
+		/// <param name="peso">Forma de asignar peso a cada arista</param>
+		public IRuta<T> CaminoÓptimo (T x,
+		                              T y,
+		                              Func<AristaPeso<T, TData>, float> peso)
 		{
-			return CaminoÓptimo (x, y, new HashSet<T> ());
+			return CaminoÓptimo (x, y, peso, new HashSet<T> ());
 		}
 
 		/// <summary>
@@ -408,9 +356,14 @@ namespace Graficas.Grafo
 		/// <param name="x">Nodo inicial.</param>
 		/// <param name="y">Nodo final.</param>
 		/// <param name="ignorar">Lista de nodos a evitar.</param>
+		/// <param name="peso">Forma de asignar peso a cada arista</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> 
-		IRuta<T> CaminoÓptimo (T x, T y, ISet<T> ignorar) // FIX
+		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
+		IRuta<T> CaminoÓptimo (T x,
+		                       T y,
+		                       Func<AristaPeso<T, TData>, float> peso,
+		                       ISet<T> ignorar) // TODO FIX
 		{
 			//List<T> retLista = new List<T>();
 			IRuta<T> ret = new Ruta<T> ();
@@ -418,10 +371,7 @@ namespace Graficas.Grafo
 			ISet<T> Ignora2;
 
 			if (x.Equals (y))
-			{
-				ConcatRuta (ret, x);
-				return ret;
-			}
+				return ret; // Devuelve ruta vacía si origen == destino
 
 			Ignora2 = new HashSet<T> (ignorar);
 			Ignora2.Add (y);
@@ -430,15 +380,28 @@ namespace Graficas.Grafo
 			{
 				if (!ignorar.Contains (n))
 				{
-					RutaBuscar = CaminoÓptimo (x, n, Ignora2);
+					RutaBuscar = CaminoÓptimo (x, n, peso, Ignora2);
 
-					if (ret.NumPasos <= 0 || ret.Longitud > RutaBuscar.Longitud)
+					try
 					{
-						if (RutaBuscar.NumPasos >= 0)
+						if (ret.NumPasos <= 0 || ret.Longitud (z => (peso ((AristaPeso<T, TData>)z))) > RutaBuscar.Longitud (z => (peso ((AristaPeso<T, TData>)z))))
 						{
-							ConcatRuta (RutaBuscar, y);
-							ret = RutaBuscar;
+							if (RutaBuscar.NumPasos >= 0)
+							{
+								RutaBuscar.Concat (this [RutaBuscar.NodoFinal, y]);
+								ret = RutaBuscar;
+							}
 						}
+					}
+					catch (InvalidCastException ex)
+					{
+						throw new InvalidCastException (
+							"Error haciendo cast de aristas al calcular camino óptimo.",
+							ex);
+					}
+					catch (System.Exception ex)
+					{
+						throw new System.Exception ("Error desconocido", ex);
 					}
 				}
 			}
@@ -483,48 +446,6 @@ namespace Graficas.Grafo
 				}
 				return null;
 			}
-		}
-
-		/// <summary>
-		/// Concatena una ruta y un nodo
-		/// </summary>
-		/// <param name="ruta">Ruta.</param>
-		/// <param name="nodo">Nodo.</param>
-		public void ConcatRuta (IRuta<T> ruta, T nodo)
-		{
-			ruta.Concat (nodo, ruta.NumPasos >= 0 ? this [ruta.NodoFinal, nodo] : 0);
-		}
-
-
-		#endregion
-
-		#region Estáticos
-
-		/// <summary>
-		/// Genera una gráfica aleatoria.
-		/// </summary>
-		/// <param name="nods">El conjunto de nodos que se usarán.</param>
-		/// <returns>Devuelve una gráfica aleatoria.</returns>
-		public static Grafo<T> GeneraGraficaAleatoria (List<T> nods)
-		{
-			var r = new Random ();
-			if (nods.Count < 2)
-				throw new System.Exception ("No se puede generar una gráfica aleatoria con menos de dos elementos.");
-			var ret = new Grafo<T> ();
-
-			T v0, v1;
-			v0 = nods [0];
-			v1 = nods [1];
-			nods.RemoveAt (0);
-			nods.RemoveAt (0);
-
-			ret.AgregaArista (v0, v1, 1);
-
-			foreach (var v in nods)
-			{
-				ret.AgregaVerticeAzar (v, r);
-			}
-			return ret;
 		}
 
 		#endregion

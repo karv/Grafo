@@ -27,13 +27,20 @@ namespace Graficas.Rutas
 			return RutasDict [x, y];
 		}
 
-		bool IntentaAgregarArista (TNodo origen, TNodo destino, float peso)
+		static float Peso (IArista<TNodo> aris)
 		{
-			if (!(RutasDict [origen, destino]?.Longitud < peso))
+			return 0;
+		}
+
+		bool IntentaAgregarArista (IArista<TNodo> aris)
+		{
+			var origen = aris.Origen;
+			var destino = aris.Destino;
+			var peso = Peso (aris);
+			if (!(RutasDict [origen, destino]?.Longitud (Peso) < peso))
 			{
 				var addRuta = new Ruta<TNodo> ();
-				addRuta.Concat (origen, 0);
-				addRuta.Concat (destino, peso);
+				addRuta.Concat (aris);
 				RutasDict [origen, destino] = addRuta;
 				return true;
 			}
@@ -42,7 +49,7 @@ namespace Graficas.Rutas
 
 		bool IntentaAgregarArista (IRuta<TNodo> ruta)
 		{
-			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud < ruta.Longitud))
+			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud (Peso) < ruta.Longitud (Peso)))
 			{
 				RutasDict [ruta.NodoInicial, ruta.NodoFinal] = ruta;
 				return true;
@@ -59,21 +66,18 @@ namespace Graficas.Rutas
 		}
 
 		/// <param name="gr">Gráfica asociada</param>
-		public ConjuntoRutasÓptimas (ILecturaGrafo<TNodo> gr)
+		public ConjuntoRutasÓptimas (IGrafo<TNodo> gr)
 			: this ()
 		{
 			var aris = new List<IArista<TNodo>> (gr.Aristas ());
-			var comp = new Comparison<IArista<TNodo>> ((x, y) => x.Peso < y.Peso ? -1 : 1);
+			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
 
 			aris.Sort (comp);
 			Debug.WriteLine (aris);
 
-			foreach (var x in gr.Nodos)
-				IntentaAgregarArista (x, x, 0);
-
 			foreach (var x in aris)
 			{
-				IntentaAgregarArista (x.Origen, x.Destino, x.Peso);
+				IntentaAgregarArista (x);
 
 				// Ahora rellenar las rutas
 				var clone = new Dictionary<Tuple<TNodo, TNodo>, IRuta<TNodo>> (RutasDict);

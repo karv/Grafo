@@ -49,7 +49,7 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas ()
+		ICollection<IArista<T>> IGrafo<T>.Aristas ()
 		{
 			return Aristas () as ICollection<IArista<T>>;
 		}
@@ -94,7 +94,7 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-		ILecturaGrafo<T> ILecturaGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (conjunto);
 		}
@@ -152,10 +152,18 @@ namespace Graficas.Grafo
 			}
 		}
 
+
 		#region IGrafica implementation
 
+		IArista<T> IGrafo<T>.this [T desde, T hasta]
+		{
+			get
+			{
+				return new AristaBool<T> (desde, hasta, this [desde, hasta], true);
+			}
+		}
 
-		ICollection<T> ILecturaGrafo<T>.Vecinos (T nodo)
+		ICollection<T> IGrafo<T>.Vecinos (T nodo)
 		{
 			var ret = new List<T> ();
 			foreach (var x in this[nodo].Vecindad)
@@ -180,11 +188,6 @@ namespace Graficas.Grafo
 				}
 				return ret;
 			}
-		}
-
-		bool ILecturaGrafo<T>.ExisteArista (T origen, T destino)
-		{
-			return AsNodo (origen).Vecindad.Contains (AsNodo (destino));
 		}
 
 		#endregion

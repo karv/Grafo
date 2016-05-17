@@ -11,7 +11,7 @@ namespace Test
 		public static HardGrafo<int> HacerGrafo ()
 		{
 			var gr = new HardGrafo<int> ();
-			ConstruirUnaGraf (gr);
+			//ConstruirUnaGraf (gr);
 			return gr;
 		}
 
@@ -44,14 +44,14 @@ namespace Test
 			Assert.AreEqual (3, rev.NodoFinal.Objeto);
 		}
 
-		public static void ConstruirUnaGraf (IGrafo<int> gr)
+		public static void ConstruirUnaGraf (Grafo<int, bool> gr)
 		{
 
 			gr.Clear ();
 			for (int i = 0; i < 100; i++)
 			{
-				gr [0, i] = true;
-				gr [i, 0] = true;
+				gr [0, i].Data = true;
+				gr [i, 0].Data = true;
 			}
 		}
 
