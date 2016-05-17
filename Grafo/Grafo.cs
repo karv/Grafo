@@ -34,6 +34,7 @@ namespace Graficas.Grafo
 			if (SóloLectura)
 				throw new InvalidOperationException ("Grafo es sólo lectura.");
 			_data.Clear ();
+			AlLimpiar?.Invoke ();
 		}
 
 		IArista<T> IGrafo<T>.this [T desde, T hasta]
@@ -449,6 +450,10 @@ namespace Graficas.Grafo
 		}
 
 		#endregion
+	
+		#region Eventos
+		public event Action AlLimpiar;
+		#endregion
 	}
 
 	/// <summary>
@@ -478,6 +483,7 @@ namespace Graficas.Grafo
 			if (SóloLectura)
 				throw new InvalidOperationException ("Grafo es sólo lectura.");
 			_data.Clear ();
+			AlLimpiar?.Invoke ();
 		}
 
 		IArista<T> IGrafo<T>.this [T desde, T hasta]
@@ -875,6 +881,13 @@ namespace Graficas.Grafo
 			}
 		}
 
+		#endregion
+
+		#region Eventos
+		/// <summary>
+		/// Ocurre al ejecutar Clear ()
+		/// </summary>
+		public event Action AlLimpiar;
 		#endregion
 	}
 }
