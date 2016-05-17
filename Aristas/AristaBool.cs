@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Representa una arista de valor booleano
 	/// </summary>
-	public class AristaBool<T>  : IArista<T>
+	public class AristaBool<T>  : IArista<T> //TEST todo
 	{
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
@@ -28,7 +28,7 @@
 		/// Devuelve el origen de la arista
 		/// </summary>
 		/// <value>The origen.</value>
-		public T Origen
+		public T Origen // TEST
 		{
 			get
 			{
@@ -46,7 +46,7 @@
 		/// Devuelve el destino de la arista
 		/// </summary>
 		/// <value>The destino.</value>
-		public T Destino
+		public T Destino // TEST
 		{
 			get
 			{
@@ -65,7 +65,7 @@
 		/// </summary>
 		/// <value>true</value>
 		/// <c>false</c>
-		public bool Existe
+		public bool Existe // TEST
 		{
 			get
 			{
@@ -83,5 +83,6 @@
 		/// Indica si la arista es sólo lectura.
 		/// </summary>
 		public bool SóloLectura { get; }
+		// TEST
 	}
 }

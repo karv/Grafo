@@ -282,14 +282,10 @@ namespace Graficas.Continuo
 					T orig = A; // Posición de este punto.
 					var ret = new List<ContinuoPunto> ();
 					// Si estoy en terreno
-					foreach (var x in Universo.GráficaBase.Vecino(orig))
-					{
+					foreach (var x in Universo.GráficaBase.Vecino (orig))
 						foreach (var y in Universo.PuntosEnIntervalo(orig, x))
-						{
 							if (!ret.Contains (y))
 								ret.Add (y);
-						}
-					}
 					return ret;
 				}
 				return Universo.PuntosEnIntervalo (A, B);
@@ -629,6 +625,7 @@ namespace Graficas.Continuo
 			}
 		}
 
+		// TODO: éste debe ser sólo lectura.
 		/// <summary>
 		/// Gráfica donde vive este contnuo
 		/// </summary>

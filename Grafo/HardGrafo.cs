@@ -152,7 +152,6 @@ namespace Graficas.Grafo
 			}
 		}
 
-
 		#region IGrafica implementation
 
 		IArista<T> IGrafo<T>.this [T desde, T hasta]

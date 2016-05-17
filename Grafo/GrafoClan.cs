@@ -9,7 +9,7 @@ namespace Graficas.Grafo
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
 	[Serializable]
-	public class GrafoClan<T> : IGrafo<T>
+	public class GrafoClan<T> : IGrafo<T> // TODO: reimplementar IGrafoRutas
 		where T : IEquatable<T>
 	{
 		[Serializable]
@@ -42,7 +42,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Elimina nodos y aristas de este grafo.
 		/// </summary>
-		public void Clear ()
+		public void Clear () // TEST
 		{
 			_nodos.Clear ();
 			clanes.Clear ();
@@ -116,7 +116,7 @@ namespace Graficas.Grafo
 		}
 
 		/// <summary>
-		/// Devuelve la arista existente entre dos nodos
+		/// Devuelve una arista existente entre dos nodos, byval
 		/// </summary>
 		/// <returns>The arista.</returns>
 		/// <param name="desde">Desde.</param>

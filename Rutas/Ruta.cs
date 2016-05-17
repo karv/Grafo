@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Graficas.Aristas;
-using System.Security.Cryptography;
-using System.Threading;
 
 namespace Graficas.Rutas
 {
