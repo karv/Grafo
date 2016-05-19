@@ -165,7 +165,7 @@ namespace Graficas.Grafo
 		/// <param name="seq">Sucesión consistente</param>
 		public IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
-			IRuta<T> ret = new Ruta<T> ();
+			var ret = new Ruta<T> ();
 			bool iniciando = true;
 			T last = default(T);
 			foreach (var x in seq)
@@ -177,7 +177,16 @@ namespace Graficas.Grafo
 				}
 				else
 				{
-					ret.Concat (EncuentraArista (last, x));
+					if (ret.NumPasos == 0 || ret.NodoFinal.Equals (last))
+						ret.Concat (EncuentraArista (last, x), last);
+					else
+					{
+						// Invertir estado de la arista
+						var ar = EncuentraArista (last, x);
+						_data.Remove (ar);
+						ar = EncuentraArista (x, last);
+						ret.Concat (ar, last);
+					}
 				}
 				last = x;
 			}
@@ -309,7 +318,7 @@ namespace Graficas.Grafo
 		                                T destino,
 		                                out AristaPeso<T, TData> aris)
 		{
-			foreach (var x in _data)
+			foreach (var x in new HashSet<AristaPeso<T, TData>> (_data))
 			{
 				if (x.Origen.Equals (origen) && x.Destino.Equals (destino))
 				{
@@ -318,7 +327,9 @@ namespace Graficas.Grafo
 				}				
 				if (EsSimétrico && (x.Origen.Equals (destino) && x.Destino.Equals (origen)))
 				{
-					aris = x;
+					_data.Remove (x);
+					aris = new AristaPeso<T , TData> (x.Destino, x.Origen, SóloLectura);
+					_data.Add (aris);
 					return true;
 				}			
 			}
@@ -357,8 +368,8 @@ namespace Graficas.Grafo
 		                       ISet<T> ignorar) // TODO FIX
 		{
 			//List<T> retLista = new List<T>();
-			IRuta<T> ret = new Ruta<T> ();
-			IRuta<T> RutaBuscar;
+			Ruta<T> ret = new Ruta<T> ();
+			Ruta<T> RutaBuscar;
 			ISet<T> Ignora2;
 
 			if (x.Equals (y))
@@ -371,7 +382,7 @@ namespace Graficas.Grafo
 			{
 				if (!ignorar.Contains (n))
 				{
-					RutaBuscar = CaminoÓptimo (x, n, peso, Ignora2);
+					RutaBuscar = (Ruta<T>)CaminoÓptimo (x, n, peso, Ignora2);
 
 					try
 					{
@@ -379,7 +390,9 @@ namespace Graficas.Grafo
 						{
 							if (RutaBuscar.NumPasos >= 0)
 							{
-								RutaBuscar.Concat (EncuentraArista (RutaBuscar.NodoFinal, y));
+								RutaBuscar.Concat (
+									EncuentraArista (RutaBuscar.NodoFinal, y),
+									RutaBuscar.NodoFinal);
 								ret = RutaBuscar;
 							}
 						}

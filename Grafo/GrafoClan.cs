@@ -156,12 +156,10 @@ namespace Graficas.Grafo
 		/// <param name="aris">Arista</param>
 		public bool ExisteArista (IArista<T> aris)
 		{
-			ISet<T> ar = new HashSet<T> ();
-			ar.Add (aris.Origen);
-			ar.Add (aris.Destino);
+			var ar2 = aris.ComoPar ().AsSet ();
 			foreach (var c in clanes)
 			{
-				if (c.IsSupersetOf (ar))
+				if (c.IsSupersetOf (ar2))
 					return true;
 			}
 			return false;
@@ -225,10 +223,10 @@ namespace Graficas.Grafo
 		{
 			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T> ();
 			var lst = new List<T> (seq);
-			for (int i = 0; i < lst.Count - 1; i++)
-			{
+			// TODO ¿Convertirlo a arista dirigida?
+/*			for (int i = 0; i < lst.Count - 1; i++)
 				ret.Concat (EncuentraArista (lst [i], lst [i + 1]));
-			}
+*/			
 			return ret;
 		}
 

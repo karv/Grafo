@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Graficas.Aristas;
+using System;
 
 namespace Graficas.Grafo
 {
@@ -7,6 +8,7 @@ namespace Graficas.Grafo
 	/// Representa una gráfica de muchos 'colores'
 	/// </summary>
 	public interface IMulticolGrafo<TNodo, TColor>: IGrafo<TNodo>
+		where TNodo : IEquatable<TNodo>
 	{
 		/// <summary>
 		/// Vecinos de un nodo de un color específico.

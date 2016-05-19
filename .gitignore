@@ -3,3 +3,4 @@ obj/
 /Grafos.userprefs
 packages/
 *.nupkg
+*.cs~

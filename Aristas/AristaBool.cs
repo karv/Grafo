@@ -1,9 +1,12 @@
-﻿namespace Graficas.Aristas
+﻿using System;
+
+namespace Graficas.Aristas
 {
 	/// <summary>
 	/// Representa una arista de valor booleano
 	/// </summary>
-	public class AristaBool<T>  : IArista<T> //TEST todo
+	public class AristaBool<T>  : IAristaDirigida<T> //TEST todo
+		where T : IEquatable<T>
 	{
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
@@ -79,10 +82,30 @@
 			}
 		}
 
+		// TEST
 		/// <summary>
 		/// Indica si la arista es sólo lectura.
 		/// </summary>
 		public bool SóloLectura { get; }
-		// TEST
+
+		public bool Coincide (T origen, T destino)
+		{
+			return Origen.Equals (origen) && Destino.Equals (destino);
+		}
+
+		public ListasExtra.ParNoOrdenado<T> ComoPar ()
+		{
+			return new ListasExtra.ParNoOrdenado<T> (Origen, Destino);
+		}
+
+		public T Antipodo (T nodo)
+		{
+			return nodo.Equals (Origen) ? Destino : Origen;
+		}
+
+		public bool Corta (T nodo)
+		{
+			return nodo.Equals (Origen) || nodo.Equals (Destino);
+		}
 	}
 }

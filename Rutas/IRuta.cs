@@ -8,6 +8,7 @@ namespace Graficas.Rutas
 	/// Una ruta de un grafo
 	/// </summary>
 	public interface IRuta<T>
+		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// Devuelve el nodo inicial
@@ -29,7 +30,7 @@ namespace Graficas.Rutas
 		/// Concatena esta ruta con un paso
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		void Concat (IArista<T> paso);
+		void Concat (IAristaDirigida<T> paso);
 
 		/// <summary>
 		/// Concatena esta ruta con otra ruta
@@ -40,7 +41,7 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		IEnumerable<IArista<T>> Pasos { get; }
+		IEnumerable<IAristaDirigida<T>> Pasos { get; }
 	}
 
 	/// <summary>
@@ -56,6 +57,7 @@ namespace Graficas.Rutas
 		/// <typeparam name="T">Nodos de ruta</typeparam>
 		public static float Longitud<T> (this IRuta<T> ruta,
 		                                 Func<IArista<T>, float> peso)
+			where T : IEquatable<T>
 		{
 			float ret = 0;
 			foreach (var x in ruta.Pasos)

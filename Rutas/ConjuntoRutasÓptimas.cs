@@ -32,7 +32,7 @@ namespace Graficas.Rutas
 			return 0;
 		}
 
-		bool IntentaAgregarArista (IArista<TNodo> aris)
+		bool IntentaAgregarArista (IAristaDirigida<TNodo> aris)
 		{
 			var origen = aris.Origen;
 			var destino = aris.Destino;
@@ -75,33 +75,35 @@ namespace Graficas.Rutas
 			aris.Sort (comp);
 			Debug.WriteLine (aris);
 
-			foreach (var x in aris)
+			foreach (var y in aris)
 			{
+				if (y == null)
+					throw new InvalidOperationException ("Grafo tiene arista nula.");
+				var x = y as IAristaDirigida<TNodo>;
+				if (x == null)
+					throw new NotSupportedException ("Para calcular rutas, el grafo debe ser de aristas dirigidas.");
+				
 				IntentaAgregarArista (x);
 
 				// Ahora rellenar las rutas
 				var clone = new Dictionary<Tuple<TNodo, TNodo>, IRuta<TNodo>> (RutasDict);
-				foreach (var y in clone)
+				foreach (var z in clone)
 				{
 					// Tomar a los que tienen como destino a x.Origen y concatenarlos con y	
-					if (y.Key.Item2.Equals (x.Origen))
+					if (z.Key.Item2.Equals (x.Origen))
 					{
-						var path = new Ruta<TNodo> (y.Value);
+						var path = new Ruta<TNodo> (z.Value);
 						path.Concat (new Ruta<TNodo> (x));
 						if (IntentaAgregarArista (path))
-						{
 							Console.WriteLine ();
-						}
 					}
 					// Tomar a los que tienen como origen a x.Destino y concatenarlos con y
-					else if (y.Key.Item1.Equals (x.Destino))
+					else if (z.Key.Item1.Equals (x.Destino))
 					{
 						var path = new Ruta<TNodo> (x);
-						path.Concat (y.Value);
+						path.Concat (z.Value);
 						if (IntentaAgregarArista (path))
-						{
 							Console.WriteLine ();
-						}
 					}
 				}
 			}

@@ -372,6 +372,9 @@ namespace Graficas.Continuo
 			/// <param name="dist">Dist.</param>
 			public bool AvanzarHacia (Ruta ruta, float dist)
 			{
+				throw new NotImplementedException ();
+				// TODO: Arreglar, ruta debe ser una RutaDirigida (Ruta compuestos de pasos dirigidos)
+				/*
 				foreach (var r in ruta.Pasos)
 				{
 					if (r.Destino.Equals (this))
@@ -382,6 +385,7 @@ namespace Graficas.Continuo
 				}
 				AlTerminarRuta?.Invoke ();
 				return true;
+				*/
 			}
 
 			/// <summary>
@@ -599,10 +603,12 @@ namespace Graficas.Continuo
 				}
 
 				// 2)
+				// TODO: Pasos debe ser dirigidos, para que corra
+				throw new NotImplementedException ();
 				foreach (var x in Pasos)
 				{
-					if (punto.EnIntervaloInmediato (x.Origen, x.Destino))
-						return true;
+					//if (punto.EnIntervaloInmediato (x.Origen, x.Destino))
+					return true;
 				}
 
 				// 1)
@@ -748,7 +754,7 @@ namespace Graficas.Continuo
 		/// <param name="arista">Arista.</param>
 		public IEnumerable<ContinuoPunto> PuntosArista (IArista<T> arista)
 		{
-			var aris = new ParNoOrdenado<T> (arista.Origen, arista.Destino);
+			var aris = arista.ComoPar ();
 			return PuntosArista (aris);
 		}
 

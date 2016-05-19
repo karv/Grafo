@@ -45,9 +45,8 @@ namespace Test
 
 		public void Iniciar ()
 		{
-			Graf = new Grafo<TestClassIns, float> ();
+			Graf = new Grafo<TestClassIns, float> (true);
 			Gr = new Continuo<TestClassIns> (Graf);
-			Graf.EsSimétrico = true;
 		}
 
 		[Test]
@@ -123,7 +122,7 @@ namespace Test
 				Gr,
 				0));
 			for (int i = 1; i < 9; i++)
-				rta.Concat (Graf.EncuentraArista (i - 1, i));
+				rta.Concat (Graf.EncuentraArista (i - 1, i), rta.NodoFinal.A);
 			rta.ConcatFinal (new Continuo<TestClassIns>.ContinuoPunto (Gr, 10));
 			rta.NodoFinal.Loc = 0.5f;
 

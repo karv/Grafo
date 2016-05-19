@@ -1,6 +1,7 @@
 ﻿using Graficas.Aristas;
 using System.Collections.Generic;
 using Graficas.Rutas;
+using System;
 
 namespace Graficas.Grafo
 {
@@ -8,6 +9,7 @@ namespace Graficas.Grafo
 	/// Un grafo en el que se pueden leer y escribir nodos y aristas
 	/// </summary>
 	public interface IGrafo<T>
+		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// Elimina nodos y aristas.

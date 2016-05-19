@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
-using System;
 using Graficas.Rutas;
 using Graficas.Extensiones;
 using Graficas.Grafo;
+using System;
 
 namespace Test
 {
@@ -25,8 +25,7 @@ namespace Test
 		public void CaminoOptimo ()
 		{
 			// TODO, rehacer 
-			var gr = new Grafo<int, float> ();
-			gr.EsSimétrico = true;
+			var gr = new Grafo<int, float> (true);
 
 			var ruta = gr.CaminoÓptimo (2, 3, z => z.Data);
 			Console.WriteLine (ruta);
@@ -56,8 +55,7 @@ namespace Test
 		[Test]
 		public void TestEnumToRuta ()
 		{
-			var gr = new Grafo<int, bool> ();
-			gr.EsSimétrico = true;
+			var gr = new Grafo<int, bool> (true);
 
 			GeneraGraficaConexa (gr);
 			TestToRuta (gr);
@@ -91,8 +89,7 @@ namespace Test
 		[Test]
 		public void TestGrafConexa ()
 		{
-			var gr = new Grafo<int, bool> ();
-			gr.EsSimétrico = true;
+			var gr = new Grafo<int, bool> (true);
 			TestConexidad (gr);
 		}
 

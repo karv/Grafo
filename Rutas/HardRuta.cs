@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Graficas.Nodos;
 using Graficas.Aristas;
+using System;
 
 namespace Graficas.Rutas
 {
@@ -8,6 +9,7 @@ namespace Graficas.Rutas
 	/// Representa una ruta dinámica según un grafo asociado.
 	/// </summary>
 	public class HardRuta<T> : IRuta<T>
+		where T : IEquatable<T>
 	{
 		List<Nodo<T>> _pasos { get; set; }
 
@@ -79,7 +81,7 @@ namespace Graficas.Rutas
 		/// Concatena esta ruta con un paso
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		public void Concat (IArista<T> paso)
+		public void Concat (IAristaDirigida<T> paso)
 		{
 			if (NodoFinal.Objeto.Equals (paso.Origen))
 			{
@@ -142,11 +144,12 @@ namespace Graficas.Rutas
 			}
 		}
 
+
 		/// <summary>
 		/// Enumera los pasos
 		/// </summary>
 		/// <value>The pasos.</value>
-		public IEnumerable<IArista<T>> Pasos
+		public IEnumerable<IAristaDirigida<T>> Pasos
 		{
 			get
 			{

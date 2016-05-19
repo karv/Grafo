@@ -8,16 +8,26 @@ namespace Graficas.Aristas
 	/// </summary>
 	[Serializable]
 	public class AristaPeso<TNodo, TValor> : IArista<TNodo> // TEST all
+		where TNodo : IEquatable<TNodo>
 	{
 		TValor _valor;
 		TNodo _origen;
 		TNodo _destino;
 		bool _existe;
 
+		public bool Coincide (TNodo origen, TNodo destino)
+		{
+			return (_origen.Equals (origen) && _destino.Equals (destino)) ||
+			((EsSimétrico) && (_origen.Equals (destino) && _destino.Equals (origen)));
+		}
+
+		public bool EsSimétrico { get; }
+
 		/// <summary>
 		/// Devuelve el origen de la arista
 		/// </summary>
 		/// <value>The origen.</value>
+		[Obsolete]
 		public TNodo Origen
 		{
 			get
@@ -36,6 +46,7 @@ namespace Graficas.Aristas
 		/// Devuelve el destino de la arista
 		/// </summary>
 		/// <value>The destino.</value>
+		[Obsolete]
 		public TNodo Destino
 		{
 			get
@@ -95,6 +106,21 @@ namespace Graficas.Aristas
 					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
 				_existe = value;
 			}
+		}
+
+		public ListasExtra.ParNoOrdenado<TNodo> ComoPar ()
+		{
+			return new ListasExtra.ParNoOrdenado<TNodo> (_origen, _destino);
+		}
+
+		public TNodo Antipodo (TNodo nodo)
+		{
+			return nodo.Equals (_origen) ? _destino : _origen;
+		}
+
+		public bool Corta (TNodo nodo)
+		{
+			return nodo.Equals (_origen) || nodo.Equals (_destino);
 		}
 
 		/// <summary> Construye una arista existente </summary>
