@@ -224,9 +224,9 @@ namespace Graficas.Grafo
 			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T> ();
 			var lst = new List<T> (seq);
 			// TODO ¿Convertirlo a arista dirigida?
-/*			for (int i = 0; i < lst.Count - 1; i++)
+			for (int i = 0; i < lst.Count - 1; i++)
 				ret.Concat (EncuentraArista (lst [i], lst [i + 1]));
-*/			
+			
 			return ret;
 		}
 
