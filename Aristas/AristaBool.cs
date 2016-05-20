@@ -5,7 +5,7 @@ namespace Graficas.Aristas
 	/// <summary>
 	/// Representa una arista de valor booleano
 	/// </summary>
-	public class AristaBool<T>  : IAristaDirigida<T> //TEST todo
+	public class AristaBool<T>  : IAristaDirigida<T> //Fact todo
 		where T : IEquatable<T>
 	{
 		/// <param name="origen">Origen.</param>
@@ -31,7 +31,7 @@ namespace Graficas.Aristas
 		/// Devuelve el origen de la arista
 		/// </summary>
 		/// <value>The origen.</value>
-		public T Origen // TEST
+		public T Origen // Fact
 		{
 			get
 			{
@@ -49,7 +49,7 @@ namespace Graficas.Aristas
 		/// Devuelve el destino de la arista
 		/// </summary>
 		/// <value>The destino.</value>
-		public T Destino // TEST
+		public T Destino // Fact
 		{
 			get
 			{
@@ -68,7 +68,7 @@ namespace Graficas.Aristas
 		/// </summary>
 		/// <value>true</value>
 		/// <c>false</c>
-		public bool Existe // TEST
+		public bool Existe // Fact
 		{
 			get
 			{
@@ -82,7 +82,7 @@ namespace Graficas.Aristas
 			}
 		}
 
-		// TEST
+		// Fact
 		/// <summary>
 		/// Indica si la arista es sólo lectura.
 		/// </summary>

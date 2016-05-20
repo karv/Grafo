@@ -2,7 +2,7 @@
 using Graficas.Grafo;
 using Graficas.Aristas;
 
-namespace GrafosTest
+namespace GrafosFact
 {
 	class MainClass
 	{

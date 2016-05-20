@@ -1,11 +1,9 @@
-﻿using NUnit.Framework;
+﻿using Xunit;
 using Graficas.Grafo;
-using Graficas;
 using Graficas.Rutas;
 
 namespace Test
 {
-	[TestFixture]
 	public class HardRutas
 	{
 		public static HardGrafo<int> HacerGrafo ()
@@ -15,7 +13,7 @@ namespace Test
 			return gr;
 		}
 
-		[Test]
+		[Fact]
 		public void TestCtor ()
 		{
 			var gr = HacerGrafo ();
@@ -26,22 +24,22 @@ namespace Test
 			ruta.Concat (0);
 			ruta.Concat (3);
 
-			Assert.AreEqual (5, ruta.NumPasos);
-			Assert.AreEqual (5, ruta.Longitud);
-			Assert.AreEqual (0, ruta.NodoInicial.Objeto);
-			Assert.AreEqual (3, ruta.NodoFinal.Objeto);
+			Assert.Equal (5, ruta.NumPasos);
+			Assert.Equal (5, ruta.Longitud);
+			Assert.Equal (0, ruta.NodoInicial.Objeto);
+			Assert.Equal (3, ruta.NodoFinal.Objeto);
 
 			var rev = ruta.Reversa ();
-			Assert.AreEqual (5, rev.NumPasos);
-			Assert.AreEqual (5, rev.Longitud);
-			Assert.AreEqual (3, rev.NodoInicial.Objeto);
-			Assert.AreEqual (0, rev.NodoFinal.Objeto);
+			Assert.Equal (5, rev.NumPasos);
+			Assert.Equal (5, rev.Longitud);
+			Assert.Equal (3, rev.NodoInicial.Objeto);
+			Assert.Equal (0, rev.NodoFinal.Objeto);
 
 			rev.Concat (ruta);
-			Assert.AreEqual (10, rev.NumPasos);
-			Assert.AreEqual (10, rev.Longitud);
-			Assert.AreEqual (3, rev.NodoInicial.Objeto);
-			Assert.AreEqual (3, rev.NodoFinal.Objeto);
+			Assert.Equal (10, rev.NumPasos);
+			Assert.Equal (10, rev.Longitud);
+			Assert.Equal (3, rev.NodoInicial.Objeto);
+			Assert.Equal (3, rev.NodoFinal.Objeto);
 		}
 
 		public static void ConstruirUnaGraf (Grafo<int, bool> gr)

@@ -1,17 +1,16 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using Graficas.Grafo;
+using Xunit;
 
 namespace Test
 {
-	[TestFixture]
 	public class TestHardGrafo
 	{
-		[Test]
+		[Fact]
 		public void AgregarQutar ()
 		{
 			const int MaxSize = 100;
-			const int MaxTests = 20;
+			const int MaxFacts = 20;
 			var gr = new HardGrafo<int> ();
 
 			for (int i = 1; i < MaxSize; i++)
@@ -20,18 +19,18 @@ namespace Test
 			Console.WriteLine (gr);
 
 			var r = new Random ();
-			for (int i = 0; i < MaxTests; i++)
+			for (int i = 0; i < MaxFacts; i++)
 			{
 				int a = r.Next (MaxSize - 1) + 1;
 				int b = r.Next (MaxSize - 1) + 1;
 				var max = Math.Max (a, b);
 				var min = Math.Min (a, b);
 
-				Assert.AreEqual (max % min == 0, gr [a, b]);
+				Assert.Equal (max % min == 0, gr [a, b]);
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void TestAristasGet ()
 		{
 			const int MaxSize = 50;
@@ -59,7 +58,7 @@ namespace Test
 				Console.Write (x + "\t");
 			}
 			Console.WriteLine ();
-			Assert.AreEqual (MaxSize * (MaxSize - 1) / 2, aris.Count);
+			Assert.Equal (MaxSize * (MaxSize - 1) / 2, aris.Count);
 
 		}
 

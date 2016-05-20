@@ -1,13 +1,12 @@
-﻿using NUnit.Framework;
-using Graficas.Rutas;
+﻿using Graficas.Rutas;
 using Graficas.Extensiones;
 using Graficas.Grafo;
 using System;
+using Xunit;
 
 namespace Test
 {
-	[TestFixture]
-	public class GeneralTest
+	public class GeneralFact
 	{
 		
 		static public void GeneraGraficaConexa (Grafo<int, bool> gr, int cant = 100)
@@ -17,11 +16,11 @@ namespace Test
 				gr [0, i] = true;
 				gr [i, 0] = true;
 			}
-			Assert.AreEqual (cant + 1, gr.Nodos.Count);
+			Assert.Equal (cant + 1, gr.Nodos.Count);
 
 		}
 
-		[Test]
+		[Fact]
 		public void CaminoOptimo ()
 		{
 			// TODO, rehacer 
@@ -34,7 +33,7 @@ namespace Test
 				Console.WriteLine (x);
 		}
 
-		static public void TestToRuta (IGrafo<int> gr)
+		static public void FactToRuta (IGrafo<int> gr)
 		{
 			var enume = new System.Collections.Generic.List<int> ();
 			enume.Add (0);
@@ -45,20 +44,20 @@ namespace Test
 			enume.Add (3);
 			var ruta = gr.ToRuta (enume);
 
-			Assert.AreEqual (5, ruta.NumPasos);
-			Assert.AreEqual (0, ruta.NodoInicial);
-			Assert.AreEqual (3, ruta.NodoFinal);
+			Assert.Equal (5, ruta.NumPasos);
+			Assert.Equal (0, ruta.NodoInicial);
+			Assert.Equal (3, ruta.NodoFinal);
 
 			Console.WriteLine (ruta);
 		}
 
-		[Test]
+		[Fact]
 		public void TestEnumToRuta ()
 		{
 			var gr = new Grafo<int, bool> (true);
 
 			GeneraGraficaConexa (gr);
-			TestToRuta (gr);
+			FactToRuta (gr);
 		}
 
 		static public void TestConexidad (Grafo<int, bool> gr)
@@ -73,11 +72,11 @@ namespace Test
 			}
 
 			var comp = gr.ComponentesConexas ();
-			Assert.AreEqual (numComp, comp.Count);
+			Assert.Equal (numComp, comp.Count);
 
 			foreach (var item in comp)
 			{
-				Assert.AreEqual (maxNod / numComp, item.Nodos.Count);
+				Assert.Equal (maxNod / numComp, item.Nodos.Count);
 				Console.WriteLine ();
 				foreach (var z in item.Nodos)
 				{
@@ -86,14 +85,14 @@ namespace Test
 			}
 		}
 
-		[Test]
+		[Fact]
 		public void TestGrafConexa ()
 		{
 			var gr = new Grafo<int, bool> (true);
 			TestConexidad (gr);
 		}
 
-		[Test]
+		[Fact]
 		public void TestSubgrafo ()
 		{
 			var gr = new HardGrafo<int> ();
@@ -128,7 +127,7 @@ namespace Test
 
 			foreach (var x in sub)
 			{
-				Assert.AreEqual (3, subg.AsNodo (x).Vecindad.Count);
+				Assert.Equal (3, subg.AsNodo (x).Vecindad.Count);
 			}
 		}
 	}

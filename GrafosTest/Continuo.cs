@@ -1,12 +1,12 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using Graficas.Continuo;
 using Graficas.Grafo;
 using Graficas.Rutas;
+using Xunit;
 
 namespace Test
 {
-	public class TestClassIns:IEquatable<TestClassIns>
+	public class TestClassIns : IEquatable<TestClassIns>
 	{
 		public int? Val;
 
@@ -37,8 +37,7 @@ namespace Test
 		}
 	}
 
-	[TestFixture]
-	public class ContinuoTest
+	public class ContinuoFact
 	{
 		public Grafo<TestClassIns, float> Graf;
 		Continuo<TestClassIns> Gr;
@@ -49,12 +48,12 @@ namespace Test
 			Gr = new Continuo<TestClassIns> (Graf);
 		}
 
-		[Test]
+		[Fact]
 		public void TestMismoIntervalo ()
 		{
 			Iniciar ();
 			Graf [0, 1] = 1;
-			Assert.True (Graf [0, 1] == 1);
+			Assert.Equal (1, Graf [0, 1]);
 			Graf [1, 2] = 1;
 			var p1 = Gr.AgregaPunto (0);
 			var p2 = Gr.AgregaPunto (1);
@@ -77,7 +76,7 @@ namespace Test
 
 		}
 
-		[Test]
+		[Fact]
 		public void TestPunto ()
 		{
 			Iniciar ();
@@ -88,8 +87,8 @@ namespace Test
 			pt.A = 0;
 			pt.B = 1;
 			pt.Loc = 1;
-			Assert.AreEqual (1, pt.DistanciaAExtremo (0));
-			Assert.AreEqual (9, pt.DistanciaAExtremo (1));
+			Assert.Equal (1, pt.DistanciaAExtremo (0));
+			Assert.Equal (9, pt.DistanciaAExtremo (1));
 			Assert.True (pt.EnIntervaloInmediato (0, 1));
 			Assert.False (pt.EnIntervaloInmediato (0, 2));
 
@@ -98,18 +97,18 @@ namespace Test
 				pt.DistanciaAExtremo (2);
 			});
 
-			Assert.AreEqual (0, pt2.DistanciaAExtremo (0));
+			Assert.Equal (0, pt2.DistanciaAExtremo (0));
 		
-			Assert.AreEqual (2, pt.Vecindad ().Count);
-			Assert.AreEqual (2, Gr.Puntos.Count); // No es 3, porque no debe calcular que se agregó el nodo '1'
+			Assert.Equal (2, pt.Vecindad ().Count);
+			Assert.Equal (2, Gr.Puntos.Count); // No es 3, porque no debe calcular que se agregó el nodo '1'
 
 			// Los puntos fijos
 			var pf1 = Gr.PuntoFijo (1);
 			Assert.True (ReferenceEquals (pf1, Gr.PuntoFijo (1)));
-			Assert.AreEqual (2, Gr.Puntos.Count); // No es 3, porque no debe calcular que se agregó el nodo '1'
+			Assert.Equal (2, Gr.Puntos.Count); // No es 3, porque no debe calcular que se agregó el nodo '1'
 		}
 
-		[Test]
+		[Fact]
 		public void ProbarRuta ()
 		{
 			Iniciar ();
@@ -130,7 +129,7 @@ namespace Test
 			Console.WriteLine (Gr.Puntos.Count);
 		}
 
-		[Test]
+		[Fact]
 		public void Avances ()
 		// La salida debe ser Despl Despl Nodo
 		{
@@ -138,8 +137,8 @@ namespace Test
 			for (int i = 0; i < 10; i++)
 			{
 				Graf [i, i + 1] = 1;
-				Assert.AreEqual (1, Graf [i, i + 1]);
-				Assert.AreEqual (1, Graf [i + 1, i]);
+				Assert.Equal (1, Graf [i, i + 1]);
+				Assert.Equal (1, Graf [i + 1, i]);
 			}
 
 			var p = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
@@ -158,7 +157,7 @@ namespace Test
 			Assert.True (p.AvanzarHacia (1, 0.7f));
 		}
 
-		[Test]
+		[Fact]
 		public void ProbarÓptimaRuta ()
 		{
 			Iniciar ();
@@ -200,12 +199,12 @@ namespace Test
 			Assert.True (inicial.AvanzarHacia (r, 6));
 
 
-			Assert.AreEqual (final, inicial);
+			Assert.Equal (final, inicial);
 
 			Console.WriteLine (r);
 		}
 
-		[Test]
+		[Fact]
 		public void ProbarEventoColisión ()
 		{
 			Iniciar ();
@@ -229,10 +228,10 @@ namespace Test
 				p1.AvanzarHacia (1, 0.01f);
 				p2.AvanzarHacia (0, 0.001f);
 			}
-			Assert.AreEqual (2, Gr.Puntos.Count);
+			Assert.Equal (2, Gr.Puntos.Count);
 		}
 
-		[Test]
+		[Fact]
 		public void RecrearError ()
 		{
 			Iniciar ();
@@ -244,7 +243,7 @@ namespace Test
 			var cc = new ConjuntoRutasÓptimas<TestClassIns> (Graf);
 			var rr = Continuo<TestClassIns>.RutaÓptima (p0, p1, cc);
 			var lon = rr.Longitud;
-			Assert.IsFalse (float.IsInfinity (lon));
+			Assert.False (float.IsInfinity (lon));
 		}
 	}
 }

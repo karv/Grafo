@@ -7,7 +7,7 @@ namespace Graficas.Aristas
 	/// Almacena el peso fuertemente, por lo que no hay vínculo directo con un grafo
 	/// </summary>
 	[Serializable]
-	public class AristaPeso<TNodo, TValor> : IArista<TNodo> // TEST all
+	public class AristaPeso<TNodo, TValor> : IArista<TNodo> // Fact all
 		where TNodo : IEquatable<TNodo>
 	{
 		TValor _valor;
