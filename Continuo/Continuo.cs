@@ -187,7 +187,7 @@ namespace Graficas.Continuo
 					return Loc;
 				if (extremo.Equals (B))
 					return Aloc;
-				if (EnOrigen && Universo.GráficaBase.ExisteArista (A, extremo))
+				if (EnOrigen && Universo.GráficaBase.EncuentraArista (A, extremo).Existe)
 					return Universo.GráficaBase [A, extremo];
 
 				throw new IndexOutOfRangeException (string.Format (

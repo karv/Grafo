@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
+using System.Diagnostics;
 
 namespace Graficas.Grafo
 {
@@ -289,7 +290,13 @@ namespace Graficas.Grafo
 				AristaPeso<T ,TData> aris;
 				if (EncuentraArista (x, y, out aris))
 					_data.Remove (aris);
-				_data.Add (new AristaPeso<T, TData> (x, y, value, SóloLectura));
+				var addArista = new AristaPeso<T, TData> (
+					                x,
+					                y,
+					                value,
+					                SóloLectura,
+					                EsSimétrico);
+				_data.Add (addArista);
 			}
 		}
 
@@ -320,18 +327,11 @@ namespace Graficas.Grafo
 		{
 			foreach (var x in new HashSet<AristaPeso<T, TData>> (_data))
 			{
-				if (x.Origen.Equals (origen) && x.Destino.Equals (destino))
+				if (x.Coincide (origen, destino))
 				{
 					aris = x;
 					return true;
 				}				
-				if (EsSimétrico && (x.Origen.Equals (destino) && x.Destino.Equals (origen)))
-				{
-					_data.Remove (x);
-					aris = new AristaPeso<T , TData> (x.Destino, x.Origen, SóloLectura);
-					_data.Add (aris);
-					return true;
-				}			
 			}
 			aris = null;
 			return false;

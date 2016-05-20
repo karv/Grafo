@@ -139,6 +139,7 @@ namespace Test
 			{
 				Graf [i, i + 1] = 1;
 				Assert.AreEqual (1, Graf [i, i + 1]);
+				Assert.AreEqual (1, Graf [i + 1, i]);
 			}
 
 			var p = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);

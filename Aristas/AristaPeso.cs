@@ -27,7 +27,6 @@ namespace Graficas.Aristas
 		/// Devuelve el origen de la arista
 		/// </summary>
 		/// <value>The origen.</value>
-		[Obsolete]
 		public TNodo Origen
 		{
 			get
@@ -46,7 +45,6 @@ namespace Graficas.Aristas
 		/// Devuelve el destino de la arista
 		/// </summary>
 		/// <value>The destino.</value>
-		[Obsolete]
 		public TNodo Destino
 		{
 			get
@@ -71,8 +69,7 @@ namespace Graficas.Aristas
 			{
 				if (Existe)
 					return _valor;
-				else
-					throw new OperaciónAristaInválidaException ("No se puede acceder al peso de una arista no existente.");
+				throw new OperaciónAristaInválidaException ("No se puede acceder al peso de una arista no existente.");
 			}
 			set
 			{
@@ -128,16 +125,19 @@ namespace Graficas.Aristas
 		/// <param name="destino">Destino.</param>
 		/// <param name="valor">Peso.</param>
 		/// <param name="sóloLectura">El objeto se creará como sólo lectura</param>
+		/// <param name="simétrico">La arista tiene dirección</param>
 		public AristaPeso (TNodo origen,
 		                   TNodo destino,
 		                   TValor valor,
-		                   bool sóloLectura = false)
+		                   bool sóloLectura = false,
+		                   bool simétrico = false)
 		{
 			_origen = origen;
 			_destino = destino;
 			_valor = valor;
 			_existe = true;
 			SóloLectura = sóloLectura;
+			EsSimétrico = simétrico;
 		}
 
 		/// <summary>
@@ -146,12 +146,17 @@ namespace Graficas.Aristas
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
 		/// <param name="sóloLectura">El objeto se creará como sólo lectura</param>
-		public AristaPeso (TNodo origen, TNodo destino, bool sóloLectura = false)
+		/// <param name="simétrico">La arista tiene dirección</param>
+		public AristaPeso (TNodo origen,
+		                   TNodo destino,
+		                   bool sóloLectura = false,
+		                   bool simétrico = false)
 		{
 			_origen = origen;
 			_destino = destino;
 			_existe = false;
 			SóloLectura = sóloLectura;
+			EsSimétrico = simétrico;
 		}
 	}
 }
