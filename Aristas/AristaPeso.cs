@@ -61,7 +61,7 @@ namespace Graficas.Aristas
 		                   TNodo destino,
 		                   bool sóloLectura = false,
 		                   bool simétrico = false)
-			: base (origen, destino, false, sóloLectura)
+			: base (origen, destino, false, sóloLectura, simétrico)
 		{
 		}
 

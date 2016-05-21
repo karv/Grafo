@@ -4,6 +4,7 @@ using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
+using System.Threading;
 
 namespace Graficas.Grafo
 {
@@ -15,6 +16,7 @@ namespace Graficas.Grafo
 		{
 			EsSimétrico = simétrico;
 			SóloLectura = sóloLectura;
+			Data = new HashSet<AristaBool<T>> ();
 		}
 
 		protected ICollection<AristaBool<T>> Data { get; set; }
@@ -234,13 +236,12 @@ namespace Graficas.Grafo
 			get
 			{
 				var ar = EncuentraArista (x, y);
-				if (ar.Existe)
-					return ar.Data;
-				throw new OperaciónAristaInválidaException ("Imposible obtener el valor de una arista no existente.");
+				return ar.Data; // Remark: verificación de existencia lo hace la propiedad Data
 			}
 			set
 			{
 				AristaPeso<T, TData> aris = EncuentraArista (x, y);
+				aris.Existe = true;
 				aris.Data = value;
 			}
 		}
@@ -286,7 +287,14 @@ namespace Graficas.Grafo
 		{
 			AristaPeso<T ,TData> aris;
 			if (!EncuentraArista (origen, destino, out aris))
-				aris = new AristaPeso<T, TData> (origen, destino, SóloLectura);
+			{
+				aris = new AristaPeso<T, TData> (
+					origen,
+					destino,
+					SóloLectura,
+					EsSimétrico);
+				Data.Add (aris);
+			}
 			return aris;
 		}
 
@@ -442,9 +450,8 @@ namespace Graficas.Grafo
 	{
 		#region ctor
 
-		/// <summary>
-		/// </summary>
-		public Grafo ()
+		public Grafo (bool simétrico = false, bool sóloLectura = false)
+			: base (simétrico, sóloLectura)
 		{
 		}
 
