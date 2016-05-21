@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
-using System.Diagnostics;
 
 namespace Graficas.Grafo
 {
@@ -128,7 +127,7 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				var ret = new HashSet<T> ();
+				var ret = new HashSet<T> (new NodosCollectionComparer<T> ());
 				foreach (var x in _data)
 				{
 					ret.Add (x.Origen);

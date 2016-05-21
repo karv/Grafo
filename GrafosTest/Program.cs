@@ -1,16 +1,13 @@
-﻿using System;
-using Graficas.Grafo;
-using Graficas.Aristas;
-using Test;
+﻿using Test;
 
-namespace GrafosFact
+namespace Test
 {
 	class MainClass
 	{
-		public static void Main (string [] args)
+		public static void Main ()
 		{
-			var test = new GeneralTest ();
-			test.TestGrafConexa ();
+			var test = new ContinuoTest ();
+			test.ProbarÓptimaRuta ();
 		}
 	}
 }

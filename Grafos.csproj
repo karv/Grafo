@@ -60,6 +60,7 @@
     <Compile Include="Aristas\OperaciónAristaInválida.cs" />
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
     <Compile Include="Grafo\Grafo.cs" />
+    <Compile Include="Grafo\NodosCollectionComparer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

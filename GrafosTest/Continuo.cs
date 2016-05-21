@@ -8,7 +8,7 @@ namespace Test
 {
 	public class TestClassIns : IEquatable<TestClassIns>
 	{
-		public int? Val;
+		public readonly int? Val;
 
 		public bool Equals (TestClassIns other)
 		{
@@ -34,6 +34,11 @@ namespace Test
 		public override string ToString ()
 		{
 			return Val.ToString ();
+		}
+
+		public override int GetHashCode ()
+		{
+			return Val ?? 0;
 		}
 	}
 
@@ -161,10 +166,9 @@ namespace Test
 		{
 			Iniciar ();
 			for (int i = 0; i < 10; i++)
-			{
 				Graf [i, i + 1] = 1;
-			}
 
+			Assert.Equal (11, Graf.NumNodos);
 			var inicial = new Continuo<TestClassIns>.ContinuoPunto (Gr, 0);
 
 			inicial.AlDesplazarse += delegate
