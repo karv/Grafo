@@ -8,9 +8,11 @@ namespace Test
 	{
 		public static HardGrafo<int> HacerGrafo ()
 		{
-			var gr = new HardGrafo<int> ();
-			//ConstruirUnaGraf (gr);
-			return gr;
+			var gr = new Grafo<int> ();
+			ConstruirUnaGraf (gr);
+			for (int i = 1; i < 100; i++)
+				Assert.True (gr [0, i], string.Format ("valor de i es {0}", i));
+			return new HardGrafo<int> (gr);
 		}
 
 		[Fact]
@@ -42,15 +44,13 @@ namespace Test
 			Assert.Equal (3, rev.NodoFinal.Objeto);
 		}
 
-		public static void ConstruirUnaGraf (Grafo<int, bool> gr)
+		public static void ConstruirUnaGraf (Grafo<int> gr)
 		{
 
 			gr.Clear ();
+
 			for (int i = 0; i < 100; i++)
-			{
-				gr [0, i] = true;
 				gr [i, 0] = true;
-			}
 		}
 
 	}

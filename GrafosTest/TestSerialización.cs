@@ -27,7 +27,7 @@ namespace Test
 		[Fact]
 		public void SerGraf ()
 		{
-			var gr = new Grafo<int, float> ();
+			var gr = new Grafo<int, float> (false, false);
 			gr [0, 1] = 1;
 			TestSerial (gr);
 
@@ -42,7 +42,7 @@ namespace Test
 		[Fact]
 		public void Cont ()
 		{
-			var gr = new Grafo<int, float> ();
+			var gr = new Grafo<int, float> (false, false);
 			gr [0, 1] = 1;
 			var c = new Continuo<int> (gr);
 			c.AgregaPunto (0, 1, 0.3f);

@@ -26,7 +26,7 @@ namespace Graficas.Grafo
 				if (x.Objeto.Equals (obj))
 					return x;
 			}
-			// Si existe, lo agrego
+			// Si no existe, lo agrego
 			var ret = new Nodo<T> (obj);
 			_nodos.Add (ret);
 			return ret;
@@ -74,7 +74,7 @@ namespace Graficas.Grafo
 		public HardGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new HardGrafo<T> ();
-			foreach (var x in conjunto)
+			foreach (T x in conjunto)
 			{
 				ret.Add (x);
 			}
@@ -121,9 +121,7 @@ namespace Graficas.Grafo
 			{
 				Nodo<T> nodoDeItem = AsNodo (item);
 				foreach (var x in graf.Vecinos(item))
-				{
 					nodoDeItem.Vecindad.Add (AsNodo (x));
-				}
 			}
 		}
 

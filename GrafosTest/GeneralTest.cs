@@ -24,7 +24,7 @@ namespace Test
 		public void CaminoOptimo ()
 		{
 			// TODO, rehacer 
-			var gr = new Grafo<int, float> (true);
+			var gr = new Grafo<int, float> (true, false);
 
 			var ruta = gr.CaminoÓptimo (2, 3, z => z.Data);
 			Console.WriteLine (ruta);
@@ -54,7 +54,7 @@ namespace Test
 		[Fact]
 		public void TestEnumToRuta ()
 		{
-			var gr = new Grafo<int, bool> (true);
+			var gr = new Grafo<int, bool> (true, false);
 
 			GeneraGraficaConexa (gr);
 			FactToRuta (gr);
@@ -90,7 +90,7 @@ namespace Test
 		[Fact]
 		public void TestGrafConexa ()
 		{
-			var gr = new Grafo<int, bool> (true);
+			var gr = new Grafo<int, bool> (true, false);
 			TestConexidad (gr);
 		}
 

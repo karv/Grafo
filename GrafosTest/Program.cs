@@ -6,8 +6,8 @@ namespace Test
 	{
 		public static void Main ()
 		{
-			var test = new ContinuoTest ();
-			test.ProbarÓptimaRuta ();
+			var test = new HardRutas ();
+			test.TestCtor ();
 		}
 	}
 }

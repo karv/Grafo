@@ -49,7 +49,7 @@ namespace Test
 
 		public void Iniciar ()
 		{
-			Graf = new Grafo<TestClassIns, float> (true);
+			Graf = new Grafo<TestClassIns, float> (true, false);
 			Gr = new Continuo<TestClassIns> (Graf);
 		}
 
