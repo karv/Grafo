@@ -250,8 +250,8 @@ namespace Graficas.Grafo
 			IEnumerable<T> Nods = Nodos;
 			foreach (var y in _data)
 			{
-				if (y.Origen.Equals (x))
-					ret.Add (y.Destino);
+				if (y.Corta (x))
+					ret.Add (y.Antipodo (x));
 			}
 			return ret;
 		}

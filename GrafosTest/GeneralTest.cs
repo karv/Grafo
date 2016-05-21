@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Test
 {
-	public class GeneralFact
+	public class GeneralTest
 	{
 		
 		static public void GeneraGraficaConexa (Grafo<int, bool> gr, int cant = 100)
@@ -63,8 +63,8 @@ namespace Test
 		static public void TestConexidad (Grafo<int, bool> gr)
 		{
 			var r = new Random ();
-			int numComp = r.Next (5);
-			int maxNod = r.Next (20) * numComp;
+			int numComp = r.Next (5) + 1;
+			int maxNod = (r.Next (20) + 2) * numComp;
 
 			for (int i = 0; i < maxNod - numComp; i++)
 			{
@@ -72,6 +72,8 @@ namespace Test
 			}
 
 			var comp = gr.ComponentesConexas ();
+			if (numComp != comp.Count)
+				comp = gr.ComponentesConexas ();
 			Assert.Equal (numComp, comp.Count);
 
 			foreach (var item in comp)

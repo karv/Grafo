@@ -537,6 +537,7 @@ namespace Graficas.Continuo
 			public Ruta (ContinuoPunto inicial)
 			{
 				NodoInicial = inicial;
+				NodoFinal = inicial;
 			}
 
 			/// <summary>

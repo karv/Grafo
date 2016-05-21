@@ -37,7 +37,7 @@ namespace Test
 		}
 	}
 
-	public class ContinuoFact
+	public class ContinuoTest
 	{
 		public Grafo<TestClassIns, float> Graf;
 		Continuo<TestClassIns> Gr;
@@ -108,7 +108,6 @@ namespace Test
 			Assert.Equal (2, Gr.Puntos.Count); // No es 3, porque no debe calcular que se agregó el nodo '1'
 		}
 
-		[Fact]
 		public void ProbarRuta ()
 		{
 			Iniciar ();

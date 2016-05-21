@@ -7,57 +7,10 @@ namespace Graficas.Aristas
 	/// Almacena el peso fuertemente, por lo que no hay vínculo directo con un grafo
 	/// </summary>
 	[Serializable]
-	public class AristaPeso<TNodo, TValor> : IArista<TNodo> // Fact all
+	public class AristaPeso<TNodo, TValor> : AristaBool<TNodo>
 		where TNodo : IEquatable<TNodo>
 	{
 		TValor _valor;
-		TNodo _origen;
-		TNodo _destino;
-		bool _existe;
-
-		public bool Coincide (TNodo origen, TNodo destino)
-		{
-			return (_origen.Equals (origen) && _destino.Equals (destino)) ||
-			((EsSimétrico) && (_origen.Equals (destino) && _destino.Equals (origen)));
-		}
-
-		public bool EsSimétrico { get; }
-
-		/// <summary>
-		/// Devuelve el origen de la arista
-		/// </summary>
-		/// <value>The origen.</value>
-		public TNodo Origen
-		{
-			get
-			{
-				return _origen;
-			}
-			set
-			{
-				if (SóloLectura)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
-				_origen = value;
-			}
-		}
-
-		/// <summary>
-		/// Devuelve el destino de la arista
-		/// </summary>
-		/// <value>The destino.</value>
-		public TNodo Destino
-		{
-			get
-			{
-				return _destino;
-			}
-			set
-			{
-				if (SóloLectura)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
-				_destino = value;
-			}
-		}
 
 		/// <summary>
 		/// Devuelve el peso de la arista
@@ -81,45 +34,6 @@ namespace Graficas.Aristas
 			}
 		}
 
-		/// <summary>
-		/// Indica si este objeto es de sólo lectura
-		/// </summary>
-		/// <value><c>true</c> si es de sólo lectura; de otra forma, <c>false</c>.</value>
-		public bool SóloLectura { get; }
-
-		/// <summary>
-		/// Existe la arista
-		/// </summary>
-		/// <value><c>true</c> Si esta arista existe; si no <c>false</c>.</value>
-		public bool Existe
-		{
-			get
-			{
-				return _existe;
-			}
-			set
-			{
-				if (SóloLectura)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
-				_existe = value;
-			}
-		}
-
-		public ListasExtra.ParNoOrdenado<TNodo> ComoPar ()
-		{
-			return new ListasExtra.ParNoOrdenado<TNodo> (_origen, _destino);
-		}
-
-		public TNodo Antipodo (TNodo nodo)
-		{
-			return nodo.Equals (_origen) ? _destino : _origen;
-		}
-
-		public bool Corta (TNodo nodo)
-		{
-			return nodo.Equals (_origen) || nodo.Equals (_destino);
-		}
-
 		/// <summary> Construye una arista existente </summary>
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
@@ -131,13 +45,9 @@ namespace Graficas.Aristas
 		                   TValor valor,
 		                   bool sóloLectura = false,
 		                   bool simétrico = false)
+			: base (origen, destino, true, sóloLectura, simétrico)
 		{
-			_origen = origen;
-			_destino = destino;
 			_valor = valor;
-			_existe = true;
-			SóloLectura = sóloLectura;
-			EsSimétrico = simétrico;
 		}
 
 		/// <summary>
@@ -151,12 +61,13 @@ namespace Graficas.Aristas
 		                   TNodo destino,
 		                   bool sóloLectura = false,
 		                   bool simétrico = false)
+			: base (origen, destino, false, sóloLectura)
 		{
-			_origen = origen;
-			_destino = destino;
-			_existe = false;
-			SóloLectura = sóloLectura;
-			EsSimétrico = simétrico;
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("{0}: {1}", base.ToString (), _valor);
 		}
 	}
 }
