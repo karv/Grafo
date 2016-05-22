@@ -87,11 +87,11 @@ namespace Graficas.Rutas
 			{
 				var agrega = NodoFinal.Vecindad.Find (x => x.Objeto.Equals (paso.Destino));
 				if (agrega == null)
-					throw new System.Exception ("Paso inexsistente en grafo.");
+					throw new Exception ("Paso inexsistente en grafo.");
 				_pasos.Add (agrega);
 				return;
 			}
-			throw new System.Exception ("Nodo final de la ruta no concide con origen del paso.");
+			throw new Exception ("Nodo final de la ruta no concide con origen del paso.");
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace Graficas.Rutas
 		public void Concat (IRuta<T> ruta)
 		{
 			if (!NodoFinal.Objeto.Equals (ruta.NodoInicial))
-				throw new System.Exception ("Nodo final de la ruta no concide con origen del paso.");
+				throw new Exception ("Nodo final de la ruta no concide con origen del paso.");
 			foreach (var x in ruta.Pasos)
 			{
 				Concat (x);
@@ -116,7 +116,7 @@ namespace Graficas.Rutas
 		{
 			var agrega = NodoFinal.Vecindad.Find (x => x.Objeto.Equals (nodo));
 			if (agrega == null)
-				throw new System.Exception ("Paso inexsistente en grafo.");
+				throw new Exception ("Paso inexsistente en grafo.");
 			_pasos.Add (agrega);
 		}
 

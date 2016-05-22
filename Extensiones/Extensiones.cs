@@ -10,8 +10,8 @@ namespace Graficas.Extensiones
 	/// </summary>
 	public static class Extensiones
 	{
-		/// <summary>
 		/// Devuelve una colección con las componentes conexas de una gráfica dada
+		/// <summary>
 		/// </summary>
 		/// <param name="gr">Gráfo</param>
 		/// <typeparam name="T">Tipo de nodos de la gráfica</typeparam>

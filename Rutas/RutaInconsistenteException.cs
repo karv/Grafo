@@ -23,7 +23,7 @@ namespace Graficas.Rutas
 
 		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
 		/// <param name="inner">The exception that is the cause of the current exception. </param>
-		public RutaInconsistenteException (string message, System.Exception inner)
+		public RutaInconsistenteException (string message, Exception inner)
 			: base (message,
 			        inner)
 		{

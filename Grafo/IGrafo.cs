@@ -25,7 +25,7 @@ namespace Graficas.Grafo
 		/// <remarks> Debe devolver una (¿nueva?) arista en caso de que no exista como tal, 
 		/// diciendo que esa arista no existe.
 		/// NUNCA devuelve null</remarks>
-		IArista<T>  this [T desde, T hasta]{ get; }
+		IArista<T> this [T desde, T hasta]{ get; }
 
 		/// <summary>
 		/// Nodos

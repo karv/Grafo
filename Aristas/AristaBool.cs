@@ -138,7 +138,8 @@ namespace Graficas.Aristas
 		/// <returns>A <see cref="System.String"/> that represents the current class</returns>
 		public override string ToString ()
 		{
-			return ComoPar ().ToString ();
+			string formato = "{0} " + (EsSimétrico ? "<" : "-") + "-> {1}";
+			return string.Format (formato, Origen, Destino);
 		}
 	}
 }

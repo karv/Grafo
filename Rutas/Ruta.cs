@@ -173,7 +173,7 @@ namespace Graficas.Rutas
 			get
 			{
 				if (NumPasos < 1)
-					throw new System.Exception ("No existe el nodo final en un path vacío.");
+					throw new Exception ("No existe el nodo final en un path vacío.");
 				return Paso [NumPasos - 1].Destino;
 			}
 		}

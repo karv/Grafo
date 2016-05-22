@@ -213,7 +213,7 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-					return Loc == 0;
+					return Loc <= 0;
 				}
 			}
 
@@ -250,10 +250,7 @@ namespace Graficas.Continuo
 						return !float.IsPositiveInfinity (Universo.GráficaBase [A, nodo]);
 					}
 				}
-				else
-				{
-					return punto.EnOrigen ? punto.EnMismoIntervalo (this) : Extremos.Equals (punto.Extremos);
-				}
+				return punto.EnOrigen ? punto.EnMismoIntervalo (this) : Extremos.Equals (punto.Extremos);
 			}
 
 			/// <summary>
@@ -468,7 +465,7 @@ namespace Graficas.Continuo
 					if (other == null)
 						return false;
 					if (EnOrigen)
-						return (A.Equals (other.A) && other.Loc == 0);
+						return (A.Equals (other.A) && other.EnOrigen);
 					return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
 					(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
 				}
@@ -629,7 +626,6 @@ namespace Graficas.Continuo
 			}
 		}
 
-		// TODO: éste debe ser sólo lectura.
 		/// <summary>
 		/// Gráfica donde vive este contnuo
 		/// </summary>
@@ -662,11 +658,12 @@ namespace Graficas.Continuo
 		/// <param name="gráfica">Grafica base</param>
 		public Continuo (Grafo<T, float> gráfica)
 		{
+			Debug.Assert (
+				gráfica.SóloLectura,
+				"Este grafo debe ser sólo lectura para evitar comportamiento inesperado."); 
 			GráficaBase = gráfica;
 			foreach (var x in gráfica.Nodos)
-			{
 				puntosFijos.Add (x, AgregaPunto (x));
-			}
 		}
 
 		/// <summary>
@@ -703,7 +700,7 @@ namespace Graficas.Continuo
 		/// <param name="loc">Distancia de este punto a el primer punto dado, a</param>
 		public ContinuoPunto AgregaPunto (T a, T b, float loc)
 		{
-			if (a == null)
+			if (ReferenceEquals (a, null))
 				throw new ArgumentNullException (
 					"a",
 					"El valor de un extremo no puede ser nulo.");
@@ -762,11 +759,11 @@ namespace Graficas.Continuo
 			string generalExcMsg = string.Format ("Fallo de integridad en {0}\n", this);
 			foreach (var p in Puntos)
 			{
-				if (p == null)
+				if (ReferenceEquals (p, null))
 					throw new ArgumentNullException (generalExcMsg + "Punto nulo en universo.");
 				if (typeof (T).IsClass)
 				{
-					if (p.A == null && p.B == null)
+					if (ReferenceEquals (p.A, null) && ReferenceEquals (p.B, null))
 						throw new ArgumentNullException (generalExcMsg + "Punto no nulo con extremos nulos.");
 				}
 			}

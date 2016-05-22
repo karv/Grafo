@@ -74,12 +74,10 @@ namespace Graficas.Grafo
 		public HardGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new HardGrafo<T> ();
-			foreach (T x in conjunto)
-			{
+			foreach (T x in conjunto.ToList ())
 				ret.Add (x);
-			}
 
-			foreach (var x in conjunto.ToArray())
+			foreach (var x in conjunto.ToList ())
 			{
 				var nodoX = ret.AsNodo (x);
 				foreach (var y in AsNodo(x).Vecindad)
@@ -209,7 +207,7 @@ namespace Graficas.Grafo
 		{
 			
 			if (Contains (item))
-				throw new System.Exception ("Ya se encuentra nodo.");
+				throw new Exception ("Ya se encuentra nodo.");
 
 			_nodos.Add (new Nodo<T> (item));
 		}

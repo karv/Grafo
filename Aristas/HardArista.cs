@@ -61,7 +61,7 @@ namespace Graficas.Aristas
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				return Origen.Vecindad.Contains (Destino);
 			}
 		}
 

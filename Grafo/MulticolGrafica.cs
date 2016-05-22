@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Graficas.Rutas;
 using Graficas.Aristas;
-using Graficas.Exception;
-using System.Diagnostics;
 
 namespace Graficas.Grafo
 {

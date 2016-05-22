@@ -1,6 +1,5 @@
 ﻿using Graficas.Grafo;
 using Graficas.Continuo;
-using Graficas.Rutas;
 using Xunit;
 
 namespace Test

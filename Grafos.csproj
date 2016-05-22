@@ -41,8 +41,6 @@
     <Compile Include="Continuo\Continuo.cs" />
     <Compile Include="Rutas\IRuta.cs" />
     <Compile Include="Rutas\Ruta.cs" />
-    <Compile Include="Exception\NodoInexistenteException.cs" />
-    <Compile Include="Exception\ColorDuplicadoException.cs" />
     <Compile Include="Grafo\GrafoClan.cs" />
     <Compile Include="Grafo\IGrafoRutas.cs" />
     <Compile Include="Grafo\IMulticolGrafo.cs" />
@@ -61,6 +59,8 @@
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
     <Compile Include="Grafo\Grafo.cs" />
     <Compile Include="Grafo\NodosCollectionComparer.cs" />
+    <Compile Include="Grafo\ColorDuplicadoException.cs" />
+    <Compile Include="Grafo\NodoInexistenteException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -83,7 +83,6 @@
     <Folder Include="Aristas\" />
     <Folder Include="Continuo\" />
     <Folder Include="Rutas\" />
-    <Folder Include="Exception\" />
     <Folder Include="Grafo\" />
     <Folder Include="Nodos\" />
     <Folder Include="Extensiones\" />

@@ -380,10 +380,9 @@ namespace Graficas.Grafo
 		IRuta<T> CaminoÓptimo (T x,
 		                       T y,
 		                       Func<AristaPeso<T, TData>, float> peso,
-		                       ISet<T> ignorar) // TODO FIX
+		                       ISet<T> ignorar)
 		{
-			//List<T> retLista = new List<T>();
-			Ruta<T> ret = new Ruta<T> ();
+			var ret = new Ruta<T> ();
 			Ruta<T> RutaBuscar;
 			ISet<T> Ignora2;
 
@@ -418,9 +417,9 @@ namespace Graficas.Grafo
 							"Error haciendo cast de aristas al calcular camino óptimo.",
 							ex);
 					}
-					catch (System.Exception ex)
+					catch (Exception ex)
 					{
-						throw new System.Exception ("Error desconocido", ex);
+						throw new Exception ("Error desconocido", ex);
 					}
 				}
 			}
@@ -663,9 +662,8 @@ namespace Graficas.Grafo
 		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
 		IRuta<T> CaminoÓptimo (T x,
 		                       T y,
-		                       ISet<T> ignorar) // TODO FIX
+		                       ISet<T> ignorar)
 		{
-			//List<T> retLista = new List<T>();
 			IRuta<T> ret = new Ruta<T> ();
 			IRuta<T> RutaBuscar;
 			ISet<T> Ignora2;
@@ -699,9 +697,9 @@ namespace Graficas.Grafo
 							"Error haciendo cast de aristas al calcular camino óptimo.",
 							ex);
 					}
-					catch (System.Exception ex)
+					catch (Exception ex)
 					{
-						throw new System.Exception ("Error desconocido", ex);
+						throw new Exception ("Error desconocido", ex);
 					}
 				}
 			}
