@@ -4,14 +4,18 @@ using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
-using System.Threading;
 
 namespace Graficas.Grafo
 {
+	/// <summary>
+	/// Clase común abstracta de Grafo
+	/// </summary>
 	[Serializable]
 	public abstract class GrafoComún<T>
 		where T : IEquatable<T>
 	{
+		/// <param name="simétrico">El grafo será construido simétrico</param>
+		/// <param name="sóloLectura">El grafo es de sólo lectura</param>
 		protected GrafoComún (bool simétrico = false, bool sóloLectura = false)
 		{
 			EsSimétrico = simétrico;
@@ -19,6 +23,9 @@ namespace Graficas.Grafo
 			Data = new HashSet<AristaBool<T>> ();
 		}
 
+		/// <summary>
+		/// Colección de aristas
+		/// </summary>
 		protected ICollection<AristaBool<T>> Data { get; set; }
 
 		/// <summary>
@@ -32,6 +39,9 @@ namespace Graficas.Grafo
 		/// <value><c>true</c> si es simétrico; otherwise, <c>false</c>.</value>
 		public bool EsSimétrico { get; }
 
+		/// <summary>
+		/// Elimina cada arista y nodo del grafo
+		/// </summary>
 		public void Clear ()
 		{
 			if (SóloLectura)
@@ -50,8 +60,18 @@ namespace Graficas.Grafo
 			return AristaCoincide (desde, hasta).Existe;
 		}
 
+		/// <summary>
+		/// Devuelve la arista coincidiente con un par de nodos dados.
+		/// </summary>
+		/// <param name="origen">Origen del nodo.</param>
+		/// <param name="destino">Destino del nodo.</param>
 		protected abstract AristaBool<T> AristaCoincide (T origen, T destino);
 
+		/// <summary>
+		/// Construye su subgrafo dados los nodos
+		/// </summary>
+		/// <param name="conjunto">Nodos</param>
+		/// <param name="ret">Grafo que se convierte en un subgrafo.</param>
 		protected void Subgrafo (IEnumerable<T> conjunto, GrafoComún<T> ret)
 		{
 			ret.Data.Clear ();
@@ -82,8 +102,27 @@ namespace Graficas.Grafo
 			IEnumerable<T> Nods = Nodos;
 			foreach (var y in Data)
 			{
-				if (y.Corta (x))
-					ret.Add (y.Antipodo (x));
+				var ap = y.Antipodo (x);
+				if (y.Coincide (x, ap))
+					ret.Add (ap);
+			}
+			return ret;
+		}
+
+		/// <summary>
+		/// Devuelve la lista de antivecinos de x (todos los que apuntan a x)
+		/// </summary>
+		/// <param name="x"></param>
+		/// <returns></returns>
+		public ISet<T> AntiVecino (T x)
+		{
+			ISet<T> ret = new HashSet<T> ();
+			IEnumerable<T> Nods = Nodos;
+			foreach (var y in Data)
+			{
+				var ap = y.Antipodo (x);
+				if (y.Coincide (ap, x))
+					ret.Add (ap);
 			}
 			return ret;
 		}
@@ -180,7 +219,8 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
 		/// <param name="sóloLectura">If set to <c>true</c> es de sólo lectura.</param>
-		public Grafo (bool simétrico = false, bool sóloLectura = false)
+		//public Grafo (bool simétrico = false, bool sóloLectura = false)
+		public Grafo (bool simétrico, bool sóloLectura)
 			: base (simétrico, sóloLectura)
 		{
 		}
@@ -251,6 +291,12 @@ namespace Graficas.Grafo
 
 		#region Común
 
+		/// <summary>
+		/// Devuelve la arista coincidiente con un par de nodos dados.
+		/// </summary>
+		/// <param name="origen">Origen del nodo.</param>
+		/// <param name="destino">Destino del nodo.</param>
+		/// <returns>The coincide.</returns>
 		protected override AristaBool<T> AristaCoincide (T origen, T destino)
 		{
 			return EncuentraArista (origen, destino);
@@ -259,23 +305,6 @@ namespace Graficas.Grafo
 		#endregion
 
 		#region Propios
-
-		/// <summary>
-		/// Devuelve la lista de antivecinos de x (todos los que apuntan a x)
-		/// </summary>
-		/// <param name="x"></param>
-		/// <returns></returns>
-		public ISet<T> AntiVecino (T x)
-		{
-			ISet<T> ret = new HashSet<T> ();
-			IEnumerable<T> Nods = Nodos;
-			foreach (var y in Data)
-			{
-				if (y.Destino.Equals (x))
-					ret.Add (y.Origen);
-			}
-			return ret;
-		}
 
 		/// <summary>
 		/// Devuelve la Arista? con extremos dados.
@@ -450,6 +479,11 @@ namespace Graficas.Grafo
 	{
 		#region ctor
 
+		/// <summary>
+		/// Initializes a new instance of the class.
+		/// </summary>
+		/// <param name="simétrico">If set to <c>true</c>, es simétrico.</param>
+		/// <param name="sóloLectura">If set to <c>true</c>, es sólo lectura.</param>
 		public Grafo (bool simétrico = false, bool sóloLectura = false)
 			: base (simétrico, sóloLectura)
 		{
@@ -531,44 +565,17 @@ namespace Graficas.Grafo
 
 		#region Propios
 
+		/// <summary>
+		/// Devuelve la arista coincidiente con un par de nodos dados.
+		/// </summary>
+		/// <param name="origen">Origen del nodo.</param>
+		/// <param name="destino">Destino del nodo.</param>
+		/// <returns>The coincide.</returns>
 		protected override AristaBool<T> AristaCoincide (T origen, T destino)
 		{
 			return EncuentraArista (origen, destino);
 		}
 
-		/// <summary>
-		/// Devuelve la lista de vecinos de x (a todos los que apunta x)
-		/// </summary>
-		/// <param name="x">Nodo</param>
-		public ISet<T> Vecino (T x)
-		{
-			ISet<T> ret = new HashSet<T> ();
-			IEnumerable<T> Nods = Nodos;
-			foreach (var y in _data)
-			{
-				
-				if (y.Origen.Equals (x))
-					ret.Add (y.Destino);
-			}
-			return ret;
-		}
-
-		/// <summary>
-		/// Devuelve la lista de antivecinos de x (todos los que apuntan a x)
-		/// </summary>
-		/// <param name="x"></param>
-		/// <returns></returns>
-		public ISet<T> AntiVecino (T x)
-		{
-			ISet<T> ret = new HashSet<T> ();
-			IEnumerable<T> Nods = Nodos;
-			foreach (var y in _data)
-			{
-				if (y.Destino.Equals (x))
-					ret.Add (y.Origen);
-			}
-			return ret;
-		}
 
 		/// <summary>
 		/// Devuelve o establece el peso de la arista que une dos vértices.

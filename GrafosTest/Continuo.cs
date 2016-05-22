@@ -49,7 +49,7 @@ namespace Test
 
 		public void Iniciar ()
 		{
-			Graf = new Grafo<TestClassIns, float> (true);
+			Graf = new Grafo<TestClassIns, float> (true, false);
 			Gr = new Continuo<TestClassIns> (Graf);
 		}
 
@@ -137,6 +137,7 @@ namespace Test
 		public void Avances ()
 		// La salida debe ser Despl Despl Nodo
 		{
+			string outp = "";
 			Iniciar ();
 			for (int i = 0; i < 10; i++)
 			{
@@ -150,15 +151,18 @@ namespace Test
 			p.AlDesplazarse += delegate
 			{
 				Console.WriteLine ("Despl");
+				outp += "d";
 			};
 			p.AlLlegarANodo += delegate
 			{
 				Console.WriteLine ("Nodo");
+				outp += "n";
 			};
 
 			var rr = Graf [0, 1];
 			Assert.False (p.AvanzarHacia (1, 0.7f));
 			Assert.True (p.AvanzarHacia (1, 0.7f));
+			Assert.Equal ("ddn", outp);
 		}
 
 		[Fact]

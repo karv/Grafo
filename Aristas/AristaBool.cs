@@ -85,6 +85,11 @@ namespace Graficas.Aristas
 			}
 		}
 
+		/// <summary>
+		/// Devuelve un <see cref="bool"/> determinando si este grafo simétrico, ie, 
+		/// la arista a -> b es equivalente a b -> a
+		/// </summary>
+		/// <value><c>true</c> if es simétrico; otherwise, <c>false</c>.</value>
 		public bool EsSimétrico { get; }
 		// Fact
 		/// <summary>
@@ -92,27 +97,45 @@ namespace Graficas.Aristas
 		/// </summary>
 		public bool SóloLectura { get; }
 
+		/// <summary>
+		/// Si esta arista coincide con extremos
+		/// </summary>
+		/// <param name="origen">Origen.</param>
+		/// <param name="destino">Destino.</param>
 		public bool Coincide (TNodo origen, TNodo destino)
 		{
 			return (_origen.Equals (origen) && _destino.Equals (destino)) ||
 			((EsSimétrico) && (_origen.Equals (destino) && _destino.Equals (origen)));
 		}
 
+		/// <summary>
+		/// Devuelve un par que representa a la arista.
+		/// </summary>
+		/// <returns>The par.</returns>
 		public ListasExtra.ParNoOrdenado<TNodo> ComoPar ()
 		{
 			return new ListasExtra.ParNoOrdenado<TNodo> (Origen, Destino);
 		}
 
+		/// <summary>
+		/// Devuelve el nodo de la arista que no es el dado
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
 		public TNodo Antipodo (TNodo nodo)
 		{
 			return nodo.Equals (Origen) ? Destino : Origen;
 		}
 
+		/// <summary>
+		/// Devuelve si esta arista toca a un nodo dado
+		/// </summary>
+		/// <param name="nodo">Nodo.</param>
 		public bool Corta (TNodo nodo)
 		{
 			return nodo.Equals (Origen) || nodo.Equals (Destino);
 		}
 
+		/// <returns>A <see cref="System.String"/> that represents the current class</returns>
 		public override string ToString ()
 		{
 			return ComoPar ().ToString ();

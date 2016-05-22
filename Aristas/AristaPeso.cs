@@ -65,6 +65,7 @@ namespace Graficas.Aristas
 		{
 		}
 
+		/// <returns>A <see cref="System.String"/> that represents the current graph </returns>
 		public override string ToString ()
 		{
 			return string.Format ("{0}: {1}", base.ToString (), _valor);

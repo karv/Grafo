@@ -43,6 +43,9 @@ namespace Graficas.Aristas
 		bool Corta (T nodo);
 	}
 
+	/// <summary>
+	/// Representa una arista con una dirección.
+	/// </summary>
 	public interface IAristaDirigida <T> : IArista<T>
 		where T : IEquatable<T>
 	{

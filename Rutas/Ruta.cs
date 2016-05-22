@@ -124,6 +124,11 @@ namespace Graficas.Rutas
 			}
 		}
 
+		/// <summary>
+		/// Se concatena con una arista
+		/// </summary>
+		/// <param name="paso">Arista que compone</param>
+		/// <param name="origen">Nodo intersección entre esta ruta y la arista</param>
 		public void Concat (IArista<T> paso, T origen)
 		{
 			TPaso p = new Ruta<T>.TPaso (origen, paso.Antipodo ((origen)));
