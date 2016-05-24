@@ -220,7 +220,7 @@ namespace Graficas.Grafo
 		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
 		/// <param name="sóloLectura">If set to <c>true</c> es de sólo lectura.</param>
 		//public Grafo (bool simétrico = false, bool sóloLectura = false)
-		public Grafo (bool simétrico, bool sóloLectura)
+		public Grafo (bool simétrico = false, bool sóloLectura = false)
 			: base (simétrico, sóloLectura)
 		{
 		}

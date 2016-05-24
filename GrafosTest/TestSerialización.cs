@@ -1,9 +1,11 @@
-﻿using Graficas.Grafo;
+﻿using NUnit.Framework;
+using Graficas.Grafo;
 using Graficas.Continuo;
-using Xunit;
+using Graficas.Rutas;
 
 namespace Test
 {
+	[TestFixture]
 	public class TestSerialización
 	{
 		static void TestSerial<T> (T gr)
@@ -11,7 +13,7 @@ namespace Test
 		{
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
 			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
-			Assert.Equal (gr [0, 1], gr2 [0, 1]);
+			Assert.AreEqual (gr [0, 1], gr2 [0, 1]);
 		}
 
 		static void TestSerialPeso<T> (T gr)
@@ -20,13 +22,13 @@ namespace Test
 			gr [0, 1] = 1;
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
 			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
-			Assert.Equal (gr [0, 1], gr2 [0, 1]);
+			Assert.AreEqual (gr [0, 1], gr2 [0, 1]);
 		}
 
-		[Fact]
+		[Test]
 		public void SerGraf ()
 		{
-			var gr = new Grafo<int, float> (false, false);
+			var gr = new Grafo<int, float> ();
 			gr [0, 1] = 1;
 			TestSerial (gr);
 
@@ -38,10 +40,10 @@ namespace Test
 			TestSerial (gr4);
 		}
 
-		[Fact]
+		[Test]
 		public void Cont ()
 		{
-			var gr = new Grafo<int, float> (false, false);
+			var gr = new Grafo<int, float> ();
 			gr [0, 1] = 1;
 			var c = new Continuo<int> (gr);
 			c.AgregaPunto (0, 1, 0.3f);
@@ -50,7 +52,7 @@ namespace Test
 			Assert.True (c2.Puntos.Count == c.Puntos.Count);
 		}
 
-		[Fact]
+		[Test]
 		public void RutasOpt ()
 		{
 		}
