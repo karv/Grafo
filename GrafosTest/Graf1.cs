@@ -1,5 +1,6 @@
 ﻿using System;
 using Graficas.Grafo;
+using NUnit.Framework;
 
 namespace Test
 {
@@ -65,7 +66,7 @@ namespace Test
 			Grafo = new Grafo<Objeto> ();
 		}
 
-		[Test]
+		[TestAttribute]
 		public void Clear ()
 		{
 			Grafo [0, 1] = true;
