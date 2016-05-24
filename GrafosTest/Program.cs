@@ -6,8 +6,6 @@ namespace Test
 	{
 		public static void Main ()
 		{
-			var test = new ContinuoTest ();
-			test.Avances ();
 		}
 	}
 }
