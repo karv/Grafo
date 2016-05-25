@@ -4,8 +4,6 @@ using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
-using Graficas.Nodos;
-using System.Runtime.InteropServices;
 
 namespace Graficas.Grafo
 {
@@ -129,7 +127,6 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-
 		/// <summary>
 		/// Devuelve un clon de la lista de nodos.
 		/// </summary>
@@ -156,19 +153,6 @@ namespace Graficas.Grafo
 		}
 
 		/// <summary>
-		/// Revisa si existe una arista consistente a una dada.
-		/// </summary>
-		/// <returns><c>true</c>, if arista was existed, <c>false</c> otherwise.</returns>
-		/// <param name="aris">Aris.</param>
-		public bool ExisteArista (IArista<T> aris)
-		{
-			return aris.Existe;
-		}
-
-		#region IGrafica
-
-
-		/// <summary>
 		/// Convierte una sucesión consistente de nodos en una ruta.
 		/// </summary>
 		/// <returns>The ruta.</returns>
@@ -188,11 +172,19 @@ namespace Graficas.Grafo
 				else
 				{
 					if (ret.NumPasos == 0 || ret.NodoFinal.Equals (last))
-						ret.Concat (AristaCoincide (last, x), last);
+					{
+						var ar = AristaCoincide (last, x);
+						if (!ar.Existe)
+							throw new RutaInconsistenteException ("La sucesión dada no representa una ruta.");
+						ret.Concat (ar, last);
+
+					}
 					else
 					{
 						// Invertir estado de la arista
 						var ar = AristaCoincide (last, x);
+						if (!ar.Existe)
+							throw new RutaInconsistenteException ("La sucesión dada no representa una ruta.");
 						Data.Remove (ar);
 						ar = AristaCoincide (x, last);
 						ret.Concat (ar, last);
@@ -202,9 +194,6 @@ namespace Graficas.Grafo
 			}
 			return ret;
 		}
-
-		#endregion
-
 	}
 
 	/// <summary>
@@ -537,7 +526,7 @@ namespace Graficas.Grafo
 		#region ctor
 
 		/// <summary>
-		/// Construye un Grafo de peso modificable
+		/// Construye un Grafo booleano modificable
 		/// </summary>
 		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
 		public Grafo (bool simétrico = false)
@@ -584,6 +573,7 @@ namespace Graficas.Grafo
 				ret.Data.Add (new AristaBool<T> (
 					x.Origen,
 					x.Destino,
+					x.Existe,
 					x.SóloLectura,
 					x.EsSimétrico)); 
 			}
@@ -700,7 +690,7 @@ namespace Graficas.Grafo
 				AristaBool<T> aris;
 				if (EncuentraArista (x, y, out aris))
 					Data.Remove (aris);
-				Data.Add (new AristaBool<T> (x, y, value, true, EsSimétrico));
+				Data.Add (new AristaBool<T> (x, y, value, false, EsSimétrico));
 			}
 		}
 
