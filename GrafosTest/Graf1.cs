@@ -1,6 +1,7 @@
 ﻿using System;
 using Graficas.Grafo;
 using NUnit.Framework;
+using Graficas.Aristas;
 
 namespace Test
 {
@@ -27,6 +28,8 @@ namespace Test
 
 		public bool Equals (Objeto other)
 		{
+			if (other == null)
+				return false;
 			return Hash == other.Hash;
 		}
 
@@ -47,33 +50,60 @@ namespace Test
 		{
 			return new Objeto (i);
 		}
+
+		public override string ToString ()
+		{
+			return Hash.ToString ();
+		}
 	}
 
 	/// <summary>
 	/// Pruebas de Grafo[1]
 	/// </summary>
-	public class Graf1 : IDisposable
+	[TestFixture]
+	public class Graf1
 	{
-		public Grafo<Objeto> Grafo;
-
-		public Graf1 ()
-		{
-			Grafo = new Grafo<Objeto> ();
-		}
-
-		public void Dispose ()
-		{
-			Grafo = new Grafo<Objeto> ();
-		}
-
-		[TestAttribute]
+		[Test]
 		public void Clear ()
 		{
+			var Grafo = new Grafo<Objeto> ();
 			Grafo [0, 1] = true;
 			Grafo.Clear ();
 
-			//Assert.Empty (Grafo.Aristas ());
-			//Assert.Empty (Grafo.Nodos);
+			Assert.IsEmpty (Grafo.Aristas ());
+			Assert.IsEmpty (Grafo.Nodos);
+		}
+
+		[Test]
+		public void SóloLectura ()
+		{
+			var Grafo = new Grafo<Objeto> ();
+			Grafo [0, 1] = true;
+			var gr2 = new Grafo<Objeto> (Grafo);
+			Assert.Throws<InvalidOperationException> (new TestDelegate (gr2.Clear));
+			Assert.Throws<OperaciónAristaInválidaException> (new TestDelegate (delegate
+			{
+				gr2 [0, 1] = false;
+			}));
+			Assert.Throws<OperaciónAristaInválidaException> (new TestDelegate (delegate
+			{
+				gr2 [0, 2] = true;
+			}));
+		}
+
+		[Test]
+		public void CtorClonado ()
+		{
+			var Grafo = new Grafo<Objeto> ();
+			Grafo [0, 1] = true;
+			Grafo [0, 2] = true;
+			Grafo [0, 3] = true;
+
+			var clón = new Grafo<Objeto> (Grafo);
+			Assert.AreEqual (true, clón [0, 1]);
+			Assert.AreEqual (true, clón [0, 2]);
+			Assert.AreEqual (true, clón [0, 3]);
+			Assert.AreEqual (false, clón [1, 2]);
 		}
 	}
 }

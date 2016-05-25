@@ -1,11 +1,11 @@
 ﻿using NUnit.Framework;
 using Graficas.Grafo;
 using Graficas.Continuo;
-using Graficas.Rutas;
 
 namespace Test
 {
 	[TestFixture]
+	[Ignore]
 	public class TestSerialización
 	{
 		static void TestSerial<T> (T gr)
@@ -13,7 +13,7 @@ namespace Test
 		{
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
 			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
-			Assert.AreEqual (gr [0, 1], gr2 [0, 1]);
+			Assert.AreEqual (gr [0, 1].Existe, gr2 [0, 1].Existe);
 		}
 
 		static void TestSerialPeso<T> (T gr)

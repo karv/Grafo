@@ -31,10 +31,10 @@
     <DocumentationFile>bin\Release\Grafos.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ListaExtras">
-      <HintPath>packages\ListaExtras.0.3.0.5\lib\ListaExtras.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="ListaExtras">
+      <HintPath>packages\ListaExtras.0.3.0.6\lib\ListaExtras.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />

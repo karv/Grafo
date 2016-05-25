@@ -4,6 +4,8 @@ using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
+using Graficas.Nodos;
+using System.Runtime.InteropServices;
 
 namespace Graficas.Grafo
 {
@@ -216,13 +218,35 @@ namespace Graficas.Grafo
 		#region ctor
 
 		/// <summary>
+		/// Construye un Grafo de peso modificable
 		/// </summary>
 		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
-		/// <param name="sóloLectura">If set to <c>true</c> es de sólo lectura.</param>
-		//public Grafo (bool simétrico = false, bool sóloLectura = false)
-		public Grafo (bool simétrico = false, bool sóloLectura = false)
+		public Grafo (bool simétrico = false)
+			: base (simétrico, false)
+		{
+		}
+
+		protected Grafo (bool simétrico, bool sóloLectura)
 			: base (simétrico, sóloLectura)
 		{
+		}
+
+		public Grafo (IGrafo<T> graf, bool sólolectura = true)
+			: base (false, sólolectura)
+		{
+			foreach (var x in graf.Aristas ())
+			{
+				var par = x.ComoPar ().AsSet ();
+				var n0 = par.PickRemove ();
+				var n1 = par.PickRemove ();
+
+				if (x.Coincide (n0, n1))
+					Data.Add (new AristaPeso<T, TData> (n0, n1, sólolectura));
+
+				if (x.Coincide (n1, n0))
+					Data.Add (new AristaPeso<T, TData> (n1, n0, sólolectura));
+
+			}
 		}
 
 		#endregion
@@ -300,6 +324,40 @@ namespace Graficas.Grafo
 		protected override AristaBool<T> AristaCoincide (T origen, T destino)
 		{
 			return EncuentraArista (origen, destino);
+		}
+
+		/// <summary>
+		/// Clona las aristas y las agrega a un grafo.
+		/// </summary>
+		/// <param name="sóloLectura">Si el grafo que devuelve es de sólo lectura</param>
+		/// <returns>Un grafo clón</returns>
+		/// <remarks>Las aristas son clonadas y por lo tanto no se preserva referencia </remarks>
+		public Grafo<T, TData> Clonar (bool sóloLectura = false) // TEST
+		// TODO implementar en Grafo<T>
+		{
+			var ret = new Grafo<T, TData> (EsSimétrico, sóloLectura);
+			foreach (var x in Data)
+			{
+				ret.Data.Add (new AristaPeso<T, TData> (
+					x.Origen,
+					x.Destino,
+					x.SóloLectura,
+					x.EsSimétrico)); 
+			}
+			return ret;
+		}
+
+		/// <summary>
+		/// Devuelve un grafo preservando referencias.
+		/// </summary>
+		/// <returns>Un grafo sólo lectura clonado</returns>
+		public Grafo<T, TData> ComoSóloLectura () // TEST
+		// TODO implementar en Grafo<T>
+		{
+			var ret = new Grafo<T, TData> (EsSimétrico, true);
+			foreach (var x in Data)
+				ret.Data.Add (x);
+			return ret;
 		}
 
 		#endregion
@@ -479,16 +537,70 @@ namespace Graficas.Grafo
 		#region ctor
 
 		/// <summary>
-		/// Initializes a new instance of the class.
+		/// Construye un Grafo de peso modificable
 		/// </summary>
-		/// <param name="simétrico">If set to <c>true</c>, es simétrico.</param>
-		/// <param name="sóloLectura">If set to <c>true</c>, es sólo lectura.</param>
-		public Grafo (bool simétrico = false, bool sóloLectura = false)
+		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
+		public Grafo (bool simétrico = false)
+			: base (simétrico, false)
+		{
+		}
+
+		protected Grafo (bool simétrico, bool sóloLectura)
 			: base (simétrico, sóloLectura)
 		{
 		}
 
+		public Grafo (IGrafo<T> graf, bool sólolectura = true)
+			: base (false, sólolectura)
+		{
+			foreach (var x in graf.Aristas ())
+			{
+				var par = x.ComoPar ().AsSet ();
+				var n0 = par.PickRemove ();
+				var n1 = par.PickRemove ();
+
+				if (x.Coincide (n0, n1))
+					Data.Add (new AristaBool<T> (n0, n1, sólolectura));
+
+				if (x.Coincide (n1, n0))
+					Data.Add (new AristaBool<T> (n1, n0, sólolectura));
+
+			}
+		}
+
 		#endregion
+
+		/// <summary>
+		/// Clona las aristas y las agrega a un grafo.
+		/// </summary>
+		/// <param name="sóloLectura">Si el grafo que devuelve es de sólo lectura</param>
+		/// <returns>Un grafo clón</returns>
+		/// <remarks>Las aristas son clonadas y por lo tanto no se preserva referencia </remarks>
+		public Grafo<T> Clonar (bool sóloLectura = false) // TEST
+		{
+			var ret = new Grafo<T> (EsSimétrico, sóloLectura);
+			foreach (var x in Data)
+			{
+				ret.Data.Add (new AristaBool<T> (
+					x.Origen,
+					x.Destino,
+					x.SóloLectura,
+					x.EsSimétrico)); 
+			}
+			return ret;
+		}
+
+		/// <summary>
+		/// Devuelve un grafo preservando referencias.
+		/// </summary>
+		/// <returns>Un grafo sólo lectura clonado</returns>
+		public Grafo<T> ComoSóloLectura () // TEST
+		{
+			var ret = new Grafo<T> (EsSimétrico, true);
+			foreach (var x in Data)
+				ret.Data.Add (x);
+			return ret;
+		}
 
 		#region IGrafica
 
@@ -532,7 +644,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		public ICollection<AristaBool<T>> Aristas ()
 		{
-			return new HashSet<AristaBool<T>> (_data);
+			return new HashSet<AristaBool<T>> (Data);
 		}
 
 		ICollection<T> IGrafo<T>.Nodos
@@ -550,15 +662,8 @@ namespace Graficas.Grafo
 
 		ICollection<IArista<T>> IGrafo<T>.Aristas ()
 		{
-			return new HashSet<IArista<T>> (_data);
+			return new HashSet<IArista<T>> (Data);
 		}
-
-		#endregion
-
-		#region Interno
-
-		HashSet<AristaBool<T>> _data = new HashSet<AristaBool<T>> ();
-		//ListaPeso<T, T, TArista> Vecinos  = new ListaPeso<T, T, TArista> (null, )
 
 		#endregion
 
@@ -590,10 +695,12 @@ namespace Graficas.Grafo
 			}
 			set
 			{
+				if (SóloLectura)
+					throw new OperaciónAristaInválidaException ("Grafo es sólo lectura.");
 				AristaBool<T> aris;
 				if (EncuentraArista (x, y, out aris))
-					_data.Remove (aris);
-				_data.Add (new AristaBool<T> (x, y, value, SóloLectura, EsSimétrico));
+					Data.Remove (aris);
+				Data.Add (new AristaBool<T> (x, y, value, true, EsSimétrico));
 			}
 		}
 
@@ -622,7 +729,7 @@ namespace Graficas.Grafo
 		                                T destino,
 		                                out AristaBool<T> aris)
 		{
-			foreach (var x in _data)
+			foreach (var x in Data)
 			{
 				if (x.Origen.Equals (origen) && x.Destino.Equals (destino))
 				{
