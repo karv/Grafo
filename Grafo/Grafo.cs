@@ -4,6 +4,7 @@ using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
+using System.Timers;
 
 namespace Graficas.Grafo
 {
@@ -230,10 +231,10 @@ namespace Graficas.Grafo
 				var n1 = par.PickRemove ();
 
 				if (x.Coincide (n0, n1))
-					Data.Add (new AristaPeso<T, TData> (n0, n1, sólolectura));
+					Data.Add (new AristaPeso<T, TData> (n0, n1, default(TData), sólolectura));
 
 				if (x.Coincide (n1, n0))
-					Data.Add (new AristaPeso<T, TData> (n1, n0, sólolectura));
+					Data.Add (new AristaPeso<T, TData> (n1, n0, default(TData), sólolectura));
 
 			}
 		}
@@ -243,6 +244,11 @@ namespace Graficas.Grafo
 		#region IGrafo
 
 		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		{
+			return Subgrafo (conjunto);
+		}
+
+		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new Grafo<T, TData> (EsSimétrico, true);
 			Subgrafo (conjunto, ret);
@@ -255,6 +261,14 @@ namespace Graficas.Grafo
 		ICollection<IArista<T>> IGrafo<T>.Aristas ()
 		{
 			return new HashSet<IArista<T>> (Data.Cast<AristaPeso<T, TData>> ());
+		}
+
+		/// <summary>
+		/// Devuelve una colección con las aristas
+		/// </summary>
+		public ICollection<AristaBool<T>> Aristas ()
+		{
+			return new HashSet<AristaBool<T>> (Data);
 		}
 
 		ICollection<T> IGrafo<T>.Nodos
@@ -293,6 +307,8 @@ namespace Graficas.Grafo
 			}
 			set
 			{
+				if (SóloLectura)
+					throw new OperaciónAristaInválidaException ("Grafo es sólo lectura.");
 				AristaPeso<T, TData> aris = EncuentraArista (x, y);
 				aris.Existe = true;
 				aris.Data = value;
@@ -325,11 +341,13 @@ namespace Graficas.Grafo
 		// TODO implementar en Grafo<T>
 		{
 			var ret = new Grafo<T, TData> (EsSimétrico, sóloLectura);
-			foreach (var x in Data)
+			foreach (AristaPeso<T, TData> x in Data)
 			{
+				var data = x.Existe ? x.Data : default(TData);
 				ret.Data.Add (new AristaPeso<T, TData> (
 					x.Origen,
 					x.Destino,
+					data,
 					x.SóloLectura,
 					x.EsSimétrico)); 
 			}
@@ -361,14 +379,10 @@ namespace Graficas.Grafo
 		/// <param name="destino">Destino.</param>
 		public AristaPeso<T, TData> EncuentraArista (T origen, T destino)
 		{
-			AristaPeso<T ,TData> aris;
+			AristaPeso<T, TData> aris;
 			if (!EncuentraArista (origen, destino, out aris))
 			{
-				aris = new AristaPeso<T, TData> (
-					origen,
-					destino,
-					SóloLectura,
-					EsSimétrico);
+				aris = new AristaPeso<T, TData> (origen, destino, false, SóloLectura);
 				Data.Add (aris);
 			}
 			return aris;
@@ -382,18 +396,20 @@ namespace Graficas.Grafo
 		/// <param name="destino">Destino.</param>
 		/// <param name="aris">Por aquí devuelve la arista si hay, null si no</param>
 		protected bool EncuentraArista (T origen,
-		                                T destino,
-		                                out AristaPeso<T, TData> aris)
+		                                T destino, out AristaPeso<T, TData> aris)
 		{
-			foreach (var x in Data)
+			foreach (AristaPeso<T, TData> x in Data)
 			{
-				if (x.Coincide (origen, destino))
+				if (x.Origen.Equals (origen) && x.Destino.Equals (destino))
 				{
-					aris = x as AristaPeso<T, TData>;
-					if (aris == null)
-						throw new OperaciónAristaInválidaException ("Data interna corrpta en grafo.");
+					aris = x;
 					return true;
 				}				
+				if (EsSimétrico && (x.Origen.Equals (destino) && x.Destino.Equals (origen)))
+				{
+					aris = x;
+					return true;
+				}			
 			}
 			aris = null;
 			return false;
@@ -704,7 +720,10 @@ namespace Graficas.Grafo
 		{
 			AristaBool<T> aris;
 			if (!EncuentraArista (origen, destino, out aris))
+			{
 				aris = new AristaBool<T> (origen, destino, false, SóloLectura);
+				Data.Add (aris);
+			}
 			return aris;
 		}
 
