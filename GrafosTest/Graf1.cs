@@ -254,5 +254,22 @@ namespace Test
 			var aris = gr.Aristas ();
 			Assert.AreEqual (2, aris.Count);
 		}
+
+		[Test]
+		public void CaminoÓptimo ()
+		{
+			var gr = new Grafo<Objeto> ();
+			for (int i = 0; i < 10; i++)
+				for (int j = 0; j < 10; j++)
+				{
+					gr [i, j] = true;
+					gr [i + 10, j + 10] = true;
+				}
+			gr [0, 10] = true;
+			gr [10, 0] = true;
+
+			var r = gr.CaminoÓptimo (1, 11);
+			Assert.AreEqual (3, r.NumPasos);
+		}
 	}
 }
