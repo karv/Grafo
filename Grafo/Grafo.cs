@@ -4,8 +4,6 @@ using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
-using System.Timers;
-using System.Diagnostics;
 
 namespace Graficas.Grafo
 {
@@ -338,8 +336,7 @@ namespace Graficas.Grafo
 		/// <param name="sóloLectura">Si el grafo que devuelve es de sólo lectura</param>
 		/// <returns>Un grafo clón</returns>
 		/// <remarks>Las aristas son clonadas y por lo tanto no se preserva referencia </remarks>
-		public Grafo<T, TData> Clonar (bool sóloLectura = false) // TEST
-		// TODO implementar en Grafo<T>
+		public Grafo<T, TData> Clonar (bool sóloLectura = false)
 		{
 			var ret = new Grafo<T, TData> (EsSimétrico, sóloLectura);
 			foreach (AristaPeso<T, TData> x in Data)
@@ -359,8 +356,7 @@ namespace Graficas.Grafo
 		/// Devuelve un grafo preservando referencias.
 		/// </summary>
 		/// <returns>Un grafo sólo lectura clonado</returns>
-		public Grafo<T, TData> ComoSóloLectura () // TEST
-		// TODO implementar en Grafo<T>
+		public Grafo<T, TData> ComoSóloLectura ()
 		{
 			var ret = new Grafo<T, TData> (EsSimétrico, true);
 			foreach (var x in Data)
@@ -428,7 +424,12 @@ namespace Graficas.Grafo
 		                              T y,
 		                              Func<AristaPeso<T, TData>, float> peso)
 		{
-			return CaminoÓptimo (x, y, peso, new HashSet<T> ());
+			if (x.Equals (y))
+				return null;
+			var ign = new HashSet<T> ();
+			ign.Add (x);
+			ign.Add (y);
+			return CaminoÓptimo (x, y, peso, ign);
 		}
 
 		/// <summary>
@@ -437,56 +438,50 @@ namespace Graficas.Grafo
 		/// <param name="x">Nodo inicial.</param>
 		/// <param name="y">Nodo final.</param>
 		/// <param name="ignorar">Lista de nodos a evitar.</param>
-		/// <param name="peso">Forma de asignar peso a cada arista</param>
+		/// <param name="peso">Función que asigna a cada arista su peso</param>
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> 
 		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
-		IRuta<T> CaminoÓptimo (T x,
-		                       T y,
-		                       Func<AristaPeso<T, TData>, float> peso,
-		                       ISet<T> ignorar)
+		/// <remarks>Devuelve null si toda ruta de x a y toca a ignorar</remarks>
+		Ruta<T> CaminoÓptimo (T x,
+		                      T y,
+		                      Func<AristaPeso<T, TData>, float> peso,
+		                      ISet<T> ignorar)
 		{
-			var ret = new Ruta<T> ();
-			Ruta<T> RutaBuscar;
-			ISet<T> Ignora2;
+			Ruta<T> ret = null;
+			float longRet = 0;
 
-			if (x.Equals (y))
-				return ret; // Devuelve ruta vacía si origen == destino
+			var arisXY = EncuentraArista (x, y);
+			if (arisXY.Existe)
+				return new Ruta<T> (x, y);
 
-			Ignora2 = new HashSet<T> (ignorar);
-			Ignora2.Add (y);
+			var consideradNodos = new HashSet<T> (AntiVecino (y));
+			consideradNodos.ExceptWith (ignorar);
 
-			foreach (var n in AntiVecino(y))
+			if (!consideradNodos.Any ())
+				return null;
+			foreach (var v in consideradNodos)
 			{
-				if (!ignorar.Contains (n))
+				var ignorarRecursivo = new HashSet<T> (ignorar);
+				ignorarRecursivo.Add (v);
+				var mejorRuta = CaminoÓptimo (x, v, peso, ignorarRecursivo);
+				if (mejorRuta != null)
 				{
-					RutaBuscar = (Ruta<T>)CaminoÓptimo (x, n, peso, Ignora2);
-
-					try
+					var últAris = EncuentraArista (v, y);
+					if (!últAris.Existe)
+						throw new Exception ("???");
+					mejorRuta.Concat (últAris, v);
+					float longÚlt = 0;
+					foreach (var p in mejorRuta.Pasos)
+						longÚlt += peso (EncuentraArista (p.Origen, p.Destino));
+					if (ret == null || longÚlt < longRet)
 					{
-						if (ret.NumPasos <= 0 || ret.Longitud (z => (peso ((AristaPeso<T, TData>)z))) > RutaBuscar.Longitud (z => (peso ((AristaPeso<T, TData>)z))))
-						{
-							if (RutaBuscar.NumPasos >= 0)
-							{
-								RutaBuscar.Concat (
-									EncuentraArista (RutaBuscar.NodoFinal, y),
-									RutaBuscar.NodoFinal);
-								ret = RutaBuscar;
-							}
-						}
-					}
-					catch (InvalidCastException ex)
-					{
-						throw new InvalidCastException (
-							"Error haciendo cast de aristas al calcular camino óptimo.",
-							ex);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception ("Error desconocido", ex);
+						ret = mejorRuta;
+						longRet = longÚlt;
 					}
 				}
 			}
+
 			return ret;
 		}
 
@@ -582,7 +577,7 @@ namespace Graficas.Grafo
 		/// <param name="sóloLectura">Si el grafo que devuelve es de sólo lectura</param>
 		/// <returns>Un grafo clón</returns>
 		/// <remarks>Las aristas son clonadas y por lo tanto no se preserva referencia </remarks>
-		public Grafo<T> Clonar (bool sóloLectura = false) // TEST
+		public Grafo<T> Clonar (bool sóloLectura = false)
 		{
 			var ret = new Grafo<T> (EsSimétrico, sóloLectura);
 			foreach (var x in Data)
@@ -601,7 +596,7 @@ namespace Graficas.Grafo
 		/// Devuelve un grafo preservando referencias.
 		/// </summary>
 		/// <returns>Un grafo sólo lectura clonado</returns>
-		public Grafo<T> ComoSóloLectura () // TEST
+		public Grafo<T> ComoSóloLectura ()
 		{
 			var ret = new Grafo<T> (EsSimétrico, true);
 			foreach (var x in Data)
