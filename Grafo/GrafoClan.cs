@@ -9,6 +9,7 @@ namespace Graficas.Grafo
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
 	[Serializable]
+	[Obsolete]
 	public class GrafoClan<T> : IGrafo<T> // TODO: reimplementar IGrafoRutas
 		where T : IEquatable<T>
 	{
