@@ -765,6 +765,8 @@ namespace Graficas.Grafo
 		/// <param name="y">Destino</param>
 		public IRuta<T> CaminoÓptimo (T x, T y)
 		{
+			if (x.Equals (y))
+				return null;
 			var ign = new HashSet<T> ();
 			ign.Add (x);
 			ign.Add (y);
@@ -780,64 +782,38 @@ namespace Graficas.Grafo
 		/// <returns>Devuelve la ruta de menor <c>Longitud</c>.</returns>
 		/// <remarks>Puede ciclar si no existe ruta de x a y.</remarks> 
 		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
-		IRuta<T> CaminoÓptimo (T x,
-		                       T y,
-		                       ISet<T> ignorar)
+		/// <remarks>Devuelve null si toda ruta de x a y toca a ignorar</remarks>
+		Ruta<T> CaminoÓptimo (T x,
+		                      T y,
+		                      ISet<T> ignorar)
 		{
-			IRuta<T> ret = new Ruta<T> (x);
-			IRuta<T> RutaBuscar;
-			ISet<T> Ignora2;
+			Ruta<T> ret = null;
 
-			Debug.WriteLine (string.Format ("Calculando ruta {0} a {1}.", x, y));
-			if (x.Equals (y))
-			{
-				Debug.WriteLine ("x == y. Regresar.");
-				return ret; // Devuelve ruta vacía si origen == destino
-			}
-			var arXY = EncuentraArista (x, y);
-			if (arXY.Existe)
-			{
-				Debug.WriteLine ("Ruta mínima " + arXY);
-				ret.Concat (arXY);
-			}
-			Ignora2 = new HashSet<T> (ignorar);
-			Ignora2.Add (y);
+			var arisXY = EncuentraArista (x, y);
+			if (arisXY.Existe)
+				return new Ruta<T> (x, y);
 
-			var vec = AntiVecino (y);
-			if (ignorar.IsSupersetOf (vec))
+			var consideradNodos = new HashSet<T> (AntiVecino (y));
+			consideradNodos.ExceptWith (ignorar);
+
+			if (!consideradNodos.Any ())
 				return null;
-
-			foreach (var n in AntiVecino(y))
+			foreach (var v in consideradNodos)
 			{
-				if (!ignorar.Contains (n))
+				var ignorarRecursivo = new HashSet<T> (ignorar);
+				ignorarRecursivo.Add (v);
+				var mejorRuta = CaminoÓptimo (x, v, ignorarRecursivo);
+				if (mejorRuta != null)
 				{
-					RutaBuscar = CaminoÓptimo (x, n, Ignora2);
-					if (RutaBuscar == null)
-						break;
-
-					try
-					{
-						if (ret.NumPasos <= 0 || ret.NumPasos > RutaBuscar.NumPasos)
-						{
-							if (RutaBuscar.NumPasos >= 0)
-							{
-								RutaBuscar.Concat (EncuentraArista (n, y));
-								ret = RutaBuscar;
-							}
-						}
-					}
-					catch (InvalidCastException ex)
-					{
-						throw new InvalidCastException (
-							"Error haciendo cast de aristas al calcular camino óptimo.",
-							ex);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception ("Error desconocido", ex);
-					}
+					var últAris = EncuentraArista (v, y);
+					if (!últAris.Existe)
+						throw new Exception ("???");
+					mejorRuta.Concat (últAris, v);
+					if (ret == null || mejorRuta.NumPasos < ret.NumPasos)
+						ret = mejorRuta;
 				}
 			}
+
 			return ret;
 		}
 

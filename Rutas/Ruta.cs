@@ -49,13 +49,20 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// 
 		/// </summary>
+		[Obsolete]
 		public Ruta ()
 		{
 		}
 
+		[Obsolete]
 		public Ruta (T inicial)
 		{
 			_virtualInicial = inicial;
+		}
+
+		public Ruta (T origen, T destino)
+		{
+			Paso.Add (new TPaso (origen, destino)); 
 		}
 
 		/// <summary>

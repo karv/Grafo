@@ -258,18 +258,31 @@ namespace Test
 		[Test]
 		public void CaminoÓptimo ()
 		{
+			const int clusterSize = 6;
 			var gr = new Grafo<Objeto> ();
-			for (int i = 0; i < 10; i++)
-				for (int j = 0; j < 10; j++)
+			for (int i = 0; i < clusterSize; i++)
+				for (int j = 0; j < clusterSize; j++)
 				{
 					gr [i, j] = true;
-					gr [i + 10, j + 10] = true;
+					gr [i + clusterSize, j + clusterSize] = true;
 				}
-			gr [0, 10] = true;
-			gr [10, 0] = true;
+			gr [0, clusterSize] = true;
+			gr [clusterSize, 0] = true;
 
-			var r = gr.CaminoÓptimo (1, 11);
+			var r = gr.CaminoÓptimo (1, clusterSize + 1);
+			Assert.AreEqual (1, r.NodoInicial);
+			Assert.AreEqual (clusterSize + 1, r.NodoFinal);
+			foreach (var x in r.Pasos)
+				Assert.True (gr.ExisteArista (x.Origen, x.Destino));
 			Assert.AreEqual (3, r.NumPasos);
+			foreach (var x in r.Pasos)
+				Console.WriteLine (string.Format ("{0} -> {1}", x.Origen, x.Destino));
+
+			r = gr.CaminoÓptimo (0, 0);
+			Assert.IsNull (r);
+
+			r = gr.CaminoÓptimo (0, -1);
+			Assert.IsNull (r);
 		}
 	}
 }
