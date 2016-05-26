@@ -27,49 +27,6 @@ namespace Graficas.Grafo
 		/// Colección de aristas
 		/// </summary>
 		protected ICollection<AristaBool<T>> Data { get; set; }
-		
-		/// <summary>
-		/// </summary>
-		public Grafo ()
-		{
-			SóloLectura = false;
-		}
-
-		/// <summary>
-		/// Inicializa un grafo, clonando sin referencias a otro dado
-		/// </summary>
-		/// <param name="grafo">Grafo a clonar</param>
-		/// <param name="hacerSóloLectura">Si es <c>true</c>, el grafo se contruirá en modo sólo lectura</param>
-		public Grafo (IGrafo<T> grafo, bool hacerSóloLectura = false)
-		{
-			foreach (var arista in grafo.Aristas ())
-				EncuentraArista (arista.Origen, arista.Destino).Existe = true;
-			SóloLectura = hacerSóloLectura;
-		}
-
-		/// <summary>
-		/// Clona un grafo y sus aristas.
-		/// </summary>
-		/// <returns>Devuelve un clon</returns>
-		/// <param name="grafo">Grafo a clonar</param>
-		/// <param name="hacerSóloLectura">Si es <c>true</c>, el grafo se contruirá en modo sólo lectura</param>
-		public static Grafo<T, TData> ClonarDesde (Grafo<T, TData> grafo,
-		                                           bool hacerSóloLectura = false) // TEST
-		{
-			var ret = new Grafo<T, TData> ();
-			foreach (var x in grafo._data)
-			{
-				ret._data.Add (new AristaPeso<T, TData> (
-					x.Origen,
-					x.Destino,
-					x.Data,
-					hacerSóloLectura));
-			}
-			ret.SóloLectura = hacerSóloLectura;
-			return ret;
-		}
-
-		#endregion
 
 		/// <summary>
 		/// Devuelve o establece si este grafo y sus aristas son de sólo lectura.
@@ -238,6 +195,8 @@ namespace Graficas.Grafo
 			}
 			return ret;
 		}
+
+		public event Action AlLimpiar;
 	}
 
 	/// <summary>
@@ -257,9 +216,9 @@ namespace Graficas.Grafo
 		public Grafo (bool simétrico = false)
 			: base (simétrico, false)
 		{
-		//ListaPeso<T, T, TArista> Vecinos  = new ListaPeso<T, T, TArista> (null, )
+			//ListaPeso<T, T, TArista> Vecinos  = new ListaPeso<T, T, TArista> (null, )
 
-		#endregion
+			#endregion
 
 		}
 
@@ -296,7 +255,6 @@ namespace Graficas.Grafo
 			}
 		}
 
-		#endregion
 
 		#region IGrafo
 

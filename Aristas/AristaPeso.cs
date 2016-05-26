@@ -30,31 +30,7 @@ namespace Graficas.Aristas
 					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
 				if (!Existe)
 					throw new OperaciónAristaInválidaException ("No se le puede asignar peso a una arista no existente.");
-				_dalor = value;
-			}
-		}
-
-		/// <summary>
-		/// Indica si este objeto es de sólo lectura
-		/// </summary>
-		/// <value><c>true</c> si es de sólo lectura; de otra forma, <c>false</c>.</value>
-		public bool SóloLectura { get; }
-
-		/// <summary>
-		/// Existe la arista
-		/// </summary>
-		/// <value><c>true</c> Si esta arista existe; si no <c>false</c>.</value>
-		public bool Existe
-		{
-			get
-			{
-				return _existe;
-			}
-			set
-			{
-				if (SóloLectura)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
-				_existe = value;
+				_valor = value;
 			}
 		}
 
