@@ -46,6 +46,7 @@
     <Compile Include="TestSerialización.cs" />
     <Compile Include="Graf1.cs" />
     <Compile Include="Graf2.cs" />
+    <Compile Include="Continuos.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

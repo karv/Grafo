@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Graficas.Aristas;
 using Graficas.Grafo;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas.Continuo
 {
@@ -158,10 +159,9 @@ namespace Graficas.Continuo
 			public static bool EnMismoIntervalo (ContinuoPunto punto1,
 			                                     ContinuoPunto punto2)
 			{
-				if (punto1.A.Equals (punto2.A) && punto1.B.Equals (punto2.B))
-					return true;
-				
-				return false;
+				if (punto1 == null || punto2 == null)
+					return false;
+				return punto1.EnMismoIntervalo (punto2);
 			}
 
 			/// <summary>
@@ -277,12 +277,8 @@ namespace Graficas.Continuo
 				if (EnOrigen)
 				{
 					T orig = A; // Posición de este punto.
-					var ret = new List<ContinuoPunto> ();
-					// Si estoy en terreno
-					foreach (var x in Universo.GráficaBase.Vecino (orig))
-						foreach (var y in Universo.PuntosEnIntervalo(orig, x))
-							if (!ret.Contains (y))
-								ret.Add (y);
+					// Si estoy en vértice
+					var ret = new HashSet<ContinuoPunto> (Universo.Puntos.Where (x => x.Extremos.Contiene (orig)));
 					return ret;
 				}
 				return Universo.PuntosEnIntervalo (A, B);
@@ -324,7 +320,7 @@ namespace Graficas.Continuo
 				dist = dist - restante;
 				AlDesplazarse?.Invoke ();
 				AlLlegarANodo?.Invoke ();
-				FromGrafica (destino);
+				FromGrafo (destino);
 				VerificaColisión (anterior);
 				return true;
 			}
@@ -335,7 +331,8 @@ namespace Graficas.Continuo
 				var minDist = anterior.DistanciaAExtremo (extremoBase);
 				var maxDist = DistanciaAExtremo (extremoBase);
 				Debug.WriteLineIf (maxDist < minDist, "¡Pasó algo raro!");
-				foreach (var x in Universo.PuntosArista(A, B))
+				var puntosIntervalo = Vecindad ();
+				foreach (var x in puntosIntervalo)
 				{
 					if (!ReferenceEquals (x, this) &&
 					    !ReferenceEquals (x, anterior) &&
@@ -388,10 +385,11 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si llegó, <c>false</c> otherwise.</returns>
 			/// <param name="destino">Destino.</param>
 			/// <param name="dist">Distancia</param>
-			public bool AvanzarHacia (ContinuoPunto destino, ref float dist)
+			/// <exception cref="System.Exception">Cuando no se intenta avanzar hacia un vecino inmediato</exception>
+			public bool AvanzarHacia (ContinuoPunto destino, ref float dist) // TEST
 			{
 				if (!EnMismoIntervalo (destino))
-					throw new System.Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
+					throw new Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
 						this,
 						destino,
 						dist));
@@ -443,7 +441,7 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Pone a este punto en un punto de la gráfica.
 			/// </summary>
-			public void FromGrafica (T punto)
+			public void FromGrafo (T punto)
 			{
 				A = punto;
 				B = default(T);
@@ -469,13 +467,13 @@ namespace Graficas.Continuo
 					return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
 					(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
 				}
-				catch (System.Exception ex)
+				catch (Exception ex)
 				{
 					var salida = string.Format (
 						             "Se produce exception al comparar Puntos en Continuo\nthis:  {0}\nother: {1}",
 						             Mostrar (),
 						             other.Mostrar ());
-					throw new System.Exception (salida, ex);
+					throw new Exception (salida, ex);
 				}
 			}
 

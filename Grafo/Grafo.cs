@@ -225,9 +225,9 @@ namespace Graficas.Grafo
 		{
 			foreach (var x in graf.Aristas ())
 			{
-				var par = x.ComoPar ().AsSet ();
-				var n0 = par.PickRemove ();
-				var n1 = par.PickRemove ();
+				var par = x.ComoPar ();
+				var n0 = par [0];
+				var n1 = par [1];
 
 				if (x.Coincide (n0, n1))
 					Data.Add (new AristaPeso<T, TData> (n0, n1, default(TData), sólolectura));
@@ -556,9 +556,9 @@ namespace Graficas.Grafo
 		{
 			foreach (var x in graf.Aristas ())
 			{
-				var par = x.ComoPar ().AsSet ();
-				var n0 = par.PickRemove ();
-				var n1 = par.PickRemove ();
+				var par = x.ComoPar ();
+				var n0 = par [0];
+				var n1 = par [1];
 
 				if (x.Coincide (n0, n1))
 					Data.Add (new AristaBool<T> (n0, n1, sólolectura));
