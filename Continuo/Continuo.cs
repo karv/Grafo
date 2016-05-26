@@ -6,7 +6,6 @@ using System.Diagnostics;
 using Graficas.Aristas;
 using Graficas.Grafo;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Graficas.Continuo
 {
@@ -318,7 +317,7 @@ namespace Graficas.Continuo
 				dist = dist - restante;
 				AlDesplazarse?.Invoke ();
 				AlLlegarANodo?.Invoke ();
-				FromGrafo (destino);
+				DesdeGrafo (destino);
 				VerificaColisión (anterior);
 				return true;
 			}

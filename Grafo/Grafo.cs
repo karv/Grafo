@@ -215,13 +215,23 @@ namespace Graficas.Grafo
 		{
 		}
 
+		/// <summary>
+		/// Construye un Grafo de peso
+		/// </summary>
+		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
+		/// <param name="sóloLectura">If set to <c>true</c> sólo lectura.</param>
 		protected Grafo (bool simétrico, bool sóloLectura)
 			: base (simétrico, sóloLectura)
 		{
 		}
 
-		public Grafo (IGrafo<T> graf, bool sólolectura = true)
-			: base (false, sólolectura)
+		/// <summary>
+		/// Clonae un Grafo
+		/// </summary>
+		/// <param name="sóloLectura">If set to <c>true</c> sólo lectura.</param>
+		/// <param name="graf">Grafo a clonar</param>
+		public Grafo (IGrafo<T> graf, bool sóloLectura = true)
+			: base (false, sóloLectura)
 		{
 			foreach (var x in graf.Aristas ())
 			{
@@ -230,10 +240,10 @@ namespace Graficas.Grafo
 				var n1 = par [1];
 
 				if (x.Coincide (n0, n1))
-					Data.Add (new AristaPeso<T, TData> (n0, n1, default(TData), sólolectura));
+					Data.Add (new AristaPeso<T, TData> (n0, n1, default(TData), sóloLectura));
 
 				if (x.Coincide (n1, n0))
-					Data.Add (new AristaPeso<T, TData> (n1, n0, default(TData), sólolectura));
+					Data.Add (new AristaPeso<T, TData> (n1, n0, default(TData), sóloLectura));
 
 			}
 		}
@@ -247,6 +257,10 @@ namespace Graficas.Grafo
 			return Subgrafo (conjunto);
 		}
 
+		/// <summary>
+		/// Calcula el subgrafo generado por un subconjutno de Nodos
+		/// </summary>
+		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
 		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new Grafo<T, TData> (EsSimétrico, true);
@@ -546,13 +560,23 @@ namespace Graficas.Grafo
 		{
 		}
 
+		/// <summary>
+		/// Construye un Grafo booleano
+		/// </summary>
+		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
+		/// <param name="sóloLectura">If set to <c>true</c> sólo lectura.</param>
 		protected Grafo (bool simétrico, bool sóloLectura)
 			: base (simétrico, sóloLectura)
 		{
 		}
 
-		public Grafo (IGrafo<T> graf, bool sólolectura = true)
-			: base (false, sólolectura)
+		/// <summary>
+		/// Clona un Grafo booleano
+		/// </summary>
+		/// <param name="sóloLectura">If set to <c>true</c> sólo lectura.</param>
+		/// <param name="graf">Grafo a clonar.</param>
+		public Grafo (IGrafo<T> graf, bool sóloLectura = true)
+			: base (false, sóloLectura)
 		{
 			foreach (var x in graf.Aristas ())
 			{
@@ -561,10 +585,10 @@ namespace Graficas.Grafo
 				var n1 = par [1];
 
 				if (x.Coincide (n0, n1))
-					Data.Add (new AristaBool<T> (n0, n1, sólolectura));
+					Data.Add (new AristaBool<T> (n0, n1, sóloLectura));
 
 				if (x.Coincide (n1, n0))
-					Data.Add (new AristaBool<T> (n1, n0, sólolectura));
+					Data.Add (new AristaBool<T> (n1, n0, sóloLectura));
 
 			}
 		}

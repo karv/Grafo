@@ -53,12 +53,16 @@ namespace Graficas.Rutas
 		{
 		}
 
+		/// <param name="inicial">Nodo inicial</param>
 		[Obsolete]
 		public Ruta (T inicial)
 		{
 			_virtualInicial = inicial;
 		}
 
+		/// <param name="origen">Nodo inicial</param>
+		/// <param name="destino">Nodo final</param>
+		/// <remarks>inicial-final debe ser una arista</remarks>
 		public Ruta (T origen, T destino)
 		{
 			Paso.Add (new TPaso (origen, destino)); 
