@@ -787,6 +787,11 @@ namespace Graficas.Grafo
 			if (x.Equals (y))
 				return ret; // Devuelve ruta vacía si origen == destino
 
+			if (Vecino (x).Contains (y))
+			{
+				ret.Concat (EncuentraArista (x, y));
+			}
+
 			Ignora2 = new HashSet<T> (ignorar);
 			Ignora2.Add (y);
 
