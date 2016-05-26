@@ -53,12 +53,18 @@ namespace Graficas.Rutas
 		{
 		}
 
+		public Ruta (T inicial)
+		{
+			_virtualInicial = inicial;
+		}
+
 		/// <summary>
 		/// Construye una implementación de esta ruta, dada una ruta abstracta
 		/// </summary>
 		/// <param name="ruta">Ruta a imitar</param>
 		public Ruta (IRuta<T> ruta)
 		{
+			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
 				Paso.Add (x);
 		}
@@ -150,6 +156,8 @@ namespace Graficas.Rutas
 			}
 		}
 
+		T _virtualInicial;
+
 		/// <summary>
 		/// Devuelve el origen de la ruta
 		/// </summary>
@@ -158,9 +166,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				if (Paso.Count == 0)
-					throw new InvalidOperationException ("Una ruta vacia no tiene definida un NodoInicial.");
-				return Paso [0].Origen;
+				return Paso.Count == 0 ? _virtualInicial : Paso [0].Origen;
 			}
 		}
 
@@ -172,9 +178,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				if (NumPasos < 1)
-					throw new Exception ("No existe el nodo final en un path vacío.");
-				return Paso [NumPasos - 1].Destino;
+				return NumPasos < 1 ? NodoInicial : Paso [NumPasos - 1].Destino;
 			}
 		}
 

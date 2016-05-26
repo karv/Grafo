@@ -5,6 +5,7 @@ using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
 using System.Timers;
+using System.Diagnostics;
 
 namespace Graficas.Grafo
 {
@@ -764,7 +765,10 @@ namespace Graficas.Grafo
 		/// <param name="y">Destino</param>
 		public IRuta<T> CaminoÓptimo (T x, T y)
 		{
-			return CaminoÓptimo (x, y, new HashSet<T> ());
+			var ign = new HashSet<T> ();
+			ign.Add (x);
+			ign.Add (y);
+			return CaminoÓptimo (x, y, ign);
 		}
 
 		/// <summary>
@@ -780,26 +784,36 @@ namespace Graficas.Grafo
 		                       T y,
 		                       ISet<T> ignorar)
 		{
-			IRuta<T> ret = new Ruta<T> ();
+			IRuta<T> ret = new Ruta<T> (x);
 			IRuta<T> RutaBuscar;
 			ISet<T> Ignora2;
 
+			Debug.WriteLine (string.Format ("Calculando ruta {0} a {1}.", x, y));
 			if (x.Equals (y))
-				return ret; // Devuelve ruta vacía si origen == destino
-
-			if (Vecino (x).Contains (y))
 			{
-				ret.Concat (EncuentraArista (x, y));
+				Debug.WriteLine ("x == y. Regresar.");
+				return ret; // Devuelve ruta vacía si origen == destino
 			}
-
+			var arXY = EncuentraArista (x, y);
+			if (arXY.Existe)
+			{
+				Debug.WriteLine ("Ruta mínima " + arXY);
+				ret.Concat (arXY);
+			}
 			Ignora2 = new HashSet<T> (ignorar);
 			Ignora2.Add (y);
+
+			var vec = AntiVecino (y);
+			if (ignorar.IsSupersetOf (vec))
+				return null;
 
 			foreach (var n in AntiVecino(y))
 			{
 				if (!ignorar.Contains (n))
 				{
 					RutaBuscar = CaminoÓptimo (x, n, Ignora2);
+					if (RutaBuscar == null)
+						break;
 
 					try
 					{
@@ -807,7 +821,7 @@ namespace Graficas.Grafo
 						{
 							if (RutaBuscar.NumPasos >= 0)
 							{
-								RutaBuscar.Concat (EncuentraArista (RutaBuscar.NodoFinal, y));
+								RutaBuscar.Concat (EncuentraArista (n, y));
 								ret = RutaBuscar;
 							}
 						}
