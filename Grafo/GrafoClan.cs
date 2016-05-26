@@ -9,7 +9,8 @@ namespace Graficas.Grafo
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales
 	/// </summary>
 	[Serializable]
-	public class GrafoClan<T> : IGrafoRutas<T>
+	[Obsolete]
+	public class GrafoClan<T> : IGrafo<T>
 		where T : IEquatable<T>
 	{
 		[Serializable]
@@ -34,9 +35,18 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public ILecturaGrafo<T> Subgrafo (IEnumerable<T> conjunto)
+		public IGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			throw new NotImplementedException ();
+		}
+
+		/// <summary>
+		/// Elimina nodos y aristas de este grafo.
+		/// </summary>
+		public void Clear () // TEST
+		{
+			_nodos.Clear ();
+			clanes.Clear ();
 		}
 
 		ICollection<T> _nodos = new HashSet<T> ();
@@ -92,7 +102,13 @@ namespace Graficas.Grafo
 
 		#region IGrafica implementation
 
-		bool ILecturaGrafo<T>.this [T desde, T hasta]
+		/// <summary>
+		/// La arista correspondiente a un par de puntos
+		/// </summary>
+		/// <returns>Booleano indicando si existe una arista</returns>
+		/// <param name="desde">Origen</param>
+		/// <param name="hasta">Destino</param>
+		public bool this [T desde, T hasta]
 		{
 			get
 			{
@@ -100,7 +116,26 @@ namespace Graficas.Grafo
 			}
 		}
 
-		ICollection<IArista<T>> ILecturaGrafo<T>.Aristas ()
+		/// <summary>
+		/// Devuelve una arista existente entre dos nodos, byval
+		/// </summary>
+		/// <returns>The arista.</returns>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
+		public AristaBool<T> EncuentraArista (T desde, T hasta)
+		{
+			return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
+		}
+
+		IArista<T> IGrafo<T>.this [T desde, T hasta]
+		{
+			get
+			{
+				return EncuentraArista (desde, hasta);
+			}
+		}
+
+		ICollection<IArista<T>> IGrafo<T>.Aristas ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -112,7 +147,7 @@ namespace Graficas.Grafo
 		/// <param name="hasta">Destino</param>
 		public bool ExisteArista (T desde, T hasta)
 		{
-			return ExisteArista (new Arista<T> (desde, hasta, 1));
+			throw new NotImplementedException ();
 		}
 
 		/// <summary>
@@ -122,12 +157,10 @@ namespace Graficas.Grafo
 		/// <param name="aris">Arista</param>
 		public bool ExisteArista (IArista<T> aris)
 		{
-			ISet<T> ar = new HashSet<T> ();
-			ar.Add (aris.Origen);
-			ar.Add (aris.Destino);
+			var ar2 = aris.ComoPar ().AsSet ();
 			foreach (var c in clanes)
 			{
-				if (c.IsSupersetOf (ar))
+				if (c.IsSupersetOf (ar2))
 					return true;
 			}
 			return false;
@@ -191,14 +224,10 @@ namespace Graficas.Grafo
 		{
 			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T> ();
 			var lst = new List<T> (seq);
+
 			for (int i = 0; i < lst.Count - 1; i++)
-			{
-				Rutas.Paso<T> nuevoPaso = new Graficas.Rutas.Paso<T> (
-					                          lst [i],
-					                          lst [i + 1],
-					                          1);
-				ret.Concat (nuevoPaso);
-			}
+				ret.Concat (EncuentraArista (lst [i], lst [i + 1]));
+
 			return ret;
 		}
 

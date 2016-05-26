@@ -14,7 +14,7 @@ namespace Graficas.Continuo
 	/// </summary>
 	[Serializable]
 	public class Continuo<T>
-		where T : IEquatable<T>
+		where T : class, IEquatable<T>
 	{
 		/// <summary>
 		/// Representa un punto en un continuo.
@@ -105,8 +105,10 @@ namespace Graficas.Continuo
 				}
 				set
 				{
+					// Analysis disable CompareNonConstrainedGenericWithNull
 					if (value == null)
-						throw new ArgumentNullException ("A no puede ser nulo.");
+					// Analysis restore CompareNonConstrainedGenericWithNull
+						throw new ArgumentNullException ("value", "A no puede ser nulo.");
 					a = value;
 				}
 			}
@@ -126,9 +128,12 @@ namespace Graficas.Continuo
 				{ 
 					_loc = value; 
 					if (_loc < 0)
-						FromGrafica (A);
-					if (Aloc < 0)
-						FromGrafica (B);
+						throw new ArgumentException ("Loc no puede ser negativo", "value");
+					// Analysis disable CompareNonConstrainedGenericWithNull
+					if (B != null && Aloc < 0)
+						throw new ArgumentException (
+							"Loc no puede ser mayor que si distancia al otro extremo",
+							"value");
 				}
 			}
 
@@ -139,6 +144,8 @@ namespace Graficas.Continuo
 			{
 				get
 				{
+					if (EnOrigen)
+						throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc si B es nulo.");
 					return Universo.GráficaBase [A, B] - Loc;
 				}
 			}
@@ -149,10 +156,9 @@ namespace Graficas.Continuo
 			public static bool EnMismoIntervalo (ContinuoPunto punto1,
 			                                     ContinuoPunto punto2)
 			{
-				if (punto1.A.Equals (punto2.A) && punto1.B.Equals (punto2.B))
-					return true;
-				
-				return false;
+				if (punto1 == null || punto2 == null)
+					return false;
+				return punto1.EnMismoIntervalo (punto2);
 			}
 
 			/// <summary>
@@ -178,7 +184,7 @@ namespace Graficas.Continuo
 					return Loc;
 				if (extremo.Equals (B))
 					return Aloc;
-				if (EnOrigen && Universo.GráficaBase.ExisteArista (A, extremo))
+				if (EnOrigen && Universo.GráficaBase.EncuentraArista (A, extremo).Existe)
 					return Universo.GráficaBase [A, extremo];
 
 				throw new IndexOutOfRangeException (string.Format (
@@ -204,7 +210,7 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-					return Loc == 0;
+					return Loc <= 0;
 				}
 			}
 
@@ -241,10 +247,7 @@ namespace Graficas.Continuo
 						return !float.IsPositiveInfinity (Universo.GráficaBase [A, nodo]);
 					}
 				}
-				else
-				{
-					return punto.EnOrigen ? punto.EnMismoIntervalo (this) : Extremos.Equals (punto.Extremos);
-				}
+				return punto.EnOrigen ? punto.EnMismoIntervalo (this) : Extremos.Equals (punto.Extremos);
 			}
 
 			/// <summary>
@@ -271,16 +274,8 @@ namespace Graficas.Continuo
 				if (EnOrigen)
 				{
 					T orig = A; // Posición de este punto.
-					var ret = new List<ContinuoPunto> ();
-					// Si estoy en terreno
-					foreach (var x in Universo.GráficaBase.Vecinos(orig))
-					{
-						foreach (var y in Universo.PuntosEnIntervalo(orig, x))
-						{
-							if (!ret.Contains (y))
-								ret.Add (y);
-						}
-					}
+					// Si estoy en vértice
+					var ret = new HashSet<ContinuoPunto> (Universo.Puntos.Where (x => x.Extremos.Contiene (orig)));
 					return ret;
 				}
 				return Universo.PuntosEnIntervalo (A, B);
@@ -322,7 +317,7 @@ namespace Graficas.Continuo
 				dist = dist - restante;
 				AlDesplazarse?.Invoke ();
 				AlLlegarANodo?.Invoke ();
-				FromGrafica (destino);
+				DesdeGrafo (destino);
 				VerificaColisión (anterior);
 				return true;
 			}
@@ -333,7 +328,8 @@ namespace Graficas.Continuo
 				var minDist = anterior.DistanciaAExtremo (extremoBase);
 				var maxDist = DistanciaAExtremo (extremoBase);
 				Debug.WriteLineIf (maxDist < minDist, "¡Pasó algo raro!");
-				foreach (var x in Universo.PuntosArista(A, B))
+				var puntosIntervalo = Vecindad ();
+				foreach (var x in puntosIntervalo)
 				{
 					if (!ReferenceEquals (x, this) &&
 					    !ReferenceEquals (x, anterior) &&
@@ -385,10 +381,11 @@ namespace Graficas.Continuo
 			/// <returns><c>true</c>, si llegó, <c>false</c> otherwise.</returns>
 			/// <param name="destino">Destino.</param>
 			/// <param name="dist">Distancia</param>
+			/// <exception cref="System.Exception">Cuando no se intenta avanzar hacia un vecino inmediato</exception>
 			public bool AvanzarHacia (ContinuoPunto destino, ref float dist)
 			{
 				if (!EnMismoIntervalo (destino))
-					throw new System.Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
+					throw new Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
 						this,
 						destino,
 						dist));
@@ -440,7 +437,18 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Pone a este punto en un punto de la gráfica.
 			/// </summary>
-			public void FromGrafica (T punto)
+			[Obsolete ("Usar this.DesdeGrafo")]
+			public void FromGrafo (T punto)
+			{
+				A = punto;
+				B = default(T);
+				Loc = 0;
+			}
+
+			/// <summary>
+			/// Pone a este punto en un punto de la gráfica.
+			/// </summary>
+			public void DesdeGrafo (T punto)
 			{
 				A = punto;
 				B = default(T);
@@ -462,17 +470,17 @@ namespace Graficas.Continuo
 					if (other == null)
 						return false;
 					if (EnOrigen)
-						return (A.Equals (other.A) && other.Loc == 0);
+						return (A.Equals (other.A) && other.EnOrigen);
 					return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
 					(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
 				}
-				catch (System.Exception ex)
+				catch (Exception ex)
 				{
 					var salida = string.Format (
 						             "Se produce exception al comparar Puntos en Continuo\nthis:  {0}\nother: {1}",
 						             Mostrar (),
 						             other.Mostrar ());
-					throw new System.Exception (salida, ex);
+					throw new Exception (salida, ex);
 				}
 			}
 
@@ -528,6 +536,7 @@ namespace Graficas.Continuo
 			public Ruta (ContinuoPunto inicial)
 			{
 				NodoInicial = inicial;
+				NodoFinal = inicial;
 			}
 
 			/// <summary>
@@ -551,11 +560,14 @@ namespace Graficas.Continuo
 			/// Devuelve el peso total de la ruta
 			/// </summary>
 			/// <value>The longitud.</value>
-			public new float Longitud
+			public float Longitud
 			{
 				get
 				{
-					return base.Longitud + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
+					var lbase = 0f;
+					foreach (var x in Paso)
+						lbase += ((AristaPeso<T, float>)x).Data;
+					return lbase + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
 				}
 			}
 
@@ -620,7 +632,7 @@ namespace Graficas.Continuo
 		/// <summary>
 		/// Gráfica donde vive este contnuo
 		/// </summary>
-		public readonly ILecturaGrafoPeso<T> GráficaBase;
+		public readonly Grafo<T, float> GráficaBase;
 
 		/// <summary>
 		/// Conjuntos de puntos asociados a este continuo
@@ -647,13 +659,14 @@ namespace Graficas.Continuo
 		/// Construye una instancia de esta clase con una grafica dada como base.
 		/// </summary>
 		/// <param name="gráfica">Grafica base</param>
-		public Continuo (ILecturaGrafoPeso<T> gráfica)
+		public Continuo (Grafo<T, float> gráfica)
 		{
+			Debug.Assert (
+				gráfica.SóloLectura,
+				"Este grafo debe ser sólo lectura para evitar comportamiento inesperado."); 
 			GráficaBase = gráfica;
 			foreach (var x in gráfica.Nodos)
-			{
 				puntosFijos.Add (x, AgregaPunto (x));
-			}
 		}
 
 		/// <summary>
@@ -668,7 +681,6 @@ namespace Graficas.Continuo
 		{
 			var ruta = rutas.CaminoÓptimo (inicial.A, final.A);
 			var ret = new Ruta (inicial);
-			ret.Concat (inicial.A, 0);
 			ret.Concat (ruta);
 			ret.ConcatFinal (final);
 			return ret;
@@ -691,8 +703,10 @@ namespace Graficas.Continuo
 		/// <param name="loc">Distancia de este punto a el primer punto dado, a</param>
 		public ContinuoPunto AgregaPunto (T a, T b, float loc)
 		{
-			if (a == null)
-				throw new ArgumentNullException ("El valor de un extremo no puede ser nulo.");
+			if (ReferenceEquals (a, null))
+				throw new ArgumentNullException (
+					"a",
+					"El valor de un extremo no puede ser nulo.");
 			var ret = new ContinuoPunto (this, a, b, loc);
 			ret.A = a;
 			ret.B = b;
@@ -738,7 +752,7 @@ namespace Graficas.Continuo
 		/// <param name="arista">Arista.</param>
 		public IEnumerable<ContinuoPunto> PuntosArista (IArista<T> arista)
 		{
-			var aris = new ParNoOrdenado<T> (arista.Origen, arista.Destino);
+			var aris = arista.ComoPar ();
 			return PuntosArista (aris);
 		}
 
@@ -748,11 +762,11 @@ namespace Graficas.Continuo
 			string generalExcMsg = string.Format ("Fallo de integridad en {0}\n", this);
 			foreach (var p in Puntos)
 			{
-				if (p == null)
+				if (ReferenceEquals (p, null))
 					throw new ArgumentNullException (generalExcMsg + "Punto nulo en universo.");
 				if (typeof (T).IsClass)
 				{
-					if (p.A == null && p.B == null)
+					if (ReferenceEquals (p.A, null) && ReferenceEquals (p.B, null))
 						throw new ArgumentNullException (generalExcMsg + "Punto no nulo con extremos nulos.");
 				}
 			}

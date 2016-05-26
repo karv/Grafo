@@ -27,22 +27,44 @@ namespace Graficas.Rutas
 			return RutasDict [x, y];
 		}
 
-		bool IntentaAgregarArista (TNodo origen, TNodo destino, float peso)
+		static float Peso (IArista<TNodo> aris)
 		{
-			if (!(RutasDict [origen, destino]?.Longitud < peso))
+			return 0;
+		}
+
+		bool IntentaAgregarArista (IArista<TNodo> aris)
+		{
+			bool ret = false;
+			var par = aris.ComoPar ();
+			var p0 = par [0];
+			var p1 = par [1];
+			var peso = Peso (aris);
+			if (aris.Coincide (p0, p1))
 			{
-				var addRuta = new Ruta<TNodo> ();
-				addRuta.Concat (origen, 0);
-				addRuta.Concat (destino, peso);
-				RutasDict [origen, destino] = addRuta;
-				return true;
+				if (!(RutasDict [p0, p1]?.Longitud (Peso) < peso))
+				{
+					var addRuta = new Ruta<TNodo> ();
+					addRuta.Concat (aris, p0);
+					RutasDict [p0, p1] = addRuta;
+					ret = true;
+				}
 			}
-			return false;
+			if (aris.Coincide (p1, p0))
+			{
+				if (!(RutasDict [p1, p0]?.Longitud (Peso) < peso))
+				{
+					var addRuta = new Ruta<TNodo> ();
+					addRuta.Concat (aris, p1);
+					RutasDict [p1, p0] = addRuta;
+					ret = true;
+				}
+			}
+			return ret;
 		}
 
 		bool IntentaAgregarArista (IRuta<TNodo> ruta)
 		{
-			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud < ruta.Longitud))
+			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud (Peso) < ruta.Longitud (Peso)))
 			{
 				RutasDict [ruta.NodoInicial, ruta.NodoFinal] = ruta;
 				return true;
@@ -59,45 +81,44 @@ namespace Graficas.Rutas
 		}
 
 		/// <param name="gr">Gráfica asociada</param>
-		public ConjuntoRutasÓptimas (ILecturaGrafo<TNodo> gr)
+		public ConjuntoRutasÓptimas (IGrafo<TNodo> gr)
 			: this ()
 		{
 			var aris = new List<IArista<TNodo>> (gr.Aristas ());
-			var comp = new Comparison<IArista<TNodo>> ((x, y) => x.Peso < y.Peso ? -1 : 1);
+			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
 
 			aris.Sort (comp);
 			Debug.WriteLine (aris);
 
-			foreach (var x in gr.Nodos)
-				IntentaAgregarArista (x, x, 0);
-
-			foreach (var x in aris)
+			foreach (var y in aris)
 			{
-				IntentaAgregarArista (x.Origen, x.Destino, x.Peso);
+				if (y == null)
+					throw new InvalidOperationException ("Grafo tiene arista nula.");
+				var x = y as IAristaDirigida<TNodo>;
+				if (x == null)
+					throw new NotSupportedException ("Para calcular rutas, el grafo debe ser de aristas dirigidas.");
+				
+				IntentaAgregarArista (x);
 
 				// Ahora rellenar las rutas
 				var clone = new Dictionary<Tuple<TNodo, TNodo>, IRuta<TNodo>> (RutasDict);
-				foreach (var y in clone)
+				foreach (var z in clone)
 				{
 					// Tomar a los que tienen como destino a x.Origen y concatenarlos con y	
-					if (y.Key.Item2.Equals (x.Origen)) // ¿Por qué no entra incluso si la igualdad es true?
+					if (z.Key.Item2.Equals (x.Origen))
 					{
-						var path = new Ruta<TNodo> (y.Value);
+						var path = new Ruta<TNodo> (z.Value);
 						path.Concat (new Ruta<TNodo> (x));
 						if (IntentaAgregarArista (path))
-						{
 							Console.WriteLine ();
-						}
 					}
 					// Tomar a los que tienen como origen a x.Destino y concatenarlos con y
-					else if (y.Key.Item1.Equals (x.Destino))
+					else if (z.Key.Item1.Equals (x.Destino))
 					{
 						var path = new Ruta<TNodo> (x);
-						path.Concat (y.Value);
+						path.Concat (z.Value);
 						if (IntentaAgregarArista (path))
-						{
 							Console.WriteLine ();
-						}
 					}
 				}
 			}

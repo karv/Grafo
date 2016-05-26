@@ -11,29 +11,39 @@ namespace Graficas.Rutas
 	public class Ruta<T> : IRuta<T>
 		where T : IEquatable<T>
 	{
-		/// <summary>
-		/// Una pareja Nodo-peso
-		/// </summary>
-		[Serializable]
-		protected struct NodoPeso
+		class TPaso : IAristaDirigida<T>
 		{
-			/// <summary>
-			/// El nodo
-			/// </summary>
-			public T Nodo;
-
-			/// <summary>
-			/// El peso
-			/// </summary>
-			public float Peso;
-
-			/// <param name="nodo">Nodo.</param>
-			/// <param name="peso">Peso.</param>
-			public NodoPeso (T nodo, float peso)
+			public TPaso (T origen, T destino)
 			{
-				Nodo = nodo;
-				Peso = peso;
+				Origen = origen;
+				Destino = destino;
 			}
+
+			public T Origen { get; set; }
+
+			public T Destino { get; set; }
+
+			public bool Coincide (T origen, T destino)
+			{
+				return Origen.Equals (origen) && Destino.Equals (destino);
+			}
+
+			public ListasExtra.ParNoOrdenado<T> ComoPar ()
+			{
+				return new ListasExtra.ParNoOrdenado<T> (Origen, Destino);
+			}
+
+			public T Antipodo (T nodo)
+			{
+				return nodo.Equals (Origen) ? Destino : Origen;
+			}
+
+			public bool Corta (T nodo)
+			{
+				return nodo.Equals (Origen) || nodo.Equals (Destino);
+			}
+
+			public bool Existe { get; set; }
 		}
 
 		/// <summary>
@@ -43,10 +53,19 @@ namespace Graficas.Rutas
 		{
 		}
 
-		/// <param name="origen">Origen</param>
-		public Ruta (T origen)
+		/// <param name="inicial">Nodo inicial</param>
+		[Obsolete]
+		public Ruta (T inicial)
 		{
-			Paso.Add (new NodoPeso (origen, 0));
+			_virtualInicial = inicial;
+		}
+
+		/// <param name="origen">Nodo inicial</param>
+		/// <param name="destino">Nodo final</param>
+		/// <remarks>inicial-final debe ser una arista</remarks>
+		public Ruta (T origen, T destino)
+		{
+			Paso.Add (new TPaso (origen, destino)); 
 		}
 
 		/// <summary>
@@ -54,25 +73,22 @@ namespace Graficas.Rutas
 		/// </summary>
 		/// <param name="ruta">Ruta a imitar</param>
 		public Ruta (IRuta<T> ruta)
-			: this (ruta.NodoInicial)
 		{
+			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
-			{
-				Paso.Add (new NodoPeso (x.Destino, x.Peso));
-			}
+				Paso.Add (x);
 		}
 
 		/// <param name="aris">Arista inicial</param>
-		public Ruta (IArista<T> aris)
+		public Ruta (IAristaDirigida<T> aris)
 		{
-			Paso.Add (new NodoPeso (aris.Origen, 0));
-			Paso.Add (new NodoPeso (aris.Destino, aris.Peso));
+			Paso.Add (aris);
 		}
 
 		/// <summary>
 		/// Lista de pasos de esta ruta.
 		/// </summary>
-		readonly protected IList<NodoPeso> Paso = new List<NodoPeso> ();
+		readonly protected IList<IAristaDirigida<T>> Paso = new List<IAristaDirigida<T>> ();
 
 		/// <summary>
 		/// 
@@ -82,7 +98,7 @@ namespace Graficas.Rutas
 			string ret = string.Format ("[{0}]: ", NumPasos);
 			foreach (var x in Paso)
 			{
-				ret += string.Format (" {0} ", x.Nodo);
+				ret += string.Format (" {0} ", x);
 
 			}
 			return ret;
@@ -91,16 +107,11 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		public IEnumerable<IPaso<T>> Pasos
+		public IEnumerable<IAristaDirigida<T>> Pasos
 		{ 
 			get
 			{ 
-				var ret = new List<IPaso<T>> ();
-				for (int i = 0; i < Paso.Count - 1; i++)
-				{
-					ret.Add (new Paso<T> (Paso [i].Nodo, Paso [i + 1].Nodo, Paso [i + 1].Peso));
-				}
-				return ret;
+				return new List<IAristaDirigida<T>> (Paso);
 			} 
 		}
 
@@ -108,26 +119,36 @@ namespace Graficas.Rutas
 		/// Concatena con un paso una ruta
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		public void Concat (IPaso<T> paso)
+		public void Concat (IAristaDirigida<T> paso)
 		{
 			if (paso == null)
-				throw new NullReferenceException ();
+				throw new NullReferenceException ("No se puede concatenar con una arista nula.");
 			if (NumPasos == 0)
 			{
-				Paso.Add (new NodoPeso (paso.Origen, 0));
-				Paso.Add (new NodoPeso (paso.Destino, paso.Peso));
+				Paso.Add (paso);
 			}
 			else
 			{
-				if (NodoFinal.Equals (paso.Origen))
+				if (paso.Corta (NodoFinal))
 				{
-					Paso.Add (new NodoPeso (paso.Destino, paso.Peso));
+					Paso.Add (paso);
 				}
 				else
 				{
-					throw new System.Exception ("El nodo final debe coincidir con el origen de el paso para poder concatenar.");
+					throw new RutaInconsistenteException ("El nodo final debe cortar a la arista para poder concatenar.");
 				}
 			}
+		}
+
+		/// <summary>
+		/// Se concatena con una arista
+		/// </summary>
+		/// <param name="paso">Arista que compone</param>
+		/// <param name="origen">Nodo intersección entre esta ruta y la arista</param>
+		public void Concat (IArista<T> paso, T origen)
+		{
+			TPaso p = new Ruta<T>.TPaso (origen, paso.Antipodo ((origen)));
+			Concat (p);
 		}
 
 		/// <summary>
@@ -136,42 +157,16 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta.</param>
 		public void Concat (IRuta<T> ruta)
 		{
-			if (!NodoFinal.Equals (ruta.NodoInicial))
-				throw new System.Exception ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
+			if (NumPasos > 0 && !NodoFinal.Equals (ruta.NodoInicial))
+				throw new RutaInconsistenteException ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 
 			foreach (var paso in ruta.Pasos)
 			{
-				Paso.Add (new NodoPeso (paso.Destino, paso.Peso));
+				Paso.Add (paso);
 			}
 		}
 
-		/// <summary>
-		/// Concatena esta ruta
-		/// </summary>
-		/// <param name="nodo">Nodo con qué concatenar</param>
-		/// <param name="peso">distancia de el Nodo final a este nuevo nodo</param>
-		public void Concat (T nodo, float peso)
-		{
-			Paso.Add (new NodoPeso (nodo, peso));
-		}
-
-		/// <summary>
-		/// Construye uan ruta como ésta, en sentido inverso.
-		/// </summary>
-		public Ruta<T> Reversa ()
-		{
-			var ret = new Ruta<T> ();
-			for (int i = Paso.Count - 1; i >= 0; i--)
-			{
-				ret.Paso.Add (Paso [i]);
-			}
-			return ret;
-		}
-
-		IRuta<T> IRuta<T>.Reversa ()
-		{
-			return Reversa ();
-		}
+		T _virtualInicial;
 
 		/// <summary>
 		/// Devuelve el origen de la ruta
@@ -181,7 +176,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return Paso [0].Nodo;
+				return Paso.Count == 0 ? _virtualInicial : Paso [0].Origen;
 			}
 		}
 
@@ -193,26 +188,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				if (NumPasos < 0)
-					throw new System.Exception ("No existe el nodo final en un path vacío.");
-				return Paso [NumPasos].Nodo;
-			}
-		}
-
-		/// <summary>
-		/// Devuelve el peso total de la ruta
-		/// </summary>
-		/// <value>The longitud.</value>
-		public float Longitud
-		{
-			get
-			{
-				float ret = 0;
-				foreach (var x in Paso)
-				{
-					ret += x.Peso;
-				}
-				return ret;
+				return NumPasos < 1 ? NodoInicial : Paso [NumPasos - 1].Destino;
 			}
 		}
 
@@ -224,7 +200,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return Paso.Count - 1;
+				return Paso.Count;
 			}
 		}
 	}

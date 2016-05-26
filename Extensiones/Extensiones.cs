@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ListasExtra.Extensiones;
 using Graficas.Grafo;
+using System;
 
 namespace Graficas.Extensiones
 {
@@ -9,16 +10,17 @@ namespace Graficas.Extensiones
 	/// </summary>
 	public static class Extensiones
 	{
-		/// <summary>
 		/// Devuelve una colección con las componentes conexas de una gráfica dada
+		/// <summary>
 		/// </summary>
 		/// <param name="gr">Gráfo</param>
 		/// <typeparam name="T">Tipo de nodos de la gráfica</typeparam>
-		public static ICollection<ILecturaGrafo<T>> ComponentesConexas<T> (this ILecturaGrafo<T> gr)
+		public static ICollection<IGrafo<T>> ComponentesConexas<T> (this IGrafo<T> gr)
+			where T : IEquatable<T>
 		{
 			var nodosRestantes = new HashSet<T> (gr.Nodos);
 			HashSet<T> Verdes;
-			var ret = new List<ILecturaGrafo<T>> ();
+			var ret = new List<IGrafo<T>> ();
 
 			while (nodosRestantes.Count > 0)
 			{

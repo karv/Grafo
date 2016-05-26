@@ -9,7 +9,8 @@
     <AssemblyName>Grafos</AssemblyName>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ReleaseVersion>0.1.6.5</ReleaseVersion>
+    <ReleaseVersion>0.2</ReleaseVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,40 +33,35 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="ListaExtras">
-      <HintPath>packages\ListaExtras.0.3.0.5\lib\ListaExtras.dll</HintPath>
+      <HintPath>packages\ListaExtras.0.3.0.7\lib\ListaExtras.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Aristas\Arista.cs" />
     <Compile Include="Aristas\IArista.cs" />
     <Compile Include="Continuo\Continuo.cs" />
-    <Compile Include="Rutas\IPaso.cs" />
     <Compile Include="Rutas\IRuta.cs" />
-    <Compile Include="Rutas\LinkedPaso.cs" />
-    <Compile Include="Rutas\Paso.cs" />
     <Compile Include="Rutas\Ruta.cs" />
-    <Compile Include="Exception\NodoInexistenteException.cs" />
-    <Compile Include="Exception\ColorDuplicadoException.cs" />
     <Compile Include="Grafo\GrafoClan.cs" />
-    <Compile Include="Grafo\GrafoNoPeso.cs" />
-    <Compile Include="Grafo\Grafos.cs" />
-    <Compile Include="Grafo\ILecturaGrafo.cs" />
-    <Compile Include="Grafo\ILecturaGrafoPeso.cs" />
     <Compile Include="Grafo\IGrafoRutas.cs" />
     <Compile Include="Grafo\IMulticolGrafo.cs" />
     <Compile Include="Grafo\MulticolGrafica.cs" />
     <Compile Include="Grafo\IGrafo.cs" />
-    <Compile Include="Grafo\IGrafoPeso.cs" />
     <Compile Include="Grafo\HardGrafo.cs" />
     <Compile Include="Aristas\HardArista.cs" />
     <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
     <Compile Include="Rutas\HardRuta.cs" />
-    <Compile Include="Grafo\GrafoArista.cs" />
-    <Compile Include="Aristas\AristaNombrada.cs" />
     <Compile Include="Nodos\INodo.cs" />
     <Compile Include="Nodos\Nodo.cs" />
     <Compile Include="Extensiones\Extensiones.cs" />
+    <Compile Include="Aristas\AristaPeso.cs" />
+    <Compile Include="Aristas\AristaBool.cs" />
+    <Compile Include="Aristas\OperaciónAristaInválida.cs" />
+    <Compile Include="Rutas\RutaInconsistenteException.cs" />
+    <Compile Include="Grafo\Grafo.cs" />
+    <Compile Include="Grafo\NodosCollectionComparer.cs" />
+    <Compile Include="Grafo\ColorDuplicadoException.cs" />
+    <Compile Include="Grafo\NodoInexistenteException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -88,7 +84,6 @@
     <Folder Include="Aristas\" />
     <Folder Include="Continuo\" />
     <Folder Include="Rutas\" />
-    <Folder Include="Exception\" />
     <Folder Include="Grafo\" />
     <Folder Include="Nodos\" />
     <Folder Include="Extensiones\" />

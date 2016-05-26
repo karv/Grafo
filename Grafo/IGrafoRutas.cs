@@ -1,11 +1,13 @@
 using Graficas.Rutas;
+using System;
 
 namespace Graficas.Grafo
 {
 	/// <summary>
 	/// Provee método para encontrar ruta óptima entre puntos
 	/// </summary>
-	public interface IGrafoRutas<T> : ILecturaGrafo<T>
+	public interface IGrafoRutas<T> : IGrafo<T>
+		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// Devuelve la ruta óptima entre dos nodos

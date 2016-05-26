@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Graficas.Nodos;
+using Graficas.Aristas;
+using System;
 
 namespace Graficas.Rutas
 {
@@ -7,6 +9,7 @@ namespace Graficas.Rutas
 	/// Representa una ruta dinámica según un grafo asociado.
 	/// </summary>
 	public class HardRuta<T> : IRuta<T>
+		where T : IEquatable<T>
 	{
 		List<Nodo<T>> _pasos { get; set; }
 
@@ -32,11 +35,6 @@ namespace Graficas.Rutas
 			ret._pasos = new List<Nodo<T>> (_pasos);
 			ret._pasos.Reverse ();
 			return ret;
-		}
-
-		IRuta<T> IRuta<T>.Reversa ()
-		{
-			return Reversa ();
 		}
 
 		/// <summary>
@@ -83,17 +81,17 @@ namespace Graficas.Rutas
 		/// Concatena esta ruta con un paso
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		public void Concat (IPaso<T> paso)
+		public void Concat (IAristaDirigida<T> paso)
 		{
 			if (NodoFinal.Objeto.Equals (paso.Origen))
 			{
 				var agrega = NodoFinal.Vecindad.Find (x => x.Objeto.Equals (paso.Destino));
 				if (agrega == null)
-					throw new System.Exception ("Paso inexsistente en grafo.");
+					throw new Exception ("Paso inexsistente en grafo.");
 				_pasos.Add (agrega);
 				return;
 			}
-			throw new System.Exception ("Nodo final de la ruta no concide con origen del paso.");
+			throw new Exception ("Nodo final de la ruta no concide con origen del paso.");
 		}
 
 		/// <summary>
@@ -103,7 +101,7 @@ namespace Graficas.Rutas
 		public void Concat (IRuta<T> ruta)
 		{
 			if (!NodoFinal.Objeto.Equals (ruta.NodoInicial))
-				throw new System.Exception ("Nodo final de la ruta no concide con origen del paso.");
+				throw new Exception ("Nodo final de la ruta no concide con origen del paso.");
 			foreach (var x in ruta.Pasos)
 			{
 				Concat (x);
@@ -118,13 +116,8 @@ namespace Graficas.Rutas
 		{
 			var agrega = NodoFinal.Vecindad.Find (x => x.Objeto.Equals (nodo));
 			if (agrega == null)
-				throw new System.Exception ("Paso inexsistente en grafo.");
+				throw new Exception ("Paso inexsistente en grafo.");
 			_pasos.Add (agrega);
-		}
-
-		void IRuta<T>.Concat (T nodo, float peso)
-		{
-			Concat (nodo);
 		}
 
 		/// <summary>
@@ -151,17 +144,18 @@ namespace Graficas.Rutas
 			}
 		}
 
+
 		/// <summary>
 		/// Enumera los pasos
 		/// </summary>
 		/// <value>The pasos.</value>
-		public IEnumerable<IPaso<T>> Pasos
+		public IEnumerable<IAristaDirigida<T>> Pasos
 		{
 			get
 			{
 				for (int i = 0; i < NumPasos; i++)
 				{
-					yield return new Paso<T> (_pasos [i].Objeto, _pasos [i + 1].Objeto, 1);
+					yield return new HardArista<T> (_pasos [i], _pasos [i + 1]);
 				}
 			}
 		}

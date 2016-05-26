@@ -6,11 +6,12 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1145A7FB-2B97-404D-929C-5440FD7396D3}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Test</RootNamespace>
     <AssemblyName>GrafosTest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ReleaseVersion>0.1.6.5</ReleaseVersion>
+    <ReleaseVersion>0.2</ReleaseVersion>
+    <StartupObject>Test.MainClass</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,21 +33,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.framework, Version=2.6.3.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
-      <Package>nunit</Package>
-    </Reference>
     <Reference Include="Store">
       <HintPath>..\packages\Store.0.2\lib\Store.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.4.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <Package>nunit</Package>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GeneralTest.cs" />
-    <Compile Include="Continuo.cs" />
-    <Compile Include="TestHardGrafo.cs" />
-    <Compile Include="Rutas.cs" />
     <Compile Include="TestSerialización.cs" />
+    <Compile Include="Graf1.cs" />
+    <Compile Include="Graf2.cs" />
+    <Compile Include="Continuos.cs" />
+    <Compile Include="OtrosGrafos.cs" />
+    <Compile Include="ConjRutasOpt.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
