@@ -363,7 +363,6 @@ namespace Graficas.Continuo
 			/// <param name="dist">Dist.</param>
 			public bool AvanzarHacia (Ruta ruta, float dist)
 			{
-				// TODO: Arreglar, ruta debe ser una RutaDirigida (Ruta compuestos de pasos dirigidos)
 				foreach (var r in ruta.Pasos)
 				{
 					if (r.Destino.Equals (this))
@@ -383,7 +382,7 @@ namespace Graficas.Continuo
 			/// <param name="destino">Destino.</param>
 			/// <param name="dist">Distancia</param>
 			/// <exception cref="System.Exception">Cuando no se intenta avanzar hacia un vecino inmediato</exception>
-			public bool AvanzarHacia (ContinuoPunto destino, ref float dist) // TEST
+			public bool AvanzarHacia (ContinuoPunto destino, ref float dist)
 			{
 				if (!EnMismoIntervalo (destino))
 					throw new Exception (string.Format ("No se puede avanzar si no coinciden\n{0} avanzando hacia {1}.\tDist:{2}",
@@ -604,7 +603,6 @@ namespace Graficas.Continuo
 				}
 
 				// 2)
-				// TODO: Pasos debe ser dirigidos, para que corra
 				foreach (var x in Pasos)
 				{
 					if (punto.EnIntervaloInmediato (x.Origen, x.Destino))

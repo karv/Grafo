@@ -6,7 +6,7 @@ namespace Graficas.Aristas
 	/// Representa una arista de valor booleano
 	/// </summary>
 	[Serializable]
-	public class AristaBool<TNodo>  : IAristaDirigida<TNodo> //TEST todo
+	public class AristaBool<TNodo>  : IAristaDirigida<TNodo> 
 		where TNodo : IEquatable<TNodo>
 	{
 		/// <param name="origen">Origen.</param>
@@ -35,7 +35,7 @@ namespace Graficas.Aristas
 		/// Devuelve el origen de la arista
 		/// </summary>
 		/// <value>The origen.</value>
-		public TNodo Origen // TEST
+		public TNodo Origen
 		{
 			get
 			{
@@ -53,7 +53,7 @@ namespace Graficas.Aristas
 		/// Devuelve el destino de la arista
 		/// </summary>
 		/// <value>The destino.</value>
-		public TNodo Destino // TEST
+		public TNodo Destino
 		{
 			get
 			{
@@ -72,7 +72,7 @@ namespace Graficas.Aristas
 		/// </summary>
 		/// <value>true</value>
 		/// <c>false</c>
-		public bool Existe // TEST
+		public bool Existe
 		{
 			get
 			{
@@ -86,7 +86,6 @@ namespace Graficas.Aristas
 			}
 		}
 
-		// TEST
 		/// <summary>
 		/// Devuelve un <see cref="bool"/> determinando si este grafo simétrico, ie, 
 		/// la arista a -> b es equivalente a b -> a

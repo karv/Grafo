@@ -135,7 +135,7 @@ namespace Graficas.Grafo
 			IGrafo<TNodo> ret;
 			if (_asignación.TryGetValue (color, out ret))
 				return ret;
-			throw new System.Exception (string.Format ("Color {0} no existe.", color));
+			throw new Exception (string.Format ("Color {0} no existe.", color));
 		}
 
 		/// <summary>

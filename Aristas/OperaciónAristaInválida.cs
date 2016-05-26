@@ -24,7 +24,7 @@ namespace Graficas.Aristas
 		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
 		/// <param name="inner">The exception that is the cause of the current exception. </param>
 		public OperaciónAristaInválidaException (string message,
-		                                         System.Exception inner)
+		                                         Exception inner)
 			: base (message,
 			        inner)
 		{

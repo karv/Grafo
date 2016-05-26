@@ -10,7 +10,7 @@ namespace Graficas.Grafo
 	/// </summary>
 	[Serializable]
 	[Obsolete]
-	public class GrafoClan<T> : IGrafo<T> // TODO: reimplementar IGrafoRutas
+	public class GrafoClan<T> : IGrafo<T>
 		where T : IEquatable<T>
 	{
 		[Serializable]
