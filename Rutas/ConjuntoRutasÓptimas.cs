@@ -32,19 +32,34 @@ namespace Graficas.Rutas
 			return 0;
 		}
 
-		bool IntentaAgregarArista (IAristaDirigida<TNodo> aris)
+		bool IntentaAgregarArista (IArista<TNodo> aris)
 		{
-			var origen = aris.Origen;
-			var destino = aris.Destino;
+			bool ret = false;
+			var par = aris.ComoPar ();
+			var p0 = par [0];
+			var p1 = par [1];
 			var peso = Peso (aris);
-			if (!(RutasDict [origen, destino]?.Longitud (Peso) < peso))
+			if (aris.Coincide (p0, p1))
 			{
-				var addRuta = new Ruta<TNodo> ();
-				addRuta.Concat (aris);
-				RutasDict [origen, destino] = addRuta;
-				return true;
+				if (!(RutasDict [p0, p1]?.Longitud (Peso) < peso))
+				{
+					var addRuta = new Ruta<TNodo> ();
+					addRuta.Concat (aris, p0);
+					RutasDict [p0, p1] = addRuta;
+					ret = true;
+				}
 			}
-			return false;
+			if (aris.Coincide (p1, p0))
+			{
+				if (!(RutasDict [p1, p0]?.Longitud (Peso) < peso))
+				{
+					var addRuta = new Ruta<TNodo> ();
+					addRuta.Concat (aris, p1);
+					RutasDict [p1, p0] = addRuta;
+					ret = true;
+				}
+			}
+			return ret;
 		}
 
 		bool IntentaAgregarArista (IRuta<TNodo> ruta)
