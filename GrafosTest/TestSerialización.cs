@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Graficas.Grafo;
 using Graficas.Continuo;
-using Graficas.Rutas;
 
 namespace Test
 {
@@ -9,15 +8,15 @@ namespace Test
 	public class TestSerialización
 	{
 		static void TestSerial<T> (T gr)
-			where T : IGrafo<int>
+			where T : IGrafo<Objeto>
 		{
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
 			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
-			Assert.AreEqual (gr [0, 1], gr2 [0, 1]);
+			Assert.AreEqual (gr [0, 1].Existe, gr2 [0, 1].Existe);
 		}
 
 		static void TestSerialPeso<T> (T gr)
-			where T : Grafo<int, float>
+			where T : Grafo<Objeto, float>
 		{
 			gr [0, 1] = 1;
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
@@ -28,33 +27,25 @@ namespace Test
 		[Test]
 		public void SerGraf ()
 		{
-			var gr = new Grafo<int, float> ();
+			var gr = new Grafo<Objeto, float> ();
 			gr [0, 1] = 1;
 			TestSerial (gr);
 
-			var gr3 = new GrafoClan<int> ();
-			gr3.AgregaArista (0, 1);
-			TestSerial (gr3);
-
-			var gr4 = new HardGrafo<int> (gr);
+			var gr4 = new HardGrafo<Objeto> (gr);
 			TestSerial (gr4);
 		}
 
 		[Test]
 		public void Cont ()
 		{
-			var gr = new Grafo<int, float> ();
+			var gr = new Grafo<Objeto, float> (true);
 			gr [0, 1] = 1;
-			var c = new Continuo<int> (gr);
+			var c = new Continuo<Objeto> (gr);
 			c.AgregaPunto (0, 1, 0.3f);
 			Store.BinarySerialization.WriteToBinaryFile ("continuo", c);
-			var c2 = Store.BinarySerialization.ReadFromBinaryFile <Continuo<int>> ("continuo");
+			var c2 = Store.BinarySerialization.ReadFromBinaryFile <Continuo<Objeto>> ("continuo");
 			Assert.True (c2.Puntos.Count == c.Puntos.Count);
 		}
 
-		[Test]
-		public void RutasOpt ()
-		{
-		}
 	}
 }

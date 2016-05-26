@@ -1,12 +1,12 @@
 using System;
 
-namespace Graficas.Exception
+namespace Graficas.Grafo
 {
 	/// <summary>
 	/// Exception de cuando se intenta accesar por un grafo a un nodo que no existe en él.
 	/// </summary>
 	[Serializable]
-	public class NodoInexistenteException : System.Exception
+	public class NodoInexistenteException : Exception
 	{
 		/// <summary>
 		/// 
@@ -23,7 +23,7 @@ namespace Graficas.Exception
 
 		/// <param name="message">Message.</param>
 		/// <param name="inner">Inner.</param>
-		public NodoInexistenteException (string message, System.Exception inner)
+		public NodoInexistenteException (string message, Exception inner)
 			: base (message, inner)
 		{
 		}

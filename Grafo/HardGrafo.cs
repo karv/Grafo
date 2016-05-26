@@ -26,7 +26,7 @@ namespace Graficas.Grafo
 				if (x.Objeto.Equals (obj))
 					return x;
 			}
-			// Si existe, lo agrego
+			// Si no existe, lo agrego
 			var ret = new Nodo<T> (obj);
 			_nodos.Add (ret);
 			return ret;
@@ -74,12 +74,10 @@ namespace Graficas.Grafo
 		public HardGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new HardGrafo<T> ();
-			foreach (var x in conjunto)
-			{
+			foreach (T x in conjunto.ToList ())
 				ret.Add (x);
-			}
 
-			foreach (var x in conjunto.ToArray())
+			foreach (var x in conjunto.ToList ())
 			{
 				var nodoX = ret.AsNodo (x);
 				foreach (var y in AsNodo(x).Vecindad)
@@ -121,9 +119,7 @@ namespace Graficas.Grafo
 			{
 				Nodo<T> nodoDeItem = AsNodo (item);
 				foreach (var x in graf.Vecinos(item))
-				{
 					nodoDeItem.Vecindad.Add (AsNodo (x));
-				}
 			}
 		}
 
@@ -136,12 +132,7 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				foreach (var x in AsNodo(desde).Vecindad)
-				{
-					if (x.Objeto.Equals (hasta))
-						return true;
-				}
-				return false;
+				return AsNodo (desde).Vecindad.Any (x => x.Objeto.Equals (hasta));
 			}
 			set
 			{
@@ -149,9 +140,14 @@ namespace Graficas.Grafo
 					AsNodo (desde).Vecindad.Add (AsNodo (hasta));
 				else
 					AsNodo (desde).Vecindad.Remove (AsNodo (hasta));
+				limpiarNodos ();
 			}
 		}
 
+		void limpiarNodos ()
+		{
+			// _nodos.RemoveWhere (x => !x.Vecindad.Any ());
+		}
 
 		#region IGrafica implementation
 
@@ -181,12 +177,7 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				var ret = new List<T> (_nodos.Count);
-				foreach (var x in _nodos)
-				{
-					ret.Add (x.Objeto);
-				}
-				return ret;
+				return new List<T> (_nodos.Select (x => x.Objeto));
 			}
 		}
 
@@ -212,7 +203,7 @@ namespace Graficas.Grafo
 		{
 			
 			if (Contains (item))
-				throw new System.Exception ("Ya se encuentra nodo.");
+				throw new Exception ("Ya se encuentra nodo.");
 
 			_nodos.Add (new Nodo<T> (item));
 		}

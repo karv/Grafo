@@ -7,48 +7,10 @@ namespace Graficas.Aristas
 	/// Almacena el peso fuertemente, por lo que no hay vínculo directo con un grafo
 	/// </summary>
 	[Serializable]
-	public class AristaPeso<TNodo, TValor> : IArista<TNodo>
+	public class AristaPeso<TNodo, TValor> : AristaBool<TNodo>
+		where TNodo : IEquatable<TNodo>
 	{
-		TValor _dalor;
-		TNodo _origen;
-		TNodo _destino;
-		bool _existe;
-
-		/// <summary>
-		/// Devuelve el origen de la arista
-		/// </summary>
-		/// <value>The origen.</value>
-		public TNodo Origen
-		{
-			get
-			{
-				return _origen;
-			}
-			set
-			{
-				if (SóloLectura)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
-				_origen = value;
-			}
-		}
-
-		/// <summary>
-		/// Devuelve el destino de la arista
-		/// </summary>
-		/// <value>The destino.</value>
-		public TNodo Destino
-		{
-			get
-			{
-				return _destino;
-			}
-			set
-			{
-				if (SóloLectura)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
-				_destino = value;
-			}
-		}
+		TValor _valor;
 
 		/// <summary>
 		/// Devuelve el peso de la arista
@@ -59,9 +21,8 @@ namespace Graficas.Aristas
 			get
 			{
 				if (Existe)
-					return _dalor;
-				else
-					throw new OperaciónAristaInválidaException ("No se puede acceder al peso de una arista no existente.");
+					return _valor;
+				throw new OperaciónAristaInválidaException ("No se puede acceder al peso de una arista no existente.");
 			}
 			set
 			{
@@ -102,16 +63,15 @@ namespace Graficas.Aristas
 		/// <param name="destino">Destino.</param>
 		/// <param name="valor">Peso.</param>
 		/// <param name="sóloLectura">El objeto se creará como sólo lectura</param>
+		/// <param name="simétrico">La arista tiene dirección</param>
 		public AristaPeso (TNodo origen,
 		                   TNodo destino,
 		                   TValor valor,
-		                   bool sóloLectura = false)
+		                   bool sóloLectura = false,
+		                   bool simétrico = false)
+			: base (origen, destino, true, sóloLectura, simétrico)
 		{
-			_origen = origen;
-			_destino = destino;
-			_dalor = valor;
-			_existe = true;
-			SóloLectura = sóloLectura;
+			_valor = valor;
 		}
 
 		/// <summary>
@@ -120,12 +80,20 @@ namespace Graficas.Aristas
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
 		/// <param name="sóloLectura">El objeto se creará como sólo lectura</param>
-		public AristaPeso (TNodo origen, TNodo destino, bool sóloLectura = false)
+		/// <param name="simétrico">La arista tiene dirección</param>
+		public AristaPeso (TNodo origen,
+		                   TNodo destino,
+		                   bool sóloLectura = false,
+		                   bool simétrico = false)
+			: base (origen, destino, false, sóloLectura, simétrico)
 		{
-			_origen = origen;
-			_destino = destino;
-			_existe = false;
-			SóloLectura = sóloLectura;
+		}
+
+		/// <returns>A <see cref="System.String"/> that represents the current graph </returns>
+		public override string ToString ()
+		{
+			var baseStr = base.ToString ();
+			return string.Format ("{0}: {1}", baseStr, _valor);
 		}
 	}
 }

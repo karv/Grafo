@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Graficas.Aristas;
-using System.Security.Cryptography;
-using System.Threading;
 
 namespace Graficas.Rutas
 {
@@ -13,6 +11,41 @@ namespace Graficas.Rutas
 	public class Ruta<T> : IRuta<T>
 		where T : IEquatable<T>
 	{
+		class TPaso : IAristaDirigida<T>
+		{
+			public TPaso (T origen, T destino)
+			{
+				Origen = origen;
+				Destino = destino;
+			}
+
+			public T Origen { get; set; }
+
+			public T Destino { get; set; }
+
+			public bool Coincide (T origen, T destino)
+			{
+				return Origen.Equals (origen) && Destino.Equals (destino);
+			}
+
+			public ListasExtra.ParNoOrdenado<T> ComoPar ()
+			{
+				return new ListasExtra.ParNoOrdenado<T> (Origen, Destino);
+			}
+
+			public T Antipodo (T nodo)
+			{
+				return nodo.Equals (Origen) ? Destino : Origen;
+			}
+
+			public bool Corta (T nodo)
+			{
+				return nodo.Equals (Origen) || nodo.Equals (Destino);
+			}
+
+			public bool Existe { get; set; }
+		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -20,10 +53,19 @@ namespace Graficas.Rutas
 		{
 		}
 
-		/// <param name="origen">Origen</param>
-		public Ruta (T origen)
+		/// <param name="inicial">Nodo inicial</param>
+		[Obsolete]
+		public Ruta (T inicial)
 		{
-			throw new NotImplementedException ();
+			_virtualInicial = inicial;
+		}
+
+		/// <param name="origen">Nodo inicial</param>
+		/// <param name="destino">Nodo final</param>
+		/// <remarks>inicial-final debe ser una arista</remarks>
+		public Ruta (T origen, T destino)
+		{
+			Paso.Add (new TPaso (origen, destino)); 
 		}
 
 		/// <summary>
@@ -31,14 +73,14 @@ namespace Graficas.Rutas
 		/// </summary>
 		/// <param name="ruta">Ruta a imitar</param>
 		public Ruta (IRuta<T> ruta)
-			: this (ruta.NodoInicial)
 		{
+			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
 				Paso.Add (x);
 		}
 
 		/// <param name="aris">Arista inicial</param>
-		public Ruta (IArista<T> aris)
+		public Ruta (IAristaDirigida<T> aris)
 		{
 			Paso.Add (aris);
 		}
@@ -46,7 +88,7 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Lista de pasos de esta ruta.
 		/// </summary>
-		readonly protected IList<IArista<T>> Paso = new List<IArista<T>> ();
+		readonly protected IList<IAristaDirigida<T>> Paso = new List<IAristaDirigida<T>> ();
 
 		/// <summary>
 		/// 
@@ -65,11 +107,11 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		public IEnumerable<IArista<T>> Pasos
+		public IEnumerable<IAristaDirigida<T>> Pasos
 		{ 
 			get
 			{ 
-				return new List<IArista<T>> (Paso);
+				return new List<IAristaDirigida<T>> (Paso);
 			} 
 		}
 
@@ -77,7 +119,7 @@ namespace Graficas.Rutas
 		/// Concatena con un paso una ruta
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		public void Concat (IArista<T> paso)
+		public void Concat (IAristaDirigida<T> paso)
 		{
 			if (paso == null)
 				throw new NullReferenceException ("No se puede concatenar con una arista nula.");
@@ -87,15 +129,26 @@ namespace Graficas.Rutas
 			}
 			else
 			{
-				if (NodoFinal.Equals (paso.Origen))
+				if (paso.Corta (NodoFinal))
 				{
 					Paso.Add (paso);
 				}
 				else
 				{
-					throw new RutaInconsistenteException ("El nodo final debe coincidir con el origen de el paso para poder concatenar.");
+					throw new RutaInconsistenteException ("El nodo final debe cortar a la arista para poder concatenar.");
 				}
 			}
+		}
+
+		/// <summary>
+		/// Se concatena con una arista
+		/// </summary>
+		/// <param name="paso">Arista que compone</param>
+		/// <param name="origen">Nodo intersección entre esta ruta y la arista</param>
+		public void Concat (IArista<T> paso, T origen)
+		{
+			TPaso p = new Ruta<T>.TPaso (origen, paso.Antipodo ((origen)));
+			Concat (p);
 		}
 
 		/// <summary>
@@ -104,7 +157,7 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta.</param>
 		public void Concat (IRuta<T> ruta)
 		{
-			if (!NodoFinal.Equals (ruta.NodoInicial))
+			if (NumPasos > 0 && !NodoFinal.Equals (ruta.NodoInicial))
 				throw new RutaInconsistenteException ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 
 			foreach (var paso in ruta.Pasos)
@@ -112,6 +165,8 @@ namespace Graficas.Rutas
 				Paso.Add (paso);
 			}
 		}
+
+		T _virtualInicial;
 
 		/// <summary>
 		/// Devuelve el origen de la ruta
@@ -121,9 +176,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				if (NumPasos < 0)
-					throw new System.Exception ("No existe el nodo final en un path vacío.");
-				return Paso [0].Origen;
+				return Paso.Count == 0 ? _virtualInicial : Paso [0].Origen;
 			}
 		}
 
@@ -135,9 +188,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				if (NumPasos < 0)
-					throw new System.Exception ("No existe el nodo final en un path vacío.");
-				return Paso [NumPasos - 1].Destino;
+				return NumPasos < 1 ? NodoInicial : Paso [NumPasos - 1].Destino;
 			}
 		}
 

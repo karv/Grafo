@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Graficas.Rutas;
 using Graficas.Aristas;
-using Graficas.Exception;
 
 namespace Graficas.Grafo
 {
@@ -111,13 +110,7 @@ namespace Graficas.Grafo
 		/// <param name="aris">Aris.</param>
 		public IEnumerable<TColor> ColoresArista (IArista<TNodo> aris)
 		{
-			var ret = new List<TColor> ();
-			foreach (var gr in _asignación)
-			{
-				if (gr.Value [aris.Origen, aris.Destino].Existe)
-					ret.Add (gr.Key);
-			}
-			return ret;
+			throw new NotImplementedException ();
 		}
 
 		/// <summary>
@@ -142,7 +135,7 @@ namespace Graficas.Grafo
 			IGrafo<TNodo> ret;
 			if (_asignación.TryGetValue (color, out ret))
 				return ret;
-			throw new System.Exception (string.Format ("Color {0} no existe.", color));
+			throw new Exception (string.Format ("Color {0} no existe.", color));
 		}
 
 		/// <summary>
