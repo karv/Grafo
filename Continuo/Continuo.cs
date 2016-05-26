@@ -6,7 +6,7 @@ using System.Diagnostics;
 using Graficas.Aristas;
 using Graficas.Grafo;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using System.Runtime.CompilerServices;
 
 namespace Graficas.Continuo
 {
@@ -15,7 +15,7 @@ namespace Graficas.Continuo
 	/// </summary>
 	[Serializable]
 	public class Continuo<T>
-		where T : IEquatable<T>
+		where T : class, IEquatable<T>
 	{
 		/// <summary>
 		/// Representa un punto en un continuo.
@@ -145,9 +145,7 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-					// Analysis disable CompareNonConstrainedGenericWithNull
-					if (B == null)
-					// Analysis restore CompareNonConstrainedGenericWithNull
+					if (EnOrigen)
 						throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc si B es nulo.");
 					return Universo.GráficaBase [A, B] - Loc;
 				}

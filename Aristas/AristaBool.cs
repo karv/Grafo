@@ -5,6 +5,7 @@ namespace Graficas.Aristas
 	/// <summary>
 	/// Representa una arista de valor booleano
 	/// </summary>
+	[Serializable]
 	public class AristaBool<TNodo>  : IAristaDirigida<TNodo> //TEST todo
 		where TNodo : IEquatable<TNodo>
 	{

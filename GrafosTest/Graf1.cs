@@ -6,6 +6,7 @@ using Graficas.Rutas;
 
 namespace Test
 {
+	[Serializable]
 	public class Objeto : IEquatable<Objeto>
 	{
 		public readonly int Hash;
