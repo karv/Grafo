@@ -49,7 +49,6 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// 
 		/// </summary>
-		[Obsolete]
 		public Ruta ()
 		{
 		}

@@ -441,7 +441,18 @@ namespace Graficas.Continuo
 			/// <summary>
 			/// Pone a este punto en un punto de la gráfica.
 			/// </summary>
+			[Obsolete ("Usar this.DesdeGrafo")]
 			public void FromGrafo (T punto)
+			{
+				A = punto;
+				B = default(T);
+				Loc = 0;
+			}
+
+			/// <summary>
+			/// Pone a este punto en un punto de la gráfica.
+			/// </summary>
+			public void DesdeGrafo (T punto)
 			{
 				A = punto;
 				B = default(T);
@@ -597,11 +608,10 @@ namespace Graficas.Continuo
 
 				// 2)
 				// TODO: Pasos debe ser dirigidos, para que corra
-				throw new NotImplementedException ();
 				foreach (var x in Pasos)
 				{
-					//if (punto.EnIntervaloInmediato (x.Origen, x.Destino))
-					return true;
+					if (punto.EnIntervaloInmediato (x.Origen, x.Destino))
+						return true;
 				}
 
 				// 1)

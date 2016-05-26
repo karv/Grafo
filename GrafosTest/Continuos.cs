@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
 using Graficas.Grafo;
-using System;
 using Graficas.Continuo;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -79,9 +77,32 @@ namespace Test
 		}
 
 		[Test]
-		public void ContPuntEventos ()
+		public void Rutas ()
 		{
-			
+			const int len = 4;
+			var gr = new Grafo<Objeto, float> (true);
+
+			for (int i = 0; i < len; i++)
+				gr [i, i + 1] = i + 1;
+
+			var cp = new Continuo<Objeto> (gr);
+
+			var ruta = new Continuo<Objeto>.Ruta (cp.PuntoFijo (0));
+			ruta.Concat (gr.EncuentraArista (0, 1));
+			ruta.Concat (gr.EncuentraArista (1, 2));
+			ruta.Concat (gr.EncuentraArista (2, 3));
+			ruta.ConcatFinal (cp.PuntoFijo (3));
+
+			Assert.AreEqual (cp.PuntoFijo (0), ruta.NodoInicial);
+			Assert.AreEqual (cp.PuntoFijo (3), ruta.NodoFinal);
+
+			Assert.AreEqual (6, ruta.Longitud);
+			Assert.True (ruta.Contiene (cp.PuntoFijo (0)));
+			Assert.True (ruta.Contiene (cp.PuntoFijo (1)));
+			Assert.True (ruta.Contiene (cp.PuntoFijo (2)));
+			Assert.False (ruta.Contiene (cp.PuntoFijo (5)));
+			var p = cp.AgregaPunto (0, 1, 0.1f);
+			Assert.True (ruta.Contiene (p));
 		}
 	}
 }
