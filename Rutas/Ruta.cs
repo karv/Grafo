@@ -11,6 +11,7 @@ namespace Graficas.Rutas
 	public class Ruta<T> : IRuta<T>
 		where T : IEquatable<T>
 	{
+		[Serializable]
 		class TPaso : IAristaDirigida<T>
 		{
 			public TPaso (T origen, T destino)
