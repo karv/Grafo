@@ -11,42 +11,6 @@ namespace Graficas.Rutas
 	public class Ruta<T> : IRuta<T>
 		where T : IEquatable<T>
 	{
-		[Serializable]
-		class TPaso : IAristaDirigida<T>
-		{
-			public TPaso (T origen, T destino)
-			{
-				Origen = origen;
-				Destino = destino;
-			}
-
-			public T Origen { get; set; }
-
-			public T Destino { get; set; }
-
-			public bool Coincide (T origen, T destino)
-			{
-				return Origen.Equals (origen) && Destino.Equals (destino);
-			}
-
-			public ListasExtra.ParNoOrdenado<T> ComoPar ()
-			{
-				return new ListasExtra.ParNoOrdenado<T> (Origen, Destino);
-			}
-
-			public T Antipodo (T nodo)
-			{
-				return nodo.Equals (Origen) ? Destino : Origen;
-			}
-
-			public bool Corta (T nodo)
-			{
-				return nodo.Equals (Origen) || nodo.Equals (Destino);
-			}
-
-			public bool Existe { get; set; }
-		}
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -66,7 +30,7 @@ namespace Graficas.Rutas
 		/// <remarks>inicial-final debe ser una arista</remarks>
 		public Ruta (T origen, T destino)
 		{
-			Paso.Add (new TPaso (origen, destino)); 
+			Paso.Add (new Paso<T> (origen, destino)); 
 		}
 
 		/// <summary>
@@ -77,19 +41,19 @@ namespace Graficas.Rutas
 		{
 			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
-				Paso.Add (x);
+				Paso.Add (new Paso<T> (x));
 		}
 
 		/// <param name="aris">Arista inicial</param>
 		public Ruta (IAristaDirigida<T> aris)
 		{
-			Paso.Add (aris);
+			Paso.Add (new Paso<T> (aris));
 		}
 
 		/// <summary>
 		/// Lista de pasos de esta ruta.
 		/// </summary>
-		readonly protected IList<IAristaDirigida<T>> Paso = new List<IAristaDirigida<T>> ();
+		readonly protected IList<IPaso<T>> Paso = new List<IPaso<T>> ();
 
 		/// <summary>
 		/// 
@@ -126,13 +90,13 @@ namespace Graficas.Rutas
 				throw new NullReferenceException ("No se puede concatenar con una arista nula.");
 			if (NumPasos == 0)
 			{
-				Paso.Add (paso);
+				Paso.Add (new Paso<T> (paso));
 			}
 			else
 			{
 				if (paso.Corta (NodoFinal))
 				{
-					Paso.Add (paso);
+					Paso.Add (new Paso<T> (paso));
 				}
 				else
 				{
@@ -148,7 +112,7 @@ namespace Graficas.Rutas
 		/// <param name="origen">Nodo intersección entre esta ruta y la arista</param>
 		public void Concat (IArista<T> paso, T origen)
 		{
-			TPaso p = new Ruta<T>.TPaso (origen, paso.Antipodo ((origen)));
+			var p = new Paso<T> (origen, paso.Antipodo ((origen)));
 			Concat (p);
 		}
 
@@ -163,7 +127,7 @@ namespace Graficas.Rutas
 
 			foreach (var paso in ruta.Pasos)
 			{
-				Paso.Add (paso);
+				Paso.Add (new Paso<T> (paso));
 			}
 		}
 

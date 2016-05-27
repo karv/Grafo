@@ -62,6 +62,8 @@
     <Compile Include="Grafo\NodosCollectionComparer.cs" />
     <Compile Include="Grafo\ColorDuplicadoException.cs" />
     <Compile Include="Grafo\NodoInexistenteException.cs" />
+    <Compile Include="Aristas\IPaso.cs" />
+    <Compile Include="Aristas\Paso.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

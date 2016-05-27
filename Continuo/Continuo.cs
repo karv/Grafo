@@ -566,7 +566,8 @@ namespace Graficas.Continuo
 				{
 					var lbase = 0f;
 					foreach (var x in Paso)
-						lbase += ((AristaPeso<T, float>)x).Data;
+						lbase += x.Peso;
+			
 					return lbase + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
 				}
 			}
