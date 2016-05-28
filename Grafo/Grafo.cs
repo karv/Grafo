@@ -233,7 +233,8 @@ namespace Graficas.Grafo
 			for (int i = 0; i < NumNodos; i++)
 			// Si es simétrico, no repetir aristas.
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
-					ret.Add (Data [i, j]);
+					if (Data [i, j].Existe)
+						ret.Add (Data [i, j]);
 			return ret;
 		}
 
