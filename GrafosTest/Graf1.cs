@@ -161,12 +161,11 @@ namespace Test
 		public void Nodos ()
 		{
 			var grafo = new Grafo<Objeto> (ObjetoColl);
-			const int max = 100;
-			for (int i = 0; i < max; i++)
+			for (int i = 0; i < size; i++)
 				grafo [0, i] = true;
-			Assert.AreEqual (max, grafo.NumNodos);
+			Assert.AreEqual (size, grafo.NumNodos);
 			var nods = grafo.Nodos;
-			for (int i = 0; i < max; i++)
+			for (int i = 0; i < size; i++)
 				Assert.True (nods.Contains (i));
 		}
 
