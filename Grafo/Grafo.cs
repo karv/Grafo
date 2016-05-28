@@ -38,13 +38,13 @@ namespace Graficas.Grafo
 
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < NumNodos; j++)
-					Data [i, j] = new AristaBool<T> (
-						IntNodos [i],
-						IntNodos [j],
-						false,
-						SóloLectura,
-						EsSimétrico);
+				{
+					var aris = ConstruirNuevaArista (IntNodos [i], IntNodos [j]);
+					Data [i, j] = aris;
+				}
 		}
+
+		protected abstract AristaBool<T> ConstruirNuevaArista (T origen, T destino);
 
 		protected virtual void ClearData ()
 		{
@@ -305,6 +305,11 @@ namespace Graficas.Grafo
 
 		#endregion
 
+		protected override AristaBool<T> ConstruirNuevaArista (T origen, T destino)
+		{
+			return new AristaPeso<T ,TData> (origen, destino, SóloLectura, EsSimétrico);
+		}
+
 		#region IGrafo
 
 		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
@@ -557,11 +562,6 @@ namespace Graficas.Grafo
 
 		#endregion
 
-		#region Eventos
-
-		public event Action AlLimpiar;
-
-		#endregion
 	}
 
 	/// <summary>
@@ -604,6 +604,11 @@ namespace Graficas.Grafo
 		}
 
 		#endregion
+
+		protected override AristaBool<T> ConstruirNuevaArista (T origen, T destino)
+		{
+			return new AristaBool<T> (origen, destino, false, SóloLectura, EsSimétrico);
+		}
 
 		/// <summary>
 		/// Clona las aristas y las agrega a un grafo.
@@ -830,13 +835,5 @@ namespace Graficas.Grafo
 
 		#endregion
 
-		#region Eventos
-
-		/// <summary>
-		/// Ocurre al ejecutar Clear ()
-		/// </summary>
-		public event Action AlLimpiar;
-
-		#endregion
 	}
 }
