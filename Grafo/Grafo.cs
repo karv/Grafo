@@ -23,6 +23,12 @@ namespace Graficas.Grafo
 			EsSimétrico = simétrico;
 			SóloLectura = sóloLectura;
 			IntNodos = new T[nodos.Count];
+
+			// Copiar la info de nodos a IntNodo
+			int i = 0;
+			foreach (var x in nodos)
+				IntNodos [i++] = x;
+
 			Data = new AristaBool<T>[NumNodos, NumNodos];
 			inicializaData ();
 		}
@@ -59,7 +65,8 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				// TODO: Hacer que devuelve un readonly
+				return new HashSet<T> (IntNodos);
 			}
 		}
 
