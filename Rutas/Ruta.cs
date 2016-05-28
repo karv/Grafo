@@ -9,7 +9,6 @@ namespace Graficas.Rutas
 	/// </summary>
 	[Serializable]
 	public class Ruta<T> : IRuta<T>
-		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// 

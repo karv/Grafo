@@ -8,7 +8,6 @@ namespace Graficas.Rutas
 	/// Una ruta de un grafo
 	/// </summary>
 	public interface IRuta<T>
-		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// Devuelve el nodo inicial
