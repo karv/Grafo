@@ -3,12 +3,34 @@ using Graficas.Grafo;
 using Graficas.Continuo;
 using System.Collections.Generic;
 using System.Linq;
+using Graficas.Rutas;
+using Graficas.Aristas;
 
 namespace Test
 {
 	[TestFixture]
 	public class Continuos
 	{
+		[Test]
+		public void ConjRutas ()
+		{
+			const int len = 4;
+			var gr = new Grafo<Objeto, float> (true);
+
+			for (int i = 0; i < len; i++)
+				gr [i, i + 1] = i + 1;
+
+			var cp = new Continuo<Objeto> (gr);
+			var ro = new ConjuntoRutasÓptimas<Objeto> (gr);
+
+			var r = Continuo<Objeto>.RutaÓptima (
+				        cp.PuntoFijo (0),
+				        cp.PuntoFijo (len - 1),
+				        ro);
+
+			Assert.AreEqual ((len * (len - 1)) / 2, r.Longitud);
+		}
+
 		[Test]
 		public void ContPuntoBasic ()
 		{
@@ -55,9 +77,9 @@ namespace Test
 			Assert.True (cp.PuntosArista (0, 1).Any (z => z.Equals (pmov)));
 			var pmov2 = cp.AgregaPunto (0);
 			var ruta = new Continuo<Objeto>.Ruta (pmov2);
-			ruta.Concat (gr.EncuentraArista (0, 1));
-			ruta.Concat (gr.EncuentraArista (1, 2));
-			ruta.Concat (gr.EncuentraArista (2, 3));
+			ruta.Concat (new Paso<Objeto> (0, 1));
+			ruta.Concat (new Paso<Objeto> (1, 2));
+			ruta.Concat (new Paso<Objeto> (2, 3));
 			ruta.ConcatFinal (cp.PuntoFijo (3));
 
 			Assert.AreEqual (0.3f, pmov.DistanciaAExtremo (0));
@@ -88,9 +110,9 @@ namespace Test
 			var cp = new Continuo<Objeto> (gr);
 
 			var ruta = new Continuo<Objeto>.Ruta (cp.PuntoFijo (0));
-			ruta.Concat (gr.EncuentraArista (0, 1));
-			ruta.Concat (gr.EncuentraArista (1, 2));
-			ruta.Concat (gr.EncuentraArista (2, 3));
+			ruta.Concat (new Ruta<Objeto> (0, 1));
+			ruta.Concat (new Ruta<Objeto> (1, 2));
+			ruta.Concat (new Ruta<Objeto> (2, 3));
 			ruta.ConcatFinal (cp.PuntoFijo (3));
 
 			Assert.AreEqual (cp.PuntoFijo (0), ruta.NodoInicial);
@@ -104,5 +126,6 @@ namespace Test
 			var p = cp.AgregaPunto (0, 1, 0.1f);
 			Assert.True (ruta.Contiene (p));
 		}
+
 	}
 }

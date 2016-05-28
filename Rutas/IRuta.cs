@@ -26,11 +26,13 @@ namespace Graficas.Rutas
 		/// </summary>
 		int NumPasos { get; }
 
+		float Longitud { get; }
+
 		/// <summary>
 		/// Concatena esta ruta con un paso
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		void Concat (IAristaDirigida<T> paso);
+		void Concat (IPaso<T> paso);
 
 		/// <summary>
 		/// Concatena esta ruta con otra ruta
@@ -41,7 +43,7 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		IEnumerable<IAristaDirigida<T>> Pasos { get; }
+		IEnumerable<IPaso<T>> Pasos { get; }
 	}
 
 	/// <summary>
@@ -55,6 +57,7 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta.</param>
 		/// <param name="peso">Función de peso</param>
 		/// <typeparam name="T">Nodos de ruta</typeparam>
+		[Obsolete ("IRuta cuenta con propiedad Longitud.get")]
 		public static float Longitud<T> (this IRuta<T> ruta,
 		                                 Func<IArista<T>, float> peso)
 			where T : IEquatable<T>

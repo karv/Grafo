@@ -28,9 +28,9 @@ namespace Graficas.Rutas
 		/// <param name="origen">Nodo inicial</param>
 		/// <param name="destino">Nodo final</param>
 		/// <remarks>inicial-final debe ser una arista</remarks>
-		public Ruta (T origen, T destino)
+		public Ruta (T origen, T destino, float peso = 1)
 		{
-			Paso.Add (new Paso<T> (origen, destino)); 
+			Paso.Add (new Paso<T> (origen, destino, peso)); 
 		}
 
 		/// <summary>
@@ -41,14 +41,9 @@ namespace Graficas.Rutas
 		{
 			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
-				Paso.Add (new Paso<T> (x));
+				Paso.Add (new Paso<T> (x.Origen, x.Destino, x.Peso));
 		}
 
-		/// <param name="aris">Arista inicial</param>
-		public Ruta (IAristaDirigida<T> aris)
-		{
-			Paso.Add (new Paso<T> (aris));
-		}
 
 		/// <summary>
 		/// Lista de pasos de esta ruta.
@@ -72,19 +67,38 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		public IEnumerable<IAristaDirigida<T>> Pasos
+		IEnumerable<IPaso<T>> IRuta<T>.Pasos
 		{ 
 			get
 			{ 
-				return new List<IAristaDirigida<T>> (Paso);
+				return  Pasos;
 			} 
+		}
+
+		public List<IPaso<T>> Pasos
+		{
+			get
+			{
+				return new List<IPaso<T>> (Paso);
+			}
+		}
+
+		public float Longitud
+		{
+			get
+			{
+				float ret = 0;
+				foreach (var x in Paso)
+					ret += x.Peso;
+				return ret;
+			}
 		}
 
 		/// <summary>
 		/// Concatena con un paso una ruta
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		public void Concat (IAristaDirigida<T> paso)
+		public void Concat (IPaso<T> paso)
 		{
 			if (paso == null)
 				throw new NullReferenceException ("No se puede concatenar con una arista nula.");
@@ -110,6 +124,7 @@ namespace Graficas.Rutas
 		/// </summary>
 		/// <param name="paso">Arista que compone</param>
 		/// <param name="origen">Nodo intersección entre esta ruta y la arista</param>
+		[Obsolete]
 		public void Concat (IArista<T> paso, T origen)
 		{
 			var p = new Paso<T> (origen, paso.Antipodo ((origen)));

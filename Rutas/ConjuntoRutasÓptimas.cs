@@ -29,7 +29,8 @@ namespace Graficas.Rutas
 
 		static float Peso (IArista<TNodo> aris)
 		{
-			return 0;
+			var ar = aris as AristaPeso<TNodo, float>;
+			return ar == null ? 1 : ar.Data;
 		}
 
 		bool IntentaAgregarArista (IArista<TNodo> aris)
@@ -41,20 +42,18 @@ namespace Graficas.Rutas
 			var peso = Peso (aris);
 			if (aris.Coincide (p0, p1))
 			{
-				if (!(RutasDict [p0, p1]?.Longitud (Peso) < peso))
+				if (!(RutasDict [p0, p1]?.Longitud < peso))
 				{
-					var addRuta = new Ruta<TNodo> ();
-					addRuta.Concat (aris, p0);
+					var addRuta = new Ruta<TNodo> (p0, p1, peso);
 					RutasDict [p0, p1] = addRuta;
 					ret = true;
 				}
 			}
 			if (aris.Coincide (p1, p0))
 			{
-				if (!(RutasDict [p1, p0]?.Longitud (Peso) < peso))
+				if (!(RutasDict [p1, p0]?.Longitud < peso))
 				{
-					var addRuta = new Ruta<TNodo> ();
-					addRuta.Concat (aris, p1);
+					var addRuta = new Ruta<TNodo> (p1, p0, peso);
 					RutasDict [p1, p0] = addRuta;
 					ret = true;
 				}
@@ -64,7 +63,7 @@ namespace Graficas.Rutas
 
 		bool IntentaAgregarArista (IRuta<TNodo> ruta)
 		{
-			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud (Peso) < ruta.Longitud (Peso)))
+			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud < ruta.Longitud))
 			{
 				RutasDict [ruta.NodoInicial, ruta.NodoFinal] = ruta;
 				return true;
@@ -108,17 +107,18 @@ namespace Graficas.Rutas
 					if (z.Key.Item2.Equals (x.Origen))
 					{
 						var path = new Ruta<TNodo> (z.Value);
-						path.Concat (new Ruta<TNodo> (x));
+						var paso = new Paso<TNodo> (x);
+						path.Concat (paso);
 						if (IntentaAgregarArista (path))
-							Console.WriteLine ();
+							Debug.WriteLine ("");
 					}
 					// Tomar a los que tienen como origen a x.Destino y concatenarlos con y
 					else if (z.Key.Item1.Equals (x.Destino))
 					{
-						var path = new Ruta<TNodo> (x);
+						var path = new Ruta<TNodo> (x.Origen, x.Destino, Peso (x));
 						path.Concat (z.Value);
 						if (IntentaAgregarArista (path))
-							Console.WriteLine ();
+							Debug.WriteLine ("");
 					}
 				}
 			}

@@ -560,7 +560,7 @@ namespace Graficas.Continuo
 			/// Devuelve el peso total de la ruta
 			/// </summary>
 			/// <value>The longitud.</value>
-			public float Longitud
+			public new float Longitud
 			{
 				get
 				{

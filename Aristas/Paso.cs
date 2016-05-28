@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas.Aristas
 {
@@ -21,11 +22,24 @@ namespace Graficas.Aristas
 		}
 
 		public Paso (IAristaDirigida<T> aris)
+			: this (aris.Origen, aris.Destino)
 		{
-			Origen = aris.Origen;
-			Destino = aris.Destino;
-			var xAris = aris as AristaPeso<T, float>;
-			Peso = xAris == null ? 1 : xAris.Data;
+			var ar = aris as AristaPeso<T, float>;
+			if (ar != null)
+				Peso = ar.Data;
+		}
+
+		public Paso (IAristaDirigida<T> aris, float peso)
+			: this (aris.Origen, aris.Destino)
+		{
+			Peso = peso;
+		}
+
+		public Paso (IPaso<T> paso)
+		{
+			Origen = paso.Origen;
+			Destino = paso.Destino;
+			Peso = paso.Peso;
 		}
 
 		public bool Coincide (T origen, T destino)
@@ -56,6 +70,11 @@ namespace Graficas.Aristas
 			{
 				return true;
 			}
+		}
+
+		public override string ToString ()
+		{
+			return string.Format ("{0} -- [{2}] -> {1}", Origen, Destino, Peso);
 		}
 	}
 }
