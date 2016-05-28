@@ -70,6 +70,14 @@ namespace Graficas.Grafo
 			}
 		}
 
+		protected AristaBool<T> AdyacenciaÍndice (int origen, int destino)
+		{
+			if (origen <= destino || !EsSimétrico)
+				return Data [origen, destino];
+			else
+				return Data [destino, origen];
+		}
+
 		/// <summary>
 		/// Devuelve o establece si este grafo y sus aristas son de sólo lectura.
 		/// </summary>
@@ -138,6 +146,8 @@ namespace Graficas.Grafo
 				index1 = indexDes;
 			}
 
+			if (index0 == -1 || index1 == -1)
+				throw new NodoInexistenteException ();
 			return Data [index0, index1];
 		}
 
@@ -155,13 +165,14 @@ namespace Graficas.Grafo
 		public ISet<T> Vecino (T x)
 		{
 			ISet<T> ret = new HashSet<T> ();
-			IEnumerable<T> Nods = Nodos;
-			foreach (var y in Data)
+			var ix = ÍndiceDe (x);
+			for (int i = 0; i < NumNodos; i++)
 			{
-				var ap = y.Antipodo (x);
-				if (y.Coincide (x, ap))
-					ret.Add (ap);
+				var ar = AdyacenciaÍndice (ix, i);
+				if (ar.Existe)
+					ret.Add (IntNodos [i]);
 			}
+			
 			return ret;
 		}
 
@@ -173,13 +184,14 @@ namespace Graficas.Grafo
 		public ISet<T> AntiVecino (T x)
 		{
 			ISet<T> ret = new HashSet<T> ();
-			IEnumerable<T> Nods = Nodos;
-			foreach (var y in Data)
+			var ix = ÍndiceDe (x);
+			for (int i = 0; i < NumNodos; i++)
 			{
-				var ap = y.Antipodo (x);
-				if (y.Coincide (ap, x))
-					ret.Add (ap);
+				var ar = AdyacenciaÍndice (i, ix);
+				if (ar.Existe)
+					ret.Add (IntNodos [i]);
 			}
+
 			return ret;
 		}
 
