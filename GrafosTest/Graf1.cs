@@ -237,7 +237,7 @@ namespace Test
 		public void Subgrafo ()
 		{
 			var r = new Random ();
-			var max = r.Next (3, 100);
+			var max = r.Next (3, size);
 			var sim = r.Next (2) == 0;
 			var original = new Grafo<Objeto> (ObjetoColl, sim);
 			for (int i = 0; i < max; i++)
