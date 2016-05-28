@@ -85,7 +85,6 @@ namespace Test
 			grafo.Clear ();
 
 			Assert.IsEmpty (grafo.Aristas ());
-			Assert.IsEmpty (grafo.Nodos);
 		}
 
 		[Test]

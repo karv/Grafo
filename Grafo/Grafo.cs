@@ -92,13 +92,13 @@ namespace Graficas.Grafo
 		}
 
 		/// <summary>
-		/// Elimina nodos y aristas. Referencias antiguas no se preservan
+		/// Elimina las aristas sin modificar referencias.
 		/// </summary>
 		public void Clear ()
 		{
 			if (SóloLectura)
 				throw new InvalidOperationException ("Grafo es sólo lectura.");
-			Clear ();
+			ClearData ();
 			AlLimpiar?.Invoke ();
 		}
 
