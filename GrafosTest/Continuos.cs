@@ -11,6 +11,17 @@ namespace Test
 	[TestFixture]
 	public class Continuos
 	{
+		const int size = 30;
+		ICollection<Objeto> ObjetoColl;
+
+		[TestFixtureSetUp]
+		public void Setup ()
+		{
+			ObjetoColl = new HashSet<Objeto> ();
+			for (int i = 0; i < size; i++)
+				ObjetoColl.Add (i);
+		}
+
 		[Test]
 		public void ConjRutas ()
 		{
@@ -34,7 +45,7 @@ namespace Test
 		[Test]
 		public void ContPuntoBasic ()
 		{
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 			gr [0, 1] = 1;
 			var cp = new Continuo<Objeto> (gr);
 			var p0 = cp.PuntoFijo (0);
@@ -66,7 +77,7 @@ namespace Test
 			bool seDesplazó = false;
 			bool terminóRuta = false;
 			var nods = new HashSet<Objeto> ();
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 
 			for (int i = 0; i < len; i++)
 				gr [i, i + 1] = i + 1;
@@ -104,7 +115,7 @@ namespace Test
 		public void Rutas ()
 		{
 			const int len = 4;
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 
 			for (int i = 0; i < len; i++)
 				gr [i, i + 1] = i + 1;
