@@ -290,30 +290,28 @@ namespace Graficas.Grafo
 		public Grafo (IGrafo<T> graf, bool sóloLectura = true)
 			: base (graf.Nodos, false, sóloLectura)
 		{
-			foreach (var x in graf.Aristas ())
-			{
-				var par = x.ComoPar ();
-				var n0 = par [0];
-				var n1 = par [1];
+			for (int i = 0; i < NumNodos; i++)
+				for (int j = 0; j < NumNodos; j++)
+				{
+					var ori = IntNodos [i];
+					var des = IntNodos [j];
+					var ari = graf [ori, des].Existe;
+					if (ari)
+						Data [i, j] = new AristaPeso<T, TData> (
+							ori,
+							des, 
+							default(TData),
+							sóloLectura, 
+							false);
+					else
+						Data [i, j] = new AristaPeso<T, TData> (
+							ori,
+							des, 
+							sóloLectura, 
+							false);
+				}
+			
 
-				var i0 = ÍndiceDe (n0);
-				var i1 = ÍndiceDe (n1);
-
-				if (x.Coincide (n0, n1))
-					Data [i0, i1] = new AristaPeso<T, TData> (
-						n0,
-						n1,
-						default(TData),
-						sóloLectura);
-
-				if (x.Coincide (n1, n0))
-					Data [i1, i0] = new AristaPeso<T, TData> (
-						n1,
-						n0,
-						default(TData),
-						sóloLectura);
-
-			}
 		}
 
 		#endregion
@@ -337,7 +335,6 @@ namespace Graficas.Grafo
 		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto)
 		{
 			var ret = new Grafo<T, TData> (new HashSet<T> (conjunto), EsSimétrico, true);
-			throw new NotImplementedException ("Construir los valores de las aristas.");
 			return ret;
 		}
 
@@ -613,7 +610,17 @@ namespace Graficas.Grafo
 		public Grafo (IGrafo<T> graf, bool sóloLectura = true)
 			: base (graf.Nodos, false, sóloLectura)
 		{
-			throw new NotImplementedException ();
+			for (int i = 0; i < NumNodos; i++)
+				for (int j = 0; j < NumNodos; j++)
+				{
+					var ori = IntNodos [i];
+					var des = IntNodos [j];
+					Data [i, j] = new AristaBool<T> (
+						ori,
+						des,
+						graf [ori, des].Existe,
+						sóloLectura);
+				}
 		}
 
 		#endregion
@@ -635,7 +642,7 @@ namespace Graficas.Grafo
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
 				{
-					var x = Data [i, j] as AristaBool<T>; // La arista iterando
+					var x = Data [i, j]; // La arista iterando
 					ret.Data [i, j] = new AristaBool<T> (
 						x.Origen,
 						x.Destino,
@@ -652,7 +659,19 @@ namespace Graficas.Grafo
 		/// <returns>Un grafo sólo lectura clonado</returns>
 		public Grafo<T> ComoSóloLectura ()
 		{
-			throw new NotImplementedException ();
+			var ret = new Grafo<T> (Nodos, EsSimétrico, true);
+			for (int i = 0; i < NumNodos; i++)
+				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
+				{
+					var x = Data [i, j]; // La arista iterando
+					ret.Data [i, j] = new AristaBool<T> (
+						x.Origen,
+						x.Destino,
+						x.Existe,
+						x.SóloLectura,
+						x.EsSimétrico);
+				}
+			return ret;
 		}
 
 		#region IGrafica
