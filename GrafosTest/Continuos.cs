@@ -26,7 +26,7 @@ namespace Test
 		public void ConjRutas ()
 		{
 			const int len = 4;
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 
 			for (int i = 0; i < len; i++)
 				gr [i, i + 1] = i + 1;
