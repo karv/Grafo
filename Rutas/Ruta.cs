@@ -27,7 +27,8 @@ namespace Graficas.Rutas
 
 		/// <param name="origen">Nodo inicial</param>
 		/// <param name="destino">Nodo final</param>
-		/// <remarks>inicial-final debe ser una arista</remarks>
+		/// <param name="peso">Peso del paso</param>
+		/// <remarks>origen-destino debe ser una arista</remarks>
 		public Ruta (T origen, T destino, float peso = 1)
 		{
 			Paso.Add (new Paso<T> (origen, destino, peso)); 
@@ -75,6 +76,10 @@ namespace Graficas.Rutas
 			} 
 		}
 
+		/// <summary>
+		/// Enumera los pasos de la ruta
+		/// </summary>
+		/// <value>Un clón de los pasos</value>
 		public List<IPaso<T>> Pasos
 		{
 			get
@@ -83,6 +88,10 @@ namespace Graficas.Rutas
 			}
 		}
 
+		/// <summary>
+		/// Devuelve la longitud de la ruta
+		/// </summary>
+		/// <value>The longitud.</value>
 		public float Longitud
 		{
 			get
@@ -124,7 +133,6 @@ namespace Graficas.Rutas
 		/// </summary>
 		/// <param name="paso">Arista que compone</param>
 		/// <param name="origen">Nodo intersección entre esta ruta y la arista</param>
-		[Obsolete]
 		public void Concat (IArista<T> paso, T origen)
 		{
 			var p = new Paso<T> (origen, paso.Antipodo ((origen)));

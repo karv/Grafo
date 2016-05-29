@@ -26,6 +26,10 @@ namespace Graficas.Rutas
 		/// </summary>
 		int NumPasos { get; }
 
+		/// <summary>
+		/// Devuelve la longitud de la ruta
+		/// </summary>
+		/// <value>The longitud.</value>
 		float Longitud { get; }
 
 		/// <summary>
