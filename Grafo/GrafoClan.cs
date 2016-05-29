@@ -226,8 +226,11 @@ namespace Graficas.Grafo
 			var lst = new List<T> (seq);
 
 			for (int i = 0; i < lst.Count - 1; i++)
-				ret.Concat (EncuentraArista (lst [i], lst [i + 1]));
-
+			{
+				var aris = EncuentraArista (lst [i], lst [i + 1]);
+				var paso = new Paso<T> (lst [i], lst [i + 1], aris.Existe ? 1 : 0);
+				ret.Concat (paso);
+			}
 			return ret;
 		}
 
