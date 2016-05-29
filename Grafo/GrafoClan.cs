@@ -43,7 +43,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Elimina nodos y aristas de este grafo.
 		/// </summary>
-		public void Clear () // TEST
+		public void Clear ()
 		{
 			_nodos.Clear ();
 			clanes.Clear ();
