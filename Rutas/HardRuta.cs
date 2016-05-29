@@ -81,7 +81,7 @@ namespace Graficas.Rutas
 		/// Concatena esta ruta con un paso
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		public void Concat (IAristaDirigida<T> paso)
+		public void Concat (IPaso<T> paso)
 		{
 			if (NodoFinal.Objeto.Equals (paso.Origen))
 			{
@@ -149,13 +149,13 @@ namespace Graficas.Rutas
 		/// Enumera los pasos
 		/// </summary>
 		/// <value>The pasos.</value>
-		public IEnumerable<IAristaDirigida<T>> Pasos
+		public IEnumerable<IPaso<T>> Pasos
 		{
 			get
 			{
 				for (int i = 0; i < NumPasos; i++)
 				{
-					yield return new HardArista<T> (_pasos [i], _pasos [i + 1]);
+					yield return new Paso<T> (_pasos [i].Objeto, _pasos [i + 1].Objeto);
 				}
 			}
 		}

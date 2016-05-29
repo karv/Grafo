@@ -144,7 +144,7 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-					if (EnOrigen)
+					if (ReferenceEquals (B, null))
 						throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc si B es nulo.");
 					return Universo.GráficaBase [A, B] - Loc;
 				}
@@ -560,13 +560,14 @@ namespace Graficas.Continuo
 			/// Devuelve el peso total de la ruta
 			/// </summary>
 			/// <value>The longitud.</value>
-			public float Longitud
+			public new float Longitud
 			{
 				get
 				{
 					var lbase = 0f;
 					foreach (var x in Paso)
-						lbase += ((AristaPeso<T, float>)x).Data;
+						lbase += x.Peso;
+			
 					return lbase + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
 				}
 			}
