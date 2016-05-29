@@ -77,10 +77,11 @@ namespace Test
 			Assert.True (cp.PuntosArista (0, 1).Any (z => z.Equals (pmov)));
 			var pmov2 = cp.AgregaPunto (0);
 			var ruta = new Continuo<Objeto>.Ruta (pmov2);
-			ruta.Concat (new Paso<Objeto> (0, 1));
-			ruta.Concat (new Paso<Objeto> (1, 2));
-			ruta.Concat (new Paso<Objeto> (2, 3));
+			ruta.Concat (new Paso<Objeto> (0, 1, 1));
+			ruta.Concat (new Paso<Objeto> (1, 2, 2));
+			ruta.Concat (new Paso<Objeto> (2, 3, 3));
 			ruta.ConcatFinal (cp.PuntoFijo (3));
+			Assert.AreEqual (6, ruta.Longitud);
 
 			Assert.AreEqual (0.3f, pmov.DistanciaAExtremo (0));
 			pmov2.AlColisionar += obj => colisionó.Add (obj);
@@ -88,10 +89,11 @@ namespace Test
 			pmov2.AlLlegarANodo += () => nods.Add (pmov2.A);
 			pmov2.AlTerminarRuta += () => terminóRuta = true;
 
-			pmov2.AvanzarHacia (ruta, ruta.Longitud);
+			var rt = pmov2.AvanzarHacia (ruta, ruta.Longitud);
 
 			Assert.True (colisionó.Contains (pmov));
 			Assert.True (seDesplazó);
+			Assert.True (rt);
 			Assert.True (terminóRuta);
 			Assert.AreEqual (3, nods.Count);
 			for (int i = 0; i < 3; i++)
@@ -110,9 +112,9 @@ namespace Test
 			var cp = new Continuo<Objeto> (gr);
 
 			var ruta = new Continuo<Objeto>.Ruta (cp.PuntoFijo (0));
-			ruta.Concat (new Ruta<Objeto> (0, 1));
-			ruta.Concat (new Ruta<Objeto> (1, 2));
-			ruta.Concat (new Ruta<Objeto> (2, 3));
+			ruta.Concat (new Paso<Objeto> (0, 1, gr [0, 1]));
+			ruta.Concat (new Paso<Objeto> (1, 2, gr [1, 2]));
+			ruta.Concat (new Paso<Objeto> (2, 3, gr [2, 3]));
 			ruta.ConcatFinal (cp.PuntoFijo (3));
 
 			Assert.AreEqual (cp.PuntoFijo (0), ruta.NodoInicial);

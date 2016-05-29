@@ -144,7 +144,7 @@ namespace Graficas.Continuo
 			{
 				get
 				{
-					if (EnOrigen)
+					if (ReferenceEquals (B, null))
 						throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc si B es nulo.");
 					return Universo.GráficaBase [A, B] - Loc;
 				}
