@@ -72,7 +72,7 @@ namespace Graficas.Grafo
 
 		protected AristaBool<T> AdyacenciaÍndice (int origen, int destino)
 		{
-			if (origen <= destino || !EsSimétrico)
+			if (destino < origen || !EsSimétrico)
 				return Data [origen, destino];
 			else
 				return Data [destino, origen];
