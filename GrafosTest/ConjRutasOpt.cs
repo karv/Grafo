@@ -23,21 +23,21 @@ namespace Test
 		[Test]
 		public void General ()
 		{
-			const int numNods = 3;
 			var r = new Random ();
 			const double compacidad = 0.1;
 			var g = new Grafo<int> (ObjetoColl, true);
-			for (int i = 1; i < numNods; i++)
+			for (int i = 1; i < size; i++)
 			{
-				var conexNodo = r.Next (i - 1);
+				var conexNodo = r.Next (i);
 				g [i, conexNodo] = true;
 				for (int j = 0; j < i; j++)
 					g [i, j] |= r.NextDouble () < compacidad;
 			}
+			Assert.True (g.Vecino (0).Count > 0);
 			var rutas = new ConjuntoRutasÓptimas<int> (g);
-			for (int i = 0; i < numNods; i++)
+			for (int i = 0; i < size; i++)
 			{
-				for (int j = 0; j < numNods; j++)
+				for (int j = 0; j < size; j++)
 				{
 					if (i != j)
 					{
