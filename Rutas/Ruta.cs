@@ -57,10 +57,7 @@ namespace Graficas.Rutas
 		{
 			string ret = string.Format ("[{0}]: ", NumPasos);
 			foreach (var x in Paso)
-			{
 				ret += string.Format (" {0} ", x);
-
-			}
 			return ret;
 		}
 
