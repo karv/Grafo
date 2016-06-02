@@ -74,6 +74,15 @@ Ejecute Calcular () antes de llamar esta función");
 			return false;
 		}
 
+		void agregarDiagonal (ICollection<TNodo> coll)
+		{
+			foreach (var x in coll)
+			{
+				var rutaEstática = new Ruta<TNodo> (x, x, 0);
+				RutasDict [x, x] = rutaEstática;
+			}
+		}
+
 		/// <summary>
 		/// Calcula las rutas óptimas
 		/// </summary>
@@ -84,6 +93,8 @@ Ejecute Calcular () antes de llamar esta función");
 			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
 
 			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>> (null, null);
+			agregarDiagonal (gr.Nodos);
+
 			aris.Sort (comp);
 			Debug.WriteLine (aris);
 
@@ -101,7 +112,7 @@ Ejecute Calcular () antes de llamar esta función");
 				var clone = new Dictionary<Tuple<TNodo, TNodo>, IRuta<TNodo>> (RutasDict);
 				foreach (var z in clone)
 				{
-					// Tomar a los que tienen como destino a x.Origen y concatenarlos con y	
+					// Tomar a los que tienen como destino a x.Origen y concatenarlos con x
 					if (z.Key.Item2.Equals (x.Origen))
 					{
 						var path = new Ruta<TNodo> (z.Value);
@@ -110,7 +121,7 @@ Ejecute Calcular () antes de llamar esta función");
 						if (IntentaAgregarArista (path))
 							Debug.WriteLine ("");
 					}
-					// Tomar a los que tienen como origen a x.Destino y concatenarlos con y
+					// Tomar a los que tienen como origen a x.Destino y concatenarlos con x
 					else if (z.Key.Item1.Equals (x.Destino))
 					{
 						var path = new Ruta<TNodo> (x.Origen, x.Destino, Peso (x));
