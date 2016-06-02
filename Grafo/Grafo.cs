@@ -334,8 +334,7 @@ namespace Graficas.Grafo
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
 		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto)
 		{
-			var ret = new Grafo<T, TData> (new HashSet<T> (conjunto), EsSimétrico, true);
-			return ret;
+			throw new NotImplementedException ();
 		}
 
 		/// <summary>
