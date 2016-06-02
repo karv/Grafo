@@ -11,17 +11,29 @@ namespace Test
 	[TestFixture]
 	public class Continuos
 	{
+		const int size = 30;
+		ICollection<Objeto> ObjetoColl;
+
+		[TestFixtureSetUp]
+		public void Setup ()
+		{
+			ObjetoColl = new HashSet<Objeto> ();
+			for (int i = 0; i < size; i++)
+				ObjetoColl.Add (i);
+		}
+
 		[Test]
 		public void ConjRutas ()
 		{
 			const int len = 4;
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 
 			for (int i = 0; i < len; i++)
 				gr [i, i + 1] = i + 1;
 
 			var cp = new Continuo<Objeto> (gr);
-			var ro = new ConjuntoRutasÓptimas<Objeto> (gr);
+			var ro = new ConjuntoRutasÓptimas<Objeto> ();
+			ro.Calcular (gr);
 
 			var r = Continuo<Objeto>.RutaÓptima (
 				        cp.PuntoFijo (0),
@@ -34,7 +46,7 @@ namespace Test
 		[Test]
 		public void ContPuntoBasic ()
 		{
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 			gr [0, 1] = 1;
 			var cp = new Continuo<Objeto> (gr);
 			var p0 = cp.PuntoFijo (0);
@@ -42,9 +54,9 @@ namespace Test
 			var p2 = new Continuo<Objeto>.ContinuoPunto (cp, 0);
 			var p3 = new Continuo<Objeto>.ContinuoPunto (cp, 0, 1, 0.5f);
 
-			Assert.AreEqual (5, cp.Puntos.Count); // 0 == p0, 1, p1
+			Assert.AreEqual (3 + ObjetoColl.Count, cp.Puntos.Count); // 0 == p0, 1, p1
 			p1.Remove ();
-			Assert.AreEqual (4, cp.Puntos.Count); // 0 == p0, 1, p1
+			Assert.AreEqual (2 + ObjetoColl.Count, cp.Puntos.Count); // 0 == p0, 1, p1
 			Assert.AreEqual (p2, p0);
 
 			Assert.True (p0.EnMismoIntervalo (p3));
@@ -66,7 +78,7 @@ namespace Test
 			bool seDesplazó = false;
 			bool terminóRuta = false;
 			var nods = new HashSet<Objeto> ();
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 
 			for (int i = 0; i < len; i++)
 				gr [i, i + 1] = i + 1;
@@ -104,7 +116,7 @@ namespace Test
 		public void Rutas ()
 		{
 			const int len = 4;
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 
 			for (int i = 0; i < len; i++)
 				gr [i, i + 1] = i + 1;

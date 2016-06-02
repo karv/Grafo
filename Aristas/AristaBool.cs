@@ -6,8 +6,7 @@ namespace Graficas.Aristas
 	/// Representa una arista de valor booleano
 	/// </summary>
 	[Serializable]
-	public class AristaBool<TNodo>  : IAristaDirigida<TNodo> 
-		where TNodo : IEquatable<TNodo>
+	public class AristaBool<TNodo>  : IAristaDirigida<TNodo>
 	{
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>

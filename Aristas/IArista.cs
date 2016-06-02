@@ -8,7 +8,6 @@ namespace Graficas.Aristas
 	/// </summary>
 	/// <typeparam name="T">Tipo de nodos</typeparam>
 	public interface IArista<T>
-		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// Si esta arista coincide con extremos
@@ -45,7 +44,6 @@ namespace Graficas.Aristas
 	/// Representa una arista con una dirección.
 	/// </summary>
 	public interface IAristaDirigida <T> : IArista<T>
-		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// Origen

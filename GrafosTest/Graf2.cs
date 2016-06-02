@@ -3,6 +3,7 @@ using Graficas.Grafo;
 using NUnit.Framework;
 using Graficas.Aristas;
 using Graficas.Rutas;
+using System.Collections.Generic;
 
 namespace Test
 {
@@ -12,21 +13,31 @@ namespace Test
 	[TestFixture]
 	public class Graf2
 	{
+		const int size = 30;
+		ICollection<Objeto> ObjetoColl;
+
+		[TestFixtureSetUp]
+		public void Setup ()
+		{
+			ObjetoColl = new HashSet<Objeto> ();
+			for (int i = 0; i < size; i++)
+				ObjetoColl.Add (i);
+		}
+
 		[Test]
 		public void Clear ()
 		{
-			var grafo = new Grafo<Objeto, float> ();
+			var grafo = new Grafo<Objeto, float> (ObjetoColl);
 			grafo [0, 1] = 1;
 			grafo.Clear ();
 
 			Assert.IsEmpty (grafo.Aristas ());
-			Assert.IsEmpty (grafo.Nodos);
 		}
 
 		[Test]
 		public void SóloLectura ()
 		{
-			var grafo = new Grafo<Objeto, float> ();
+			var grafo = new Grafo<Objeto, float> (ObjetoColl);
 			grafo [0, 1] = 1;
 			var gr2 = new Grafo<Objeto, float> (grafo);
 			Assert.Throws<InvalidOperationException> (new TestDelegate (gr2.Clear));
@@ -43,7 +54,7 @@ namespace Test
 		[Test]
 		public void CtorClonado ()
 		{
-			var grafo = new Grafo<Objeto, float> ();
+			var grafo = new Grafo<Objeto, float> (ObjetoColl);
 			grafo [0, 1] = 1;
 			grafo [0, 2] = 1;
 			grafo [0, 3] = 1;
@@ -58,7 +69,7 @@ namespace Test
 		[Test]
 		public void Simetría ()
 		{
-			var grafo = new Grafo<Objeto, float> (true);
+			var grafo = new Grafo<Objeto, float> (ObjetoColl, true);
 			Assert.False (grafo.SóloLectura);
 			grafo [0, 1] = 1;
 			Assert.AreEqual (1, grafo [0, 1]);
@@ -71,7 +82,7 @@ namespace Test
 		[Test]
 		public void ExisteArista ()
 		{
-			var grafo = new Grafo<Objeto, float> ();
+			var grafo = new Grafo<Objeto, float> (ObjetoColl);
 			grafo [0, 1] = 1;
 			Assert.True (grafo.ExisteArista (0, 1) && !grafo.ExisteArista (1, 0));
 		}
@@ -79,7 +90,7 @@ namespace Test
 		[Test]
 		public void Vecindad ()
 		{
-			var grafo = new Grafo<Objeto, float> ();
+			var grafo = new Grafo<Objeto, float> (ObjetoColl);
 			grafo [0, 1] = 1;
 			grafo [0, 2] = 1;
 			grafo [1, 2] = 1;
@@ -96,13 +107,13 @@ namespace Test
 		[Test]
 		public void Nodos ()
 		{
-			var grafo = new Grafo<Objeto, float> ();
+			var grafo = new Grafo<Objeto, float> (ObjetoColl);
 			const int max = 100;
-			for (int i = 0; i < max; i++)
+			for (int i = 0; i < size; i++)
 				grafo [0, i] = 1;
-			Assert.AreEqual (max, grafo.NumNodos);
+			Assert.AreEqual (size, grafo.NumNodos);
 			var nods = grafo.Nodos;
-			for (int i = 0; i < max; i++)
+			for (int i = 0; i < size; i++)
 				Assert.True (nods.Contains (i));
 		}
 
@@ -110,7 +121,7 @@ namespace Test
 		public void Ruta ()
 		{
 			// Probar ruta simétrica
-			var grafo = new Grafo<Objeto, float> (true);
+			var grafo = new Grafo<Objeto, float> (ObjetoColl, true);
 			const int max = 10;
 			var enumerador = new Objeto[max];
 			for (int i = 0; i < max; i++)
@@ -131,7 +142,7 @@ namespace Test
 			}));
 
 			// Probar ruta asimétrica
-			grafo = new Grafo<Objeto, float> ();
+			grafo = new Grafo<Objeto, float> (ObjetoColl);
 			for (int i = 0; i < max; i++)
 			{
 				grafo [i, i + 1] = 1;
@@ -153,7 +164,7 @@ namespace Test
 		[Test]
 		public void Clonar ()
 		{
-			var grafo = new Grafo<Objeto, float> ();
+			var grafo = new Grafo<Objeto, float> (ObjetoColl);
 			grafo [0, 1] = 1;
 			var clón = grafo.Clonar ();
 			Assert.AreEqual (1, clón [0, 1]);
@@ -163,7 +174,7 @@ namespace Test
 		[Test]
 		public void AsReadonly ()
 		{
-			var grafo = new Grafo<Objeto, float> ();
+			var grafo = new Grafo<Objeto, float> (ObjetoColl);
 			grafo [0, 1] = 1;
 			var read = grafo.ComoSóloLectura ();
 			Assert.True (read.SóloLectura);
@@ -176,7 +187,10 @@ namespace Test
 			var r = new Random ();
 			var max = r.Next (3, 100);
 			var sim = r.Next (2) == 0;
-			var original = new Grafo<Objeto, float> (sim);
+			var thiscoll = new Objeto[max];
+			for (int i = 0; i < max; i++)
+				thiscoll [i] = i;
+			var original = new Grafo<Objeto, float> (thiscoll, sim);
 			for (int i = 0; i < max; i++)
 				for (int j = 0; j < max; j++)
 					original [i, j] = (float)r.NextDouble ();
@@ -189,13 +203,23 @@ namespace Test
 			var sub = original.Subgrafo (subcol);
 			for (int i = 0; i < subcolSize; i++)
 				for (int j = 0; j < subcolSize; j++)
-					Assert.AreEqual (original [i, j], sub [i, j]);
+				{
+					Assert.AreEqual (
+						original.ExisteArista (i, j),
+						sub.ExisteArista (i, j),
+						string.Format (
+							"i = {0}\nj = {1}",
+							i,
+							j));
+					if (original.ExisteArista (i, j))
+						Assert.AreEqual (original [i, j], sub [i, j]);
+				}
 		}
 
 		[Test]
 		public void Aristas ()
 		{
-			var gr = new Grafo<Objeto, float> ();
+			var gr = new Grafo<Objeto, float> (ObjetoColl);
 			gr [0, 1] = 1;
 			gr [0, 2] = 1;
 
@@ -207,7 +231,7 @@ namespace Test
 		public void CaminoÓptimo ()
 		{
 			const int clusterSize = 2;
-			var gr = new Grafo<Objeto, float> ();
+			var gr = new Grafo<Objeto, float> (ObjetoColl);
 			for (int i = 0; i < clusterSize; i++)
 				for (int j = 0; j < clusterSize; j++)
 				{
@@ -229,8 +253,10 @@ namespace Test
 			r = gr.CaminoÓptimo (0, 0, z => z.Data);
 			Assert.IsNull (r);
 
-			r = gr.CaminoÓptimo (0, -1, z => z.Data);
-			Assert.IsNull (r);
+			Assert.Throws<NodoInexistenteException> (new TestDelegate (delegate
+			{
+				r = gr.CaminoÓptimo (0, -1, z => z.Data);
+			}));
 		}
 	}
 }

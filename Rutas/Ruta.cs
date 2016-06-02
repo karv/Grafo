@@ -9,7 +9,6 @@ namespace Graficas.Rutas
 	/// </summary>
 	[Serializable]
 	public class Ruta<T> : IRuta<T>
-		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// 
@@ -58,10 +57,7 @@ namespace Graficas.Rutas
 		{
 			string ret = string.Format ("[{0}]: ", NumPasos);
 			foreach (var x in Paso)
-			{
 				ret += string.Format (" {0} ", x);
-
-			}
 			return ret;
 		}
 
