@@ -187,7 +187,10 @@ namespace Test
 			var r = new Random ();
 			var max = r.Next (3, 100);
 			var sim = r.Next (2) == 0;
-			var original = new Grafo<Objeto, float> (ObjetoColl, sim);
+			var thiscoll = new Objeto[max];
+			for (int i = 0; i < max; i++)
+				thiscoll [i] = i;
+			var original = new Grafo<Objeto, float> (thiscoll, sim);
 			for (int i = 0; i < max; i++)
 				for (int j = 0; j < max; j++)
 					original [i, j] = (float)r.NextDouble ();
@@ -200,7 +203,17 @@ namespace Test
 			var sub = original.Subgrafo (subcol);
 			for (int i = 0; i < subcolSize; i++)
 				for (int j = 0; j < subcolSize; j++)
-					Assert.AreEqual (original [i, j], sub [i, j]);
+				{
+					Assert.AreEqual (
+						original.ExisteArista (i, j),
+						sub.ExisteArista (i, j),
+						string.Format (
+							"i = {0}\nj = {1}",
+							i,
+							j));
+					if (original.ExisteArista (i, j))
+						Assert.AreEqual (original [i, j], sub [i, j]);
+				}
 		}
 
 		[Test]
