@@ -5,6 +5,7 @@ using Graficas.Grafo;
 using Graficas.Aristas;
 using ListasExtra;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Graficas.Rutas
 {
@@ -52,30 +53,19 @@ Ejecute Calcular () antes de llamar esta función");
 			return ar == null ? 1 : ar.Data;
 		}
 
-		bool IntentaAgregarArista (IArista<TNodo> aris)
+		bool IntentaAgregarArista (IArista<TNodo> aris, TNodo ori, TNodo des)
 		{
+			if (!aris.Existe)
+				return false;
+			
 			bool ret = false;
-			var par = aris.ComoPar ();
-			var p0 = par [0];
-			var p1 = par [1];
+
 			var peso = Peso (aris);
-			if (aris.Coincide (p0, p1))
+			if (!(CaminoÓptimo (ori, des)?.Longitud < peso))
 			{
-				if (!(CaminoÓptimo (p0, p1)?.Longitud < peso))
-				{
-					var addRuta = new Ruta<TNodo> (p0, p1, peso);
-					reemplazaRuta (addRuta);
-					ret = true;
-				}
-			}
-			if (aris.Coincide (p1, p0))
-			{
-				if (!(CaminoÓptimo (p1, p0)?.Longitud < peso))
-				{
-					var addRuta = new Ruta<TNodo> (p1, p0, peso);
-					reemplazaRuta (addRuta);
-					ret = true;
-				}
+				var addRuta = new Ruta<TNodo> (ori, des, peso);
+				reemplazaRuta (addRuta);
+				ret = true;
 			}
 			return ret;
 		}
@@ -115,38 +105,37 @@ Ejecute Calcular () antes de llamar esta función");
 
 			aris.Sort (comp);
 			Debug.WriteLine (aris);
+			var cmp = EqualityComparer<TNodo>.Default;
 
-			foreach (var y in aris)
+			foreach (var x in gr.Nodos)
 			{
-				if (y == null)
-					throw new InvalidOperationException ("Grafo tiene arista nula.");
-				var x = y as IAristaDirigida<TNodo>;
-				if (x == null)
-					throw new NotSupportedException ("Para calcular rutas, el grafo debe ser de aristas dirigidas.");
-				
-				IntentaAgregarArista (x);
-
-				// Ahora rellenar las rutas
-				var clone = new HashSet<IRuta<TNodo>> (rutas);
-				var cmp = EqualityComparer<TNodo>.Default;
-				foreach (var z in clone)
+				foreach (var y in gr.Nodos)
 				{
-					// Tomar a los que tienen como destino a x.Origen y concatenarlos con x
-					if (cmp.Equals (z.NodoFinal, x.Origen))
+					var ar = gr [x, y];
+
+					IntentaAgregarArista (ar, x, y);
+
+					// Ahora rellenar las rutas
+					var clone = new HashSet<IRuta<TNodo>> (rutas);
+					foreach (var z in clone)
 					{
-						var path = new Ruta<TNodo> (z);
-						var paso = new Paso<TNodo> (x);
-						path.Concat (paso);
-						if (IntentaAgregarArista (path))
-							Debug.WriteLine (string.Format ("Nueva mejor ruta: {0}", path));
-					}
-					// Tomar a los que tienen como origen a x.Destino y concatenarlos con x
-					else if (cmp.Equals (z.NodoInicial, x.Destino))
-					{
-						var path = new Ruta<TNodo> (x.Origen, x.Destino, Peso (x));
-						path.Concat (z);
-						if (IntentaAgregarArista (path))
-							Debug.WriteLine (string.Format ("Nueva mejor ruta: {0}", path));
+						// Tomar a los que tienen como destino a x.Origen y concatenarlos con x
+						if (cmp.Equals (z.NodoFinal, x))
+						{
+							var path = new Ruta<TNodo> (z);
+							var paso = new Paso<TNodo> (x, y, Peso (ar));
+							path.Concat (paso);
+							if (IntentaAgregarArista (path))
+								Debug.WriteLine (string.Format ("Nueva mejor ruta: {0}", path));
+						}
+						// Tomar a los que tienen como origen a x.Destino y concatenarlos con x
+						else if (cmp.Equals (z.NodoInicial, y))
+						{
+							var path = new Ruta<TNodo> (x, y, Peso (ar));
+							path.Concat (z);
+							if (IntentaAgregarArista (path))
+								Debug.WriteLine (string.Format ("Nueva mejor ruta: {0}", path));
+						}
 					}
 				}
 			}
