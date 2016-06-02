@@ -292,8 +292,10 @@ namespace Test
 			r = gr.CaminoÓptimo (0, 0);
 			Assert.IsNull (r);
 
-			r = gr.CaminoÓptimo (0, -1);
-			Assert.IsNull (r);
+			Assert.Throws<NodoInexistenteException> (new TestDelegate (delegate
+			{
+				r = gr.CaminoÓptimo (0, -1);
+			}));
 		}
 	}
 }
