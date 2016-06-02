@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Graficas.Grafo;
 using Graficas.Aristas;
 using ListasExtra;
+using System.Linq;
 
 namespace Graficas.Rutas
 {
@@ -14,7 +15,7 @@ namespace Graficas.Rutas
 	public class ConjuntoRutasÓptimas<TNodo>
 		where TNodo : IEquatable<TNodo>
 	{
-		ListaPeso<TNodo, TNodo, IRuta<TNodo>> RutasDict;
+		HashSet<IRuta<TNodo>> rutas;
 
 		/// <summary>
 		/// Devuelve el camino óptimo entre dos puntos.
@@ -24,10 +25,25 @@ namespace Graficas.Rutas
 		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
-			if (RutasDict == null)
+			if (rutas == null)
 				throw new Exception (@"No se inicializó esta clase
 Ejecute Calcular () antes de llamar esta función");
-			return RutasDict [x, y];
+
+			var cmp = EqualityComparer<TNodo>.Default;
+			var ret = rutas.FirstOrDefault (r => cmp.Equals (r.NodoInicial, x) && cmp.Equals (
+				          r.NodoFinal,
+				          y));
+			return ret;
+		}
+
+		void reemplazaRuta (IRuta<TNodo> reemplazando)
+		{
+			var eliminar = CaminoÓptimo (
+				               reemplazando.NodoInicial,
+				               reemplazando.NodoFinal);
+			if (eliminar != null)
+				rutas.Remove (eliminar);
+			rutas.Add (reemplazando);
 		}
 
 		static float Peso (IArista<TNodo> aris)
@@ -45,19 +61,19 @@ Ejecute Calcular () antes de llamar esta función");
 			var peso = Peso (aris);
 			if (aris.Coincide (p0, p1))
 			{
-				if (!(RutasDict [p0, p1]?.Longitud < peso))
+				if (!(CaminoÓptimo (p0, p1)?.Longitud < peso))
 				{
 					var addRuta = new Ruta<TNodo> (p0, p1, peso);
-					RutasDict [p0, p1] = addRuta;
+					reemplazaRuta (addRuta);
 					ret = true;
 				}
 			}
 			if (aris.Coincide (p1, p0))
 			{
-				if (!(RutasDict [p1, p0]?.Longitud < peso))
+				if (!(CaminoÓptimo (p1, p0)?.Longitud < peso))
 				{
 					var addRuta = new Ruta<TNodo> (p1, p0, peso);
-					RutasDict [p1, p0] = addRuta;
+					reemplazaRuta (addRuta);
 					ret = true;
 				}
 			}
@@ -66,9 +82,11 @@ Ejecute Calcular () antes de llamar esta función");
 
 		bool IntentaAgregarArista (IRuta<TNodo> ruta)
 		{
-			if (!(RutasDict [ruta.NodoInicial, ruta.NodoFinal]?.Longitud < ruta.Longitud))
+			var rta = CaminoÓptimo (ruta.NodoInicial, ruta.NodoFinal);
+
+			if (rta == null || rta.Longitud > ruta.Longitud)
 			{
-				RutasDict [ruta.NodoInicial, ruta.NodoFinal] = ruta;
+				reemplazaRuta (ruta);
 				return true;
 			}
 			return false;
@@ -79,7 +97,7 @@ Ejecute Calcular () antes de llamar esta función");
 			foreach (var x in coll)
 			{
 				var rutaEstática = new Ruta<TNodo> (x, x, 0);
-				RutasDict [x, x] = rutaEstática;
+				rutas.Add (rutaEstática);
 			}
 		}
 
@@ -92,7 +110,7 @@ Ejecute Calcular () antes de llamar esta función");
 			var aris = new List<IArista<TNodo>> (gr.Aristas ());
 			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
 
-			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>> (null, null);
+			rutas = new HashSet<IRuta<TNodo>> ();
 			agregarDiagonal (gr.Nodos);
 
 			aris.Sort (comp);
@@ -109,25 +127,26 @@ Ejecute Calcular () antes de llamar esta función");
 				IntentaAgregarArista (x);
 
 				// Ahora rellenar las rutas
-				var clone = new Dictionary<Tuple<TNodo, TNodo>, IRuta<TNodo>> (RutasDict);
+				var clone = new HashSet<IRuta<TNodo>> (rutas);
+				var cmp = EqualityComparer<TNodo>.Default;
 				foreach (var z in clone)
 				{
 					// Tomar a los que tienen como destino a x.Origen y concatenarlos con x
-					if (z.Key.Item2.Equals (x.Origen))
+					if (cmp.Equals (z.NodoFinal, x.Origen))
 					{
-						var path = new Ruta<TNodo> (z.Value);
+						var path = new Ruta<TNodo> (z);
 						var paso = new Paso<TNodo> (x);
 						path.Concat (paso);
 						if (IntentaAgregarArista (path))
-							Debug.WriteLine ("");
+							Debug.WriteLine (string.Format ("Nueva mejor ruta: {0}", path));
 					}
 					// Tomar a los que tienen como origen a x.Destino y concatenarlos con x
-					else if (z.Key.Item1.Equals (x.Destino))
+					else if (cmp.Equals (z.NodoInicial, x.Destino))
 					{
 						var path = new Ruta<TNodo> (x.Origen, x.Destino, Peso (x));
-						path.Concat (z.Value);
+						path.Concat (z);
 						if (IntentaAgregarArista (path))
-							Debug.WriteLine ("");
+							Debug.WriteLine (string.Format ("Nueva mejor ruta: {0}", path));
 					}
 				}
 			}
