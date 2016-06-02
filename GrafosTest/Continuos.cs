@@ -32,7 +32,8 @@ namespace Test
 				gr [i, i + 1] = i + 1;
 
 			var cp = new Continuo<Objeto> (gr);
-			var ro = new ConjuntoRutasÓptimas<Objeto> (gr);
+			var ro = new ConjuntoRutasÓptimas<Objeto> ();
+			ro.Calcular (gr);
 
 			var r = Continuo<Objeto>.RutaÓptima (
 				        cp.PuntoFijo (0),

@@ -34,7 +34,8 @@ namespace Test
 					g [i, j] |= r.NextDouble () < compacidad;
 			}
 			Assert.True (g.Vecino (0).Count > 0);
-			var rutas = new ConjuntoRutasÓptimas<int> (g);
+			var rutas = new ConjuntoRutasÓptimas<int> ();
+			rutas.Calcular (g);
 			for (int i = 0; i < size; i++)
 			{
 				for (int j = 0; j < size; j++)
@@ -42,7 +43,7 @@ namespace Test
 					if (i != j)
 					{
 						var rt = rutas.CaminoÓptimo (i, j);
-						Assert.NotNull (rt);
+						Assert.NotNull (rt, string.Format ("¿No hay camino de {0} a {1}?", i, j));
 						Assert.AreEqual (i, rt.NodoInicial);
 						Assert.AreEqual (j, rt.NodoFinal);
 					}

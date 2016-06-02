@@ -14,7 +14,7 @@ namespace Graficas.Rutas
 	public class ConjuntoRutasÓptimas<TNodo>
 		where TNodo : IEquatable<TNodo>
 	{
-		ListaPeso<TNodo, TNodo, IRuta<TNodo>> RutasDict { get; }
+		ListaPeso<TNodo, TNodo, IRuta<TNodo>> RutasDict;
 
 		/// <summary>
 		/// Devuelve el camino óptimo entre dos puntos.
@@ -24,6 +24,9 @@ namespace Graficas.Rutas
 		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
+			if (RutasDict == null)
+				throw new Exception (@"No se inicializó esta clase
+Ejecute Calcular () antes de llamar esta función");
 			return RutasDict [x, y];
 		}
 
@@ -72,20 +75,15 @@ namespace Graficas.Rutas
 		}
 
 		/// <summary>
-		/// 
+		/// Calcula las rutas óptimas
 		/// </summary>
-		protected ConjuntoRutasÓptimas ()
-		{
-			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>> (null, null);
-		}
-
 		/// <param name="gr">Gráfica asociada</param>
-		public ConjuntoRutasÓptimas (IGrafo<TNodo> gr)
-			: this ()
+		public void Calcular (IGrafo<TNodo> gr)
 		{
 			var aris = new List<IArista<TNodo>> (gr.Aristas ());
 			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
 
+			RutasDict = new ListaPeso<TNodo, TNodo, IRuta<TNodo>> (null, null);
 			aris.Sort (comp);
 			Debug.WriteLine (aris);
 

@@ -56,7 +56,8 @@ namespace Test
 			gr [1, 2] = 2;
 			gr [2, 3] = 3;
 
-			var rr = new ConjuntoRutasÓptimas<Objeto> (gr);
+			var rr = new ConjuntoRutasÓptimas<Objeto> ();
+			rr.Calcular (gr);
 			var zero3 = rr.CaminoÓptimo (0, 3);
 
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", rr);
