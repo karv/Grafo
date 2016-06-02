@@ -97,14 +97,11 @@ Ejecute Calcular () antes de llamar esta función");
 		/// <param name="gr">Gráfica asociada</param>
 		public void Calcular (IGrafo<TNodo> gr)
 		{
-			var aris = new List<IArista<TNodo>> (gr.Aristas ());
 			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
 
 			rutas = new HashSet<IRuta<TNodo>> ();
 			agregarDiagonal (gr.Nodos);
 
-			aris.Sort (comp);
-			Debug.WriteLine (aris);
 			var cmp = EqualityComparer<TNodo>.Default;
 
 			foreach (var x in gr.Nodos)
@@ -112,6 +109,8 @@ Ejecute Calcular () antes de llamar esta función");
 				foreach (var y in gr.Nodos)
 				{
 					var ar = gr [x, y];
+					if (!ar.Existe)
+						continue;
 
 					IntentaAgregarArista (ar, x, y);
 
