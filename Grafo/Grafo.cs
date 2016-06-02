@@ -419,13 +419,15 @@ namespace Graficas.Grafo
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
 				{
 					var x = Data [i, j] as AristaPeso<T, TData>; // La arista iterando
-					var data = x.Existe ? x.Data : default(TData);
-					ret.Data [i, j] = new AristaPeso<T, TData> (
-						x.Origen,
-						x.Destino,
-						data,
-						x.SóloLectura,
-						x.EsSimétrico);
+					if (x.Existe)
+					{
+						ret.Data [i, j] = new AristaPeso<T, TData> (
+							x.Origen,
+							x.Destino,
+							x.Data,
+							x.SóloLectura,
+							x.EsSimétrico);
+					}
 				}
 			return ret;
 		}
