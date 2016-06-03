@@ -40,6 +40,8 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta a imitar</param>
 		public Ruta (IRuta<T> ruta)
 		{
+			if (ruta == null)
+				throw new ArgumentNullException ();
 			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
 				Paso.Add (new Paso<T> (x.Origen, x.Destino, x.Peso));
@@ -145,6 +147,8 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta.</param>
 		public void Concat (IRuta<T> ruta)
 		{
+			if (ruta == null)
+				return;
 			if (NumPasos > 0 && !NodoFinal.Equals (ruta.NodoInicial))
 				throw new RutaInconsistenteException ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 

@@ -51,7 +51,11 @@ namespace Graficas.Aristas
 		{
 			var ar = aris as AristaPeso<T, float>;
 			if (ar != null)
+			{
+				if (!ar.Existe)
+					throw new Exception ("No se puede construir un paso desde una arista inexistente.");
 				Peso = ar.Data;
+			}
 		}
 
 		/// <summary>
