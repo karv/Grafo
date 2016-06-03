@@ -191,7 +191,7 @@ namespace Graficas.Rutas
 		/// Devuelve la ruta nula
 		/// </summary>
 		/// <value>The paso nulo.</value>
-		public static Ruta<T> RutaNula
+		public static Ruta<T> Nulo
 		{
 			get
 			{
