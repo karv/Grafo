@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Grafos</id>
-    <version>0.2.0.2</version>
+    <version>0.2.0.3</version>
     <title>Grafos</title>
     <authors>Edgar Carballo</authors>
     <owners>Edgar Carballo</owners>
@@ -10,7 +10,7 @@
     <description>Herramientas para gráficos</description>
     <copyright></copyright>
     <dependencies>
-      <dependency id="ListaExtras" version="0.3.0.5" />
+      <dependency id="ListaExtras" version="0.3.0.7" />
     </dependencies>
   </metadata>
   <files>
