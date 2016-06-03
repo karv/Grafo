@@ -89,7 +89,14 @@ namespace Test
 			pmov2.AlLlegarANodo += () => nods.Add (pmov2.A);
 			pmov2.AlTerminarRuta += () => terminóRuta = true;
 
-			var rt = pmov2.AvanzarHacia (ruta, ruta.Longitud);
+			var rt = pmov2.AvanzarHacia (ruta, 1);
+
+			const int partes = 100;
+			var avanceParte = ruta.Longitud / partes;
+			while (!rt)
+			{
+				rt = pmov2.AvanzarHacia (ruta, avanceParte);
+			}
 
 			Assert.True (colisionó.Contains (pmov));
 			Assert.True (seDesplazó);
