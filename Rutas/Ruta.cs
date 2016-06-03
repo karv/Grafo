@@ -44,7 +44,6 @@ namespace Graficas.Rutas
 				Paso.Add (new Paso<T> (x.Origen, x.Destino, x.Peso));
 		}
 
-
 		/// <summary>
 		/// Lista de pasos de esta ruta.
 		/// </summary>
@@ -185,6 +184,19 @@ namespace Graficas.Rutas
 			get
 			{
 				return Paso.Count;
+			}
+		}
+
+		/// <summary>
+		/// Devuelve la ruta nula
+		/// </summary>
+		/// <value>The paso nulo.</value>
+		public static Ruta<T> RutaNula
+		{
+			get
+			{
+				var ret = new Ruta<T> ();
+				return ret;
 			}
 		}
 	}
