@@ -140,6 +140,8 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta.</param>
 		public void Concat (IRuta<T> ruta)
 		{
+			if (ruta.NumPasos == 0)
+				return;
 			if (NumPasos > 0 && !NodoFinal.Equals (ruta.NodoInicial))
 				throw new RutaInconsistenteException ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 
@@ -184,6 +186,14 @@ namespace Graficas.Rutas
 			get
 			{
 				return Paso.Count;
+			}
+		}
+
+		public bool EsNulo
+		{
+			get
+			{
+				return NumPasos == 0;
 			}
 		}
 

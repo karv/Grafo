@@ -48,6 +48,7 @@
     <Compile Include="Continuos.cs" />
     <Compile Include="OtrosGrafos.cs" />
     <Compile Include="ConjRutasOpt.cs" />
+    <Compile Include="Rutas.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
