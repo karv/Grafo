@@ -4,7 +4,6 @@ using System.Diagnostics;
 using Graficas.Grafo;
 using Graficas.Aristas;
 using ListasExtra;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas.Rutas
 {
@@ -88,10 +87,6 @@ namespace Graficas.Rutas
 			: this ()
 		{
 			var aris = new List<IArista<TNodo>> (gr.Aristas ());
-			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
-
-			//aris.Sort (comp);
-			Debug.WriteLine (aris);
 
 			foreach (var y in aris)
 			{
