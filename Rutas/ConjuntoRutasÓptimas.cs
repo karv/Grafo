@@ -24,7 +24,7 @@ namespace Graficas.Rutas
 		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
-			return RutasDict [x, y];
+			return new Ruta<TNodo> (RutasDict [x, y]);
 		}
 
 		static float Peso (IArista<TNodo> aris)
