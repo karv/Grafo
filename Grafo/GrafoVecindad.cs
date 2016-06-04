@@ -100,20 +100,26 @@ namespace Graficas.Grafo
 			}
 		}
 
-		public AristaBool<T> this [T desde, T hasta]
+		public bool this [T desde, T hasta]
 		{
 			get
 			{
 				bool ret = Vecindad [desde].Contains (hasta);
-				return new AristaBool<T> (desde, hasta, ret, true, Simétrico);
+				return ret;
 			}
+		}
+
+		public AristaBool<T> Arista (T desde, T hasta)
+		{
+			bool ret = Vecindad [desde].Contains (hasta);
+			return new AristaBool<T> (desde, hasta, ret, true, Simétrico);
 		}
 
 		IArista<T> IGrafo<T>.this [T desde, T hasta]
 		{
 			get
 			{
-				return this [desde, hasta];
+				return Arista (desde, hasta);
 			}
 		}
 
