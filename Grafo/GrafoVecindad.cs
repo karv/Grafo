@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Graficas.Aristas;
 using System;
+using System.Linq;
 
 namespace Graficas.Grafo
 {
@@ -82,7 +83,19 @@ namespace Graficas.Grafo
 
 		public IGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
-			throw new NotImplementedException ();
+			try
+			{
+				var ret = new GrafoVecindad<T> (Comparador);
+				foreach (var c in conjunto)
+					ret.Vecindad [c].UnionWith (Vecindad [c].Intersect (conjunto));
+				return ret;
+			}
+			catch (Exception ex)
+			{
+				var m = string.Format ("No se puede calcular el subgrafo de esta clase respecto a {0}.\n" +
+				        "¿Es el argumento un subconjunto de Nodos?", conjunto);
+				throw new Exception (m, ex);
+			}
 		}
 
 		public IArista<T> this [T desde, T hasta]
