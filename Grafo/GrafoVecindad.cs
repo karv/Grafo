@@ -109,6 +109,14 @@ namespace Graficas.Grafo
 			}
 		}
 
+		IArista<T> IGrafo<T>.this [T desde, T hasta]
+		{
+			get
+			{
+				return this [desde, hasta];
+			}
+		}
+
 		ICollection<T> IGrafo<T>.Nodos
 		{
 			get
