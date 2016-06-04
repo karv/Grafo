@@ -348,9 +348,19 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto)
+		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto) // TEST
 		{
-			throw new NotImplementedException ();
+			var ret = new Grafo<T, TData> (
+				          new HashSet<T> (conjunto),
+				          EsSimétrico,
+				          SóloLectura);
+			foreach (var x in conjunto)
+				ret.Nodos.Add (x);
+
+			foreach (var x in new List<T> (conjunto))
+				foreach (var y in new List<T> (conjunto))
+					ret [x, y] = this [x, y];
+			return ret;
 		}
 
 		/// <summary>
