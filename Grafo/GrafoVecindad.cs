@@ -9,9 +9,11 @@ namespace Graficas.Grafo
 	{
 		#region Ctor
 
-		public GrafoVecindad (IEqualityComparer<T> comparador = null)
+		public GrafoVecindad (bool simétrico = false,
+		                      IEqualityComparer<T> comparador = null)
 		{
 			Comparador = comparador ?? EqualityComparer<T>.Default;
+			Simétrico = simétrico;
 			Nodos = new HashSet<T> (Comparador);
 			Vecindad = new Dictionary<T, HashSet<T>> (Comparador);
 			inicializaDiccionario ();
