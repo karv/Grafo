@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Graficas.Aristas;
+using System;
 
 namespace Graficas.Grafo
 {
-	public class GrafoVecindad<T> : IGrafo<T>
+	public class GrafoVecindad<T> : IGrafo<T> // TEST all
 	{
 		#region Ctor
 
@@ -61,24 +62,34 @@ namespace Graficas.Grafo
 
 		public ICollection<T> Vecinos (T nodo)
 		{
-			throw new System.NotImplementedException ();
+			try
+			{
+				return new HashSet<T> (Vecindad [nodo], Comparador);
+			}
+			catch (Exception ex)
+			{
+				var m = string.Format (
+					        "No se puede calcular vecindad de {0}. ¿Es un nodo de esta clase?",
+					        nodo);
+				throw new Exception (m, ex);
+			}
 		}
 
 		public Graficas.Rutas.IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
-			throw new System.NotImplementedException ();
+			throw new NotImplementedException ();
 		}
 
 		public IGrafo<T> Subgrafo (IEnumerable<T> conjunto)
 		{
-			throw new System.NotImplementedException ();
+			throw new NotImplementedException ();
 		}
 
 		public IArista<T> this [T desde, T hasta]
 		{
 			get
 			{
-				throw new System.NotImplementedException ();
+				throw new NotImplementedException ();
 			}
 		}
 
@@ -86,7 +97,7 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				throw new System.NotImplementedException ();
+				throw new NotImplementedException ();
 			}
 		}
 
