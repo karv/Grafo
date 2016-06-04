@@ -107,6 +107,32 @@ namespace Graficas.Grafo
 				bool ret = Vecindad [desde].Contains (hasta);
 				return ret;
 			}
+			set
+			{
+				establecerArista (desde, hasta, value);
+				if (Simétrico)
+					establecerArista (hasta, desde, value);
+			}
+		}
+
+		void establecerArista (T desde, T hasta, bool valor)
+		{
+			if (valor)
+				AgregaArista (desde, hasta);
+			else
+				EliminaArista (desde, hasta);
+		}
+
+		protected void EliminaArista (T desde, T hasta)
+		{
+			var vec = Vecindad [desde];
+			vec.Remove (hasta);
+		}
+
+		protected void AgregaArista (T desde, T hasta)
+		{
+			var vec = Vecindad [desde];
+			vec.Add (hasta);
 		}
 
 		public AristaBool<T> Arista (T desde, T hasta)
