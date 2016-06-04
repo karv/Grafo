@@ -97,8 +97,6 @@ Ejecute Calcular () antes de llamar esta función");
 		/// <param name="gr">Gráfica asociada</param>
 		public void Calcular (IGrafo<TNodo> gr)
 		{
-			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
-
 			rutas = new HashSet<IRuta<TNodo>> ();
 			agregarDiagonal (gr.Nodos);
 
