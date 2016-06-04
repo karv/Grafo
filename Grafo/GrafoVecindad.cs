@@ -87,7 +87,7 @@ namespace Graficas.Grafo
 		{
 			try
 			{
-				var ret = new GrafoVecindad<T> (Comparador);
+				var ret = new GrafoVecindad<T> (Simétrico, Comparador);
 				foreach (var c in conjunto)
 					ret.Vecindad [c].UnionWith (Vecindad [c].Intersect (conjunto));
 				return ret;
@@ -100,11 +100,12 @@ namespace Graficas.Grafo
 			}
 		}
 
-		public IArista<T> this [T desde, T hasta]
+		public AristaBool<T> this [T desde, T hasta]
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				bool ret = Vecindad [desde].Contains (hasta);
+				return new AristaBool<T> (desde, hasta, ret, true, Simétrico);
 			}
 		}
 
@@ -112,7 +113,7 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				throw new NotImplementedException ();
+				return Nodos;
 			}
 		}
 
