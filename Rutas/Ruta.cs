@@ -39,6 +39,8 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta a imitar</param>
 		public Ruta (IRuta<T> ruta)
 		{
+			if (ruta == null)
+				throw new ArgumentNullException ();
 			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
 				Paso.Add (new Paso<T> (x.Origen, x.Destino, x.Peso));

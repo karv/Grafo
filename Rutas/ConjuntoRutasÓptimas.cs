@@ -14,7 +14,6 @@ namespace Graficas.Rutas
 	/// </summary>
 	[Serializable]
 	public class ConjuntoRutasÓptimas<TNodo>
-		where TNodo : IEquatable<TNodo>
 	{
 		HashSet<IRuta<TNodo>> rutas;
 
@@ -50,6 +49,8 @@ Ejecute Calcular () antes de llamar esta función");
 		static float Peso (IArista<TNodo> aris)
 		{
 			var ar = aris as AristaPeso<TNodo, float>;
+			if (!ar.Existe)
+				return float.PositiveInfinity;
 			return ar == null ? 1 : ar.Data;
 		}
 

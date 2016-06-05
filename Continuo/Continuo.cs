@@ -180,12 +180,16 @@ namespace Graficas.Continuo
 			/// </summary>
 			public float DistanciaAExtremo (T extremo)
 			{
+				if (EnOrigen)
+				{
+					var ar = Universo.GráficaBase.EncuentraArista (A, extremo);
+					if (ar.Existe)
+						return ar.Data;
+				}
 				if (extremo.Equals (A))
 					return Loc;
 				if (extremo.Equals (B))
 					return Aloc;
-				if (EnOrigen && Universo.GráficaBase.EncuentraArista (A, extremo).Existe)
-					return Universo.GráficaBase [A, extremo];
 
 				throw new IndexOutOfRangeException (string.Format (
 					"{0} no es un extremo de {1}",

@@ -259,7 +259,6 @@ namespace Graficas.Grafo
 	/// </summary>
 	[Serializable]
 	public class Grafo<T, TData> : GrafoComún<T>, IGrafo<T>
-		where T : IEquatable<T>
 	{
 		#region ctor
 
