@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Graficas.Rutas;
 using Graficas.Aristas;
+using ListasExtra.Extensiones;
+using System;
 
 namespace Test
 {
@@ -29,6 +31,46 @@ namespace Test
 				        ro);
 
 			Assert.AreEqual ((len * (len - 1)) / 2, r.Longitud);
+		}
+
+		[Test]
+		public void TodasRutas ()
+		{
+			const int numNodos = 10;
+			const int numObjMov = 100;
+			var r = new Random ();
+			var nods = new Objeto[numNodos];
+			for (int i = 0; i < numNodos; i++)
+				nods [i] = i;
+			var gr = ConjRutasOpt.HacerConexo (nods);
+			var cont = new Continuo<Objeto> (gr);
+
+			for (int i = 0; i < numObjMov; i++)
+			{
+				var ini = nods.Aleatorio (r);
+				var vec = gr.Vecino (ini);
+				if (vec.Count == 0)
+					Console.WriteLine ();
+				var fin = vec.Aleatorio (r);
+				Assert.True (gr.EncuentraArista (ini, fin).Existe);
+				var dis = r.NextDouble () * gr [ini, fin];
+				cont.AgregaPunto (ini, fin, (float)dis);
+			}
+			var rutas = new ConjuntoRutasÓptimas<Objeto> (gr);
+
+			foreach (var ini in new List <Continuo<Objeto>.ContinuoPunto>(cont.Puntos))
+				foreach (var fin in new List <Continuo<Objeto>.ContinuoPunto>(cont.Puntos))
+				{
+					var rruta = Continuo<Objeto>.RutaÓptima (ini, fin, rutas);
+					Assert.AreEqual (ini, rruta.NodoInicial);
+					Assert.AreEqual (fin, rruta.NodoFinal);
+
+					foreach (var x in rruta.Pasos)
+					{
+						var ar = gr.EncuentraArista (x.Origen, x.Destino);
+						Assert.True (ar.Existe);
+					}
+				}
 		}
 
 		[Test]
@@ -89,7 +131,12 @@ namespace Test
 			pmov2.AlLlegarANodo += () => nods.Add (pmov2.A);
 			pmov2.AlTerminarRuta += () => terminóRuta = true;
 
-			var rt = pmov2.AvanzarHacia (ruta, ruta.Longitud);
+			var rt = false;
+
+			const int partes = 100;
+			var avanceParte = ruta.Longitud / partes;
+			while (!rt)
+				rt = pmov2.AvanzarHacia (ruta, avanceParte);
 
 			Assert.True (colisionó.Contains (pmov));
 			Assert.True (seDesplazó);

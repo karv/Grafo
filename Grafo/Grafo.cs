@@ -99,12 +99,14 @@ namespace Graficas.Grafo
 		public ISet<T> Vecino (T x)
 		{
 			ISet<T> ret = new HashSet<T> ();
-			IEnumerable<T> Nods = Nodos;
 			foreach (var y in Data)
 			{
-				var ap = y.Antipodo (x);
-				if (y.Coincide (x, ap))
-					ret.Add (ap);
+				if (y.Existe)
+				{
+					var ap = y.Antipodo (x);
+					if (y.Coincide (x, ap))
+						ret.Add (ap);
+				}
 			}
 			return ret;
 		}
@@ -393,7 +395,7 @@ namespace Graficas.Grafo
 			AristaPeso<T, TData> aris;
 			if (!EncuentraArista (origen, destino, out aris))
 			{
-				aris = new AristaPeso<T, TData> (origen, destino, false, SóloLectura);
+				aris = new AristaPeso<T, TData> (origen, destino, SóloLectura, EsSimétrico);
 				Data.Add (aris);
 			}
 			return aris;

@@ -24,12 +24,15 @@ namespace Graficas.Rutas
 		/// <param name="y">Destino</param>
 		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
-			return RutasDict [x, y];
+			var ret = RutasDict [x, y];
+			return ret == null ? null : new Ruta<TNodo> (ret);
 		}
 
 		static float Peso (IArista<TNodo> aris)
 		{
 			var ar = aris as AristaPeso<TNodo, float>;
+			if (!ar.Existe)
+				return float.PositiveInfinity;
 			return ar == null ? 1 : ar.Data;
 		}
 
@@ -84,13 +87,11 @@ namespace Graficas.Rutas
 			: this ()
 		{
 			var aris = new List<IArista<TNodo>> (gr.Aristas ());
-			var comp = new Comparison<IArista<TNodo>> ((x, y) => Peso (x) < Peso (y) ? -1 : 1);
-
-			aris.Sort (comp);
-			Debug.WriteLine (aris);
 
 			foreach (var y in aris)
 			{
+				if (!y.Existe)
+					continue;
 				if (y == null)
 					throw new InvalidOperationException ("Grafo tiene arista nula.");
 				var x = y as IAristaDirigida<TNodo>;
