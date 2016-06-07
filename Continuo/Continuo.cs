@@ -69,6 +69,12 @@ namespace Graficas.Continuo
 				A = nodo;
 			}
 
+			/// <param name="universo">Universo.</param>
+			/// <remarks>Asegúrese de asignar un valor a A al heredar este constructor.</remarks>
+			protected ContinuoPunto (Continuo<T> universo)
+			{
+				Universo = universo;
+			}
 
 			/// <param name="universo">Continuo donde vive este punto</param>
 			/// <param name="p0">Un punto fijo adyacence a este nuevo punto</param>
