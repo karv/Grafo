@@ -4,3 +4,5 @@ obj/
 packages/
 *.nupkg
 *.cs~
+.*.bak
+*.verbak

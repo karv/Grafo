@@ -74,6 +74,8 @@ namespace Test
 			foreach (var ini in new List <Continuo<Objeto>.ContinuoPunto>(cont.Puntos))
 				foreach (var fin in new List <Continuo<Objeto>.ContinuoPunto>(cont.Puntos))
 				{
+					if (ini.Equals (fin))
+						continue;
 					var rruta = Continuo<Objeto>.RutaÓptima (ini, fin, rutas);
 					Assert.AreEqual (ini, rruta.NodoInicial);
 					Assert.AreEqual (fin, rruta.NodoFinal);
