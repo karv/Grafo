@@ -9,6 +9,7 @@ using System.Linq;
 
 namespace Graficas.Continuo
 {
+
 	/// <summary>
 	/// Representa un continuo producido por una IGrafica
 	/// </summary>
@@ -20,7 +21,7 @@ namespace Graficas.Continuo
 		/// Representa un punto en un continuo.
 		/// </summary>
 		[Serializable]
-		public class ContinuoPunto : IEquatable<ContinuoPunto>, IDisposable
+		public class ContinuoPunto : IDisposable
 		{
 			#region General
 
@@ -304,39 +305,50 @@ namespace Graficas.Continuo
 			bool AvanzarHacia (T destino, ref float dist)
 			{
 				var restante = DistanciaAExtremo (destino);
-				var anterior = Clonar ();
 
 				if (restante > dist) // No llega
 				{
-					if (destino.Equals (A))
+					using (var anterior = Clonar ())
 					{
-						Loc -= dist;
-					}
-					else
-					{
-						B = destino;
-						Loc += dist;
-					}
-					dist = 0;
-					AlDesplazarse?.Invoke ();
+						if (destino.Equals (A))
+						{
+							Loc -= dist;
+						}
+						else
+						{
+							B = destino;
+							Loc += dist;
+						}
+						dist = 0;
+						AlDesplazarse?.Invoke ();
 
-					VerificaColisión (anterior);
+						VerificaColisión (anterior);
+					}
 					return false;
 				}
 
+				//using var otroAnt = 
 				dist = dist - restante;
 				AlDesplazarse?.Invoke ();
 				AlLlegarANodo?.Invoke ();
-				DesdeGrafo (destino);
-				VerificaColisión (anterior);
+				using (var anterior = Clonar ())
+				{
+					DesdeGrafo (destino);
+					VerificaColisión (anterior);
+				}
 				return true;
 			}
 
 			void VerificaColisión (ContinuoPunto anterior)
 			{
-				var extremoBase = anterior.A;
-				var minDist = anterior.DistanciaAExtremo (extremoBase);
-				var maxDist = DistanciaAExtremo (extremoBase);
+				var extremosBase = new List<T> (Extremos.AsSet ().Intersect (anterior.Extremos.AsSet ()));
+				var extremoBase = extremosBase [0];
+
+
+				var n0 = anterior.DistanciaAExtremo (extremoBase);
+				var n1 = DistanciaAExtremo (extremoBase);
+				var maxDist = Math.Max (n0, n1);
+				var minDist = Math.Min (n0, n1);
 				Debug.WriteLineIf (maxDist < minDist, "¡Pasó algo raro!");
 				var puntosIntervalo = Vecindad ();
 				foreach (var x in puntosIntervalo)
@@ -373,12 +385,20 @@ namespace Graficas.Continuo
 			/// <param name="dist">Dist.</param>
 			public bool AvanzarHacia (Ruta ruta, float dist)
 			{
-				foreach (var r in ruta.Pasos)
+				foreach (var r in new List<IPaso<T>> (ruta.Pasos))
 				{
 					if (r.Destino.Equals (this))
+					{
+						// Al parecer nunca se llega aquí.
+						// TODO ¿Eliminar?
+						ruta.EliminarPrimero ();
 						continue;
+					}
 					if (!AvanzarHacia (r.Destino, ref dist))
 						return false;
+
+					// Si llega aquí es que avanzó exactamente hasta un nodo hasta este momento.
+					// Hay que eliminar el paso de la ruta y actualizar Inicial.
 					ruta.EliminarPrimero ();
 				}
 				AlTerminarRuta?.Invoke ();
@@ -473,7 +493,7 @@ namespace Graficas.Continuo
 			/// Dos puntos se dicen iguales si representan el mismo punto encajado en el grafo.
 			/// </summary>
 			/// <param name="other">Comparando/>.</param>
-			public bool Equals (ContinuoPunto other)
+			public bool Coincide (ContinuoPunto other)
 			{
 				try
 				{
@@ -533,6 +553,14 @@ namespace Graficas.Continuo
 			/// <value>The nodo inicial.</value>
 			public new ContinuoPunto NodoInicial { get; }
 
+			/*{
+				get
+				{
+					return (Pasos.Count > 0) ? Pasos [0].Origen : intInicial;
+
+				}
+			}*/
+
 			/// <summary>
 			/// Devuelve el destino de la ruta
 			/// </summary>
@@ -555,6 +583,7 @@ namespace Graficas.Continuo
 			public void EliminarPrimero ()
 			{
 				Paso.RemoveAt (0);
+				//NodoInicial = Paso [0].Origen;
 			}
 
 			/// <summary>
