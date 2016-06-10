@@ -7,6 +7,7 @@ using Graficas.Rutas;
 using Graficas.Aristas;
 using ListasExtra.Extensiones;
 using System;
+using System.Security.Cryptography;
 
 namespace Test
 {
@@ -74,7 +75,7 @@ namespace Test
 			foreach (var ini in new List <Continuo<Objeto>.ContinuoPunto>(cont.Puntos))
 				foreach (var fin in new List <Continuo<Objeto>.ContinuoPunto>(cont.Puntos))
 				{
-					if (ini.Equals (fin))
+					if (ini.Coincide (fin))
 						continue;
 					var rruta = Continuo<Objeto>.RutaÓptima (ini, fin, rutas);
 					Assert.AreEqual (ini, rruta.NodoInicial);
@@ -131,7 +132,7 @@ namespace Test
 			var cp = new Continuo<Objeto> (gr);
 			var pmov = cp.AgregaPunto (0);
 			pmov.AvanzarHacia (1, 0.3f);
-			Assert.True (cp.PuntosArista (0, 1).Any (z => z.Equals (pmov)));
+			Assert.True (cp.PuntosArista (0, 1).Any (z => z.Coincide (pmov)));
 			var pmov2 = cp.AgregaPunto (0);
 			var ruta = new Continuo<Objeto>.Ruta (pmov2);
 			ruta.Concat (new Paso<Objeto> (0, 1, 1));
@@ -191,5 +192,38 @@ namespace Test
 			Assert.True (ruta.Contiene (p));
 		}
 
+		[Test]
+		public void MovSimult ()
+		{
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
+
+			for (int i = 0; i < ObjetoColl.Count - 1; i++)
+				gr [i, i + 1] = 1;
+
+			var cp = new Continuo<Objeto> (gr);
+			var opt = new ConjuntoRutasÓptimas<Objeto> ();
+			opt.Calcular (gr);
+
+			var p0 = cp.AgregaPunto (0);
+			var p1 = cp.AgregaPunto (ObjetoColl.Count - 1);
+			//var p1 = cp.AgregaPunto (9);
+
+			var r0 = Continuo<Objeto>.RutaÓptima (p0, p1, opt);
+			var r1 = Continuo<Objeto>.RutaÓptima (p1, p0, opt);
+
+			var ret = false;
+			p0.AlColisionar += obj => ret |= obj.Coincide (p1);
+			p0.AlLlegarANodo += delegate
+			{
+				Console.WriteLine (p0.A);
+			};
+			p0.AlTerminarRuta += Assert.Fail;
+
+			while (!ret)
+			{
+				p0.AvanzarHacia (r0, 0.9f);
+				p1.AvanzarHacia (r1, 0.9f);
+			}
+		}
 	}
 }
