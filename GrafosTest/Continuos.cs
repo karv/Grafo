@@ -84,6 +84,9 @@ namespace Test
 					foreach (var x in rruta.Pasos)
 					{
 						var ar = gr.EncuentraArista (x.Origen, x.Destino);
+						if (x.Origen == x.Destino)
+							continue;
+						//Console.WriteLine ();
 						Assert.True (ar.Existe);
 					}
 				}
@@ -93,6 +96,7 @@ namespace Test
 		public void ContPuntoBasic ()
 		{
 			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
+			var compa = new ComparadorCoincidencia<Objeto> ();
 			gr [0, 1] = 1;
 			var cp = new Continuo<Objeto> (gr);
 			var p0 = cp.PuntoFijo (0);
@@ -103,7 +107,8 @@ namespace Test
 			Assert.AreEqual (3 + ObjetoColl.Count, cp.Puntos.Count); // 0 == p0, 1, p1
 			p1.Remove ();
 			Assert.AreEqual (2 + ObjetoColl.Count, cp.Puntos.Count); // 0 == p0, 1, p1
-			Assert.AreEqual (p2, p0);
+			Assert.True (compa.Equals (p2, p0));
+			//Assert.AreEqual (p2, p0);
 
 			Assert.True (p0.EnMismoIntervalo (p3));
 			Assert.True (Continuo<Objeto>.ContinuoPunto.EnMismoIntervalo (p0, p3));

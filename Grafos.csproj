@@ -65,6 +65,7 @@
     <Compile Include="Aristas\IPaso.cs" />
     <Compile Include="Aristas\Paso.cs" />
     <Compile Include="Rutas\ComparadorPorPaso.cs" />
+    <Compile Include="Continuo\Comparador.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
