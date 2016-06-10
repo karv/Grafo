@@ -9,7 +9,6 @@ namespace Graficas.Rutas
 	/// </summary>
 	[Serializable]
 	public class Ruta<T> : IRuta<T>
-		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// 
@@ -47,7 +46,6 @@ namespace Graficas.Rutas
 				Paso.Add (new Paso<T> (x.Origen, x.Destino, x.Peso));
 		}
 
-
 		/// <summary>
 		/// Lista de pasos de esta ruta.
 		/// </summary>
@@ -60,10 +58,7 @@ namespace Graficas.Rutas
 		{
 			string ret = string.Format ("[{0}]: ", NumPasos);
 			foreach (var x in Paso)
-			{
 				ret += string.Format (" {0} ", x);
-
-			}
 			return ret;
 		}
 
@@ -147,7 +142,7 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta.</param>
 		public void Concat (IRuta<T> ruta)
 		{
-			if (ruta == null)
+			if (ruta.NumPasos == 0)
 				return;
 			if (NumPasos > 0 && !NodoFinal.Equals (ruta.NodoInicial))
 				throw new RutaInconsistenteException ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
@@ -193,6 +188,27 @@ namespace Graficas.Rutas
 			get
 			{
 				return Paso.Count;
+			}
+		}
+
+		public bool EsNulo
+		{
+			get
+			{
+				return NumPasos == 0;
+			}
+		}
+
+		/// <summary>
+		/// Devuelve la ruta nula
+		/// </summary>
+		/// <value>The paso nulo.</value>
+		public static Ruta<T> Nulo
+		{
+			get
+			{
+				var ret = new Ruta<T> ();
+				return ret;
 			}
 		}
 	}

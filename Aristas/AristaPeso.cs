@@ -8,7 +8,6 @@ namespace Graficas.Aristas
 	/// </summary>
 	[Serializable]
 	public class AristaPeso<TNodo, TValor> : AristaBool<TNodo>
-		where TNodo : IEquatable<TNodo>
 	{
 		TValor _valor;
 

@@ -9,7 +9,6 @@ namespace Graficas.Aristas
 	/// <remarks>Este objeto es de sólo lectura</remarks>
 	[Serializable]
 	public struct Paso<T> : IPaso<T>
-		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// Devuelve el origen del paso

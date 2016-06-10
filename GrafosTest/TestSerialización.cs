@@ -2,12 +2,24 @@
 using Graficas.Grafo;
 using Graficas.Continuo;
 using Graficas.Rutas;
+using System.Collections.Generic;
 
 namespace Test
 {
 	[TestFixture]
 	public class TestSerialización
 	{
+		const int size = 30;
+		ICollection<Objeto> ObjetoColl;
+
+		[TestFixtureSetUp]
+		public void Setup ()
+		{
+			ObjetoColl = new HashSet<Objeto> ();
+			for (int i = 0; i < size; i++)
+				ObjetoColl.Add (i);
+		}
+
 		static void TestSerial<T> (T gr)
 			where T : IGrafo<Objeto>
 		{
@@ -28,7 +40,7 @@ namespace Test
 		[Test]
 		public void SerGraf ()
 		{
-			var gr = new Grafo<Objeto, float> ();
+			var gr = new Grafo<Objeto, float> (ObjetoColl);
 			gr [0, 1] = 1;
 			TestSerial (gr);
 
@@ -39,12 +51,13 @@ namespace Test
 		[Test]
 		public void PathSet ()
 		{
-			var gr = new Grafo<Objeto, float> ();
+			var gr = new Grafo<Objeto, float> (ObjetoColl);
 			gr [0, 1] = 1;
 			gr [1, 2] = 2;
 			gr [2, 3] = 3;
 
-			var rr = new ConjuntoRutasÓptimas<Objeto> (gr);
+			var rr = new ConjuntoRutasÓptimas<Objeto> ();
+			rr.Calcular (gr);
 			var zero3 = rr.CaminoÓptimo (0, 3);
 
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", rr);
@@ -58,7 +71,7 @@ namespace Test
 		[Test]
 		public void Cont ()
 		{
-			var gr = new Grafo<Objeto, float> (true);
+			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 			gr [0, 1] = 1;
 			var c = new Continuo<Objeto> (gr);
 			c.AgregaPunto (0, 1, 0.3f);

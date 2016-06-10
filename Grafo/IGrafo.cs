@@ -9,7 +9,6 @@ namespace Graficas.Grafo
 	/// Un grafo en el que se pueden leer y escribir nodos y aristas
 	/// </summary>
 	public interface IGrafo<T>
-		where T : IEquatable<T>
 	{
 		/// <summary>
 		/// Elimina nodos y aristas.
@@ -34,7 +33,7 @@ namespace Graficas.Grafo
 		ICollection<T> Nodos { get; }
 
 		/// <summary>
-		/// Colección de aristas
+		/// Colección de aristas existentes
 		/// </summary>
 		ICollection<IArista<T>> Aristas ();
 
