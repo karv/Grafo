@@ -7,7 +7,6 @@ using Graficas.Rutas;
 using Graficas.Aristas;
 using ListasExtra.Extensiones;
 using System;
-using System.Security.Cryptography;
 
 namespace Test
 {

@@ -389,17 +389,17 @@ namespace Graficas.Continuo
 				{
 					if (r.Destino.Equals (this))
 					{
+						// Al parecer nunca se llega aquí.
+						// TODO ¿Eliminar?
 						ruta.EliminarPrimero ();
 						continue;
 					}
 					if (!AvanzarHacia (r.Destino, ref dist))
 						return false;
-					else
-					{
-						// Si llega aquí es que avanzó exactamente hasta un nodo hasta este momento.
-						// Hay que eliminar el paso de la ruta y actualizar Inicial.
-						ruta.EliminarPrimero ();
-					}
+
+					// Si llega aquí es que avanzó exactamente hasta un nodo hasta este momento.
+					// Hay que eliminar el paso de la ruta y actualizar Inicial.
+					ruta.EliminarPrimero ();
 				}
 				AlTerminarRuta?.Invoke ();
 				return true;
