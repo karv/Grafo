@@ -176,25 +176,5 @@ namespace Graficas.Continuo
 		}
 
 		#endregion
-
-		#region Debug
-
-		[Conditional ("DEBUG")]
-		public void ProbarIntegridad ()
-		{
-			string generalExcMsg = string.Format ("Fallo de integridad en {0}\n", this);
-			foreach (var p in Puntos)
-			{
-				if (ReferenceEquals (p, null))
-					throw new ArgumentNullException (generalExcMsg + "Punto nulo en universo.");
-				if (typeof (T).IsClass)
-				{
-					if (ReferenceEquals (p.A, null) && ReferenceEquals (p.B, null))
-						throw new ArgumentNullException (generalExcMsg + "Punto no nulo con extremos nulos.");
-				}
-			}
-		}
-
-		#endregion
 	}
 }
