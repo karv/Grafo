@@ -373,13 +373,6 @@ namespace Graficas.Continuo
 		{
 			foreach (var r in new List<IPaso<T>> (ruta.Pasos))
 			{
-				if (r.Destino.Equals (this))
-				{
-					// Al parecer nunca se llega aquí.
-					// TODO ¿Eliminar?
-					ruta.EliminarPrimero ();
-					continue;
-				}
 				if (!AvanzarHacia (r.Destino, ref dist))
 					return false;
 
