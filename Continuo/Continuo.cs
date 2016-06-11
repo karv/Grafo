@@ -97,6 +97,14 @@ namespace Graficas.Continuo
 
 		}
 
+		IEqualityComparer<T> ComparaNodos
+		{
+			get
+			{
+				return GráficaBase.Comparador;
+			}
+		}
+
 		#endregion
 
 		#region Acceso a puntos
