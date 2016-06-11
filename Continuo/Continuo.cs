@@ -118,12 +118,7 @@ namespace Graficas.Continuo
 		/// <param name="punto">Nodo en el grafo</param>
 		public Punto<T> PuntoFijo (T punto)
 		{
-			Punto<T> ret;
-			if (puntosFijos.Any (z => z.Key.Equals (punto)))
-				return puntosFijos.First (z => z.Key.Equals (punto)).Value;
-			ret = new Punto<T> (punto);
-			puntosFijos.Add (punto, ret);
-			return ret;
+			return puntosFijos [punto];
 		}
 
 		/// <summary>
