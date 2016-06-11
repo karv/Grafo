@@ -118,7 +118,19 @@ namespace Graficas.Continuo
 		/// <param name="punto">Nodo en el grafo</param>
 		public Punto<T> PuntoFijo (T punto)
 		{
-			return puntosFijos [punto];
+			try
+			{
+				return puntosFijos [punto];
+			}
+			catch (KeyNotFoundException ex)
+			{
+				throw new NodoInexistenteException (
+					string.Format (
+						"El nodo {0} no se encuentra en el grafo base {1}.",
+						punto,
+						GrafoBase),
+					ex);
+			}
 		}
 
 		/// <summary>
