@@ -349,7 +349,6 @@ namespace Graficas.Continuo
 					x.AlColisionar?.Invoke (this);
 				}
 			}
-			anterior.Remove ();
 		}
 
 		/// <summary>
