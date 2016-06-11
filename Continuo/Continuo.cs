@@ -81,7 +81,7 @@ namespace Graficas.Continuo
 
 		#region Interno
 
-		readonly Dictionary<T, Punto<T>> puntosFijos = new Dictionary<T, Punto<T>> ();
+		readonly Dictionary<T, Punto<T>> puntosFijos;
 
 		IEnumerable<Punto<T>> PuntosArista (ParNoOrdenado<T> arista)
 		{
@@ -102,6 +102,11 @@ namespace Graficas.Continuo
 				return GrafoBase.Comparador;
 			}
 		}
+
+		/// <summary>
+		/// Devuelve el comparador que se usa para los puntos (flotantes)
+		/// </summary>
+		protected IEqualityComparer<Punto<T>> ComparaPuntos { get; }
 
 		#endregion
 
@@ -143,6 +148,8 @@ namespace Graficas.Continuo
 				gráfica.SóloLectura,
 				"Este grafo debe ser sólo lectura para evitar comportamiento inesperado."); 
 			GrafoBase = gráfica;
+			ComparaPuntos = new ComparadorCoincidencia<T> (ComparaNodos);
+			puntosFijos = new Dictionary<T, Punto<T>> (ComparaNodos);
 			foreach (var x in gráfica.Nodos)
 				puntosFijos.Add (x, AgregaPunto (x));
 		}

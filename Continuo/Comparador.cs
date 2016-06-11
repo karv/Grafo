@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Graficas.Continuo
 {
 	public class ComparadorCoincidencia<T> : IEqualityComparer<Punto<T>>
-		//where T : class, IEquatable<T>
 	{
 		public ComparadorCoincidencia (IEqualityComparer<T> compa = null)
 		{
 			ComparaNodos = compa ?? EqualityComparer<T>.Default;
 		}
 
-		IEqualityComparer<T> ComparaNodos { get; }
+		/// <summary>
+		/// Devuelve el comparador de nodos que se usa para comparar extremos.
+		/// </summary>
+		public IEqualityComparer<T> ComparaNodos { get; }
 
 		public bool Equals (Punto<T> x, Punto<T> y)
 		{
