@@ -28,8 +28,6 @@ namespace Graficas.Continuo
 		/// </summary>
 		public readonly List<Punto<T>> Puntos = new List<Punto<T>> ();
 
-		/// 
-
 		/// <summary>
 		/// Agrega un punto al grafo y lo devuelve
 		/// </summary>

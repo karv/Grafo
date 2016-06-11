@@ -3,7 +3,6 @@ using System.Linq;
 using ListasExtra;
 using System.Collections.Generic;
 using Graficas.Aristas;
-using System.Diagnostics;
 
 namespace Graficas.Continuo
 {
@@ -142,7 +141,7 @@ namespace Graficas.Continuo
 			{
 				if (ReferenceEquals (B, null))
 					throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc si B es nulo.");
-				return Universo.GráficaBase [A, B] - Loc;
+				return Universo.GrafoBase [A, B] - Loc;
 			}
 		}
 
@@ -178,7 +177,7 @@ namespace Graficas.Continuo
 		{
 			if (EnOrigen)
 			{
-				var ar = Universo.GráficaBase.EncuentraArista (A, extremo);
+				var ar = Universo.GrafoBase.EncuentraArista (A, extremo);
 				if (ar.Existe)
 					return ar.Data;
 			}
@@ -237,14 +236,14 @@ namespace Graficas.Continuo
 				{
 					// True si son vecinos según Universo
 					return A.Equals (punto.A) ||
-					Universo.GráficaBase.ExisteArista (A, punto.A);
+					Universo.GrafoBase.ExisteArista (A, punto.A);
 				}
 				else
 				{
 					if (!punto.Extremos.Contiene (A))
 						return false;
 					var nodo = punto.Extremos.Excepto (A);
-					return !float.IsPositiveInfinity (Universo.GráficaBase [A, nodo]);
+					return !float.IsPositiveInfinity (Universo.GrafoBase [A, nodo]);
 				}
 			}
 			return punto.EnOrigen ? punto.EnMismoIntervalo (this) : Extremos.Equals (punto.Extremos);
