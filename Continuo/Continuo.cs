@@ -95,7 +95,7 @@ namespace Graficas.Continuo
 
 		}
 
-		IEqualityComparer<T> ComparaNodos
+		public IEqualityComparer<T> ComparaNodos
 		{
 			get
 			{
@@ -106,7 +106,7 @@ namespace Graficas.Continuo
 		/// <summary>
 		/// Devuelve el comparador que se usa para los puntos (flotantes)
 		/// </summary>
-		protected IEqualityComparer<Punto<T>> ComparaPuntos { get; }
+		public IEqualityComparer<Punto<T>> ComparaPuntos { get; }
 
 		#endregion
 

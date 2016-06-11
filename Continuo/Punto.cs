@@ -139,8 +139,8 @@ namespace Graficas.Continuo
 		{
 			get
 			{
-				if (ReferenceEquals (B, null))
-					throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc si B es nulo.");
+				if (EnOrigen)
+					throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc estando en un punto fijo");
 				return Universo.GrafoBase [A, B] - Loc;
 			}
 		}
@@ -180,10 +180,14 @@ namespace Graficas.Continuo
 				var ar = Universo.GrafoBase.EncuentraArista (A, extremo);
 				if (ar.Existe)
 					return ar.Data;
+				throw new IndexOutOfRangeException (string.Format (
+					"{0} no es un extremo de {1}",
+					extremo,
+					this));
 			}
-			if (extremo.Equals (A))
+			if (Universo.ComparaNodos.Equals (extremo, A))
 				return Loc;
-			if (extremo.Equals (B))
+			if (Universo.ComparaNodos.Equals (extremo, B))
 				return Aloc;
 
 			throw new IndexOutOfRangeException (string.Format (
@@ -219,7 +223,7 @@ namespace Graficas.Continuo
 		public ParNoOrdenado<T> Extremos
 		{
 			get
-				{ return new ParNoOrdenado<T> (A, B); }
+			{ return new ParNoOrdenado<T> (A, B, Universo.ComparaNodos); }
 		}
 
 		/// <summary>
@@ -235,7 +239,7 @@ namespace Graficas.Continuo
 				if (punto.EnOrigen)
 				{
 					// True si son vecinos según Universo
-					return A.Equals (punto.A) ||
+					return Universo.ComparaNodos.Equals (A, punto.A) ||
 					Universo.GrafoBase.ExisteArista (A, punto.A);
 				}
 				else
@@ -259,7 +263,8 @@ namespace Graficas.Continuo
 		{
 			if (EnOrigen)
 			{
-				return A.Equals (p1) || A.Equals (p2);
+				return Universo.ComparaNodos.Equals (A, p1) ||
+				Universo.ComparaNodos.Equals (A, p2);
 			}
 			return new ParNoOrdenado<T> (p1, p2).Equals (Extremos);
 		}
@@ -298,7 +303,7 @@ namespace Graficas.Continuo
 			{
 				using (var anterior = Clonar ())
 				{
-					if (destino.Equals (A))
+					if (Universo.ComparaNodos.Equals (destino, A))
 					{
 						Loc -= dist;
 					}
@@ -412,7 +417,7 @@ namespace Graficas.Continuo
 			{
 				AvanzarHacia (A, ref avance);
 			}
-			return Equals (destino);
+			return Universo.ComparaPuntos.Equals (destino, this);
 		}
 
 		#endregion
@@ -479,9 +484,18 @@ namespace Graficas.Continuo
 				if (other == null)
 					return false;
 				if (EnOrigen)
-					return (A.Equals (other.A) && other.EnOrigen);
-				return (A.Equals (other.A) && B.Equals (other.B) && Loc == other.Loc) ||
-				(A.Equals (other.B) && B.Equals (other.A) && Loc == other.Aloc);
+					return (other.EnOrigen && Universo.ComparaNodos.Equals (A, other.A));
+				var ret =
+					(Universo.ComparaNodos.Equals (A, other.A) &&
+					Universo.ComparaNodos.Equals (B, other.B) &&
+					Loc == other.Loc)
+
+					||
+
+					(Universo.ComparaNodos.Equals (A, other.B) &&
+					Universo.ComparaNodos.Equals (B, other.A) &&
+					Loc == other.Aloc);
+				return ret;
 			}
 			catch (Exception ex)
 			{
