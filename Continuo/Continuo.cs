@@ -21,7 +21,7 @@ namespace Graficas.Continuo
 		/// <summary>
 		/// Gráfica donde vive este contnuo
 		/// </summary>
-		public readonly Grafo<T, float> GráficaBase;
+		public readonly Grafo<T, float> GrafoBase;
 
 		/// <summary>
 		/// Conjuntos de puntos asociados a este continuo
@@ -101,7 +101,7 @@ namespace Graficas.Continuo
 		{
 			get
 			{
-				return GráficaBase.Comparador;
+				return GrafoBase.Comparador;
 			}
 		}
 
@@ -144,7 +144,7 @@ namespace Graficas.Continuo
 			Debug.Assert (
 				gráfica.SóloLectura,
 				"Este grafo debe ser sólo lectura para evitar comportamiento inesperado."); 
-			GráficaBase = gráfica;
+			GrafoBase = gráfica;
 			foreach (var x in gráfica.Nodos)
 				puntosFijos.Add (x, AgregaPunto (x));
 		}
