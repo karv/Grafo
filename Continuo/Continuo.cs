@@ -146,7 +146,7 @@ namespace Graficas.Continuo
 		}
 
 		[Conditional ("DEBUG")]
-		void ProbarIntegridad ()
+		public void ProbarIntegridad ()
 		{
 			string generalExcMsg = string.Format ("Fallo de integridad en {0}\n", this);
 			foreach (var p in Puntos)
