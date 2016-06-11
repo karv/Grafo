@@ -85,14 +85,7 @@ namespace Graficas.Continuo
 
 		IEnumerable<Punto<T>> PuntosArista (ParNoOrdenado<T> arista)
 		{
-			foreach (var x in Puntos)
-			{
-				if (x.Extremos.Equals (arista))
-				{
-					yield return x;
-				}
-			}
-
+			return Puntos.Where (x => x.Extremos.Equals (arista));
 		}
 
 		public IEqualityComparer<T> ComparaNodos
