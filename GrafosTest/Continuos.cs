@@ -71,8 +71,8 @@ namespace Test
 			var rutas = new ConjuntoRutasÓptimas<Objeto> ();
 			rutas.Calcular (gr);
 
-			foreach (var ini in new List <Continuo<Objeto>.ContinuoPunto>(cont.Puntos))
-				foreach (var fin in new List <Continuo<Objeto>.ContinuoPunto>(cont.Puntos))
+			foreach (var ini in new List <Punto<Objeto>>(cont.Puntos))
+				foreach (var fin in new List <Punto<Objeto>> (cont.Puntos))
 				{
 					if (ini.Coincide (fin))
 						continue;
@@ -100,8 +100,8 @@ namespace Test
 			var cp = new Continuo<Objeto> (gr);
 			var p0 = cp.PuntoFijo (0);
 			var p1 = p0.Clonar ();
-			var p2 = new Continuo<Objeto>.ContinuoPunto (cp, 0);
-			var p3 = new Continuo<Objeto>.ContinuoPunto (cp, 0, 1, 0.5f);
+			var p2 = new Punto<Objeto> (cp, 0);
+			var p3 = new Punto<Objeto> (cp, 0, 1, 0.5f);
 
 			Assert.AreEqual (3 + ObjetoColl.Count, cp.Puntos.Count); // 0 == p0, 1, p1
 			p1.Remove ();
@@ -110,7 +110,7 @@ namespace Test
 			//Assert.AreEqual (p2, p0);
 
 			Assert.True (p0.EnMismoIntervalo (p3));
-			Assert.True (Continuo<Objeto>.ContinuoPunto.EnMismoIntervalo (p0, p3));
+			Assert.True (Punto<Objeto>.EnMismoIntervalo (p0, p3));
 			Assert.AreEqual (0.5f, p3.DistanciaAExtremo (0));
 			Assert.AreEqual (0.5f, p3.DistanciaAExtremo (1));
 
@@ -124,7 +124,7 @@ namespace Test
 		public void ContPuntDinam ()
 		{
 			const int len = 10;
-			var colisionó = new HashSet<Continuo<Objeto>.ContinuoPunto> ();
+			var colisionó = new HashSet<Punto<Objeto>> ();
 			bool seDesplazó = false;
 			bool terminóRuta = false;
 			var nods = new HashSet<Objeto> ();
