@@ -371,7 +371,7 @@ namespace Graficas.Continuo
 		/// <returns><c>true</c>, si termina la ruta; <c>false</c> otherwise.</returns>
 		/// <param name="ruta">Ruta.</param>
 		/// <param name="dist">Dist.</param>
-		public bool AvanzarHacia (Continuo<T>.Ruta ruta, float dist)
+		public bool AvanzarHacia (Ruta<T> ruta, float dist)
 		{
 			foreach (var r in new List<IPaso<T>> (ruta.Pasos))
 			{

@@ -138,7 +138,7 @@ namespace Test
 			pmov.AvanzarHacia (1, 0.3f);
 			Assert.True (cp.PuntosArista (0, 1).Any (z => z.Coincide (pmov)));
 			var pmov2 = cp.AgregaPunto (0);
-			var ruta = new Continuo<Objeto>.Ruta (pmov2);
+			var ruta = new Graficas.Continuo.Ruta<Objeto> (pmov2);
 			ruta.Concat (new Paso<Objeto> (0, 1, 1));
 			ruta.Concat (new Paso<Objeto> (1, 2, 2));
 			ruta.Concat (new Paso<Objeto> (2, 3, 3));
@@ -178,7 +178,7 @@ namespace Test
 
 			var cp = new Continuo<Objeto> (gr);
 
-			var ruta = new Continuo<Objeto>.Ruta (cp.PuntoFijo (0));
+			var ruta = new Graficas.Continuo.Ruta<Objeto> (cp.PuntoFijo (0));
 			ruta.Concat (new Paso<Objeto> (0, 1, gr [0, 1]));
 			ruta.Concat (new Paso<Objeto> (1, 2, gr [1, 2]));
 			ruta.Concat (new Paso<Objeto> (2, 3, gr [2, 3]));
