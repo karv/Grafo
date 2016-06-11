@@ -16,7 +16,7 @@ namespace Graficas.Continuo
 	[Serializable]
 	public class Continuo<T>
 	{
-
+		#region General
 
 		/// <summary>
 		/// Gráfica donde vive este contnuo
@@ -28,61 +28,7 @@ namespace Graficas.Continuo
 		/// </summary>
 		public readonly List<Punto<T>> Puntos = new List<Punto<T>> ();
 
-		readonly Dictionary<T, Punto<T>> puntosFijos = new Dictionary<T, Punto<T>> ();
-
-		/// <summary>
-		/// Devuelve el punto en el continuo equivalente a un nodo del grafo.
-		/// </summary>
-		/// <param name="punto">Nodo en el grafo</param>
-		public Punto<T> PuntoFijo (T punto)
-		{
-			Punto<T> ret;
-			if (puntosFijos.Any (z => z.Key.Equals (punto)))
-				return puntosFijos.First (z => z.Key.Equals (punto)).Value;
-			ret = new Punto<T> (punto);
-			puntosFijos.Add (punto, ret);
-			return ret;
-		}
-
-		/// <summary>
-		/// Construye una instancia de esta clase con una grafica dada como base.
-		/// </summary>
-		/// <param name="gráfica">Grafica base</param>
-		public Continuo (Grafo<T, float> gráfica)
-		{
-			Debug.Assert (
-				gráfica.SóloLectura,
-				"Este grafo debe ser sólo lectura para evitar comportamiento inesperado."); 
-			GráficaBase = gráfica;
-			foreach (var x in gráfica.Nodos)
-				puntosFijos.Add (x, AgregaPunto (x));
-		}
-
-		/// <summary>
-		/// Devuelve la ruta óptima entre dos puntos
-		/// </summary>
-		/// <param name="inicial">Punto inicial.</param>
-		/// <param name="final">Punto final.</param>
-		/// <param name="rutas">Conjunto de rutas óptimas previamente calculadas.</param>
-		public static Ruta<T> RutaÓptima (Punto<T> inicial,
-		                                  Punto<T> final,
-		                                  ConjuntoRutasÓptimas<T> rutas)
-		{
-			var ruta = rutas.CaminoÓptimo (inicial.A, final.A);
-			var ret = new Ruta<T> (inicial);
-			ret.Concat (ruta);
-			ret.ConcatFinal (final);
-			return ret;
-		}
-
-
-		/// <summary>
-		/// Devuelve una nueva lista de los puntos que hay en dos nodos consecutivos.
-		/// </summary>
-		public ICollection<Punto<T>> PuntosEnIntervalo (T p1, T p2)
-		{
-			return Puntos.FindAll (x => x.EnIntervaloInmediato (p1, p2));
-		}
+		/// 
 
 		/// <summary>
 		/// Agrega un punto al grafo y lo devuelve
@@ -112,18 +58,6 @@ namespace Graficas.Continuo
 			return new Punto<T> (this, a);
 		}
 
-		IEnumerable<Punto<T>> PuntosArista (ParNoOrdenado<T> arista)
-		{
-			foreach (var x in Puntos)
-			{
-				if (x.Extremos.Equals (arista))
-				{
-					yield return x;
-				}
-			}
-			
-		}
-
 		/// <summary>
 		/// Enumera los puntos existentes en una arista
 		/// </summary>
@@ -145,6 +79,93 @@ namespace Graficas.Continuo
 			return PuntosArista (aris);
 		}
 
+		#endregion
+
+		#region Interno
+
+		readonly Dictionary<T, Punto<T>> puntosFijos = new Dictionary<T, Punto<T>> ();
+
+		IEnumerable<Punto<T>> PuntosArista (ParNoOrdenado<T> arista)
+		{
+			foreach (var x in Puntos)
+			{
+				if (x.Extremos.Equals (arista))
+				{
+					yield return x;
+				}
+			}
+
+		}
+
+		#endregion
+
+		#region Acceso a puntos
+
+		/// <summary>
+		/// Devuelve el punto en el continuo equivalente a un nodo del grafo.
+		/// </summary>
+		/// <param name="punto">Nodo en el grafo</param>
+		public Punto<T> PuntoFijo (T punto)
+		{
+			Punto<T> ret;
+			if (puntosFijos.Any (z => z.Key.Equals (punto)))
+				return puntosFijos.First (z => z.Key.Equals (punto)).Value;
+			ret = new Punto<T> (punto);
+			puntosFijos.Add (punto, ret);
+			return ret;
+		}
+
+		/// <summary>
+		/// Devuelve una nueva lista de los puntos que hay en dos nodos consecutivos.
+		/// </summary>
+		public ICollection<Punto<T>> PuntosEnIntervalo (T p1, T p2)
+		{
+			return Puntos.FindAll (x => x.EnIntervaloInmediato (p1, p2));
+		}
+
+		#endregion
+
+		#region Ctor
+
+		/// <summary>
+		/// Construye una instancia de esta clase con una grafica dada como base.
+		/// </summary>
+		/// <param name="gráfica">Grafica base</param>
+		public Continuo (Grafo<T, float> gráfica)
+		{
+			Debug.Assert (
+				gráfica.SóloLectura,
+				"Este grafo debe ser sólo lectura para evitar comportamiento inesperado."); 
+			GráficaBase = gráfica;
+			foreach (var x in gráfica.Nodos)
+				puntosFijos.Add (x, AgregaPunto (x));
+		}
+
+		#endregion
+
+		#region Rutas
+
+		/// <summary>
+		/// Devuelve la ruta óptima entre dos puntos
+		/// </summary>
+		/// <param name="inicial">Punto inicial.</param>
+		/// <param name="final">Punto final.</param>
+		/// <param name="rutas">Conjunto de rutas óptimas previamente calculadas.</param>
+		public static Ruta<T> RutaÓptima (Punto<T> inicial,
+		                                  Punto<T> final,
+		                                  ConjuntoRutasÓptimas<T> rutas)
+		{
+			var ruta = rutas.CaminoÓptimo (inicial.A, final.A);
+			var ret = new Ruta<T> (inicial);
+			ret.Concat (ruta);
+			ret.ConcatFinal (final);
+			return ret;
+		}
+
+		#endregion
+
+		#region Debug
+
 		[Conditional ("DEBUG")]
 		public void ProbarIntegridad ()
 		{
@@ -160,5 +181,7 @@ namespace Graficas.Continuo
 				}
 			}
 		}
+
+		#endregion
 	}
 }
