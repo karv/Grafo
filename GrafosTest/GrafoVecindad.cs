@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using Graficas.Grafo;
+using System;
 
 namespace Test
 {
@@ -25,11 +26,20 @@ namespace Test
 		[Test]
 		public void Ctor ()
 		{
-			var nods = new int?[20];
+			var r = new Random ();
+			var nods = new int?[r.Next (100)];
 			for (int i = 0; i < nods.Length; i++)
 				nods [i] = 0;
-			var g = new GrafoVecindad<int?> (nods, false, new TestComparer ());
-			Assert.AreEqual (g.);
+			// Analysis disable ObjectCreationAsStatement
+			new GrafoVecindad<int?> (nods, false, new TestComparer ());
+			new GrafoVecindad<int?> (nods, true, new TestComparer ());
+
+
+			for (int i = 0; i < nods.Length; i++)
+				nods [i] = i;
+			new GrafoVecindad<int?> (nods, false, new TestComparer ());
+			new GrafoVecindad<int?> (nods, true, new TestComparer ());
+			// Analysis restore ObjectCreationAsStatement
 		}
 	}
 }

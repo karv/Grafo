@@ -14,7 +14,7 @@ namespace Graficas.Grafo
 		{
 			Comparador = comparador ?? EqualityComparer<T>.Default;
 			Simétrico = simétrico;
-			nodos = new HashSet<T> (nodos, Comparador);
+			this.nodos = new HashSet<T> (nodos, Comparador);
 			Vecindad = new Dictionary<T, HashSet<T>> (Comparador);
 			inicializaDiccionario ();
 		}
