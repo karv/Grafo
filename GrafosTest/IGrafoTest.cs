@@ -12,6 +12,8 @@ namespace Test
 	{
 		public IGrafo<int> Gr { get; set; }
 
+		public int RealNumNodos { get; set; }
+
 		static Random r = new Random ();
 
 		public void HacerAleatorio ()
@@ -50,7 +52,8 @@ namespace Test
 
 		public void Reset ()
 		{
-			Reset (r.Next (3, 100));
+			RealNumNodos = r.Next (3, 100);
+			Reset (RealNumNodos);
 		}
 
 		[SetUp]
@@ -144,6 +147,14 @@ namespace Test
 				var ar = Gr [x.Origen, x.Destino];
 				Assert.True (ar.Existe);
 			}
+		}
+
+		[Test]
+		public void Nodos ()
+		{
+			Assert.AreEqual (RealNumNodos, Gr.Nodos.Count);
+			for (int i = 0; i < RealNumNodos; i++)
+				Assert.True (Gr.Nodos.Contains (i));
 		}
 	}
 
