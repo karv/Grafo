@@ -52,7 +52,7 @@ namespace Graficas.Grafo
 				x.Existe = false;
 		}
 
-		protected IEqualityComparer<T> Comparador = EqualityComparer<T>.Default;
+		public readonly IEqualityComparer<T> Comparador = EqualityComparer<T>.Default;
 
 		/// <summary>
 		/// Colección de aristas

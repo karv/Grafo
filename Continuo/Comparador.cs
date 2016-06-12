@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Graficas.Continuo
 {
-	public class ComparadorCoincidencia<T> : IEqualityComparer<Continuo<T>.ContinuoPunto>
-		where T : class, IEquatable<T>
+	public class ComparadorCoincidencia<T> : IEqualityComparer<Punto<T>>
 	{
 		public ComparadorCoincidencia (IEqualityComparer<T> compa = null)
 		{
 			ComparaNodos = compa ?? EqualityComparer<T>.Default;
 		}
 
-		IEqualityComparer<T> ComparaNodos { get; }
+		/// <summary>
+		/// Devuelve el comparador de nodos que se usa para comparar extremos.
+		/// </summary>
+		public IEqualityComparer<T> ComparaNodos { get; }
 
-		public bool Equals (Continuo<T>.ContinuoPunto x, Continuo<T>.ContinuoPunto y)
+		public bool Equals (Punto<T> x, Punto<T> y)
 		{
 			if (ReferenceEquals (null, x) || ReferenceEquals (null, y))
 				return false;
@@ -21,7 +22,7 @@ namespace Graficas.Continuo
 			return x.Coincide (y);
 		}
 
-		public int GetHashCode (Continuo<T>.ContinuoPunto obj)
+		public int GetHashCode (Punto<T> obj)
 		{
 			return obj.EnOrigen ? ComparaNodos.GetHashCode (obj.A) : 
 				ComparaNodos.GetHashCode (obj.A) + ComparaNodos.GetHashCode (obj.B) + obj.Loc.GetHashCode ();
