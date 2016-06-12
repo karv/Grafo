@@ -38,13 +38,25 @@ namespace Test
 			SetValue (clusterSize, 0, true);
 		}
 
+		void HacerLineal ()
+		{
+			Reset ();
+			var n = Gr.Nodos.Count;
+			for (int i = 0; i < n - 1; i++)
+				SetValue (i, i + 1, true);
+		}
+
 		public abstract void Reset (int size);
+
+		public void Reset ()
+		{
+			Reset (r.Next (3, 100));
+		}
 
 		[SetUp]
 		public void Setup ()
 		{
-			
-			Reset (r.Next (3, 100));
+			Reset ();
 		}
 
 		public abstract void SetValue (int a, int b, bool r);
@@ -113,6 +125,26 @@ namespace Test
 
 				}
 		}
+
+		[Test]
+		public void Path ()
+		{
+			HacerLineal ();
+			var n = Gr.Nodos.Count;
+			var rr = new int[n];
+			for (int i = 0; i < n; i++)
+				rr [i] = i;
+			var ruta = Gr.ToRuta (rr);
+
+			Assert.AreEqual (0, ruta.NodoInicial);
+			Assert.AreEqual (n - 1, ruta.NodoFinal);
+			Assert.AreEqual (n - 1, ruta.NumPasos);
+			foreach (var x in ruta.Pasos)
+			{
+				var ar = Gr [x.Origen, x.Destino];
+				Assert.True (ar.Existe);
+			}
+		}
 	}
 
 	public class GrafoTest : IGrafoTest
@@ -165,5 +197,4 @@ namespace Test
 			graf [a, b] = r;
 		}
 	}
-
 }
