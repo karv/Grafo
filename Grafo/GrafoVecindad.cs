@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Graficas.Grafo
 {
-	public class GrafoVecindad<T> : IGrafo<T> // TEST all
+	public class GrafoVecindad<T> : IGrafo<T>
 	{
 		#region Ctor
 
