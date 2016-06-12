@@ -57,7 +57,6 @@ namespace Test
 			Assert.IsEmpty (g.Vecinos (1));
 		}
 
-	
 		[Test]
 		public void AristasGet ()
 		{

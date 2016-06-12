@@ -11,14 +11,23 @@ namespace Test
 	[TestFixture]
 	public abstract class IGrafoTest
 	{
-		public abstract IGrafo<int> ObtenerGrafoNuevo ();
+		public IGrafo<int> Gr { get; set; }
+
+		public abstract void Reset ();
+
+		[SetUp]
+		public void Setup ()
+		{
+			Reset ();
+		}
+
+		public abstract void SetValue (int a, int b, bool r);
 
 		public static List<int> GeneralNodos { get; }
 
 		[Test]
 		public void SubGrafo ()
 		{
-			var Gr = ObtenerGrafoNuevo ();
 			var r = new Random ();
 			var hs = new List<int> (Gr.Nodos.Where (z => r.Next (2) == 1));
 
@@ -43,38 +52,68 @@ namespace Test
 				Gr.Subgrafo (hs);
 			});
 		}
+
+		[Test]
+		public void Clear ()
+		{
+			SetValue (0, 1, true);
+			Assert.True (Gr [0, 1].Existe);
+			Gr.Clear ();
+			Assert.False (Gr [0, 1].Existe);
+			Assert.IsEmpty (Gr.Vecinos (0));
+			Assert.IsEmpty (Gr.Vecinos (1));
+			Assert.IsEmpty (Gr.Aristas ());
+		}
 	}
 
 	public class GrafoTest : IGrafoTest
 	{
-		public override IGrafo<int> ObtenerGrafoNuevo ()
+		public override void Reset ()
 		{
 			var nodos = new int[30];
 			for (int i = 0; i < nodos.Length; i++)
 				nodos [i] = i;
-			return new Grafo<int> (nodos);
+			Gr = new Grafo<int> (nodos);
+		}
+
+		public override void SetValue (int a, int b, bool r)
+		{
+			var graf = (Grafo<int>)(Gr);
+			graf [a, b] = r;
 		}
 	}
 
 	public class GrafoData : IGrafoTest
 	{
-		public override IGrafo<int> ObtenerGrafoNuevo ()
+		public override void Reset ()
 		{
 			var nodos = new int[30];
 			for (int i = 0; i < nodos.Length; i++)
 				nodos [i] = i;
-			return new Grafo<int, float> (nodos);
+			Gr = new Grafo<int, float> (nodos);
+		}
+
+		public override void SetValue (int a, int b, bool r)
+		{
+			var graf = (Grafo<int, float>)(Gr);
+			graf.EncuentraArista (a, b).Existe = r;
 		}
 	}
 
 	public class GrafoVecindad : IGrafoTest
 	{
-		public override IGrafo<int> ObtenerGrafoNuevo ()
+		public override void Reset ()
 		{
 			var nodos = new int[30];
 			for (int i = 0; i < nodos.Length; i++)
 				nodos [i] = i;
-			return new GrafoVecindad<int> (nodos);
+			Gr = new Grafo<int> (nodos);
+		}
+
+		public override void SetValue (int a, int b, bool r)
+		{
+			var graf = (Grafo<int>)(Gr);
+			graf [a, b] = r;
 		}
 	}
 
