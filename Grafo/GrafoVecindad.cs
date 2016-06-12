@@ -2,6 +2,7 @@
 using Graficas.Aristas;
 using System;
 using System.Linq;
+using Graficas.Rutas;
 
 namespace Graficas.Grafo
 {
@@ -78,9 +79,27 @@ namespace Graficas.Grafo
 			}
 		}
 
-		public Graficas.Rutas.IRuta<T> ToRuta (IEnumerable<T> seq)
+		public IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
-			throw new NotImplementedException ();
+			var ret = new Ruta<T> ();
+			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
+			T last = default(T);
+			foreach (var x in seq)
+			{
+				if (iniciando)
+				{
+					iniciando = false;
+					ret = new Ruta<T> ();
+				}
+				else
+				{
+					if (!Vecinos (last).Contains (x))
+						throw new RutaInconsistenteException ("La sucesión dada no representa una ruta.");
+					ret.Concat (new Paso<T> (last, x));
+				}
+				last = x;
+			}
+			return ret;
 		}
 
 		public GrafoVecindad<T> Subgrafo (IEnumerable<T> conjunto)
