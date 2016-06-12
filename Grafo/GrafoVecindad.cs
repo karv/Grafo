@@ -69,12 +69,12 @@ namespace Graficas.Grafo
 			{
 				return new HashSet<T> (Vecindad [nodo], Comparador);
 			}
-			catch (Exception ex)
+			catch (KeyNotFoundException ex)
 			{
 				var m = string.Format (
 					        "No se puede calcular vecindad de {0}. ¿Es un nodo de esta clase?",
 					        nodo);
-				throw new Exception (m, ex);
+				throw new NodoInexistenteException (m, ex);
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace Graficas.Grafo
 			throw new NotImplementedException ();
 		}
 
-		public IGrafo<T> Subgrafo (IEnumerable<T> conjunto)
+		public GrafoVecindad<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			try
 			{
@@ -98,6 +98,11 @@ namespace Graficas.Grafo
 				        "¿Es el argumento un subconjunto de Nodos?", conjunto);
 				throw new Exception (m, ex);
 			}
+		}
+
+		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		{
+			return Subgrafo (conjunto);
 		}
 
 		public bool this [T desde, T hasta]
