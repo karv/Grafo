@@ -158,7 +158,7 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				return new HashSet<T> (nodos, Comparador);
+				return new List<T> (nodos).AsReadOnly ();
 			}
 		}
 

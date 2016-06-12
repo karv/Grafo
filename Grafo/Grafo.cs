@@ -65,8 +65,7 @@ namespace Graficas.Grafo
 		{
 			get
 			{
-				// TODO: Hacer que devuelve un readonly
-				return new HashSet<T> (IntNodos);
+				return new List<T> (IntNodos).AsReadOnly ();
 			}
 		}
 
