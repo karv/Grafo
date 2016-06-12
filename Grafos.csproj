@@ -69,6 +69,7 @@
     <Compile Include="Continuo\Punto.cs" />
     <Compile Include="Continuo\RutaContinuo.cs" />
     <Compile Include="Grafo\GrafoVecindad.cs" />
+    <Compile Include="Grafo\OperaciónInválidaGrafosException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
