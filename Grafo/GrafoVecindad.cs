@@ -9,19 +9,19 @@ namespace Graficas.Grafo
 	{
 		#region Ctor
 
-		public GrafoVecindad (bool simétrico = false,
+		public GrafoVecindad (IEnumerable<T> nodos, bool simétrico = false,
 		                      IEqualityComparer<T> comparador = null)
 		{
 			Comparador = comparador ?? EqualityComparer<T>.Default;
 			Simétrico = simétrico;
-			Nodos = new HashSet<T> (Comparador);
+			nodos = new HashSet<T> (nodos, Comparador);
 			Vecindad = new Dictionary<T, HashSet<T>> (Comparador);
 			inicializaDiccionario ();
 		}
 
 		void inicializaDiccionario ()
 		{
-			foreach (var x in Nodos)
+			foreach (var x in nodos)
 				Vecindad.Add (x, new HashSet<T> (Comparador));
 		}
 
@@ -29,7 +29,7 @@ namespace Graficas.Grafo
 
 		#region Interno
 
-		HashSet<T> Nodos { get; }
+		HashSet<T> nodos { get; }
 
 		public IEqualityComparer<T> Comparador { get; }
 
@@ -87,7 +87,7 @@ namespace Graficas.Grafo
 		{
 			try
 			{
-				var ret = new GrafoVecindad<T> (Simétrico, Comparador);
+				var ret = new GrafoVecindad<T> (conjunto, Simétrico, Comparador);
 				foreach (var c in conjunto)
 					ret.Vecindad [c].UnionWith (Vecindad [c].Intersect (conjunto));
 				return ret;
@@ -149,11 +149,11 @@ namespace Graficas.Grafo
 			}
 		}
 
-		ICollection<T> IGrafo<T>.Nodos
+		public ICollection<T> Nodos
 		{
 			get
 			{
-				return Nodos;
+				return new HashSet<T> (nodos, Comparador);
 			}
 		}
 
