@@ -692,6 +692,8 @@ namespace Graficas.Grafo
 			var ret = new Grafo<T> (conjunto, EsSimétrico, SóloLectura);
 			foreach (var x in conjunto)
 			{
+				if (!Nodos.Contains (x))
+					throw new OperaciónInválidaGrafosException ("Se requere que el conjunto de nodos esté contenido en los nodos del grafo original.");
 				ret.Nodos.Add (x);
 			}
 
