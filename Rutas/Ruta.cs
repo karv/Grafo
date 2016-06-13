@@ -191,12 +191,21 @@ namespace Graficas.Rutas
 			}
 		}
 
+		/// <summary>
+		/// Devuelve un valor que indica si esta ruta es nula, ie. No tiene pasos
+		/// </summary>
+		/// <remarks>Que la ruta sea nula no es lo mismo que su valor sea <c>null</c>.
 		public bool EsNulo
 		{
 			get
 			{
 				return NumPasos == 0;
 			}
+		}
+
+		public static bool RutaNula (Ruta<T> r)
+		{
+			return r?.EsNulo ?? true;
 		}
 
 		/// <summary>
