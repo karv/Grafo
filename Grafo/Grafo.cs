@@ -354,11 +354,11 @@ namespace Graficas.Grafo
 		}
 
 		/// <summary>
-		/// Devuelve una nueva colección con las aristas
+		/// Devuelve una nueva colección con las aristas existentes
 		/// </summary>
 		ICollection<IArista<T>> IGrafo<T>.Aristas ()
 		{
-			return new HashSet<IArista<T>> (Data.Cast<AristaPeso<T, TData>> ());
+			return new HashSet<IArista<T>> (Data.Cast<AristaPeso<T, TData>> ().Where (x => x.Existe));
 		}
 
 		ICollection<T> IGrafo<T>.Nodos
