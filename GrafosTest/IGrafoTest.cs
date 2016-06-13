@@ -88,7 +88,7 @@ namespace Test
 			while (Gr.Nodos.Contains (hs [0]))
 				hs [0]++;
 
-			Assert.Throws<OperaciónInválidaGrafosException> (delegate
+			Assert.Throws<ArgumentException> (delegate
 			{
 				Gr.Subgrafo (hs);
 			});

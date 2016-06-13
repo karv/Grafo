@@ -121,7 +121,7 @@ namespace Test
 				}
 
 			subnods [0] = nods.Length;
-			Assert.Throws<Exception> (delegate
+			Assert.Throws<ArgumentException> (delegate
 			{
 				g.Subgrafo (subnods);
 			});

@@ -4,6 +4,7 @@ using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas.Grafo
 {
@@ -348,9 +349,28 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
+		/// <remarks>No construye nuevas aristas, por lo que preserva refs.</remarks>
 		public Grafo<T, TData> Subgrafo (IEnumerable<T> conjunto)
 		{
-			throw new NotImplementedException ();
+			if (conjunto.Any (z => !Nodos.Contains (z)))
+				throw new ArgumentException ("Nodos no es un cobcojunto", "conjunto");
+			var ret = new Grafo<T, TData> (
+				          new HashSet<T> (conjunto),
+				          EsSimétrico,
+				          SóloLectura);
+
+			for (int i = 0; i < ret.NumNodos; i++)
+			{
+				// ii  es el índice en this que contiene al i-ésimo elemento de ret.Nodos
+				var ii = ret.ÍndiceDe (ret.IntNodos [i]); 
+				for (int j = 0; j < ret.NumNodos; j++)
+				{
+					// ij  es el índice en this que contiene al j-ésimo elemento de ret.Nodos
+					var ij = ret.ÍndiceDe (ret.IntNodos [j]); 
+					ret.Data [i, j] = Data [ii, ij];
+				}
+			}
+			return ret;
 		}
 
 		/// <summary>
@@ -716,20 +736,15 @@ namespace Graficas.Grafo
 		public Grafo<T> Subgrafo (ICollection<T> conjunto)
 		{
 			var ret = new Grafo<T> (conjunto, EsSimétrico, SóloLectura);
-			foreach (var x in conjunto)
-			{
-				if (!Nodos.Contains (x))
-					throw new OperaciónInválidaGrafosException ("Se requere que el conjunto de nodos esté contenido en los nodos del grafo original.");
-				ret.Nodos.Add (x);
-			}
+
+			if (conjunto.Any (x => !Nodos.Contains (x)))
+				throw new ArgumentException (
+					"Se requere que el conjunto de nodos esté contenido en los nodos del grafo original.",
+					"conjunto");
 
 			foreach (var x in new List<T> (conjunto))
-			{
 				foreach (var y in new List<T> (conjunto))
-				{
 					ret [x, y] = this [x, y];
-				}
-			}
 			return ret;
 		}
 
