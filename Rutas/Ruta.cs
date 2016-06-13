@@ -210,7 +210,9 @@ namespace Graficas.Rutas
 		/// <param name="r">Ruta</param>
 		public static bool RutaNula (Ruta<T> r)
 		{
+			// Analysis disable ConstantNullCoalescingCondition
 			return r?.EsNulo ?? true;
+			// Analysis restore ConstantNullCoalescingCondition
 		}
 
 		/// <summary>

@@ -351,14 +351,12 @@ namespace Graficas.Grafo
 							ori,
 							des, 
 							default(TData),
-							sóloLectura, 
-							false);
+							sóloLectura);
 					else
 						Data [i, j] = new AristaPeso<T, TData> (
 							ori,
 							des, 
-							sóloLectura, 
-							false);
+							sóloLectura);
 				}
 			
 
