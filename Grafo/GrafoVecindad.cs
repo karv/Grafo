@@ -115,7 +115,7 @@ namespace Graficas.Grafo
 			{
 				var m = string.Format ("No se puede calcular el subgrafo de esta clase respecto a {0}.\n" +
 				        "¿Es el argumento un subconjunto de Nodos?", conjunto);
-				throw new OperaciónInválidaGrafosException (m, ex);
+				throw new ArgumentException (m, "conjunto", ex);
 			}
 		}
 
