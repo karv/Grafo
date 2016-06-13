@@ -1,7 +1,6 @@
 ﻿using Graficas.Aristas;
 using System.Collections.Generic;
 using Graficas.Rutas;
-using System;
 
 namespace Graficas.Grafo
 {
@@ -21,9 +20,6 @@ namespace Graficas.Grafo
 		/// <returns> Una arista no nula </returns>
 		/// <param name="desde">Origen</param>
 		/// <param name="hasta">Destino</param>
-		/// <remarks> Debe devolver una (¿nueva?) arista en caso de que no exista como tal, 
-		/// diciendo que esa arista no existe.
-		/// NUNCA devuelve null</remarks>
 		IArista<T> this [T desde, T hasta]{ get; }
 
 		/// <summary>

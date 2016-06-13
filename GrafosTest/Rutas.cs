@@ -1,4 +1,3 @@
-using System;
 using NUnit.Framework;
 using Graficas.Rutas;
 using Graficas.Aristas;
@@ -44,6 +43,10 @@ namespace Test
 
 			rn2.Concat (Ruta<int>.Nulo);
 			Assert.True (rn2.NumPasos == 1);
+
+			Assert.True (Ruta<int>.RutaNula (null));
+			Assert.True (Ruta<int>.RutaNula (Ruta<int>.Nulo));
+			Assert.False (Ruta<int>.RutaNula (rn2));
 		}
 
 	}

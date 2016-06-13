@@ -88,6 +88,10 @@ namespace Graficas.Continuo
 			return Puntos.Where (x => x.Extremos.Equals (arista));
 		}
 
+		/// <summary>
+		/// Devuelve el comparador de nodos que se utiliza.
+		/// Es el mismo que usa el grafo base.
+		/// </summary>
 		public IEqualityComparer<T> ComparaNodos
 		{
 			get

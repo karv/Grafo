@@ -6,10 +6,16 @@ using Graficas.Rutas;
 
 namespace Graficas.Grafo
 {
+	/// <summary>
+	/// Representa un grafo visto como una función que a cada nodo le asigna su vecindad.
+	/// </summary>
 	public class GrafoVecindad<T> : IGrafo<T>
 	{
 		#region Ctor
 
+		/// <param name="nodos">Colección de nodos del grafo</param>
+		/// <param name="simétrico">Si el grafo es simétrico</param>
+		/// <param name="comparador">Comparador</param>
 		public GrafoVecindad (IEnumerable<T> nodos, bool simétrico = false,
 		                      IEqualityComparer<T> comparador = null)
 		{
@@ -32,10 +38,22 @@ namespace Graficas.Grafo
 
 		HashSet<T> nodos { get; }
 
+		/// <summary>
+		/// Devuelve el comparador que se usa para los nodos
+		/// </summary>
+		/// <value>The comparador.</value>
 		public IEqualityComparer<T> Comparador { get; }
 
+		/// <summary>
+		/// El diccionario que asigna a cada nodo su vecindad
+		/// </summary>
+		/// <value>The vecindad.</value>
 		protected Dictionary<T, HashSet<T>> Vecindad { get; }
 
+		/// <summary>
+		/// Devuelve un <c>bool</c> que indica si este grafo es tratato como simétrico
+		/// </summary>
+		/// <value><c>true</c> if simétrico; otherwise, <c>false</c>.</value>
 		public bool Simétrico { get; }
 
 		#endregion
@@ -64,6 +82,10 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
+		/// <summary>
+		/// Devuelve una copia de la vecindad de un nodo dado.
+		/// </summary>
+		/// <param name="nodo">Nodoa a considedad su vecindad</param>
 		public ICollection<T> Vecinos (T nodo)
 		{
 			try
@@ -79,6 +101,11 @@ namespace Graficas.Grafo
 			}
 		}
 
+		/// <summary>
+		/// Convierte una sucesión consistente de nodos a una ruta
+		/// </summary>
+		/// <returns>The ruta.</returns>
+		/// <param name="seq">Sucesión consistente.</param>
 		public IRuta<T> ToRuta (IEnumerable<T> seq)
 		{
 			var ret = new Ruta<T> ();
@@ -102,6 +129,10 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
+		/// <summary>
+		/// Calcula el subgrafo generado por un subconjutno de Nodos
+		/// </summary>
+		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
 		public GrafoVecindad<T> Subgrafo (IEnumerable<T> conjunto)
 		{
 			try
@@ -124,6 +155,11 @@ namespace Graficas.Grafo
 			return Subgrafo (conjunto);
 		}
 
+		/// <summary>
+		/// El valor de existencia de la arista correspondiente a un par de puntos
+		/// </summary>
+		/// <param name="desde">Origen</param>
+		/// <param name="hasta">Destino</param>
 		public bool this [T desde, T hasta]
 		{
 			get
@@ -147,18 +183,33 @@ namespace Graficas.Grafo
 				EliminaArista (desde, hasta);
 		}
 
+		/// <summary>
+		/// Elimina una arista
+		/// </summary>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
 		protected void EliminaArista (T desde, T hasta)
 		{
 			var vec = Vecindad [desde];
 			vec.Remove (hasta);
 		}
 
+		/// <summary>
+		/// Agrega una arista
+		/// </summary>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
 		protected void AgregaArista (T desde, T hasta)
 		{
 			var vec = Vecindad [desde];
 			vec.Add (hasta);
 		}
 
+		/// <summary>
+		/// Devuelve una arista que representa al estado de la arista en el grafo
+		/// </summary>
+		/// <param name="desde">Desde.</param>
+		/// <param name="hasta">Hasta.</param>
 		public AristaBool<T> Arista (T desde, T hasta)
 		{
 			bool ret = Vecindad [desde].Contains (hasta);
@@ -173,6 +224,10 @@ namespace Graficas.Grafo
 			}
 		}
 
+		/// <summary>
+		/// Devuelve una colección sólo lectura de sus nodos
+		/// </summary>
+		/// <value>The nodos.</value>
 		public ICollection<T> Nodos
 		{
 			get
