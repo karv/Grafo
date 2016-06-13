@@ -2,18 +2,21 @@
 
 namespace Graficas.Grafo
 {
+	/// <summary>
+	/// Operación inválida grafos exception.
+	/// </summary>
 	[Serializable]
 	public class OperaciónInválidaGrafosException : Exception
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OperaciónInválidaGrafosException"/> class
+		/// Initializes a new instance of the <see cref="Graficas.Grafo.OperaciónInválidaGrafosException"/> class
 		/// </summary>
 		public OperaciónInválidaGrafosException ()
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OperaciónInválidaGrafosException"/> class
+		/// Initializes a new instance of the <see cref="Graficas.Grafo.OperaciónInválidaGrafosException"/> class
 		/// </summary>
 		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
 		public OperaciónInválidaGrafosException (string message)
@@ -22,7 +25,7 @@ namespace Graficas.Grafo
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OperaciónInválidaGrafosException"/> class
+		/// Initializes a new instance of the <see cref="Graficas.Grafo.OperaciónInválidaGrafosException"/> class
 		/// </summary>
 		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
 		/// <param name="inner">The exception that is the cause of the current exception. </param>
@@ -32,7 +35,7 @@ namespace Graficas.Grafo
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="T:OperaciónInválidaGrafosException"/> class
+		/// Initializes a new instance of the <see cref="Graficas.Grafo.OperaciónInválidaGrafosException"/> class
 		/// </summary>
 		/// <param name="context">The contextual information about the source or destination.</param>
 		/// <param name="info">The object that holds the serialized object data.</param>

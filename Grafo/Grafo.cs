@@ -4,7 +4,6 @@ using Graficas.Rutas;
 using ListasExtra;
 using Graficas.Aristas;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Graficas.Grafo
 {
@@ -51,14 +50,29 @@ namespace Graficas.Grafo
 
 		#region Control
 
+		/// <summary>
+		/// Construye una nueva arista para utilizarla al asignar las rutas de Data
+		/// </summary>
+		/// <returns>The nueva arista.</returns>
+		/// <param name="origen">Nodo origen</param>
+		/// <param name="destino">Nodo destino</param>
 		protected abstract AristaBool<T> ConstruirNuevaArista (T origen, T destino);
 
+		/// <summary>
+		/// Establece a cada arista como inexistente.
+		/// </summary>
 		protected virtual void ClearData ()
 		{
 			foreach (var x in Data)
 				x.Existe = false;
 		}
 
+		/// <summary>
+		/// Devuelve la arista con extremos de índices dados.
+		/// </summary>
+		/// <returns>La arista</returns>
+		/// <param name="origen">Índice del origen</param>
+		/// <param name="destino">Índice del destino</param>
 		protected AristaBool<T> AdyacenciaÍndice (int origen, int destino)
 		{
 			if (destino < origen || !EsSimétrico)
@@ -87,6 +101,9 @@ namespace Graficas.Grafo
 
 		#region Data
 
+		/// <summary>
+		/// Devuelve el comparador que se usa para los nodos.
+		/// </summary>
 		public readonly IEqualityComparer<T> Comparador = EqualityComparer<T>.Default;
 
 		/// <summary>
@@ -94,12 +111,18 @@ namespace Graficas.Grafo
 		/// </summary>
 		protected AristaBool<T>[,] Data { get; set; }
 
+		/// <summary>
+		/// Los nodos del grafo.
+		/// </summary>
 		protected T[] IntNodos { get; }
 
 		#endregion
 
 		#region Propiedades
 
+		/// <summary>
+		/// Devuelve una lista sólo lectura con los nodos del grafo.
+		/// </summary>
 		public ICollection<T> Nodos
 		{
 			get
@@ -271,6 +294,9 @@ namespace Graficas.Grafo
 
 		#region Eventos
 
+		/// <summary>
+		/// Se ejecuta al ejecutar Clear ()
+		/// </summary>
 		public event Action AlLimpiar;
 
 		#endregion
@@ -288,6 +314,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Construye un Grafo de peso modificable
 		/// </summary>
+		/// <param name="nodos">Colección de nodos del grafo</param>
 		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
 		public Grafo (ICollection<T> nodos, bool simétrico = false)
 			: base (nodos, simétrico, false)
@@ -297,6 +324,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Construye un Grafo de peso
 		/// </summary>
+		/// <param name="nodos">Colección de nodos del grafo</param>
 		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
 		/// <param name="sóloLectura">If set to <c>true</c> sólo lectura.</param>
 		protected Grafo (ICollection<T> nodos, bool simétrico, bool sóloLectura)
@@ -430,6 +458,12 @@ namespace Graficas.Grafo
 
 		#region Común
 
+		/// <summary>
+		/// Construye una nueva arista para utilizarla al asignar las rutas de Data.
+		/// </summary>
+		/// <returns>Devuelve una AristaPeso correspondiente.</returns>
+		/// <param name="origen">Nodo origen</param>
+		/// <param name="destino">Nodo destino</param>
 		protected override AristaBool<T> ConstruirNuevaArista (T origen, T destino)
 		{
 			return new AristaPeso<T ,TData> (origen, destino, SóloLectura, EsSimétrico);
@@ -627,6 +661,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Construye un Grafo booleano modificable
 		/// </summary>
+		/// <param name="nodos">Una colección con los nodos del grafo</param>
 		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
 		public Grafo (ICollection<T> nodos, bool simétrico = false)
 			: base (nodos, simétrico, false)
@@ -636,6 +671,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Construye un Grafo booleano
 		/// </summary>
+		/// <param name="nodos">Una colección con los nodos del grafo</param>
 		/// <param name="simétrico">If set to <c>true</c> es simétrico.</param>
 		/// <param name="sóloLectura">If set to <c>true</c> sólo lectura.</param>
 		protected Grafo (ICollection<T> nodos, bool simétrico, bool sóloLectura)
@@ -712,6 +748,12 @@ namespace Graficas.Grafo
 
 		#region Común
 
+		/// <summary>
+		/// Construye una nueva arista para utilizarla al asignar las rutas de Data
+		/// </summary>
+		/// <returns>Devuelve una nueva AristaBool correspondiente</returns>
+		/// <param name="origen">Nodo origen</param>
+		/// <param name="destino">Nodo destino</param>
 		protected override AristaBool<T> ConstruirNuevaArista (T origen, T destino)
 		{
 			return new AristaBool<T> (origen, destino, false, SóloLectura, EsSimétrico);
