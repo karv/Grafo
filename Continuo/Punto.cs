@@ -177,6 +177,8 @@ namespace Graficas.Continuo
 		{
 			if (EnOrigen)
 			{
+				if (Universo.ComparaNodos.Equals (A, extremo))
+					return 0;
 				var ar = Universo.GrafoBase.EncuentraArista (A, extremo);
 				if (ar.Existe)
 					return ar.Data;
