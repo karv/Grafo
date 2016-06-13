@@ -13,6 +13,8 @@ namespace Graficas.Grafo
 	[Serializable]
 	public abstract class GrafoComún<T>
 	{
+		#region Ctor
+
 		/// <param name="simétrico">El grafo será construido simétrico</param>
 		/// <param name="sóloLectura">El grafo es de sólo lectura</param>
 		/// <param name="nodos">Conjunto de nodos</param>
@@ -44,6 +46,10 @@ namespace Graficas.Grafo
 				}
 		}
 
+		#endregion
+
+		#region Control
+
 		protected abstract AristaBool<T> ConstruirNuevaArista (T origen, T destino);
 
 		protected virtual void ClearData ()
@@ -51,6 +57,34 @@ namespace Graficas.Grafo
 			foreach (var x in Data)
 				x.Existe = false;
 		}
+
+		protected AristaBool<T> AdyacenciaÍndice (int origen, int destino)
+		{
+			if (destino < origen || !EsSimétrico)
+				return Data [origen, destino];
+			return Data [destino, origen];
+		}
+
+		/// <summary>
+		/// Devuelve el índice de un nodo en el arreglo de nodos
+		/// </summary>
+		/// <returns>Un entero que representa el índice del nodo dado.</returns>
+		/// <param name="nodo">Nodo del grafo.</param>
+		protected int ÍndiceDe (T nodo)
+		{
+			return Array.FindIndex (IntNodos, z => Comparador.Equals (nodo, z));
+		}
+
+		/// <summary>
+		/// Devuelve la arista coincidiente con un par de nodos dados.
+		/// </summary>
+		/// <param name="origen">Origen del nodo.</param>
+		/// <param name="destino">Destino del nodo.</param>
+		protected abstract AristaBool<T> AristaCoincide (T origen, T destino);
+
+		#endregion
+
+		#region Data
 
 		public readonly IEqualityComparer<T> Comparador = EqualityComparer<T>.Default;
 
@@ -61,20 +95,16 @@ namespace Graficas.Grafo
 
 		protected T[] IntNodos { get; }
 
+		#endregion
+
+		#region Propiedades
+
 		public ICollection<T> Nodos
 		{
 			get
 			{
 				return new List<T> (IntNodos).AsReadOnly ();
 			}
-		}
-
-		protected AristaBool<T> AdyacenciaÍndice (int origen, int destino)
-		{
-			if (destino < origen || !EsSimétrico)
-				return Data [origen, destino];
-			else
-				return Data [destino, origen];
 		}
 
 		/// <summary>
@@ -89,14 +119,19 @@ namespace Graficas.Grafo
 		public bool EsSimétrico { get; }
 
 		/// <summary>
-		/// Devuelve el índice de un nodo en el arreglo de nodos
+		/// Devuelve el número de nodos de esta gráfica.
 		/// </summary>
-		/// <returns>Un entero que representa el índice del nodo dado.</returns>
-		/// <param name="nodo">Nodo del grafo.</param>
-		protected int ÍndiceDe (T nodo)
+		public int NumNodos
 		{
-			return Array.FindIndex (IntNodos, z => Comparador.Equals (nodo, z));
+			get
+			{
+				return Nodos.Count;
+			}
 		}
+
+		#endregion
+
+		#region General
 
 		/// <summary>
 		/// Elimina las aristas sin modificar referencias.
@@ -151,13 +186,6 @@ namespace Graficas.Grafo
 		}
 
 		/// <summary>
-		/// Devuelve la arista coincidiente con un par de nodos dados.
-		/// </summary>
-		/// <param name="origen">Origen del nodo.</param>
-		/// <param name="destino">Destino del nodo.</param>
-		protected abstract AristaBool<T> AristaCoincide (T origen, T destino);
-
-		/// <summary>
 		/// Devuelve la lista de vecinos de x (a todos los que apunta x)
 		/// </summary>
 		/// <param name="x">Nodo</param>
@@ -171,7 +199,7 @@ namespace Graficas.Grafo
 				if (ar.Existe)
 					ret.Add (IntNodos [i]);
 			}
-			
+
 			return ret;
 		}
 
@@ -192,17 +220,6 @@ namespace Graficas.Grafo
 			}
 
 			return ret;
-		}
-
-		/// <summary>
-		/// Devuelve el número de nodos de esta gráfica.
-		/// </summary>
-		public int NumNodos
-		{
-			get
-			{
-				return Nodos.Count;
-			}
 		}
 
 		/// <summary>
@@ -249,7 +266,13 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
+		#endregion
+
+		#region Eventos
+
 		public event Action AlLimpiar;
+
+		#endregion
 	}
 
 	/// <summary>
@@ -313,11 +336,6 @@ namespace Graficas.Grafo
 		}
 
 		#endregion
-
-		protected override AristaBool<T> ConstruirNuevaArista (T origen, T destino)
-		{
-			return new AristaPeso<T ,TData> (origen, destino, SóloLectura, EsSimétrico);
-		}
 
 		#region IGrafo
 
@@ -391,6 +409,11 @@ namespace Graficas.Grafo
 		#endregion
 
 		#region Común
+
+		protected override AristaBool<T> ConstruirNuevaArista (T origen, T destino)
+		{
+			return new AristaPeso<T ,TData> (origen, destino, SóloLectura, EsSimétrico);
+		}
 
 		/// <summary>
 		/// Devuelve la arista coincidiente con un par de nodos dados.
@@ -570,7 +593,6 @@ namespace Graficas.Grafo
 		}
 
 		#endregion
-
 	}
 
 	/// <summary>
@@ -622,13 +644,6 @@ namespace Graficas.Grafo
 				}
 		}
 
-		#endregion
-
-		protected override AristaBool<T> ConstruirNuevaArista (T origen, T destino)
-		{
-			return new AristaBool<T> (origen, destino, false, SóloLectura, EsSimétrico);
-		}
-
 		/// <summary>
 		/// Clona las aristas y las agrega a un grafo.
 		/// </summary>
@@ -672,6 +687,17 @@ namespace Graficas.Grafo
 				}
 			return ret;
 		}
+
+		#endregion
+
+		#region Común
+
+		protected override AristaBool<T> ConstruirNuevaArista (T origen, T destino)
+		{
+			return new AristaBool<T> (origen, destino, false, SóloLectura, EsSimétrico);
+		}
+
+		#endregion
 
 		#region IGrafica
 
@@ -867,6 +893,5 @@ namespace Graficas.Grafo
 		}
 
 		#endregion
-
 	}
 }
