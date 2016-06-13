@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace Graficas.Continuo
 {
+	// THINK ¿No serializarlo, y construirlo cada vez que un grafo es deserializado?
+	[Serializable]
 	public class ComparadorCoincidencia<T> : IEqualityComparer<Punto<T>>
 	{
 		public ComparadorCoincidencia (IEqualityComparer<T> compa = null)
