@@ -225,7 +225,7 @@ namespace Graficas.Continuo
 		public ParNoOrdenado<T> Extremos
 		{
 			get
-			{ return new ParNoOrdenado<T> (A, B, Universo.ComparaNodos); }
+			{ return new ParNoOrdenado<T> (A, B); }
 		}
 
 		/// <summary>
