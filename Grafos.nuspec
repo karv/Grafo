@@ -10,7 +10,7 @@
     <description>Herramientas para gráficos</description>
     <copyright></copyright>
     <dependencies>
-      <dependency id="ListaExtras" version="0.3.0.7" />
+      <dependency id="ListaExtras" version="0.3.1" />
     </dependencies>
   </metadata>
   <files>
