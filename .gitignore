@@ -6,3 +6,4 @@ packages/
 *.cs~
 .*.bak
 *.verbak
+doc/
