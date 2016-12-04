@@ -11,6 +11,7 @@ namespace Graficas.Grafo
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>
 	[Serializable]
+	[Obsolete]
 	public class HardGrafo<T> :  IGrafo<T>
 		where T : IEquatable<T>
 	{

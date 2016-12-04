@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Graficas.Grafo;
+using Graficas.Grafo.Estáticos;
 using Graficas.Continuo;
 using System.Collections.Generic;
 using System.Linq;

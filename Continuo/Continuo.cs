@@ -6,6 +6,7 @@ using System.Diagnostics;
 using Graficas.Aristas;
 using Graficas.Grafo;
 using System.Linq;
+using Graficas.Grafo.Estáticos;
 
 namespace Graficas.Continuo
 {

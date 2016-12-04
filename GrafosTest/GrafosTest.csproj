@@ -53,6 +53,7 @@
     <Compile Include="Rutas.cs" />
     <Compile Include="GrafoVecindad.cs" />
     <Compile Include="IGrafoTest.cs" />
+    <Compile Include="Dinamicidad.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
