@@ -282,19 +282,6 @@ namespace Graficas.Grafo.Dinámicos
 		}
 
 		/// <summary>
-		/// Agrega un nodo al grafo, determinando su vecindad
-		/// </summary>
-		/// <param name="node">Nodo</param>
-		/// <param name="vecindad">Vecindad</param>
-		public void AddNode (TNode node, IEnumerable<TNode> vecindad)
-		{
-			if (ExistNode (node))
-				throw new InvalidOperationException ("Cannot add an existing node");
-
-			Vecindad.Add (node, new HashSet<TNode> (vecindad, Comparador));
-		}
-
-		/// <summary>
 		/// Elimina un nodo del grafo
 		/// </summary>
 		/// <param name="node">Nodo</param>
