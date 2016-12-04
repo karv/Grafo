@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Rutas;
-using ListasExtra;
 using System.Diagnostics;
+using System.Linq;
 using Graficas.Aristas;
 using Graficas.Grafo;
-using System.Linq;
+using Graficas.Grafo.Estáticos;
+using Graficas.Rutas;
+using ListasExtra;
 
 namespace Graficas.Continuo
 {
@@ -85,6 +86,7 @@ namespace Graficas.Continuo
 
 		IEnumerable<Punto<T>> PuntosArista (ParNoOrdenado<T> arista)
 		{
+			// FIXME: ¿Por qué no estoy usandoque arista sea una pareja?
 			return Puntos.Where (x => x.Extremos.Equals (arista));
 		}
 

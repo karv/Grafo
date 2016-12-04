@@ -43,7 +43,6 @@
     <Compile Include="Continuo\Continuo.cs" />
     <Compile Include="Rutas\IRuta.cs" />
     <Compile Include="Rutas\Ruta.cs" />
-    <Compile Include="Grafo\GrafoClan.cs" />
     <Compile Include="Grafo\IGrafoRutas.cs" />
     <Compile Include="Grafo\IMulticolGrafo.cs" />
     <Compile Include="Grafo\MulticolGrafica.cs" />
@@ -59,7 +58,6 @@
     <Compile Include="Aristas\AristaBool.cs" />
     <Compile Include="Aristas\OperaciónAristaInválida.cs" />
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
-    <Compile Include="Grafo\Grafo.cs" />
     <Compile Include="Grafo\NodosCollectionComparer.cs" />
     <Compile Include="Grafo\ColorDuplicadoException.cs" />
     <Compile Include="Grafo\NodoInexistenteException.cs" />
@@ -69,8 +67,11 @@
     <Compile Include="Continuo\Comparador.cs" />
     <Compile Include="Continuo\Punto.cs" />
     <Compile Include="Continuo\RutaContinuo.cs" />
-    <Compile Include="Grafo\GrafoVecindad.cs" />
     <Compile Include="Grafo\OperaciónInválidaGrafosException.cs" />
+    <Compile Include="Grafo\Estáticos\Grafo.cs" />
+    <Compile Include="Grafo\Estáticos\GrafoClan.cs" />
+    <Compile Include="Grafo\Estáticos\GrafoVecindad.cs" />
+    <Compile Include="Grafo\Dinámicos\GrafoVecindad.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -96,6 +97,8 @@
     <Folder Include="Grafo\" />
     <Folder Include="Nodos\" />
     <Folder Include="Extensiones\" />
+    <Folder Include="Grafo\Estáticos\" />
+    <Folder Include="Grafo\Dinámicos\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Nodos;
-using Graficas.Rutas;
 using System.Linq;
 using Graficas.Aristas;
+using Graficas.Nodos;
+using Graficas.Rutas;
 
 namespace Graficas.Grafo
 {
@@ -11,6 +11,7 @@ namespace Graficas.Grafo
 	/// Representa el conjunto de nodos de una gráfica.
 	/// </summary>
 	[Serializable]
+	[Obsolete]
 	public class HardGrafo<T> :  IGrafo<T>
 		where T : IEquatable<T>
 	{

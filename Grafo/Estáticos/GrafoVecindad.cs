@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Graficas.Aristas;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Graficas.Aristas;
 using Graficas.Rutas;
 
-namespace Graficas.Grafo
+namespace Graficas.Grafo.Estáticos
 {
 	/// <summary>
 	/// Representa un grafo visto como una función que a cada nodo le asigna su vecindad.

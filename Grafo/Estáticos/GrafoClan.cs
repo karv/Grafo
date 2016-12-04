@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Aristas;
 using System.Runtime.Serialization;
+using Graficas.Aristas;
 
-namespace Graficas.Grafo
+namespace Graficas.Grafo.Estáticos
 {
 	/// <summary>
 	/// Representa una gráfica modelada como conjunto de sus subgráficas completas maximales

@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using Graficas.Grafo;
+using Graficas.Grafo.Estáticos;
 using System;
 using System.Linq;
 

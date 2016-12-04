@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Graficas.Aristas;
 using Graficas.Rutas;
 using ListasExtra;
-using Graficas.Aristas;
-using System.Linq;
 
-namespace Graficas.Grafo
+namespace Graficas.Grafo.Estáticos
 {
 	/// <summary>
 	/// Clase común abstracta de Grafo

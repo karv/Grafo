@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
-using Graficas.Grafo;
+﻿using System.Collections.Generic;
 using Graficas.Continuo;
+using Graficas.Grafo;
+using Graficas.Grafo.Estáticos;
 using Graficas.Rutas;
-using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace Test
 {
