@@ -1,9 +1,9 @@
-﻿using NUnit.Framework;
-using Graficas.Grafo;
-using Graficas.Grafo.Estáticos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Graficas.Grafo;
+using Graficas.Grafo.Estáticos;
+using NUnit.Framework;
 using Test;
 
 namespace Test

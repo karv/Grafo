@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Graficas.Aristas;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Graficas.Aristas;
 using Graficas.Rutas;
 
 namespace Graficas.Grafo.Estáticos

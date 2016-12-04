@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Aristas;
 using System.Runtime.Serialization;
+using Graficas.Aristas;
 
 namespace Graficas.Grafo.Estáticos
 {

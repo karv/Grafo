@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using Graficas.Aristas;
-using System;
-using System.Linq;
-using Graficas.Rutas;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Graficas.Aristas;
+using Graficas.Rutas;
 
 namespace Graficas.Grafo.Dinámicos
 {
@@ -14,30 +14,17 @@ namespace Graficas.Grafo.Dinámicos
 	{
 		#region Ctor
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Graficas.Grafo.Dinámicos.GrafoVecindad{TNode}"/> class.
+		/// </summary>
+		/// <param name="simétrico">If set to <c>true</c> simétrico.</param>
+		/// <param name="comparador">Comparador.</param>
 		public GrafoVecindad (bool simétrico = false,
 		                      IEqualityComparer<TNode> comparador = null)
 		{
 			Comparador = comparador ?? EqualityComparer<TNode>.Default;
 			Simétrico = simétrico;
 			Vecindad = new Dictionary<TNode, HashSet<TNode>> (Comparador);
-		}
-
-		/// <param name="nodos">Colección de nodos del grafo</param>
-		/// <param name="simétrico">Si el grafo es simétrico</param>
-		/// <param name="comparador">Comparador</param>
-		public GrafoVecindad (IEnumerable<TNode> nodos, bool simétrico = false,
-		                      IEqualityComparer<TNode> comparador = null)
-		{
-			Comparador = comparador ?? EqualityComparer<TNode>.Default;
-			Simétrico = simétrico;
-			Vecindad = new Dictionary<TNode, HashSet<TNode>> (Comparador);
-			inicializaDiccionario ();
-		}
-
-		void inicializaDiccionario ()
-		{
-			foreach (var x in Nodos)
-				Vecindad.Add (x, new HashSet<TNode> (Comparador));
 		}
 
 		#endregion
@@ -75,6 +62,9 @@ namespace Graficas.Grafo.Dinámicos
 				x.Clear ();
 		}
 
+		/// <summary>
+		/// Elimina nodos y aristas.
+		/// </summary>
 		public void Clear ()
 		{
 			Vecindad.Clear ();
@@ -93,6 +83,11 @@ namespace Graficas.Grafo.Dinámicos
 			return ret;
 		}
 
+		/// <summary>
+		/// Devuelve el <see cref="HashSet{TNode}"/> que contiene la información interna de la vecindad de un nodo.
+		/// </summary>
+		/// <param name="node">Nodo</param>
+		/// <exception cref="T:Graficas.Grafo.NodoInexistenteException">Ocurre cuando el nodo no está en el grafo</exception>
 		protected HashSet<TNode> ReferencePreservingNeighborhood (TNode node)
 		{
 			try
@@ -156,9 +151,13 @@ namespace Graficas.Grafo.Dinámicos
 				throw new ArgumentNullException ("conjunto");
 			try
 			{
-				var ret = new GrafoVecindad<TNode> (conjunto, Simétrico, Comparador);
+				var ret = new GrafoVecindad<TNode> (Simétrico, Comparador);
 				foreach (var c in conjunto)
-					ret.ReferencePreservingNeighborhood (c).RemoveWhere (z => !conjunto.Contains (z));
+				{
+					ret.AddNode (c);
+					foreach (var n in ReferencePreservingNeighborhood (c).Where (z => conjunto.Contains (z)))
+						ret.ReferencePreservingNeighborhood (c).Add (n);
+				}					
 				return ret;
 			}
 			catch (Exception ex)
@@ -257,6 +256,10 @@ namespace Graficas.Grafo.Dinámicos
 			get { return Nodos; }
 		}
 
+		/// <summary>
+		/// Devuelve un valor que indica si un nodo pertenece al grafo
+		/// </summary>
+		/// <param name="node">Nodo</param>
 		public bool ExistNode (TNode node)
 		{
 			return Vecindad.ContainsKey (node);
@@ -266,6 +269,10 @@ namespace Graficas.Grafo.Dinámicos
 
 		#region Dinamicidad
 
+		/// <summary>
+		/// Agrega un nodo aislado al grafo
+		/// </summary>
+		/// <param name="node">Nodo</param>
 		public void AddNode (TNode node)
 		{
 			if (ExistNode (node))
@@ -274,6 +281,11 @@ namespace Graficas.Grafo.Dinámicos
 			Vecindad.Add (node, new HashSet<TNode> (Comparador));
 		}
 
+		/// <summary>
+		/// Agrega un nodo al grafo, determinando su vecindad
+		/// </summary>
+		/// <param name="node">Nodo</param>
+		/// <param name="vecindad">Vecindad</param>
 		public void AddNode (TNode node, IEnumerable<TNode> vecindad)
 		{
 			if (ExistNode (node))
@@ -282,6 +294,10 @@ namespace Graficas.Grafo.Dinámicos
 			Vecindad.Add (node, new HashSet<TNode> (vecindad, Comparador));
 		}
 
+		/// <summary>
+		/// Elimina un nodo del grafo
+		/// </summary>
+		/// <param name="node">Nodo</param>
 		public void RemoveNode (TNode node)
 		{
 			Vecindad.Remove (node);

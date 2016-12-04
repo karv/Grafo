@@ -1,7 +1,6 @@
-﻿using Graficas.Grafo.Dinámicos;
+﻿using Graficas.Grafo;
+using Graficas.Grafo.Dinámicos;
 using NUnit.Framework;
-using System;
-using Graficas.Grafo;
 
 namespace Test
 {

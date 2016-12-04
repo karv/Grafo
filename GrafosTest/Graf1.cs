@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using Graficas.Aristas;
 using Graficas.Grafo;
 using Graficas.Grafo.Estáticos;
-using NUnit.Framework;
-using Graficas.Aristas;
 using Graficas.Rutas;
-using System.Collections.Generic;
+using NUnit.Framework;
 
 namespace Test
 {
