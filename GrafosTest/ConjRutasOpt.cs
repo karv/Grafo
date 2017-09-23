@@ -25,9 +25,9 @@ namespace Test
 				for (int j = 0; j < i; j++)
 				{
 					var ar = g.EncuentraArista (nodos [i], nodos [j]);
-					if (!ar.Existe && r.NextDouble () < compacidad)
+					if (!ar.Exists && r.NextDouble () < compacidad)
 					{
-						ar.Existe = true;
+						ar.Exists = true;
 						ar.Data = (float)r.NextDouble ();
 					}
 				}

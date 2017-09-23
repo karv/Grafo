@@ -6,7 +6,7 @@ namespace Graficas.Aristas
 	/// <summary>
 	/// Arista que conserva los nodos por referencia
 	/// </summary>
-	public class HardArista<T> : IAristaDirigida<T>
+	public class HardArista<T> : IDirectedEdge<T>
 		where T : IEquatable<T>
 	{
 		/// <summary>
@@ -22,10 +22,8 @@ namespace Graficas.Aristas
 		/// <summary>
 		/// Devuelve 1 si existe esta arista; 0 en caso contratio.
 		/// </summary>
-		public float Peso
-		{
-			get
-			{
+		public float Peso {
+			get {
 				return Origen.Vecindad.Contains (Destino) ? 1 : 0;
 			}
 		}
@@ -57,10 +55,8 @@ namespace Graficas.Aristas
 		/// Existe la arista
 		/// </summary>
 		/// <value><c>true</c> Si esta arista existe; si no <c>false</c>.</value>
-		public bool Existe
-		{
-			get
-			{
+		public bool Exists {
+			get {
 				return Origen.Vecindad.Contains (Destino);
 			}
 		}
@@ -70,7 +66,7 @@ namespace Graficas.Aristas
 		/// </summary>
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
-		public bool Coincide (T origen, T destino)
+		public bool Match (T origen, T destino)
 		{
 			return Origen.Objeto.Equals ((origen)) && Destino.Objeto.Equals ((destino));
 		}
@@ -88,7 +84,7 @@ namespace Graficas.Aristas
 		/// Devuelve el nodo de la arista que no es el dado
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public T Antipodo (T nodo)
+		public T Antipode (T nodo)
 		{
 			return nodo.Equals (Destino.Objeto) ? Origen.Objeto : Destino.Objeto;
 		}
@@ -97,16 +93,16 @@ namespace Graficas.Aristas
 		/// Devuelve si esta arista toca a un nodo dado
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public bool Corta (T nodo)
+		public bool Intersects (T nodo)
 		{
 			return nodo.Equals ((Origen.Objeto)) || nodo.Equals ((Destino.Objeto));
 		}
 
 		#region IArista
 
-		T IAristaDirigida<T>.Origen { get { return Origen.Objeto; } }
+		T IDirectedEdge<T>.Origin { get { return Origen.Objeto; } }
 
-		T IAristaDirigida<T>.Destino { get { return Destino.Objeto; } }
+		T IDirectedEdge<T>.Destination { get { return Destino.Objeto; } }
 
 		#endregion
 	}

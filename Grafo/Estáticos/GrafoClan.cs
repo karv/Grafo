@@ -122,12 +122,12 @@ namespace Graficas.Grafo.Estáticos
 		/// <returns>The arista.</returns>
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
-		public AristaBool<T> EncuentraArista (T desde, T hasta)
+		public ExistentialEdge<T> EncuentraArista (T desde, T hasta)
 		{
-			return new AristaBool<T> (desde, hasta, ExisteArista (desde, hasta), true);
+			return new ExistentialEdge<T> (desde, hasta, ExisteArista (desde, hasta), true);
 		}
 
-		IArista<T> IGrafo<T>.this [T desde, T hasta]
+		IEdge<T> IGrafo<T>.this [T desde, T hasta]
 		{
 			get
 			{
@@ -135,7 +135,7 @@ namespace Graficas.Grafo.Estáticos
 			}
 		}
 
-		ICollection<IArista<T>> IGrafo<T>.Aristas ()
+		ICollection<IEdge<T>> IGrafo<T>.Aristas ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -155,9 +155,9 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		/// <returns><c>true</c>, if arista was existed, <c>false</c> otherwise.</returns>
 		/// <param name="aris">Arista</param>
-		public bool ExisteArista (IArista<T> aris)
+		public bool ExisteArista (IEdge<T> aris)
 		{
-			var ar2 = aris.ComoPar ().AsSet ();
+			var ar2 = aris.AsTuple ().AsSet ();
 			foreach (var c in clanes)
 			{
 				if (c.IsSupersetOf (ar2))
@@ -228,7 +228,7 @@ namespace Graficas.Grafo.Estáticos
 			for (int i = 0; i < lst.Count - 1; i++)
 			{
 				var aris = EncuentraArista (lst [i], lst [i + 1]);
-				var paso = new Paso<T> (lst [i], lst [i + 1], aris.Existe ? 1 : 0);
+				var paso = new Step<T> (lst [i], lst [i + 1], aris.Exists ? 1 : 0);
 				ret.Concat (paso);
 			}
 			return ret;

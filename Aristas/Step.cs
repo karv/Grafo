@@ -8,7 +8,7 @@ namespace Graficas.Aristas
 	/// </summary>
 	/// <remarks>Este objeto es de sólo lectura</remarks>
 	[Serializable]
-	public struct Paso<T> : IPaso<T>
+	public struct Step<T> : IStep<T>
 	{
 		/// <summary>
 		/// Devuelve el origen del paso
@@ -34,7 +34,7 @@ namespace Graficas.Aristas
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
 		/// <param name="peso">Peso.</param>
-		public Paso (T origen, T destino, float peso = 1)
+		public Step (T origen, T destino, float peso = 1)
 		{
 			Origen = origen;
 			Destino = destino;
@@ -45,13 +45,12 @@ namespace Graficas.Aristas
 		/// Initializes a new instance of this struct.
 		/// </summary>
 		/// <param name="aris">Arista a copiar</param>
-		public Paso (IAristaDirigida<T> aris)
-			: this (aris.Origen, aris.Destino)
+		public Step (IDirectedEdge<T> aris)
+			: this (aris.Origin, aris.Destination)
 		{
 			var ar = aris as AristaPeso<T, float>;
-			if (ar != null)
-			{
-				if (!ar.Existe)
+			if (ar != null) {
+				if (!ar.Exists)
 					throw new Exception ("No se puede construir un paso desde una arista inexistente.");
 				Peso = ar.Data;
 			}
@@ -62,8 +61,8 @@ namespace Graficas.Aristas
 		/// </summary>
 		/// <param name="aris">Arista a copiar</param>
 		/// <param name="peso">Peso del paso</param>
-		public Paso (IAristaDirigida<T> aris, float peso)
-			: this (aris.Origen, aris.Destino)
+		public Step (IDirectedEdge<T> aris, float peso)
+			: this (aris.Origin, aris.Destination)
 		{
 			Peso = peso;
 		}
@@ -72,10 +71,10 @@ namespace Graficas.Aristas
 		/// Clona un paso
 		/// </summary>
 		/// <param name="paso">Paso a clonar</param>
-		public Paso (IPaso<T> paso)
+		public Step (IStep<T> paso)
 		{
-			Origen = paso.Origen;
-			Destino = paso.Destino;
+			Origen = paso.Origin;
+			Destino = paso.Destination;
 			Peso = paso.Peso;
 		}
 
@@ -122,10 +121,8 @@ namespace Graficas.Aristas
 		/// Existe este paso.
 		/// </summary>
 		/// <value><c>true</c> si existe. <c>false</c> en caso contrario</value>
-		public bool Existe
-		{
-			get
-			{
+		public bool Existe {
+			get {
 				return true;
 			}
 		}

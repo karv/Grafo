@@ -50,9 +50,9 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-		ICollection<IArista<T>> IGrafo<T>.Aristas ()
+		ICollection<IEdge<T>> IGrafo<T>.Aristas ()
 		{
-			return Aristas () as ICollection<IArista<T>>;
+			return Aristas () as ICollection<IEdge<T>>;
 		}
 
 		/// <summary>
@@ -152,11 +152,11 @@ namespace Graficas.Grafo
 
 		#region IGrafica implementation
 
-		IArista<T> IGrafo<T>.this [T desde, T hasta]
+		IEdge<T> IGrafo<T>.this [T desde, T hasta]
 		{
 			get
 			{
-				return new AristaBool<T> (desde, hasta, this [desde, hasta], true);
+				return new ExistentialEdge<T> (desde, hasta, this [desde, hasta], true);
 			}
 		}
 

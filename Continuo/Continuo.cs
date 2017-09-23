@@ -72,9 +72,9 @@ namespace Graficas.Continuo
 		/// Enumera los puntos existentes en una arista
 		/// </summary>
 		/// <param name="arista">Arista.</param>
-		public IEnumerable<Punto<T>> PuntosArista (IArista<T> arista)
+		public IEnumerable<Punto<T>> PuntosArista (IEdge<T> arista)
 		{
-			var aris = arista.ComoPar ();
+			var aris = arista.AsTuple ();
 			return PuntosArista (aris);
 		}
 

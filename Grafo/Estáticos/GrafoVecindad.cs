@@ -73,12 +73,12 @@ namespace Graficas.Grafo.Estáticos
 		/// Colección de aristas existentes.
 		/// </summary>
 		/// <remarks>No preserva referencia </remarks>
-		public ICollection<IArista<T>> Aristas ()
+		public ICollection<IEdge<T>> Aristas ()
 		{
-			var ret = new HashSet<IArista<T>> ();
+			var ret = new HashSet<IEdge<T>> ();
 			foreach (var x in Vecindad)
 				foreach (var y in x.Value)
-					ret.Add (new AristaBool<T> (x.Key, y, true, true, Simétrico));
+					ret.Add (new ExistentialEdge<T> (x.Key, y, true, true, Simétrico));
 			return ret;
 		}
 
@@ -122,7 +122,7 @@ namespace Graficas.Grafo.Estáticos
 				{
 					if (!Vecinos (last).Contains (x))
 						throw new RutaInconsistenteException ("La sucesión dada no representa una ruta.");
-					ret.Concat (new Paso<T> (last, x));
+					ret.Concat (new Step<T> (last, x));
 				}
 				last = x;
 			}
@@ -210,13 +210,13 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
-		public AristaBool<T> Arista (T desde, T hasta)
+		public ExistentialEdge<T> Arista (T desde, T hasta)
 		{
 			bool ret = Vecindad [desde].Contains (hasta);
-			return new AristaBool<T> (desde, hasta, ret, true, Simétrico);
+			return new ExistentialEdge<T> (desde, hasta, ret, true, Simétrico);
 		}
 
-		IArista<T> IGrafo<T>.this [T desde, T hasta]
+		IEdge<T> IGrafo<T>.this [T desde, T hasta]
 		{
 			get
 			{

@@ -20,7 +20,7 @@ namespace Graficas.Grafo
 		/// <returns> Una arista no nula </returns>
 		/// <param name="desde">Origen</param>
 		/// <param name="hasta">Destino</param>
-		IArista<T> this [T desde, T hasta]{ get; }
+		IEdge<T> this [T desde, T hasta]{ get; }
 
 		/// <summary>
 		/// Nodos
@@ -31,7 +31,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Colección de aristas existentes
 		/// </summary>
-		ICollection<IArista<T>> Aristas ();
+		ICollection<IEdge<T>> Aristas ();
 
 		/// <summary>
 		/// Colección de vecinos de un nodo

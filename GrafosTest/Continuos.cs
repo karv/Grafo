@@ -64,7 +64,7 @@ namespace Test
 				if (vec.Count == 0)
 					Console.WriteLine ();
 				var fin = vec.Aleatorio (r);
-				Assert.True (gr.EncuentraArista (ini, fin).Existe);
+				Assert.True (gr.EncuentraArista (ini, fin).Exists);
 				var dis = r.NextDouble () * gr [ini, fin];
 				cont.AgregaPunto (ini, fin, (float)dis);
 			}
@@ -82,11 +82,11 @@ namespace Test
 
 					foreach (var x in rruta.Pasos)
 					{
-						var ar = gr.EncuentraArista (x.Origen, x.Destino);
-						if (x.Origen == x.Destino)
+						var ar = gr.EncuentraArista (x.Origin, x.Destination);
+						if (x.Origin == x.Destination)
 							continue;
 						//Console.WriteLine ();
-						Assert.True (ar.Existe);
+						Assert.True (ar.Exists);
 					}
 				}
 		}
@@ -139,9 +139,9 @@ namespace Test
 			Assert.True (cp.PuntosArista (0, 1).Any (z => z.Coincide (pmov)));
 			var pmov2 = cp.AgregaPunto (0);
 			var ruta = new Graficas.Continuo.Ruta<Objeto> (pmov2);
-			ruta.Concat (new Paso<Objeto> (0, 1, 1));
-			ruta.Concat (new Paso<Objeto> (1, 2, 2));
-			ruta.Concat (new Paso<Objeto> (2, 3, 3));
+			ruta.Concat (new Step<Objeto> (0, 1, 1));
+			ruta.Concat (new Step<Objeto> (1, 2, 2));
+			ruta.Concat (new Step<Objeto> (2, 3, 3));
 			ruta.ConcatFinal (cp.PuntoFijo (3));
 			Assert.AreEqual (6, ruta.Longitud);
 
@@ -179,9 +179,9 @@ namespace Test
 			var cp = new Continuo<Objeto> (gr);
 
 			var ruta = new Graficas.Continuo.Ruta<Objeto> (cp.PuntoFijo (0));
-			ruta.Concat (new Paso<Objeto> (0, 1, gr [0, 1]));
-			ruta.Concat (new Paso<Objeto> (1, 2, gr [1, 2]));
-			ruta.Concat (new Paso<Objeto> (2, 3, gr [2, 3]));
+			ruta.Concat (new Step<Objeto> (0, 1, gr [0, 1]));
+			ruta.Concat (new Step<Objeto> (1, 2, gr [1, 2]));
+			ruta.Concat (new Step<Objeto> (2, 3, gr [2, 3]));
 			ruta.ConcatFinal (cp.PuntoFijo (3));
 
 			Assert.AreEqual (cp.PuntoFijo (0), ruta.NodoInicial);

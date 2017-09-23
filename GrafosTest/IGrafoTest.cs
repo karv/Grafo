@@ -81,8 +81,8 @@ namespace Test
 					var ni = hs [i];
 					var nj = hs [j];
 					Assert.AreEqual (
-						Gr [ni, nj].Existe,
-						g2 [ni, nj].Existe,
+						Gr [ni, nj].Exists,
+						g2 [ni, nj].Exists,
 						string.Format ("i == {0}; j == {1}", ni, nj));
 				}
 
@@ -99,9 +99,9 @@ namespace Test
 		public void Clear ()
 		{
 			SetValue (0, 1, true);
-			Assert.True (Gr [0, 1].Existe);
+			Assert.True (Gr [0, 1].Exists);
 			Gr.Clear ();
-			Assert.False (Gr [0, 1].Existe);
+			Assert.False (Gr [0, 1].Exists);
 			Assert.IsEmpty (Gr.Vecinos (0));
 			Assert.IsEmpty (Gr.Vecinos (1));
 			Assert.IsEmpty (Gr.Aristas ());
@@ -117,9 +117,9 @@ namespace Test
 				for (int j = 0; j < ls.Count; j++)
 				{
 					var a = Gr [i, j];
-					if (a.Existe)
+					if (a.Exists)
 					{
-						Assert.True (a.Coincide (i, j));
+						Assert.True (a.Match (i, j));
 						Assert.True (ar.Contains (a));
 					}
 					else
@@ -145,8 +145,8 @@ namespace Test
 			Assert.AreEqual (n - 1, ruta.NumPasos);
 			foreach (var x in ruta.Pasos)
 			{
-				var ar = Gr [x.Origen, x.Destino];
-				Assert.True (ar.Existe);
+				var ar = Gr [x.Origin, x.Destination];
+				Assert.True (ar.Exists);
 			}
 		}
 
@@ -189,7 +189,7 @@ namespace Test
 		public override void SetValue (int a, int b, bool r)
 		{
 			var graf = (Grafo<int, float>)(Gr);
-			graf.EncuentraArista (a, b).Existe = r;
+			graf.EncuentraArista (a, b).Exists = r;
 		}
 	}
 

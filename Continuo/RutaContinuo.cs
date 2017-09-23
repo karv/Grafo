@@ -98,7 +98,7 @@ namespace Graficas.Continuo
 			// 2)
 			foreach (var x in Pasos)
 			{
-				if (punto.EnIntervaloInmediato (x.Origen, x.Destino))
+				if (punto.EnIntervaloInmediato (x.Origin, x.Destination))
 					return true;
 			}
 

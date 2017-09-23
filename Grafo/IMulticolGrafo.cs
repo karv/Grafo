@@ -36,6 +36,6 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <returns>Enumeracion de colores</returns>
 		/// <param name="aris">Arista</param>
-		IEnumerable<TColor> ColoresArista (IArista<TNodo> aris);
+		IEnumerable<TColor> ColoresArista (IEdge<TNodo> aris);
 	}
 }

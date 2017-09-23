@@ -129,7 +129,7 @@ namespace Test
 			Assert.True (grafo [0, 1]);
 			Assert.True (grafo [1, 0]);
 			var ar = grafo.EncuentraArista (0, 1);
-			ar.Existe = false;
+			ar.Exists = false;
 			Assert.False (grafo [1, 0]);
 		}
 
@@ -285,10 +285,10 @@ namespace Test
 			Assert.AreEqual (1, r.NodoInicial);
 			Assert.AreEqual (clusterSize + 1, r.NodoFinal);
 			foreach (var x in r.Pasos)
-				Assert.True (gr.ExisteArista (x.Origen, x.Destino));
+				Assert.True (gr.ExisteArista (x.Origin, x.Destination));
 			Assert.AreEqual (3, r.NumPasos);
 			foreach (var x in r.Pasos)
-				Console.WriteLine (string.Format ("{0} -> {1}", x.Origen, x.Destino));
+				Console.WriteLine (string.Format ("{0} -> {1}", x.Origin, x.Destination));
 
 			r = gr.CaminoÓptimo (0, 0);
 			Assert.IsNull (r);

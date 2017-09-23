@@ -46,17 +46,17 @@ Ejecute Calcular () antes de llamar esta función");
 			rutas.Add (reemplazando);
 		}
 
-		static float Peso (IArista<TNodo> aris)
+		static float Peso (IEdge<TNodo> aris)
 		{
 			var ar = aris as AristaPeso<TNodo, float>;
-			if (!ar.Existe)
+			if (!ar.Exists)
 				return float.PositiveInfinity;
 			return ar == null ? 1 : ar.Data;
 		}
 
-		bool IntentaAgregarArista (IArista<TNodo> aris, TNodo ori, TNodo des)
+		bool IntentaAgregarArista (IEdge<TNodo> aris, TNodo ori, TNodo des)
 		{
-			if (!aris.Existe)
+			if (!aris.Exists)
 				return false;
 			
 			bool ret = false;
@@ -108,7 +108,7 @@ Ejecute Calcular () antes de llamar esta función");
 				foreach (var y in gr.Nodos)
 				{
 					var ar = gr [x, y];
-					if (!ar.Existe)
+					if (!ar.Exists)
 						continue;
 
 					IntentaAgregarArista (ar, x, y);
@@ -121,7 +121,7 @@ Ejecute Calcular () antes de llamar esta función");
 						if (cmp.Equals (z.NodoFinal, x))
 						{
 							var path = new Ruta<TNodo> (z);
-							var paso = new Paso<TNodo> (x, y, Peso (ar));
+							var paso = new Step<TNodo> (x, y, Peso (ar));
 							path.Concat (paso);
 							if (IntentaAgregarArista (path))
 								Debug.WriteLine (string.Format ("Nueva mejor ruta: {0}", path));

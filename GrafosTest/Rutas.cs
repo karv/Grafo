@@ -17,9 +17,9 @@ namespace Test
 			var r3 = new Ruta<int> ();
 			for (int i = 0; i < lon; i++)
 			{
-				r1.Concat (new Paso<int> (i, i + 1, i));
-				r2.Concat (new Paso<int> (i, i + 1, i));
-				r3.Concat (new Paso<int> (i, i == lon - 1 ? lon + 1 : i + 1, i));
+				r1.Concat (new Step<int> (i, i + 1, i));
+				r2.Concat (new Step<int> (i, i + 1, i));
+				r3.Concat (new Step<int> (i, i == lon - 1 ? lon + 1 : i + 1, i));
 			}
 
 			var compa = new ComparadorPorPaso<int> ();
@@ -32,7 +32,7 @@ namespace Test
 		public void TestRutaNula ()
 		{
 			var rn = Ruta<int>.Nulo;
-			rn.Concat (new Paso<int> (0, 1));
+			rn.Concat (new Step<int> (0, 1));
 			Assert.True (rn.NumPasos == 1);
 			Assert.AreEqual (rn.NodoInicial, 0);
 			Assert.AreEqual (rn.NodoFinal, 1);

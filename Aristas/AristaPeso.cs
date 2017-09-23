@@ -7,7 +7,7 @@ namespace Graficas.Aristas
 	/// Almacena el peso fuertemente, por lo que no hay vínculo directo con un grafo
 	/// </summary>
 	[Serializable]
-	public class AristaPeso<TNodo, TValor> : AristaBool<TNodo>
+	public class AristaPeso<TNodo, TValor> : ExistentialEdge<TNodo>
 	{
 		TValor _valor;
 
@@ -19,15 +19,15 @@ namespace Graficas.Aristas
 		{
 			get
 			{
-				if (Existe)
+				if (Exists)
 					return _valor;
 				throw new OperaciónAristaInválidaException ("No se puede acceder al peso de una arista no existente.");
 			}
 			set
 			{
-				if (SóloLectura)
+				if (Readonly)
 					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
-				if (!Existe)
+				if (!Exists)
 					throw new OperaciónAristaInválidaException ("No se le puede asignar peso a una arista no existente.");
 				_valor = value;
 			}

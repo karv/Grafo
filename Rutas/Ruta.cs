@@ -30,7 +30,7 @@ namespace Graficas.Rutas
 		/// <remarks>origen-destino debe ser una arista</remarks>
 		public Ruta (T origen, T destino, float peso = 1)
 		{
-			Paso.Add (new Paso<T> (origen, destino, peso)); 
+			Paso.Add (new Step<T> (origen, destino, peso)); 
 		}
 
 		/// <summary>
@@ -43,13 +43,13 @@ namespace Graficas.Rutas
 				throw new ArgumentNullException ();
 			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
-				Paso.Add (new Paso<T> (x.Origen, x.Destino, x.Peso));
+				Paso.Add (new Step<T> (x.Origin, x.Destination, x.Peso));
 		}
 
 		/// <summary>
 		/// Lista de pasos de esta ruta.
 		/// </summary>
-		readonly protected IList<IPaso<T>> Paso = new List<IPaso<T>> ();
+		readonly protected IList<IStep<T>> Paso = new List<IStep<T>> ();
 
 		/// <summary>
 		/// 
@@ -65,7 +65,7 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		IEnumerable<IPaso<T>> IRuta<T>.Pasos
+		IEnumerable<IStep<T>> IRuta<T>.Pasos
 		{ 
 			get
 			{ 
@@ -77,11 +77,11 @@ namespace Graficas.Rutas
 		/// Enumera los pasos de la ruta
 		/// </summary>
 		/// <value>Un clón de los pasos</value>
-		public List<IPaso<T>> Pasos
+		public List<IStep<T>> Pasos
 		{
 			get
 			{
-				return new List<IPaso<T>> (Paso);
+				return new List<IStep<T>> (Paso);
 			}
 		}
 
@@ -104,19 +104,19 @@ namespace Graficas.Rutas
 		/// Concatena con un paso una ruta
 		/// </summary>
 		/// <param name="paso">Paso con qué concatenar</param>
-		public void Concat (IPaso<T> paso)
+		public void Concat (IStep<T> paso)
 		{
 			if (paso == null)
 				throw new NullReferenceException ("No se puede concatenar con una arista nula.");
 			if (NumPasos == 0)
 			{
-				Paso.Add (new Paso<T> (paso));
+				Paso.Add (new Step<T> (paso));
 			}
 			else
 			{
-				if (paso.Corta (NodoFinal))
+				if (paso.Intersects (NodoFinal))
 				{
-					Paso.Add (new Paso<T> (paso));
+					Paso.Add (new Step<T> (paso));
 				}
 				else
 				{
@@ -130,9 +130,9 @@ namespace Graficas.Rutas
 		/// </summary>
 		/// <param name="paso">Arista que compone</param>
 		/// <param name="origen">Nodo intersección entre esta ruta y la arista</param>
-		public void Concat (IArista<T> paso, T origen)
+		public void Concat (IEdge<T> paso, T origen)
 		{
-			var p = new Paso<T> (origen, paso.Antipodo ((origen)));
+			var p = new Step<T> (origen, paso.Antipode ((origen)));
 			Concat (p);
 		}
 
@@ -149,7 +149,7 @@ namespace Graficas.Rutas
 
 			foreach (var paso in ruta.Pasos)
 			{
-				Paso.Add (new Paso<T> (paso));
+				Paso.Add (new Step<T> (paso));
 			}
 		}
 
@@ -163,7 +163,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return Paso.Count == 0 ? _virtualInicial : Paso [0].Origen;
+				return Paso.Count == 0 ? _virtualInicial : Paso [0].Origin;
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return NumPasos < 1 ? NodoInicial : Paso [NumPasos - 1].Destino;
+				return NumPasos < 1 ? NodoInicial : Paso [NumPasos - 1].Destination;
 			}
 		}
 

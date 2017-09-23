@@ -72,7 +72,7 @@ namespace Graficas.Rutas
 				return 0;
 			var ret = 0;
 			foreach (var x in obj.Pasos)
-				ret += Comparador.GetHashCode (x.Origen) + Comparador.GetHashCode (x.Destino);
+				ret += Comparador.GetHashCode (x.Origin) + Comparador.GetHashCode (x.Destination);
 			return ret;
 		}
 	}

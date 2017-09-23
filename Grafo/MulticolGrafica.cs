@@ -28,7 +28,7 @@ namespace Graficas.Grafo
 			throw new NotImplementedException ();
 		}
 
-		ICollection<IArista<TNodo>> IGrafo<TNodo>.Aristas ()
+		ICollection<IEdge<TNodo>> IGrafo<TNodo>.Aristas ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -77,7 +77,7 @@ namespace Graficas.Grafo
 			*/
 		}
 
-		IArista<TNodo> IGrafo<TNodo>.this [TNodo desde, TNodo hasta]
+		IEdge<TNodo> IGrafo<TNodo>.this [TNodo desde, TNodo hasta]
 		{ 
 			get
 			{
@@ -100,7 +100,7 @@ namespace Graficas.Grafo
 
 		bool ExisteArista (TNodo desde, TNodo hasta)
 		{
-			return _asignación.Any (z => z.Value [desde, hasta].Existe);
+			return _asignación.Any (z => z.Value [desde, hasta].Exists);
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <returns>The arista.</returns>
 		/// <param name="aris">Aris.</param>
-		public IEnumerable<TColor> ColoresArista (IArista<TNodo> aris)
+		public IEnumerable<TColor> ColoresArista (IEdge<TNodo> aris)
 		{
 			throw new NotImplementedException ();
 		}

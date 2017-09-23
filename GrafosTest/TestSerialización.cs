@@ -26,7 +26,7 @@ namespace Test
 		{
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
 			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
-			Assert.AreEqual (gr [0, 1].Existe, gr2 [0, 1].Existe);
+			Assert.AreEqual (gr [0, 1].Exists, gr2 [0, 1].Existe);
 		}
 
 		static void TestSerialPeso<T> (T gr)

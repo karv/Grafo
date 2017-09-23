@@ -180,7 +180,7 @@ namespace Graficas.Continuo
 				if (Universo.ComparaNodos.Equals (A, extremo))
 					return 0;
 				var ar = Universo.GrafoBase.EncuentraArista (A, extremo);
-				if (ar.Existe)
+				if (ar.Exists)
 					return ar.Data;
 				throw new IndexOutOfRangeException (string.Format (
 					"{0} no es un extremo de {1}",

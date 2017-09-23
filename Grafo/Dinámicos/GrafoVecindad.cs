@@ -74,12 +74,12 @@ namespace Graficas.Grafo.Dinámicos
 		/// Colección de aristas existentes.
 		/// </summary>
 		/// <remarks>No preserva referencia </remarks>
-		public ICollection<IArista<TNode>> Aristas ()
+		public ICollection<IEdge<TNode>> Aristas ()
 		{
-			var ret = new HashSet<IArista<TNode>> ();
+			var ret = new HashSet<IEdge<TNode>> ();
 			foreach (var x in Vecindad)
 				foreach (var y in x.Value)
-					ret.Add (new AristaBool<TNode> (x.Key, y, true, true, Simétrico));
+					ret.Add (new ExistentialEdge<TNode> (x.Key, y, true, true, Simétrico));
 			return ret;
 		}
 
@@ -134,7 +134,7 @@ namespace Graficas.Grafo.Dinámicos
 				{
 					if (!Vecinos (last).Contains (x))
 						throw new RutaInconsistenteException ("La sucesión dada no representa una ruta.");
-					ret.Concat (new Paso<TNode> (last, x));
+					ret.Concat (new Step<TNode> (last, x));
 				}
 				last = x;
 			}
@@ -228,13 +228,13 @@ namespace Graficas.Grafo.Dinámicos
 		/// </summary>
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
-		public AristaBool<TNode> Arista (TNode desde, TNode hasta)
+		public ExistentialEdge<TNode> Arista (TNode desde, TNode hasta)
 		{
 			bool ret = Vecindad [desde].Contains (hasta);
-			return new AristaBool<TNode> (desde, hasta, ret, true, Simétrico);
+			return new ExistentialEdge<TNode> (desde, hasta, ret, true, Simétrico);
 		}
 
-		IArista<TNode> IGrafo<TNode>.this [TNode desde, TNode hasta]
+		IEdge<TNode> IGrafo<TNode>.this [TNode desde, TNode hasta]
 		{
 			get
 			{
