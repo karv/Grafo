@@ -48,7 +48,6 @@ Global
 		$2.IndexerArgumentWrapping = WrapIfTooLong
 		$2.AlignToFirstIndexerArgument = True
 		$2.scope = text/x-csharp
-		$2.IndentSwitchCaseSection = True
 		$2.NewLinesForBracesInProperties = False
 		$2.NewLinesForBracesInAccessors = False
 		$2.NewLinesForBracesInAnonymousMethods = False

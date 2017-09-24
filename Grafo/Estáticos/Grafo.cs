@@ -347,13 +347,13 @@ namespace Graficas.Grafo.Estáticos
 					var des = IntNodos [j];
 					var ari = graf [ori, des].Exists;
 					if (ari)
-						Data [i, j] = new AristaPeso<T, TData> (
+						Data [i, j] = new WeightedEdge<T, TData> (
 							ori,
 							des, 
 							default(TData),
 							sóloLectura);
 					else
-						Data [i, j] = new AristaPeso<T, TData> (
+						Data [i, j] = new WeightedEdge<T, TData> (
 							ori,
 							des, 
 							sóloLectura);
@@ -404,7 +404,7 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		ICollection<IEdge<T>> IGrafo<T>.Aristas ()
 		{
-			return new HashSet<IEdge<T>> (Data.Cast<AristaPeso<T, TData>> ().Where (x => x.Exists));
+			return new HashSet<IEdge<T>> (Data.Cast<WeightedEdge<T, TData>> ().Where (x => x.Exists));
 		}
 
 		ICollection<T> IGrafo<T>.Nodos
@@ -445,7 +445,7 @@ namespace Graficas.Grafo.Estáticos
 			{
 				if (SóloLectura)
 					throw new OperaciónAristaInválidaException ("Grafo es sólo lectura.");
-				AristaPeso<T, TData> aris = EncuentraArista (x, y);
+				WeightedEdge<T, TData> aris = EncuentraArista (x, y);
 				aris.Exists = true;
 				aris.Data = value;
 			}
@@ -464,7 +464,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="destino">Nodo destino</param>
 		protected override ExistentialEdge<T> ConstruirNuevaArista (T origen, T destino)
 		{
-			return new AristaPeso<T ,TData> (origen, destino, SóloLectura, EsSimétrico);
+			return new WeightedEdge<T ,TData> (origen, destino, SóloLectura, EsSimétrico);
 		}
 
 		/// <summary>
@@ -490,10 +490,10 @@ namespace Graficas.Grafo.Estáticos
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
 				{
-					var x = Data [i, j] as AristaPeso<T, TData>; // La arista iterando
+					var x = Data [i, j] as WeightedEdge<T, TData>; // La arista iterando
 					if (x.Exists)
 					{
-						ret.Data [i, j] = new AristaPeso<T, TData> (
+						ret.Data [i, j] = new WeightedEdge<T, TData> (
 							x.Origin,
 							x.Destination,
 							x.Data,
@@ -527,9 +527,9 @@ namespace Graficas.Grafo.Estáticos
 		/// <returns>Devuelve la arista, posiblemente inexistente.</returns>
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
-		public new AristaPeso<T, TData> EncuentraArista (T origen, T destino)
+		public new WeightedEdge<T, TData> EncuentraArista (T origen, T destino)
 		{
-			return base.EncuentraArista (origen, destino) as AristaPeso<T, TData>;
+			return base.EncuentraArista (origen, destino) as WeightedEdge<T, TData>;
 		}
 
 		/// <summary>
@@ -541,7 +541,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="peso">Forma de asignar peso a cada arista</param>
 		public IRuta<T> CaminoÓptimo (T x,
 		                              T y,
-		                              Func<AristaPeso<T, TData>, float> peso)
+		                              Func<WeightedEdge<T, TData>, float> peso)
 		{
 			if (x.Equals (y))
 				return null;
@@ -564,7 +564,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <remarks>Devuelve null si toda ruta de x a y toca a ignorar</remarks>
 		Ruta<T> CaminoÓptimo (T x,
 		                      T y,
-		                      Func<AristaPeso<T, TData>, float> peso,
+		                      Func<WeightedEdge<T, TData>, float> peso,
 		                      ISet<T> ignorar)
 		{
 			Ruta<T> ret = null;

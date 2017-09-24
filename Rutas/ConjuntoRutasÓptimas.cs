@@ -48,7 +48,7 @@ Ejecute Calcular () antes de llamar esta función");
 
 		static float Peso (IEdge<TNodo> aris)
 		{
-			var ar = aris as AristaPeso<TNodo, float>;
+			var ar = aris as WeightedEdge<TNodo, float>;
 			if (!ar.Exists)
 				return float.PositiveInfinity;
 			return ar == null ? 1 : ar.Data;

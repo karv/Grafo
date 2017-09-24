@@ -8,29 +8,6 @@ namespace Graficas.Aristas
 	[Serializable]
 	public class ExistentialEdge<TNodo> : IDirectedEdge<TNodo>
 	{
-		/// <param name="origin">Origin node</param>
-		/// <param name="destination">Destination node.</param>
-		/// <param name="exists">If set to <c>true</c>, it exists.</param>
-		/// <param name="readOnly">If <c>true</c>, this edge cannot be modified.</param>
-		/// <param name="isSymmetric">If <c>true</c>, this edge is commutative.</param>
-		public ExistentialEdge (
-			TNodo origin,
-			TNodo destination,
-			bool exists = true,
-			bool readOnly = false,
-			bool isSymmetric = false)
-		{
-			Origin = origin;
-			Destination = destination;
-			Exists = exists;
-			Readonly = readOnly;
-			IsSymmetric = isSymmetric;
-		}
-
-		TNodo _origin;
-		TNodo _destination;
-		bool _exists;
-
 		/// <summary>
 		/// Gets or sets the origin.
 		/// </summary>
@@ -46,7 +23,7 @@ namespace Graficas.Aristas
 		}
 
 		/// <summary>
-		/// Devuelve el destino de la arista
+		/// Gets or sets the destination.
 		/// </summary>
 		public TNodo Destination
 		{
@@ -86,6 +63,25 @@ namespace Graficas.Aristas
 		/// </summary>
 		public bool Readonly { get; }
 
+		/// <param name="origin">Origin node</param>
+		/// <param name="destination">Destination node.</param>
+		/// <param name="exists">If set to <c>true</c>, it exists.</param>
+		/// <param name="readOnly">If <c>true</c>, this edge cannot be modified.</param>
+		/// <param name="isSymmetric">If <c>true</c>, this edge is commutative.</param>
+		public ExistentialEdge (
+			TNodo origin,
+			TNodo destination,
+			bool exists = true,
+			bool readOnly = false,
+			bool isSymmetric = false)
+		{
+			Origin = origin;
+			Destination = destination;
+			Exists = exists;
+			Readonly = readOnly;
+			IsSymmetric = isSymmetric;
+		}
+
 		/// <summary>
 		/// Determines whether this is an edge with specified vertices.
 		/// </summary>
@@ -121,5 +117,9 @@ namespace Graficas.Aristas
 			string formato = "{0} " + (IsSymmetric ? "<" : "-") + "-> {1}";
 			return string.Format (formato, Origin, Destination);
 		}
+
+		TNodo _origin;
+		TNodo _destination;
+		bool _exists;
 	}
 }

@@ -60,13 +60,13 @@
     <Compile Include="Grafo\MulticolGrafica.cs" />
     <Compile Include="Grafo\IGrafo.cs" />
     <Compile Include="Grafo\HardGrafo.cs" />
-    <Compile Include="Aristas\HardArista.cs" />
+    <Compile Include="Aristas\HardEdge.cs" />
     <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
     <Compile Include="Rutas\HardRuta.cs" />
     <Compile Include="Nodos\INodo.cs" />
     <Compile Include="Nodos\Nodo.cs" />
     <Compile Include="Extensiones\Extensiones.cs" />
-    <Compile Include="Aristas\AristaPeso.cs" />
+    <Compile Include="Aristas\WeightedEdge.cs" />
     <Compile Include="Aristas\ExistentialEdge.cs" />
     <Compile Include="Aristas\OperaciónAristaInválida.cs" />
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
@@ -84,6 +84,7 @@
     <Compile Include="Grafo\Estáticos\GrafoClan.cs" />
     <Compile Include="Grafo\Estáticos\GrafoVecindad.cs" />
     <Compile Include="Grafo\Dinámicos\GrafoVecindad.cs" />
+    <Compile Include="Aristas\IDirectedEdge.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -99,7 +100,7 @@
           </XmlFormattingPolicy>
           <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="MSBuild" />
           <TextStylePolicy TabsToSpaces="False" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="150" TabWidth="2" IndentWidth="2" scope="text/x-csharp" />
-          <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForClausesInQuery="True" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="False" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" PlaceSystemDirectiveFirst="True" IndentSwitchSection="False" IndentSwitchCaseSection="False" NewLineForMembersInObjectInit="False" NewLineForMembersInAnonymousTypes="False" SpacingAfterMethodDeclarationName="True" SpaceAfterMethodCallName="True" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" IndentSwitchSection="False" IndentSwitchCaseSection="False" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForMembersInObjectInit="False" NewLineForMembersInAnonymousTypes="False" NewLineForClausesInQuery="True" SpacingAfterMethodDeclarationName="True" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceAfterMethodCallName="True" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="False" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" PlaceSystemDirectiveFirst="True" scope="text/x-csharp" />
           <VersionControlPolicy>
             <CommitMessageStyle Header="" Indent="" FirstFilePrefix="* " FileSeparator=":&#xA;* " LastFilePostfix=": " LineAlign="2" InterMessageLines="1" IncludeDirectoryPaths="False" Wrap="True" />
           </VersionControlPolicy>

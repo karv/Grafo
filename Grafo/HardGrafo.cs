@@ -36,14 +36,14 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Devuelve una copia de la colección de las aristas.
 		/// </summary>
-		public ICollection<HardArista<T>> Aristas ()
+		public ICollection<HardEdge<T>> Aristas ()
 		{
-			var ret = new List<HardArista<T>> ();
+			var ret = new List<HardEdge<T>> ();
 			foreach (var x in _nodos)
 			{
 				foreach (var y in x.Vecindad)
 				{
-					ret.Add (new HardArista<T> (x, y));
+					ret.Add (new HardEdge<T> (x, y));
 				}
 			}
 

@@ -3,19 +3,18 @@
 namespace Graficas.Aristas
 {
 	/// <summary>
-	/// Representa una arista de un grafo.
-	/// Almacena el peso fuertemente, por lo que no hay vínculo directo con un grafo
+	/// A weighted edge.
 	/// </summary>
 	[Serializable]
-	public class AristaPeso<TNodo, TValor> : ExistentialEdge<TNodo>
+	public class WeightedEdge<TNode, TWg> : ExistentialEdge<TNode>
 	{
-		TValor _valor;
+		TWg _valor;
 
 		/// <summary>
-		/// Devuelve el peso de la arista
+		/// Gets the weight of this edge.
 		/// </summary>
 		/// <value>The peso.</value>
-		public TValor Data
+		public TWg Data
 		{
 			get
 			{
@@ -33,38 +32,40 @@ namespace Graficas.Aristas
 			}
 		}
 
-		/// <summary> Construye una arista existente </summary>
+		/// <summary> Initializes a new (existing)edge. </summary>
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
 		/// <param name="valor">Peso.</param>
 		/// <param name="sóloLectura">El objeto se creará como sólo lectura</param>
 		/// <param name="simétrico">La arista tiene dirección</param>
-		public AristaPeso (TNodo origen,
-		                   TNodo destino,
-		                   TValor valor,
-		                   bool sóloLectura = false,
-		                   bool simétrico = false)
+		public WeightedEdge (TNode origen,
+											 TNode destino,
+											 TWg valor,
+											 bool sóloLectura = false,
+											 bool simétrico = false)
 			: base (origen, destino, true, sóloLectura, simétrico)
 		{
 			_valor = valor;
 		}
 
 		/// <summary>
-		/// Construye una arista inexistente
+		/// Initializes a new non-existent edge.
 		/// </summary>
 		/// <param name="origen">Origen.</param>
 		/// <param name="destino">Destino.</param>
 		/// <param name="sóloLectura">El objeto se creará como sólo lectura</param>
 		/// <param name="simétrico">La arista tiene dirección</param>
-		public AristaPeso (TNodo origen,
-		                   TNodo destino,
-		                   bool sóloLectura = false,
-		                   bool simétrico = false)
+		public WeightedEdge (TNode origen,
+											 TNode destino,
+											 bool sóloLectura = false,
+											 bool simétrico = false)
 			: base (origen, destino, false, sóloLectura, simétrico)
 		{
 		}
 
-		/// <returns>A <see cref="System.String"/> that represents the current graph </returns>
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:Graficas.Aristas.WeightedEdge`2"/>.
+		/// </summary>
 		public override string ToString ()
 		{
 			var baseStr = base.ToString ();

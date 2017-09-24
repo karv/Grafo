@@ -48,7 +48,7 @@ namespace Graficas.Aristas
 		public Step (IDirectedEdge<T> aris)
 			: this (aris.Origin, aris.Destination)
 		{
-			var ar = aris as AristaPeso<T, float>;
+			var ar = aris as WeightedEdge<T, float>;
 			if (ar != null) {
 				if (!ar.Exists)
 					throw new Exception ("No se puede construir un paso desde una arista inexistente.");
