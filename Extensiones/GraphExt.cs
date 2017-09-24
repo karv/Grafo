@@ -8,7 +8,7 @@ namespace Graficas.Extensiones
 	/// <summary>
 	/// Métodos extendidos de grafos
 	/// </summary>
-	public static class Extensiones
+	public static class GraphExt
 	{
 		/// Devuelve una colección con las componentes conexas de una gráfica dada
 		/// <summary>
@@ -51,6 +51,5 @@ namespace Graficas.Extensiones
 
 			return ret;
 		}
-
 	}
 }
