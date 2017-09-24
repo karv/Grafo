@@ -1,4 +1,4 @@
-﻿namespace Graficas.Aristas
+﻿namespace Graficas.Edges
 {
 	/// <summary>
 	/// An edge is a direction.

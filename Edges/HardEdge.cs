@@ -1,7 +1,7 @@
 ﻿using System;
 using Graficas.Nodos;
 
-namespace Graficas.Aristas
+namespace Graficas.Edges
 {
 	/// <summary>
 	/// Edge that preserve references to nodes.

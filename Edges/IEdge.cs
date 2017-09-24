@@ -1,7 +1,7 @@
 using System;
 using CE.Collections;
 
-namespace Graficas.Aristas
+namespace Graficas.Edges
 {
 	/// <summary>
 	/// An edge in a graph.

@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Aristas\IEdge.cs" />
+    <Compile Include="Edges\IEdge.cs" />
     <Compile Include="Continuo\Continuo.cs" />
     <Compile Include="Rutas\IRuta.cs" />
     <Compile Include="Rutas\Ruta.cs" />
@@ -60,20 +60,20 @@
     <Compile Include="Grafo\MulticolGrafica.cs" />
     <Compile Include="Grafo\IGrafo.cs" />
     <Compile Include="Grafo\HardGrafo.cs" />
-    <Compile Include="Aristas\HardEdge.cs" />
+    <Compile Include="Edges\HardEdge.cs" />
     <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
     <Compile Include="Rutas\HardRuta.cs" />
     <Compile Include="Nodos\INodo.cs" />
     <Compile Include="Nodos\Nodo.cs" />
     <Compile Include="Extensiones\Extensiones.cs" />
-    <Compile Include="Aristas\WeightedEdge.cs" />
-    <Compile Include="Aristas\ExistentialEdge.cs" />
+    <Compile Include="Edges\WeightedEdge.cs" />
+    <Compile Include="Edges\ExistentialEdge.cs" />
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
     <Compile Include="Grafo\NodosCollectionComparer.cs" />
     <Compile Include="Grafo\ColorDuplicadoException.cs" />
     <Compile Include="Grafo\NodoInexistenteException.cs" />
-    <Compile Include="Aristas\IStep.cs" />
-    <Compile Include="Aristas\Step.cs" />
+    <Compile Include="Edges\IStep.cs" />
+    <Compile Include="Edges\Step.cs" />
     <Compile Include="Rutas\ComparadorPorPaso.cs" />
     <Compile Include="Continuo\Comparador.cs" />
     <Compile Include="Continuo\Punto.cs" />
@@ -83,7 +83,7 @@
     <Compile Include="Grafo\Estáticos\GrafoClan.cs" />
     <Compile Include="Grafo\Estáticos\GrafoVecindad.cs" />
     <Compile Include="Grafo\Dinámicos\GrafoVecindad.cs" />
-    <Compile Include="Aristas\IDirectedEdge.cs" />
+    <Compile Include="Edges\IDirectedEdge.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -145,7 +145,7 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Folder Include="Aristas\" />
+    <Folder Include="Edges\" />
     <Folder Include="Continuo\" />
     <Folder Include="Rutas\" />
     <Folder Include="Grafo\" />

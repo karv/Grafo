@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Graficas.Aristas
+namespace Graficas.Edges
 {
 	/// <summary>
 	/// Representa una arista de valor booleano
