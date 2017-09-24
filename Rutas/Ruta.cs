@@ -30,7 +30,7 @@ namespace Graficas.Rutas
 		/// <remarks>origen-destino debe ser una arista</remarks>
 		public Ruta (T origen, T destino, float peso = 1)
 		{
-			Paso.Add (new Step<T> (origen, destino, peso));
+			Step.Add (new Step<T> (origen, destino, peso));
 		}
 
 		/// <summary>
@@ -43,13 +43,13 @@ namespace Graficas.Rutas
 				throw new ArgumentNullException ();
 			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
-				Paso.Add (new Step<T> (x.Origin, x.Destination, x.Weight));
+				Step.Add (new Step<T> (x.Origin, x.Destination, x.Weight));
 		}
 
 		/// <summary>
 		/// Lista de pasos de esta ruta.
 		/// </summary>
-		readonly protected IList<IStep<T>> Paso = new List<IStep<T>> ();
+		readonly protected IList<IStep<T>> Step = new List<IStep<T>> ();
 
 		/// <summary>
 		/// 
@@ -57,7 +57,7 @@ namespace Graficas.Rutas
 		public override string ToString ()
 		{
 			string ret = string.Format ("[{0}]: ", NumPasos);
-			foreach (var x in Paso)
+			foreach (var x in Step)
 				ret += string.Format (" {0} ", x);
 			return ret;
 		}
@@ -81,7 +81,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return new List<IStep<T>> (Paso);
+				return new List<IStep<T>> (Step);
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace Graficas.Rutas
 			get
 			{
 				float ret = 0;
-				foreach (var x in Paso)
+				foreach (var x in Step)
 					ret += x.Weight;
 				return ret;
 			}
@@ -110,13 +110,13 @@ namespace Graficas.Rutas
 				throw new NullReferenceException ("No se puede concatenar con una arista nula.");
 			if (NumPasos == 0)
 			{
-				Paso.Add (new Step<T> (paso));
+				Step.Add (new Step<T> (paso));
 			}
 			else
 			{
 				if (paso.Contains (NodoFinal))
 				{
-					Paso.Add (new Step<T> (paso));
+					Step.Add (new Step<T> (paso));
 				}
 				else
 				{
@@ -149,7 +149,7 @@ namespace Graficas.Rutas
 
 			foreach (var paso in ruta.Pasos)
 			{
-				Paso.Add (new Step<T> (paso));
+				Step.Add (new Step<T> (paso));
 			}
 		}
 
@@ -163,7 +163,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return Paso.Count == 0 ? _virtualInicial : Paso[0].Origin;
+				return Step.Count == 0 ? _virtualInicial : Step[0].Origin;
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return NumPasos < 1 ? NodoInicial : Paso[NumPasos - 1].Destination;
+				return NumPasos < 1 ? NodoInicial : Step[NumPasos - 1].Destination;
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return Paso.Count;
+				return Step.Count;
 			}
 		}
 

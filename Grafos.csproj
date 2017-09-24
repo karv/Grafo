@@ -77,7 +77,7 @@
     <Compile Include="Rutas\ComparadorPorPaso.cs" />
     <Compile Include="Continua\MatchComparer.cs" />
     <Compile Include="Continua\ContinuumPoint.cs" />
-    <Compile Include="Continua\RutaContinuo.cs" />
+    <Compile Include="Continua\Path.cs" />
     <Compile Include="Grafo\OperaciónInválidaGrafosException.cs" />
     <Compile Include="Grafo\Estáticos\Grafo.cs" />
     <Compile Include="Grafo\Estáticos\GrafoClan.cs" />

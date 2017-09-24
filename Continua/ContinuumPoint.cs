@@ -223,12 +223,12 @@ namespace Graficas.Continua
 		}
 
 		/// <summary>
-		/// Advances this through a specific <see cref="Ruta{T}"/>.
+		/// Advances this through a specific <see cref="Path{T}"/>.
 		/// </summary>
 		/// <returns><c>true</c> if the path is completed; <c>false</c> otherwise.</returns>
 		/// <param name="path">path</param>
 		/// <param name="dist">Distance</param>
-		public bool AdvanceTowards (Ruta<T> path, float dist)
+		public bool AdvanceTowards (Path<T> path, float dist)
 		{
 			foreach (var r in new List<IStep<T>> (path.Pasos))
 			{
@@ -237,7 +237,7 @@ namespace Graficas.Continua
 
 				// Si llega aquí es que avanzó exactamente hasta un nodo hasta este momento.
 				// Hay que eliminar el paso de la ruta y actualizar Inicial.
-				path.EliminarPrimero ();
+				path.RemoveFirstStep ();
 			}
 			return true;
 		}

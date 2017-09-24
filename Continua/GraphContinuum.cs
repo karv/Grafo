@@ -139,13 +139,13 @@ namespace Graficas.Continua
 		/// <param name="origin">Punto inicial.</param>
 		/// <param name="destination">Punto final.</param>
 		/// <param name="routes">Optimal routes collection</param>
-		public static Ruta<T> OptimalPath (ContinuumPoint<T> origin,
+		public static Path<T> OptimalPath (ContinuumPoint<T> origin,
 																			 ContinuumPoint<T> destination,
 																			 ConjuntoRutasÓptimas<T> routes)
 		{
 			// TODO: several issues
 			var ruta = routes.CaminoÓptimo (origin.A, destination.A);
-			var ret = new Ruta<T> (origin);
+			var ret = new Path<T> (origin);
 			ret.Concat (ruta);
 			ret.ConcatFinal (destination);
 			return ret;
