@@ -7,7 +7,7 @@ namespace Graficas.Continua
 	/// Compares points in a continuum.
 	/// </summary>
 	[Serializable]
-	public class MatchComparer<T> : IEqualityComparer<Punto<T>>
+	public class MatchComparer<T> : IEqualityComparer<ContinuumPoint<T>>
 	{
 		/// <summary>
 		/// Gets the node comparer for end points.
@@ -21,24 +21,24 @@ namespace Graficas.Continua
 		}
 
 		/// <summary>
-		/// Determines whether two specified <see cref="Punto{T}"/> are in the same <c>place</c>.
+		/// Determines whether two specified <see cref="ContinuumPoint{T}"/> are in the same <c>place</c>.
 		/// </summary>
 		/// <param name="x">The first point.</param>
 		/// <param name="y">The second point.</param>
-		public bool Equals (Punto<T> x, Punto<T> y)
+		public bool Equals (ContinuumPoint<T> x, ContinuumPoint<T> y)
 		{
 			if (ReferenceEquals (null, x) || ReferenceEquals (null, y))
 				return false;
 
-			return x.Coincide (y);
+			return x.Match (y);
 		}
 
 		/// <summary>
 		/// Gets the hash code.
 		/// </summary>
-		public int GetHashCode (Punto<T> obj)
+		public int GetHashCode (ContinuumPoint<T> obj)
 		{
-			return obj.EnOrigen ? NodeComparer.GetHashCode (obj.A) :
+			return obj.AtNode ? NodeComparer.GetHashCode (obj.A) :
 				NodeComparer.GetHashCode (obj.A) + NodeComparer.GetHashCode (obj.B) + obj.Loc.GetHashCode ();
 		}
 	}

@@ -13,19 +13,19 @@ namespace Graficas.Continua
 		/// Devuelve el origen de la ruta
 		/// </summary>
 		/// <value>The nodo inicial.</value>
-		public new Punto<T> NodoInicial { get; }
+		public new ContinuumPoint<T> NodoInicial { get; }
 
 		/// <summary>
 		/// Devuelve el destino de la ruta
 		/// </summary>
 		/// <value>The nodo final.</value>
-		public new Punto<T> NodoFinal { get; private set; }
+		public new ContinuumPoint<T> NodoFinal { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the class
 		/// </summary>
 		/// <param name="inicial">Punto de origen</param>
-		public Ruta (Punto<T> inicial)
+		public Ruta (ContinuumPoint<T> inicial)
 		{
 			NodoInicial = inicial;
 			NodoFinal = inicial;
@@ -43,7 +43,7 @@ namespace Graficas.Continua
 		/// Concatena finalmente con un punto
 		/// </summary>
 		/// <param name="final">Final.</param>
-		public void ConcatFinal (Punto<T> final)
+		public void ConcatFinal (ContinuumPoint<T> final)
 		{
 			NodoFinal = final;
 		}
@@ -80,7 +80,7 @@ namespace Graficas.Continua
 		/// Revisa si un punto dado pertenece a esta ruta.
 		/// </summary>
 		/// <param name="punto">Punto.</param>
-		public bool Contiene (Punto<T> punto)
+		public bool Contiene (ContinuumPoint<T> punto)
 		{
 			// Hay de tres:
 			// 0) Está en el semiintervalo inicial
@@ -88,7 +88,7 @@ namespace Graficas.Continua
 			// 2) Está en un intervalo intermedio
 
 			// 0)
-			if (NodoInicial.EnMismoIntervalo (punto))
+			if (NodoInicial.OnSameInterval (punto))
 			{
 				T MyA = punto.A;
 				if (NodoInicial.DistanciaAExtremo (MyA) <= punto.Loc)
@@ -98,12 +98,12 @@ namespace Graficas.Continua
 			// 2)
 			foreach (var x in Pasos)
 			{
-				if (punto.EnIntervaloInmediato (x.Origin, x.Destination))
+				if (punto.OnEdge (x.Origin, x.Destination))
 					return true;
 			}
 
 			// 1)
-			if (NodoFinal.EnMismoIntervalo (punto))
+			if (NodoFinal.OnSameInterval (punto))
 			{
 				T MyB = punto.B;
 				if (NodoFinal.DistanciaAExtremo (MyB) < punto.Aloc)
@@ -116,7 +116,7 @@ namespace Graficas.Continua
 		/// <summary>
 		/// Devuelve una enumeración de los puntos contenidos en esta ruta
 		/// </summary>
-		public List<Punto<T>> PuntosEnRuta (GraphContinuum<T> gr)
+		public List<ContinuumPoint<T>> PuntosEnRuta (GraphContinuum<T> gr)
 		{
 			return gr.Points.FindAll (Contiene);
 		}
