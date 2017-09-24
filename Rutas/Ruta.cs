@@ -43,7 +43,7 @@ namespace Graficas.Rutas
 				throw new ArgumentNullException ();
 			_virtualInicial = ruta.NodoInicial;
 			foreach (var x in ruta.Pasos)
-				Paso.Add (new Step<T> (x.Origin, x.Destination, x.Peso));
+				Paso.Add (new Step<T> (x.Origin, x.Destination, x.Weight));
 		}
 
 		/// <summary>
@@ -95,7 +95,7 @@ namespace Graficas.Rutas
 			{
 				float ret = 0;
 				foreach (var x in Paso)
-					ret += x.Peso;
+					ret += x.Weight;
 				return ret;
 			}
 		}

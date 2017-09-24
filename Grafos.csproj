@@ -68,12 +68,11 @@
     <Compile Include="Extensiones\Extensiones.cs" />
     <Compile Include="Aristas\WeightedEdge.cs" />
     <Compile Include="Aristas\ExistentialEdge.cs" />
-    <Compile Include="Aristas\OperaciónAristaInválida.cs" />
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
     <Compile Include="Grafo\NodosCollectionComparer.cs" />
     <Compile Include="Grafo\ColorDuplicadoException.cs" />
     <Compile Include="Grafo\NodoInexistenteException.cs" />
-    <Compile Include="Aristas\IPaso.cs" />
+    <Compile Include="Aristas\IStep.cs" />
     <Compile Include="Aristas\Step.cs" />
     <Compile Include="Rutas\ComparadorPorPaso.cs" />
     <Compile Include="Continuo\Comparador.cs" />

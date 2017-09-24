@@ -58,7 +58,7 @@ namespace Graficas.Continuo
 			{
 				var lbase = 0f;
 				foreach (var x in Paso)
-					lbase += x.Peso;
+					lbase += x.Weight;
 
 				return lbase + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
 			}

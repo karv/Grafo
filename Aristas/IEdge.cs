@@ -28,6 +28,6 @@ namespace Graficas.Aristas
 		/// Gets the antipodal node from a specified node, relative to this edge.
 		/// </summary>
 		/// <param name="nodo">Node.</param>
-		T Antipode (T nodo);
+		T Antipode (T node);
 	}
 }

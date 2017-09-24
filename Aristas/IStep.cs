@@ -1,13 +1,13 @@
 ﻿namespace Graficas.Aristas
 {
 	/// <summary>
-	/// Representa un paso en una ruta de un grafo.
+	/// Represents a step in a graph path.	
 	/// </summary>
 	public interface IStep<T> : IDirectedEdge<T>
 	{
 		/// <summary>
-		/// Peso del paso
+		/// Weight of the step.
 		/// </summary>
-		float Peso { get; }
+		float Weight { get; }
 	}
 }

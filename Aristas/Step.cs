@@ -4,127 +4,104 @@ using System.Collections.Generic;
 namespace Graficas.Aristas
 {
 	/// <summary>
-	/// Un paso de una ruta.
+	/// A generic implementation of an immutable step.
 	/// </summary>
-	/// <remarks>Este objeto es de sólo lectura</remarks>
 	[Serializable]
 	public struct Step<T> : IStep<T>
 	{
 		/// <summary>
-		/// Devuelve el origen del paso
+		/// Gets or sets the origin.
 		/// </summary>
-		/// <value>The origen.</value>
-		public T Origen { get; }
+		public T Origin { get; }
 
 		/// <summary>
-		/// Devuelve el destino del paso
+		/// Devuelve el destino de la arista.
 		/// </summary>
-		/// <value>The destino.</value>
-		public T Destino { get; }
+		public T Destination { get; }
 
 		/// <summary>
-		/// Peso del paso
+		/// Weight of this step.
 		/// </summary>
-		/// <value>The peso.</value>
-		public float Peso { get; }
+		public float Weight { get; }
+
+		bool IEdge<T>.Exists => true;
 
 		/// <summary>
-		/// Initializes a new instance of this struct.
+		/// Initializes a new step.
 		/// </summary>
-		/// <param name="origen">Origen.</param>
-		/// <param name="destino">Destino.</param>
-		/// <param name="peso">Peso.</param>
-		public Step (T origen, T destino, float peso = 1)
+		public Step (T origon, T destination, float weight = 1)
 		{
-			Origen = origen;
-			Destino = destino;
-			Peso = peso;
+			Origin = origon;
+			Destination = destination;
+			Weight = weight;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of this struct.
+		/// Initializes a new step.
 		/// </summary>
-		/// <param name="aris">Arista a copiar</param>
-		public Step (IDirectedEdge<T> aris)
-			: this (aris.Origin, aris.Destination)
+		/// <param name="edge">A directed edge to clone.</param>
+		public Step (IDirectedEdge<T> edge)
+			: this (edge.Origin, edge.Destination)
 		{
-			var ar = aris as WeightedEdge<T, float>;
-			if (ar != null) {
+			if (edge is WeightedEdge<T, float> ar)
+			{
 				if (!ar.Exists)
-					throw new Exception ("No se puede construir un paso desde una arista inexistente.");
-				Peso = ar.Data;
+					throw new ArgumentException ("Cannot initialize a new step from an non-existent edge.", nameof (edge));
+				Weight = ar.Data;
 			}
 		}
 
 		/// <summary>
-		/// Initializes a new instance of this struct.
+		/// Initializes a new step.
 		/// </summary>
-		/// <param name="aris">Arista a copiar</param>
-		/// <param name="peso">Peso del paso</param>
-		public Step (IDirectedEdge<T> aris, float peso)
-			: this (aris.Origin, aris.Destination)
+		/// <param name="edge">A directed edge to clone.</param>
+		/// <param name="weight">Peso del paso</param>
+		public Step (IDirectedEdge<T> edge, float weight)
+			: this (edge.Origin, edge.Destination)
 		{
-			Peso = peso;
+			Weight = weight;
 		}
 
 		/// <summary>
-		/// Clona un paso
+		/// Initializes a new step.
 		/// </summary>
-		/// <param name="paso">Paso a clonar</param>
-		public Step (IStep<T> paso)
-		{
-			Origen = paso.Origin;
-			Destino = paso.Destination;
-			Peso = paso.Peso;
-		}
+		/// <param name="step">Step to clone.</param>
+		public Step (IStep<T> step) : this (step.Origin, step.Destination, step.Weight) { }
 
 		/// <summary>
-		/// Si esta arista coincide con extremos
+		/// Determines if this edge matches with the specified endpoints.
 		/// </summary>
-		/// <param name="origen">Origen.</param>
-		/// <param name="destino">Destino.</param>
-		public bool Coincide (T origen, T destino)
+		public bool Match (T origen, T destino)
 		{
 			var cmp = EqualityComparer<T>.Default;
-			return cmp.Equals (origen, Origen) && cmp.Equals (destino, Destino);
+			return cmp.Equals (origen, Origin) && cmp.Equals (destino, Destination);
 		}
 
 		/// <summary>
 		/// Devuelve un par que representa a la arista.
 		/// </summary>
 		/// <returns>The par.</returns>
-		public ListasExtra.ParNoOrdenado<T> ComoPar ()
+		public Tuple<T, T> AsTuple ()
 		{
-			return new ListasExtra.ParNoOrdenado<T> (Origen, Destino);
+			return new Tuple<T, T> (Origin, Destination);
 		}
 
 		/// <summary>
-		/// Devuelve el nodo de la arista que no es el dado
+		/// Gets the antipodal node from a specified node, relative to this edge.
 		/// </summary>
-		/// <param name="nodo">Nodo.</param>
-		public T Antipodo (T nodo)
+		/// <param name="node">Node.</param>
+		public T Antipode (T node)
 		{
-			return ComoPar ().Excepto (nodo);
+			return AsPair ().Excepto (node);
 		}
 
 		/// <summary>
-		/// Devuelve si esta arista toca a un nodo dado
+		/// Determines whether this edge contains an specified node as an endpoint.
 		/// </summary>
-		/// <param name="nodo">Nodo.</param>
-		public bool Corta (T nodo)
+		public bool Contains (T node)
 		{
 			var cmp = EqualityComparer<T>.Default;
-			return cmp.Equals (nodo, Origen) || cmp.Equals (nodo, Destino);
-		}
-
-		/// <summary>
-		/// Existe este paso.
-		/// </summary>
-		/// <value><c>true</c> si existe. <c>false</c> en caso contrario</value>
-		public bool Existe {
-			get {
-				return true;
-			}
+			return cmp.Equals (node, Origin) || cmp.Equals (node, Destination);
 		}
 
 		/// <summary>
@@ -133,7 +110,9 @@ namespace Graficas.Aristas
 		/// <returns>A <see cref="System.String"/> that represents the current struct.</returns>
 		public override string ToString ()
 		{
-			return string.Format ("{0} -- [{2}] -> {1}", Origen, Destino, Peso);
+			return string.Format ("{0} -- [{2}] -> {1}", Origin, Destination, Weight);
 		}
+
+		ListasExtra.ParNoOrdenado<T> AsPair () => new ListasExtra.ParNoOrdenado<T> (Origin, Destination);
 	}
 }
