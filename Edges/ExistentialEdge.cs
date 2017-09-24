@@ -34,7 +34,7 @@ namespace Graficas.Edges
 			set
 			{
 				if (Readonly)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
+					throw new InvalidOperationException ("Edge is readonly.");
 				_destination = value;
 			}
 		}
@@ -48,7 +48,7 @@ namespace Graficas.Edges
 			set
 			{
 				if (Readonly)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
+					throw new InvalidOperationException ("Edge is readonly.");
 				_exists = value;
 			}
 		}

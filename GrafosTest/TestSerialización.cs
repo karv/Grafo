@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Graficas.Continuo;
+using Graficas.Continua;
 using Graficas.Grafo;
 using Graficas.Grafo.Estáticos;
 using Graficas.Rutas;
@@ -25,7 +25,7 @@ namespace Test
 			where T : IGrafo<Objeto>
 		{
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
-			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
+			var gr2 = Store.BinarySerialization.ReadFromBinaryFile<T> ("some.graph");
 			Assert.AreEqual (gr [0, 1].Exists, gr2 [0, 1].Existe);
 		}
 
@@ -34,7 +34,7 @@ namespace Test
 		{
 			gr [0, 1] = 1;
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
-			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
+			var gr2 = Store.BinarySerialization.ReadFromBinaryFile<T> ("some.graph");
 			Assert.AreEqual (gr [0, 1], gr2 [0, 1]);
 		}
 
@@ -62,7 +62,7 @@ namespace Test
 			var zero3 = rr.CaminoÓptimo (0, 3);
 
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", rr);
-			var rr2 = Store.BinarySerialization.ReadFromBinaryFile <ConjuntoRutasÓptimas<Objeto>> ("some.graph");
+			var rr2 = Store.BinarySerialization.ReadFromBinaryFile<ConjuntoRutasÓptimas<Objeto>> ("some.graph");
 			var copia = rr2.CaminoÓptimo (0, 3);
 			Assert.AreEqual (zero3.NumPasos, copia.NumPasos);
 			Assert.AreEqual (zero3.NodoInicial, copia.NodoInicial);
@@ -77,7 +77,7 @@ namespace Test
 			var c = new Continuo<Objeto> (gr);
 			c.AgregaPunto (0, 1, 0.3f);
 			Store.BinarySerialization.WriteToBinaryFile ("continuo", c);
-			var c2 = Store.BinarySerialization.ReadFromBinaryFile <Continuo<Objeto>> ("continuo");
+			var c2 = Store.BinarySerialization.ReadFromBinaryFile<Continuo<Objeto>> ("continuo");
 			Assert.True (c2.Puntos.Count == c.Puntos.Count);
 		}
 

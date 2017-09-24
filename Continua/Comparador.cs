@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System;
 
-namespace Graficas.Continuo
+namespace Graficas.Continua
 {
 	// THINK ¿No serializarlo, y construirlo cada vez que un grafo es deserializado?
 	/// <summary>
@@ -44,7 +44,7 @@ namespace Graficas.Continuo
 		/// <param name="obj">Object.</param>
 		public int GetHashCode (Punto<T> obj)
 		{
-			return obj.EnOrigen ? ComparaNodos.GetHashCode (obj.A) : 
+			return obj.EnOrigen ? ComparaNodos.GetHashCode (obj.A) :
 				ComparaNodos.GetHashCode (obj.A) + ComparaNodos.GetHashCode (obj.B) + obj.Loc.GetHashCode ();
 		}
 	}

@@ -1,4 +1,4 @@
-﻿using Graficas.Aristas;
+﻿using Graficas.Edges;
 using System.Collections.Generic;
 using Graficas.Rutas;
 
@@ -20,7 +20,7 @@ namespace Graficas.Grafo
 		/// <returns> Una arista no nula </returns>
 		/// <param name="desde">Origen</param>
 		/// <param name="hasta">Destino</param>
-		IEdge<T> this [T desde, T hasta]{ get; }
+		IEdge<T> this[T desde, T hasta] { get; }
 
 		/// <summary>
 		/// Nodos

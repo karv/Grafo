@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graficas.Aristas;
+using Graficas.Edges;
 using Graficas.Rutas;
 
 namespace Graficas.Grafo.Estáticos
@@ -17,7 +17,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="simétrico">Si el grafo es simétrico</param>
 		/// <param name="comparador">Comparador</param>
 		public GrafoVecindad (IEnumerable<T> nodos, bool simétrico = false,
-		                      IEqualityComparer<T> comparador = null)
+													IEqualityComparer<T> comparador = null)
 		{
 			Comparador = comparador ?? EqualityComparer<T>.Default;
 			Simétrico = simétrico;
@@ -90,13 +90,13 @@ namespace Graficas.Grafo.Estáticos
 		{
 			try
 			{
-				return new HashSet<T> (Vecindad [nodo], Comparador);
+				return new HashSet<T> (Vecindad[nodo], Comparador);
 			}
 			catch (KeyNotFoundException ex)
 			{
 				var m = string.Format (
-					        "No se puede calcular vecindad de {0}. ¿Es un nodo de esta clase?",
-					        nodo);
+									"No se puede calcular vecindad de {0}. ¿Es un nodo de esta clase?",
+									nodo);
 				throw new NodoInexistenteException (m, ex);
 			}
 		}
@@ -110,7 +110,7 @@ namespace Graficas.Grafo.Estáticos
 		{
 			var ret = new Ruta<T> ();
 			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
-			T last = default(T);
+			T last = default (T);
 			foreach (var x in seq)
 			{
 				if (iniciando)
@@ -139,13 +139,13 @@ namespace Graficas.Grafo.Estáticos
 			{
 				var ret = new GrafoVecindad<T> (conjunto, Simétrico, Comparador);
 				foreach (var c in conjunto)
-					ret.Vecindad [c].UnionWith (Vecindad [c].Intersect (conjunto));
+					ret.Vecindad[c].UnionWith (Vecindad[c].Intersect (conjunto));
 				return ret;
 			}
 			catch (Exception ex)
 			{
 				var m = string.Format ("No se puede calcular el subgrafo de esta clase respecto a {0}.\n" +
-				        "¿Es el argumento un subconjunto de Nodos?", conjunto);
+								"¿Es el argumento un subconjunto de Nodos?", conjunto);
 				throw new ArgumentException (m, "conjunto", ex);
 			}
 		}
@@ -160,11 +160,11 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		/// <param name="desde">Origen</param>
 		/// <param name="hasta">Destino</param>
-		public bool this [T desde, T hasta]
+		public bool this[T desde, T hasta]
 		{
 			get
 			{
-				bool ret = Vecindad [desde].Contains (hasta);
+				bool ret = Vecindad[desde].Contains (hasta);
 				return ret;
 			}
 			set
@@ -190,7 +190,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="hasta">Hasta.</param>
 		protected void EliminaArista (T desde, T hasta)
 		{
-			var vec = Vecindad [desde];
+			var vec = Vecindad[desde];
 			vec.Remove (hasta);
 		}
 
@@ -201,7 +201,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="hasta">Hasta.</param>
 		protected void AgregaArista (T desde, T hasta)
 		{
-			var vec = Vecindad [desde];
+			var vec = Vecindad[desde];
 			vec.Add (hasta);
 		}
 
@@ -212,11 +212,11 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="hasta">Hasta.</param>
 		public ExistentialEdge<T> Arista (T desde, T hasta)
 		{
-			bool ret = Vecindad [desde].Contains (hasta);
+			bool ret = Vecindad[desde].Contains (hasta);
 			return new ExistentialEdge<T> (desde, hasta, ret, true, Simétrico);
 		}
 
-		IEdge<T> IGrafo<T>.this [T desde, T hasta]
+		IEdge<T> IGrafo<T>.this[T desde, T hasta]
 		{
 			get
 			{

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Aristas;
+using Graficas.Edges;
 
 namespace Graficas.Rutas
 {
@@ -45,14 +45,14 @@ namespace Graficas.Rutas
 			if (!Comparador.Equals (x.NodoFinal, y.NodoFinal))
 				return false;
 
-			var enumX = new List<IPaso<T>> (x.Pasos);
-			var enumY = new List<IPaso<T>> (y.Pasos);
+			var enumX = new List<IStep<T>> (x.Pasos);
+			var enumY = new List<IStep<T>> (y.Pasos);
 
 			for (int i = 0; i < x.NumPasos; i++)
 			{
-				if (!Comparador.Equals (enumX [i].Origen, enumY [i].Origen))
+				if (!Comparador.Equals (enumX[i].Origin, enumY[i].Origin))
 					return false;
-				if (!Comparador.Equals (enumX [i].Destino, enumY [i].Destino))
+				if (!Comparador.Equals (enumX[i].Destination, enumY[i].Destination))
 					return false;
 			}
 

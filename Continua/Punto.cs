@@ -2,9 +2,9 @@
 using System.Linq;
 using ListasExtra;
 using System.Collections.Generic;
-using Graficas.Aristas;
+using Graficas.Edges;
 
-namespace Graficas.Continuo
+namespace Graficas.Continua
 {
 	/// <summary>
 	/// Representa un punto en un continuo.
@@ -49,7 +49,7 @@ namespace Graficas.Continuo
 		/// <param name="universo">Continuo donde vive este punto</param>
 		/// <param name="nodo">Nodo donde 'poner' el punto</param>
 		public Punto (Continuo<T> universo, T nodo)
-			: this (universo, nodo, default(T), 0)
+			: this (universo, nodo, default (T), 0)
 		{
 		}
 
@@ -103,7 +103,7 @@ namespace Graficas.Continuo
 				// Analysis disable CompareNonConstrainedGenericWithNull
 				if (value == null)
 					// Analysis restore CompareNonConstrainedGenericWithNull
-						throw new ArgumentNullException ("value", "A no puede ser nulo.");
+					throw new ArgumentNullException ("value", "A no puede ser nulo.");
 				a = value;
 			}
 		}
@@ -120,8 +120,8 @@ namespace Graficas.Continuo
 		{
 			get { return _loc; }
 			set
-			{ 
-				_loc = value; 
+			{
+				_loc = value;
 				if (_loc < 0)
 					throw new ArgumentException ("Loc no puede ser negativo", "value");
 				// Analysis disable CompareNonConstrainedGenericWithNull
@@ -140,8 +140,8 @@ namespace Graficas.Continuo
 			get
 			{
 				if (EnOrigen)
-					throw new OperaciónAristaInválidaException ("No se puede acceder a ALoc estando en un punto fijo");
-				return Universo.GrafoBase [A, B] - Loc;
+					throw new InvalidOperationException ("Cannot get property ALoc when this point is a node.");
+				return Universo.GrafoBase[A, B] - Loc;
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace Graficas.Continuo
 		/// Revisa si dos puntos están en un mismo intervalo
 		/// </summary>
 		public static bool EnMismoIntervalo (Punto<T> punto1,
-		                                     Punto<T> punto2)
+																				 Punto<T> punto2)
 		{
 			if (punto1 == null || punto2 == null)
 				return false;
@@ -249,7 +249,7 @@ namespace Graficas.Continuo
 					if (!punto.Extremos.Contiene (A))
 						return false;
 					var nodo = punto.Extremos.Excepto (A);
-					return !float.IsPositiveInfinity (Universo.GrafoBase [A, nodo]);
+					return !float.IsPositiveInfinity (Universo.GrafoBase[A, nodo]);
 				}
 			}
 			return punto.EnOrigen ? punto.EnMismoIntervalo (this) : Extremos.Equals (punto.Extremos);
@@ -280,7 +280,7 @@ namespace Graficas.Continuo
 			if (EnOrigen)
 			{
 				T orig = A; // Posición de este punto.
-				// Si estoy en vértice
+										// Si estoy en vértice
 				var ret = new HashSet<Punto<T>> (Universo.Puntos.Where (x => x.Extremos.Contiene (orig)));
 				return ret;
 			}
@@ -337,7 +337,7 @@ namespace Graficas.Continuo
 		void VerificaColisión (Punto<T> anterior)
 		{
 			var extremosBase = new List<T> (Extremos.AsSet ().Intersect (anterior.Extremos.AsSet ()));
-			var extremoBase = extremosBase [0];
+			var extremoBase = extremosBase[0];
 
 
 			var n0 = anterior.DistanciaAExtremo (extremoBase);
@@ -348,9 +348,9 @@ namespace Graficas.Continuo
 			foreach (var x in puntosIntervalo)
 			{
 				if (!ReferenceEquals (x, this) &&
-				    !ReferenceEquals (x, anterior) &&
-				    minDist <= x.DistanciaAExtremo (extremoBase) &&
-				    maxDist >= x.DistanciaAExtremo (extremoBase))
+						!ReferenceEquals (x, anterior) &&
+						minDist <= x.DistanciaAExtremo (extremoBase) &&
+						maxDist >= x.DistanciaAExtremo (extremoBase))
 				{
 					AlColisionar?.Invoke (x);
 					x.AlColisionar?.Invoke (this);
@@ -378,9 +378,9 @@ namespace Graficas.Continuo
 		/// <param name="dist">Dist.</param>
 		public bool AvanzarHacia (Ruta<T> ruta, float dist)
 		{
-			foreach (var r in new List<IPaso<T>> (ruta.Pasos))
+			foreach (var r in new List<IStep<T>> (ruta.Pasos))
 			{
-				if (!AvanzarHacia (r.Destino, ref dist))
+				if (!AvanzarHacia (r.Destination, ref dist))
 					return false;
 
 				// Si llega aquí es que avanzó exactamente hasta un nodo hasta este momento.
@@ -457,7 +457,7 @@ namespace Graficas.Continuo
 		public void FromGrafo (T punto)
 		{
 			A = punto;
-			B = default(T);
+			B = default (T);
 			Loc = 0;
 		}
 
@@ -467,7 +467,7 @@ namespace Graficas.Continuo
 		public void DesdeGrafo (T punto)
 		{
 			A = punto;
-			B = default(T);
+			B = default (T);
 			Loc = 0;
 		}
 
@@ -502,9 +502,9 @@ namespace Graficas.Continuo
 			catch (Exception ex)
 			{
 				var salida = string.Format (
-					             "Se produce exception al comparar Puntos en Continuo\nthis:  {0}\nother: {1}",
-					             Mostrar (),
-					             other.Mostrar ());
+											 "Se produce exception al comparar Puntos en Continuo\nthis:  {0}\nother: {1}",
+											 Mostrar (),
+											 other.Mostrar ());
 				throw new Exception (salida, ex);
 			}
 		}

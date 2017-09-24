@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Graficas.Continuo
+namespace Graficas.Continua
 {
 	/// <summary>
 	/// Una ruta de ContinuoPuntos
@@ -121,5 +121,5 @@ namespace Graficas.Continuo
 			return gr.Puntos.FindAll (Contiene);
 		}
 	}
-		
+
 }

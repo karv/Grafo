@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graficas.Aristas;
+using Graficas.Edges;
 using Graficas.Nodos;
 using Graficas.Rutas;
 
@@ -12,7 +12,7 @@ namespace Graficas.Grafo
 	/// </summary>
 	[Serializable]
 	[Obsolete]
-	public class HardGrafo<T> :  IGrafo<T>
+	public class HardGrafo<T> : IGrafo<T>
 		where T : IEquatable<T>
 	{
 		readonly HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>> ();
@@ -81,7 +81,7 @@ namespace Graficas.Grafo
 			foreach (var x in conjunto.ToList ())
 			{
 				var nodoX = ret.AsNodo (x);
-				foreach (var y in AsNodo(x).Vecindad)
+				foreach (var y in AsNodo (x).Vecindad)
 				{
 					if (conjunto.Contains (y.Objeto))
 					{
@@ -119,7 +119,7 @@ namespace Graficas.Grafo
 			foreach (var item in graf.Nodos)
 			{
 				Nodo<T> nodoDeItem = AsNodo (item);
-				foreach (var x in graf.Vecinos(item))
+				foreach (var x in graf.Vecinos (item))
 					nodoDeItem.Vecindad.Add (AsNodo (x));
 			}
 		}
@@ -129,7 +129,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <param name="desde">Desde.</param>
 		/// <param name="hasta">Hasta.</param>
-		public bool this [T desde, T hasta]
+		public bool this[T desde, T hasta]
 		{
 			get
 			{
@@ -152,11 +152,11 @@ namespace Graficas.Grafo
 
 		#region IGrafica implementation
 
-		IEdge<T> IGrafo<T>.this [T desde, T hasta]
+		IEdge<T> IGrafo<T>.this[T desde, T hasta]
 		{
 			get
 			{
-				return new ExistentialEdge<T> (desde, hasta, this [desde, hasta], true);
+				return new ExistentialEdge<T> (desde, hasta, this[desde, hasta], true);
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Devuelve el nodo correspondiente a un valor
 		/// </summary>
-		public INodo<T> this [T key]
+		public INodo<T> this[T key]
 		{
 			get
 			{
@@ -202,7 +202,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		public void Add (T item)
 		{
-			
+
 			if (Contains (item))
 				throw new Exception ("Ya se encuentra nodo.");
 

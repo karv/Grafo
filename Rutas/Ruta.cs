@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Aristas;
+using Graficas.Edges;
 
 namespace Graficas.Rutas
 {
@@ -30,7 +30,7 @@ namespace Graficas.Rutas
 		/// <remarks>origen-destino debe ser una arista</remarks>
 		public Ruta (T origen, T destino, float peso = 1)
 		{
-			Paso.Add (new Step<T> (origen, destino, peso)); 
+			Paso.Add (new Step<T> (origen, destino, peso));
 		}
 
 		/// <summary>
@@ -66,11 +66,11 @@ namespace Graficas.Rutas
 		/// Enumera los pasos de la ruta
 		/// </summary>
 		IEnumerable<IStep<T>> IRuta<T>.Pasos
-		{ 
+		{
 			get
-			{ 
-				return  Pasos;
-			} 
+			{
+				return Pasos;
+			}
 		}
 
 		/// <summary>
@@ -114,7 +114,7 @@ namespace Graficas.Rutas
 			}
 			else
 			{
-				if (paso.Intersects (NodoFinal))
+				if (paso.Contains (NodoFinal))
 				{
 					Paso.Add (new Step<T> (paso));
 				}
@@ -163,7 +163,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return Paso.Count == 0 ? _virtualInicial : Paso [0].Origin;
+				return Paso.Count == 0 ? _virtualInicial : Paso[0].Origin;
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return NumPasos < 1 ? NodoInicial : Paso [NumPasos - 1].Destination;
+				return NumPasos < 1 ? NodoInicial : Paso[NumPasos - 1].Destination;
 			}
 		}
 

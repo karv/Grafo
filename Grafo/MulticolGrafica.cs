@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Graficas.Rutas;
-using Graficas.Aristas;
+using Graficas.Edges;
 
 namespace Graficas.Grafo
 {
@@ -10,12 +10,12 @@ namespace Graficas.Grafo
 	/// Modela una IMulticolGrafica que es la superposición de varias IGráficas
 	/// </summary>
 	public class MulticolGrafica<TNodo, TColor> : IMulticolGrafo<TNodo, TColor>
-		where TNodo :IEquatable<TNodo>
+		where TNodo : IEquatable<TNodo>
 	{
 		/// <summary>
 		/// La asignación de color -> Gráfica
 		/// </summary>
-		readonly Dictionary <TColor, IGrafo<TNodo>> _asignación = new Dictionary<TColor, IGrafo<TNodo>> ();
+		readonly Dictionary<TColor, IGrafo<TNodo>> _asignación = new Dictionary<TColor, IGrafo<TNodo>> ();
 
 		#region IGrafica
 
@@ -43,7 +43,7 @@ namespace Graficas.Grafo
 
 			foreach (var color in _asignación.Keys)
 			{
-				ret.UnionWith (_asignación [color].Vecinos (nodo));
+				ret.UnionWith (_asignación[color].Vecinos (nodo));
 			}
 			return ret;
 		}
@@ -77,8 +77,8 @@ namespace Graficas.Grafo
 			*/
 		}
 
-		IEdge<TNodo> IGrafo<TNodo>.this [TNodo desde, TNodo hasta]
-		{ 
+		IEdge<TNodo> IGrafo<TNodo>.this[TNodo desde, TNodo hasta]
+		{
 			get
 			{
 				throw new NotImplementedException ();
@@ -100,7 +100,7 @@ namespace Graficas.Grafo
 
 		bool ExisteArista (TNodo desde, TNodo hasta)
 		{
-			return _asignación.Any (z => z.Value [desde, hasta].Exists);
+			return _asignación.Any (z => z.Value[desde, hasta].Exists);
 		}
 
 		/// <summary>
@@ -154,7 +154,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <value>The nodos.</value>
 		public ICollection<TNodo> Nodos
-		{			
+		{
 			get
 			{
 				var ret = new List<TNodo> ();

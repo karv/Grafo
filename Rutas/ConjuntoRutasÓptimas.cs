@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Graficas.Grafo;
-using Graficas.Aristas;
+using Graficas.Edges;
 using ListasExtra;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,16 +31,16 @@ Ejecute Calcular () antes de llamar esta función");
 
 			var cmp = EqualityComparer<TNodo>.Default;
 			var ret = rutas.FirstOrDefault (r => cmp.Equals (r.NodoInicial, x) && cmp.Equals (
-				          r.NodoFinal,
-				          y));
+									r.NodoFinal,
+									y));
 			return ret;
 		}
 
 		void reemplazaRuta (IRuta<TNodo> reemplazando)
 		{
 			var eliminar = CaminoÓptimo (
-				               reemplazando.NodoInicial,
-				               reemplazando.NodoFinal);
+											 reemplazando.NodoInicial,
+											 reemplazando.NodoFinal);
 			if (eliminar != null)
 				rutas.Remove (eliminar);
 			rutas.Add (reemplazando);
@@ -58,7 +58,7 @@ Ejecute Calcular () antes de llamar esta función");
 		{
 			if (!aris.Exists)
 				return false;
-			
+
 			bool ret = false;
 
 			var peso = Peso (aris);
@@ -107,7 +107,7 @@ Ejecute Calcular () antes de llamar esta función");
 			{
 				foreach (var y in gr.Nodos)
 				{
-					var ar = gr [x, y];
+					var ar = gr[x, y];
 					if (!ar.Exists)
 						continue;
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Graficas.Aristas;
+using Graficas.Edges;
 using System;
 
 namespace Graficas.Rutas
@@ -62,7 +62,7 @@ namespace Graficas.Rutas
 		/// <typeparam name="T">Nodos de ruta</typeparam>
 		[Obsolete ("IRuta cuenta con propiedad Longitud.get")]
 		public static float Longitud<T> (this IRuta<T> ruta,
-		                                 Func<IEdge<T>, float> peso)
+																		 Func<IEdge<T>, float> peso)
 			where T : IEquatable<T>
 		{
 			float ret = 0;

@@ -20,14 +20,14 @@ namespace Graficas.Edges
 			{
 				if (Exists)
 					return _valor;
-				throw new OperaciónAristaInválidaException ("No se puede acceder al peso de una arista no existente.");
+				throw new InvalidOperationException ("Cannot get the weight of an non-existent edge.");
 			}
 			set
 			{
 				if (Readonly)
-					throw new OperaciónAristaInválidaException ("Arista está en modo lectura.");
+					throw new InvalidOperationException ("Edge is readonly.");
 				if (!Exists)
-					throw new OperaciónAristaInválidaException ("No se le puede asignar peso a una arista no existente.");
+					throw new InvalidOperationException ("Cannot set the weight of an non-existent edge.");
 				_valor = value;
 			}
 		}

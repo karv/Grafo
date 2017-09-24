@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Graficas.Nodos;
-using Graficas.Aristas;
+using Graficas.Edges;
 using System;
 
 namespace Graficas.Rutas
@@ -45,7 +45,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return _pasos [0];
+				return _pasos[0];
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return _pasos [_pasos.Count - 1];
+				return _pasos[_pasos.Count - 1];
 			}
 		}
 
@@ -155,7 +155,7 @@ namespace Graficas.Rutas
 			{
 				for (int i = 0; i < NumPasos; i++)
 				{
-					yield return new Step<T> (_pasos [i].Objeto, _pasos [i + 1].Objeto);
+					yield return new Step<T> (_pasos[i].Objeto, _pasos[i + 1].Objeto);
 				}
 			}
 		}

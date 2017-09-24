@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using Graficas.Aristas;
+using Graficas.Edges;
 
 namespace Graficas.Grafo.Estáticos
 {
@@ -92,7 +92,7 @@ namespace Graficas.Grafo.Estáticos
 			{
 				for (int j = i + 1; j < conj.Count; j++)
 				{
-					ret.Add (new ListasExtra.ParNoOrdenado<T> (arr [i], arr [j]));
+					ret.Add (new ListasExtra.ParNoOrdenado<T> (arr[i], arr[j]));
 				}
 			}
 			return ret;
@@ -108,7 +108,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <returns>Booleano indicando si existe una arista</returns>
 		/// <param name="desde">Origen</param>
 		/// <param name="hasta">Destino</param>
-		public bool this [T desde, T hasta]
+		public bool this[T desde, T hasta]
 		{
 			get
 			{
@@ -127,7 +127,7 @@ namespace Graficas.Grafo.Estáticos
 			return new ExistentialEdge<T> (desde, hasta, ExisteArista (desde, hasta), true);
 		}
 
-		IEdge<T> IGrafo<T>.this [T desde, T hasta]
+		IEdge<T> IGrafo<T>.this[T desde, T hasta]
 		{
 			get
 			{
@@ -157,7 +157,8 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="aris">Arista</param>
 		public bool ExisteArista (IEdge<T> aris)
 		{
-			var ar2 = aris.AsTuple ().AsSet ();
+			var arTuple = aris.AsTuple ();
+			var ar2 = new HashSet<T> { arTuple.Item1, arTuple.Item2 };
 			foreach (var c in clanes)
 			{
 				if (c.IsSupersetOf (ar2))
@@ -227,8 +228,8 @@ namespace Graficas.Grafo.Estáticos
 
 			for (int i = 0; i < lst.Count - 1; i++)
 			{
-				var aris = EncuentraArista (lst [i], lst [i + 1]);
-				var paso = new Step<T> (lst [i], lst [i + 1], aris.Exists ? 1 : 0);
+				var aris = EncuentraArista (lst[i], lst[i + 1]);
+				var paso = new Step<T> (lst[i], lst[i + 1], aris.Exists ? 1 : 0);
 				ret.Concat (paso);
 			}
 			return ret;

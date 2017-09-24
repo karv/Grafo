@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Graficas.Aristas;
+using Graficas.Edges;
 using System;
 
 namespace Graficas.Grafo
@@ -7,7 +7,7 @@ namespace Graficas.Grafo
 	/// <summary>
 	/// Representa una gráfica de muchos 'colores'
 	/// </summary>
-	public interface IMulticolGrafo<TNodo, TColor>: IGrafo<TNodo>
+	public interface IMulticolGrafo<TNodo, TColor> : IGrafo<TNodo>
 		where TNodo : IEquatable<TNodo>
 	{
 		/// <summary>

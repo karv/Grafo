@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graficas.Aristas;
+using Graficas.Edges;
 using Graficas.Rutas;
 using ListasExtra;
 
@@ -19,8 +19,8 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="sóloLectura">El grafo es de sólo lectura</param>
 		/// <param name="nodos">Conjunto de nodos</param>
 		protected GrafoComún (ICollection<T> nodos,
-		                      bool simétrico = false,
-		                      bool sóloLectura = false)
+													bool simétrico = false,
+													bool sóloLectura = false)
 		{
 			EsSimétrico = simétrico;
 			SóloLectura = sóloLectura;
@@ -29,7 +29,7 @@ namespace Graficas.Grafo.Estáticos
 			// Copiar la info de nodos a IntNodo
 			int i = 0;
 			foreach (var x in nodos)
-				IntNodos [i++] = x;
+				IntNodos[i++] = x;
 
 			Data = new ExistentialEdge<T>[NumNodos, NumNodos];
 			inicializaData ();
@@ -41,8 +41,8 @@ namespace Graficas.Grafo.Estáticos
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < NumNodos; j++)
 				{
-					var aris = ConstruirNuevaArista (IntNodos [i], IntNodos [j]);
-					Data [i, j] = aris;
+					var aris = ConstruirNuevaArista (IntNodos[i], IntNodos[j]);
+					Data[i, j] = aris;
 				}
 		}
 
@@ -76,8 +76,8 @@ namespace Graficas.Grafo.Estáticos
 		protected ExistentialEdge<T> AdyacenciaÍndice (int origen, int destino)
 		{
 			if (destino < origen || !EsSimétrico)
-				return Data [origen, destino];
-			return Data [destino, origen];
+				return Data[origen, destino];
+			return Data[destino, origen];
 		}
 
 		/// <summary>
@@ -206,7 +206,7 @@ namespace Graficas.Grafo.Estáticos
 
 			if (index0 == -1 || index1 == -1)
 				throw new NodoInexistenteException ();
-			return Data [index0, index1];
+			return Data[index0, index1];
 		}
 
 		/// <summary>
@@ -221,7 +221,7 @@ namespace Graficas.Grafo.Estáticos
 			{
 				var ar = AdyacenciaÍndice (ix, i);
 				if (ar.Exists)
-					ret.Add (IntNodos [i]);
+					ret.Add (IntNodos[i]);
 			}
 
 			return ret;
@@ -240,7 +240,7 @@ namespace Graficas.Grafo.Estáticos
 			{
 				var ar = AdyacenciaÍndice (i, ix);
 				if (ar.Exists)
-					ret.Add (IntNodos [i]);
+					ret.Add (IntNodos[i]);
 			}
 
 			return ret;
@@ -255,7 +255,7 @@ namespace Graficas.Grafo.Estáticos
 		{
 			var ret = new Ruta<T> ();
 			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
-			T last = default(T);
+			T last = default (T);
 			foreach (var x in seq)
 			{
 				if (iniciando)
@@ -283,10 +283,10 @@ namespace Graficas.Grafo.Estáticos
 		{
 			var ret = new HashSet<ExistentialEdge<T>> ();
 			for (int i = 0; i < NumNodos; i++)
-			// Si es simétrico, no repetir aristas.
+				// Si es simétrico, no repetir aristas.
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
-					if (Data [i, j].Exists)
-						ret.Add (Data [i, j]);
+					if (Data[i, j].Exists)
+						ret.Add (Data[i, j]);
 			return ret;
 		}
 
@@ -343,22 +343,22 @@ namespace Graficas.Grafo.Estáticos
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < NumNodos; j++)
 				{
-					var ori = IntNodos [i];
-					var des = IntNodos [j];
-					var ari = graf [ori, des].Exists;
+					var ori = IntNodos[i];
+					var des = IntNodos[j];
+					var ari = graf[ori, des].Exists;
 					if (ari)
-						Data [i, j] = new WeightedEdge<T, TData> (
+						Data[i, j] = new WeightedEdge<T, TData> (
 							ori,
-							des, 
-							default(TData),
+							des,
+							default (TData),
 							sóloLectura);
 					else
-						Data [i, j] = new WeightedEdge<T, TData> (
+						Data[i, j] = new WeightedEdge<T, TData> (
 							ori,
-							des, 
+							des,
 							sóloLectura);
 				}
-			
+
 
 		}
 
@@ -381,19 +381,19 @@ namespace Graficas.Grafo.Estáticos
 			if (conjunto.Any (z => !Nodos.Contains (z)))
 				throw new ArgumentException ("Nodos no es un cobcojunto", "conjunto");
 			var ret = new Grafo<T, TData> (
-				          new HashSet<T> (conjunto),
-				          EsSimétrico,
-				          SóloLectura);
+									new HashSet<T> (conjunto),
+									EsSimétrico,
+									SóloLectura);
 
 			for (int i = 0; i < ret.NumNodos; i++)
 			{
 				// ii  es el índice en this que contiene al i-ésimo elemento de ret.Nodos
-				var ii = ret.ÍndiceDe (ret.IntNodos [i]); 
+				var ii = ret.ÍndiceDe (ret.IntNodos[i]);
 				for (int j = 0; j < ret.NumNodos; j++)
 				{
 					// ij  es el índice en this que contiene al j-ésimo elemento de ret.Nodos
-					var ij = ret.ÍndiceDe (ret.IntNodos [j]); 
-					ret.Data [i, j] = Data [ii, ij];
+					var ij = ret.ÍndiceDe (ret.IntNodos[j]);
+					ret.Data[i, j] = Data[ii, ij];
 				}
 			}
 			return ret;
@@ -420,8 +420,8 @@ namespace Graficas.Grafo.Estáticos
 			return Vecino (nodo);
 		}
 
-		IEdge<T> IGrafo<T>.this [T desde, T hasta]
-		{ 
+		IEdge<T> IGrafo<T>.this[T desde, T hasta]
+		{
 			get
 			{
 				return EncuentraArista (desde, hasta);
@@ -434,7 +434,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="x">Vértice origen.</param>
 		/// <param name="y">Vértice destino.</param>
 		/// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
-		public TData this [T x, T y]
+		public TData this[T x, T y]
 		{
 			get
 			{
@@ -444,7 +444,7 @@ namespace Graficas.Grafo.Estáticos
 			set
 			{
 				if (SóloLectura)
-					throw new OperaciónAristaInválidaException ("Grafo es sólo lectura.");
+					throw new InvalidOperationException ("Graph is readonly.");
 				WeightedEdge<T, TData> aris = EncuentraArista (x, y);
 				aris.Exists = true;
 				aris.Data = value;
@@ -464,7 +464,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="destino">Nodo destino</param>
 		protected override ExistentialEdge<T> ConstruirNuevaArista (T origen, T destino)
 		{
-			return new WeightedEdge<T ,TData> (origen, destino, SóloLectura, EsSimétrico);
+			return new WeightedEdge<T, TData> (origen, destino, SóloLectura, EsSimétrico);
 		}
 
 		/// <summary>
@@ -490,10 +490,10 @@ namespace Graficas.Grafo.Estáticos
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
 				{
-					var x = Data [i, j] as WeightedEdge<T, TData>; // La arista iterando
+					var x = Data[i, j] as WeightedEdge<T, TData>; // La arista iterando
 					if (x.Exists)
 					{
-						ret.Data [i, j] = new WeightedEdge<T, TData> (
+						ret.Data[i, j] = new WeightedEdge<T, TData> (
 							x.Origin,
 							x.Destination,
 							x.Data,
@@ -513,7 +513,7 @@ namespace Graficas.Grafo.Estáticos
 			var ret = new Grafo<T, TData> (Nodos, EsSimétrico, true);
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
-					ret.Data [i, j] = Data [i, j];
+					ret.Data[i, j] = Data[i, j];
 			return ret;
 		}
 
@@ -540,8 +540,8 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="y">Destino</param>
 		/// <param name="peso">Forma de asignar peso a cada arista</param>
 		public IRuta<T> CaminoÓptimo (T x,
-		                              T y,
-		                              Func<WeightedEdge<T, TData>, float> peso)
+																	T y,
+																	Func<WeightedEdge<T, TData>, float> peso)
 		{
 			if (x.Equals (y))
 				return null;
@@ -563,9 +563,9 @@ namespace Graficas.Grafo.Estáticos
 		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
 		/// <remarks>Devuelve null si toda ruta de x a y toca a ignorar</remarks>
 		Ruta<T> CaminoÓptimo (T x,
-		                      T y,
-		                      Func<WeightedEdge<T, TData>, float> peso,
-		                      ISet<T> ignorar)
+													T y,
+													Func<WeightedEdge<T, TData>, float> peso,
+													ISet<T> ignorar)
 		{
 			Ruta<T> ret = null;
 			float longRet = 0;
@@ -624,7 +624,7 @@ namespace Graficas.Grafo.Estáticos
 
 				foreach (var x in ret)
 				{
-					lista [x] = 0;
+					lista[x] = 0;
 				}
 
 				// Ahora seleecionar uno.
@@ -633,7 +633,7 @@ namespace Graficas.Grafo.Estáticos
 
 				foreach (var x in lista.Keys)
 				{
-					Suma += lista [x];
+					Suma += lista[x];
 					if (Suma >= rn)
 					{
 						ret.Add (x);
@@ -688,12 +688,12 @@ namespace Graficas.Grafo.Estáticos
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < NumNodos; j++)
 				{
-					var ori = IntNodos [i];
-					var des = IntNodos [j];
-					Data [i, j] = new ExistentialEdge<T> (
+					var ori = IntNodos[i];
+					var des = IntNodos[j];
+					Data[i, j] = new ExistentialEdge<T> (
 						ori,
 						des,
-						graf [ori, des].Exists,
+						graf[ori, des].Exists,
 						sóloLectura);
 				}
 		}
@@ -710,8 +710,8 @@ namespace Graficas.Grafo.Estáticos
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
 				{
-					var x = Data [i, j]; // La arista iterando
-					ret.Data [i, j] = new ExistentialEdge<T> (
+					var x = Data[i, j]; // La arista iterando
+					ret.Data[i, j] = new ExistentialEdge<T> (
 						x.Origin,
 						x.Destination,
 						x.Exists,
@@ -731,8 +731,8 @@ namespace Graficas.Grafo.Estáticos
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < (EsSimétrico ? i + 1 : NumNodos); j++)
 				{
-					var x = Data [i, j]; // La arista iterando
-					ret.Data [i, j] = new ExistentialEdge<T> (
+					var x = Data[i, j]; // La arista iterando
+					ret.Data[i, j] = new ExistentialEdge<T> (
 						x.Origin,
 						x.Destination,
 						x.Exists,
@@ -761,8 +761,8 @@ namespace Graficas.Grafo.Estáticos
 
 		#region IGrafica
 
-		IEdge<T> IGrafo<T>.this [T desde, T hasta]
-		{ 
+		IEdge<T> IGrafo<T>.this[T desde, T hasta]
+		{
 			get
 			{
 				return EncuentraArista (desde, hasta);
@@ -784,7 +784,7 @@ namespace Graficas.Grafo.Estáticos
 
 			foreach (var x in new List<T> (conjunto))
 				foreach (var y in new List<T> (conjunto))
-					ret [x, y] = this [x, y];
+					ret[x, y] = this[x, y];
 			return ret;
 		}
 
@@ -808,7 +808,7 @@ namespace Graficas.Grafo.Estáticos
 
 		ICollection<IEdge<T>> IGrafo<T>.Aristas ()
 		{
-			return new HashSet<IEdge<T>> (Aristas ().Cast <IEdge<T>> ());
+			return new HashSet<IEdge<T>> (Aristas ().Cast<IEdge<T>> ());
 		}
 
 		#endregion
@@ -833,7 +833,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="x">Vértice origen.</param>
 		/// <param name="y">Vértice destino.</param>
 		/// <returns>Devuelve el peso de la arista que une estos nodos. <see cref="float.PositiveInfinity"/> si no existe arista.</returns>
-		public bool this [T x, T y]
+		public bool this[T x, T y]
 		{
 			get
 			{
@@ -842,7 +842,7 @@ namespace Graficas.Grafo.Estáticos
 			set
 			{
 				if (SóloLectura)
-					throw new OperaciónAristaInválidaException ("Grafo es sólo lectura.");
+					throw new InvalidOperationException ("Graph is readonly.");
 				EncuentraArista (x, y).Exists = value;
 			}
 		}
@@ -874,8 +874,8 @@ namespace Graficas.Grafo.Estáticos
 		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
 		/// <remarks>Devuelve null si toda ruta de x a y toca a ignorar</remarks>
 		Ruta<T> CaminoÓptimo (T x,
-		                      T y,
-		                      ISet<T> ignorar)
+													T y,
+													ISet<T> ignorar)
 		{
 			Ruta<T> ret = null;
 
@@ -927,7 +927,7 @@ namespace Graficas.Grafo.Estáticos
 
 				foreach (var x in ret)
 				{
-					lista [x] = 0;
+					lista[x] = 0;
 				}
 
 				// Ahora seleecionar uno.
@@ -936,7 +936,7 @@ namespace Graficas.Grafo.Estáticos
 
 				foreach (var x in lista.Keys)
 				{
-					Suma += lista [x];
+					Suma += lista[x];
 					if (Suma >= rn)
 					{
 						ret.Add (x);

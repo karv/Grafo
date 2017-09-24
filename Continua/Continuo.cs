@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Graficas.Aristas;
 using Graficas.Grafo;
 using Graficas.Grafo.Estáticos;
 using Graficas.Rutas;
 using ListasExtra;
+using Graficas.Edges;
 
-namespace Graficas.Continuo
+namespace Graficas.Continua
 {
 
 	/// <summary>
@@ -75,7 +75,7 @@ namespace Graficas.Continuo
 		public IEnumerable<Punto<T>> PuntosArista (IEdge<T> arista)
 		{
 			var aris = arista.AsTuple ();
-			return PuntosArista (aris);
+			return PuntosArista (arista);
 		}
 
 		#endregion
@@ -119,7 +119,7 @@ namespace Graficas.Continuo
 		{
 			try
 			{
-				return puntosFijos [punto];
+				return puntosFijos[punto];
 			}
 			catch (KeyNotFoundException ex)
 			{
@@ -152,7 +152,7 @@ namespace Graficas.Continuo
 		{
 			Debug.Assert (
 				gráfica.SóloLectura,
-				"Este grafo debe ser sólo lectura para evitar comportamiento inesperado."); 
+				"Este grafo debe ser sólo lectura para evitar comportamiento inesperado.");
 			GrafoBase = gráfica;
 			ComparaPuntos = new ComparadorCoincidencia<T> (ComparaNodos);
 			puntosFijos = new Dictionary<T, Punto<T>> (ComparaNodos);
@@ -171,8 +171,8 @@ namespace Graficas.Continuo
 		/// <param name="final">Punto final.</param>
 		/// <param name="rutas">Conjunto de rutas óptimas previamente calculadas.</param>
 		public static Ruta<T> RutaÓptima (Punto<T> inicial,
-		                                  Punto<T> final,
-		                                  ConjuntoRutasÓptimas<T> rutas)
+																			Punto<T> final,
+																			ConjuntoRutasÓptimas<T> rutas)
 		{
 			var ruta = rutas.CaminoÓptimo (inicial.A, final.A);
 			var ret = new Ruta<T> (inicial);
