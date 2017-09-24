@@ -116,9 +116,9 @@ namespace Graficas.Continua
 		/// <summary>
 		/// Devuelve una enumeración de los puntos contenidos en esta ruta
 		/// </summary>
-		public List<Punto<T>> PuntosEnRuta (Continuo<T> gr)
+		public List<Punto<T>> PuntosEnRuta (GraphContinuum<T> gr)
 		{
-			return gr.Puntos.FindAll (Contiene);
+			return gr.Points.FindAll (Contiene);
 		}
 	}
 

@@ -98,7 +98,7 @@ namespace Graficas.Grafo.Dinámicos
 			{
 				var m = string.Format (
 									"Cannot get node {0}.", node);
-				throw new NodoInexistenteException (m, ex);
+				throw new NonExistentNodeException (m, ex);
 			}
 		}
 

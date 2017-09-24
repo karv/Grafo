@@ -97,7 +97,7 @@ namespace Graficas.Grafo.Estáticos
 				var m = string.Format (
 									"No se puede calcular vecindad de {0}. ¿Es un nodo de esta clase?",
 									nodo);
-				throw new NodoInexistenteException (m, ex);
+				throw new NonExistentNodeException (m, ex);
 			}
 		}
 

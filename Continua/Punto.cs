@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
-using ListasExtra;
 using System.Collections.Generic;
+using System.Linq;
 using Graficas.Edges;
+using ListasExtra;
 
 namespace Graficas.Continua
 {
@@ -39,7 +39,7 @@ namespace Graficas.Continua
 		/// </summary>
 		public void Remove ()
 		{
-			Universo.Puntos.Remove (this);
+			Universo.Points.Remove (this);
 		}
 
 		#endregion
@@ -48,7 +48,7 @@ namespace Graficas.Continua
 
 		/// <param name="universo">Continuo donde vive este punto</param>
 		/// <param name="nodo">Nodo donde 'poner' el punto</param>
-		public Punto (Continuo<T> universo, T nodo)
+		public Punto (GraphContinuum<T> universo, T nodo)
 			: this (universo, nodo, default (T), 0)
 		{
 		}
@@ -60,7 +60,7 @@ namespace Graficas.Continua
 
 		/// <param name="universo">Universo.</param>
 		/// <remarks>Asegúrese de asignar un valor a A al heredar este constructor.</remarks>
-		protected Punto (Continuo<T> universo)
+		protected Punto (GraphContinuum<T> universo)
 		{
 			Universo = universo;
 		}
@@ -71,13 +71,13 @@ namespace Graficas.Continua
 		/// <param name="dist">Distancia de este punto al primer punto fijo dado</param>
 		/// <remarks>Hacer p1 == null hace que este punto nuevo coincida con el primer punto. 
 		/// Hacer a p0 == null tira exception.</remarks>
-		public Punto (Continuo<T> universo, T p0, T p1, float dist)
+		public Punto (GraphContinuum<T> universo, T p0, T p1, float dist)
 		{
 			Universo = universo;
 			A = p0;
 			B = p1;
 			Loc = dist;
-			Universo.Puntos.Add (this);
+			Universo.Points.Add (this);
 		}
 
 
@@ -177,7 +177,7 @@ namespace Graficas.Continua
 		{
 			if (EnOrigen)
 			{
-				if (Universo.ComparaNodos.Equals (A, extremo))
+				if (Universo.NodeComparer.Equals (A, extremo))
 					return 0;
 				var ar = Universo.GrafoBase.EncuentraArista (A, extremo);
 				if (ar.Exists)
@@ -187,9 +187,9 @@ namespace Graficas.Continua
 					extremo,
 					this));
 			}
-			if (Universo.ComparaNodos.Equals (extremo, A))
+			if (Universo.NodeComparer.Equals (extremo, A))
 				return Loc;
-			if (Universo.ComparaNodos.Equals (extremo, B))
+			if (Universo.NodeComparer.Equals (extremo, B))
 				return Aloc;
 
 			throw new IndexOutOfRangeException (string.Format (
@@ -206,7 +206,7 @@ namespace Graficas.Continua
 		/// <summary>
 		/// El universo donde habita este continuo
 		/// </summary>
-		protected readonly Continuo<T> Universo;
+		protected readonly GraphContinuum<T> Universo;
 
 		/// <summary>
 		/// Revisa y devuelve si este punto está en un nodo.
@@ -241,7 +241,7 @@ namespace Graficas.Continua
 				if (punto.EnOrigen)
 				{
 					// True si son vecinos según Universo
-					return Universo.ComparaNodos.Equals (A, punto.A) ||
+					return Universo.NodeComparer.Equals (A, punto.A) ||
 					Universo.GrafoBase.ExisteArista (A, punto.A);
 				}
 				else
@@ -265,8 +265,8 @@ namespace Graficas.Continua
 		{
 			if (EnOrigen)
 			{
-				return Universo.ComparaNodos.Equals (A, p1) ||
-				Universo.ComparaNodos.Equals (A, p2);
+				return Universo.NodeComparer.Equals (A, p1) ||
+				Universo.NodeComparer.Equals (A, p2);
 			}
 			return new ParNoOrdenado<T> (p1, p2).Equals (Extremos);
 		}
@@ -281,10 +281,10 @@ namespace Graficas.Continua
 			{
 				T orig = A; // Posición de este punto.
 										// Si estoy en vértice
-				var ret = new HashSet<Punto<T>> (Universo.Puntos.Where (x => x.Extremos.Contiene (orig)));
+				var ret = new HashSet<Punto<T>> (Universo.Points.Where (x => x.Extremos.Contiene (orig)));
 				return ret;
 			}
-			return Universo.PuntosEnIntervalo (A, B);
+			return Universo.PointsInEdge (A, B);
 		}
 
 		#endregion
@@ -305,7 +305,7 @@ namespace Graficas.Continua
 			{
 				using (var anterior = Clonar ())
 				{
-					if (Universo.ComparaNodos.Equals (destino, A))
+					if (Universo.NodeComparer.Equals (destino, A))
 					{
 						Loc -= dist;
 					}
@@ -419,7 +419,7 @@ namespace Graficas.Continua
 			{
 				AvanzarHacia (A, ref avance);
 			}
-			return Universo.ComparaPuntos.Equals (destino, this);
+			return Universo.PointComparer.Equals (destino, this);
 		}
 
 		#endregion
@@ -486,16 +486,16 @@ namespace Graficas.Continua
 				if (other == null)
 					return false;
 				if (EnOrigen)
-					return (other.EnOrigen && Universo.ComparaNodos.Equals (A, other.A));
+					return (other.EnOrigen && Universo.NodeComparer.Equals (A, other.A));
 				var ret =
-					(Universo.ComparaNodos.Equals (A, other.A) &&
-					Universo.ComparaNodos.Equals (B, other.B) &&
+					(Universo.NodeComparer.Equals (A, other.A) &&
+					Universo.NodeComparer.Equals (B, other.B) &&
 					Loc == other.Loc)
 
 					||
 
-					(Universo.ComparaNodos.Equals (A, other.B) &&
-					Universo.ComparaNodos.Equals (B, other.A) &&
+					(Universo.NodeComparer.Equals (A, other.B) &&
+					Universo.NodeComparer.Equals (B, other.A) &&
 					Loc == other.Aloc);
 				return ret;
 			}
@@ -530,7 +530,7 @@ namespace Graficas.Continua
 
 		void IDisposable.Dispose ()
 		{
-			Universo.Puntos.Remove (this);
+			Universo.Points.Remove (this);
 		}
 
 		#endregion

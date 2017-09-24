@@ -205,7 +205,7 @@ namespace Graficas.Grafo.Estáticos
 			}
 
 			if (index0 == -1 || index1 == -1)
-				throw new NodoInexistenteException ();
+				throw new NonExistentNodeException ();
 			return Data[index0, index1];
 		}
 

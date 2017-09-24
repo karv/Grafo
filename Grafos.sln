@@ -60,6 +60,12 @@ Global
 		$2.NewLineForFinally = False
 		$2.NewLineForClausesInQuery = False
 		$2.SpaceBeforeOpenSquareBracket = True
+		$2.IndentSwitchSection = True
+		$2.IndentSwitchCaseSection = True
+		$2.NewLineForMembersInObjectInit = True
+		$2.NewLineForMembersInAnonymousTypes = True
+		$2.SpacingAfterMethodDeclarationName = False
+		$2.SpaceAfterMethodCallName = False
 		$0.TextStylePolicy = $3
 		$3.scope = text/plain
 		$0.VersionControlPolicy = $4

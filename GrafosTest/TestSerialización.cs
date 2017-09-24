@@ -74,10 +74,10 @@ namespace Test
 		{
 			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
 			gr [0, 1] = 1;
-			var c = new Continuo<Objeto> (gr);
+			var c = new GraphContinuum<Objeto> (gr);
 			c.AgregaPunto (0, 1, 0.3f);
 			Store.BinarySerialization.WriteToBinaryFile ("continuo", c);
-			var c2 = Store.BinarySerialization.ReadFromBinaryFile<Continuo<Objeto>> ("continuo");
+			var c2 = Store.BinarySerialization.ReadFromBinaryFile<GraphContinuum<Objeto>> ("continuo");
 			Assert.True (c2.Puntos.Count == c.Puntos.Count);
 		}
 
