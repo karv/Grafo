@@ -99,13 +99,13 @@ Ejecute Calcular () antes de llamar esta función");
 		public void Calcular (IGrafo<TNodo> gr)
 		{
 			rutas = new HashSet<IRuta<TNodo>> ();
-			agregarDiagonal (gr.Nodos);
+			agregarDiagonal (gr.Nodes);
 
 			var cmp = EqualityComparer<TNodo>.Default;
 
-			foreach (var x in gr.Nodos)
+			foreach (var x in gr.Nodes)
 			{
-				foreach (var y in gr.Nodos)
+				foreach (var y in gr.Nodes)
 				{
 					var ar = gr[x, y];
 					if (!ar.Exists)

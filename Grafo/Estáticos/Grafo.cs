@@ -251,7 +251,7 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		/// <returns>The ruta.</returns>
 		/// <param name="seq">Sucesión consistente</param>
-		public IRuta<T> ToRuta (IEnumerable<T> seq)
+		public IRuta<T> ToPath (IEnumerable<T> seq)
 		{
 			var ret = new Ruta<T> ();
 			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
@@ -338,7 +338,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="sóloLectura">If set to <c>true</c> sólo lectura.</param>
 		/// <param name="graf">Grafo a clonar</param>
 		public Grafo (IGrafo<T> graf, bool sóloLectura = true)
-			: base (graf.Nodos, false, sóloLectura)
+			: base (graf.Nodes, false, sóloLectura)
 		{
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < NumNodos; j++)
@@ -366,7 +366,7 @@ namespace Graficas.Grafo.Estáticos
 
 		#region IGrafo
 
-		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		IGrafo<T> IGrafo<T>.Subgraph (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (conjunto);
 		}
@@ -402,12 +402,12 @@ namespace Graficas.Grafo.Estáticos
 		/// <summary>
 		/// Devuelve una nueva colección con las aristas existentes
 		/// </summary>
-		ICollection<IEdge<T>> IGrafo<T>.Aristas ()
+		ICollection<IEdge<T>> IGrafo<T>.Edges ()
 		{
 			return new HashSet<IEdge<T>> (Data.Cast<WeightedEdge<T, TData>> ().Where (x => x.Exists));
 		}
 
-		ICollection<T> IGrafo<T>.Nodos
+		ICollection<T> IGrafo<T>.Nodes
 		{
 			get
 			{
@@ -415,7 +415,7 @@ namespace Graficas.Grafo.Estáticos
 			}
 		}
 
-		ICollection<T> IGrafo<T>.Vecinos (T nodo)
+		ICollection<T> IGrafo<T>.Neighborhood (T nodo)
 		{
 			return Vecino (nodo);
 		}
@@ -683,7 +683,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <param name="sóloLectura">If set to <c>true</c> sólo lectura.</param>
 		/// <param name="graf">Grafo a clonar.</param>
 		public Grafo (IGrafo<T> graf, bool sóloLectura = true)
-			: base (graf.Nodos, false, sóloLectura)
+			: base (graf.Nodes, false, sóloLectura)
 		{
 			for (int i = 0; i < NumNodos; i++)
 				for (int j = 0; j < NumNodos; j++)
@@ -788,12 +788,12 @@ namespace Graficas.Grafo.Estáticos
 			return ret;
 		}
 
-		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		IGrafo<T> IGrafo<T>.Subgraph (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (new HashSet<T> (conjunto));
 		}
 
-		ICollection<T> IGrafo<T>.Nodos
+		ICollection<T> IGrafo<T>.Nodes
 		{
 			get
 			{
@@ -801,12 +801,12 @@ namespace Graficas.Grafo.Estáticos
 			}
 		}
 
-		ICollection<T> IGrafo<T>.Vecinos (T nodo)
+		ICollection<T> IGrafo<T>.Neighborhood (T nodo)
 		{
 			return Vecino (nodo);
 		}
 
-		ICollection<IEdge<T>> IGrafo<T>.Aristas ()
+		ICollection<IEdge<T>> IGrafo<T>.Edges ()
 		{
 			return new HashSet<IEdge<T>> (Aristas ().Cast<IEdge<T>> ());
 		}

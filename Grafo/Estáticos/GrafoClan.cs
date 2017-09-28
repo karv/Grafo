@@ -35,7 +35,7 @@ namespace Graficas.Grafo.Estáticos
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public IGrafo<T> Subgrafo (IEnumerable<T> conjunto)
+		public IGrafo<T> Subgraph (IEnumerable<T> conjunto)
 		{
 			throw new NotImplementedException ();
 		}
@@ -135,7 +135,7 @@ namespace Graficas.Grafo.Estáticos
 			}
 		}
 
-		ICollection<IEdge<T>> IGrafo<T>.Aristas ()
+		ICollection<IEdge<T>> IGrafo<T>.Edges ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -181,7 +181,7 @@ namespace Graficas.Grafo.Estáticos
 			_nodos.Add (hasta);
 			NuevoClan.Add (desde);
 			NuevoClan.Add (hasta);
-			foreach (var z in Nodos)
+			foreach (var z in Nodes)
 			{
 				if (!NuevoClan.Contains (z))
 				{
@@ -205,7 +205,7 @@ namespace Graficas.Grafo.Estáticos
 		/// Colección de vecinos de un nodo
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public ICollection<T> Vecinos (T nodo)
+		public ICollection<T> Neighborhood (T nodo)
 		{
 			var ret = new HashSet<T> ();
 			foreach (var c in clanes)
@@ -221,7 +221,7 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		/// <returns>The ruta.</returns>
 		/// <param name="seq">Sucesión consistente.</param>
-		public Graficas.Rutas.IRuta<T> ToRuta (IEnumerable<T> seq)
+		public Graficas.Rutas.IRuta<T> ToPath (IEnumerable<T> seq)
 		{
 			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T> ();
 			var lst = new List<T> (seq);
@@ -249,7 +249,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <summary>
 		/// Devuelve una colección de los nodos
 		/// </summary>
-		public ICollection<T> Nodos
+		public ICollection<T> Nodes
 		{
 			get
 			{

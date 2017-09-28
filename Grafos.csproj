@@ -82,7 +82,7 @@
     <Compile Include="Grafo\Estáticos\Grafo.cs" />
     <Compile Include="Grafo\Estáticos\GrafoClan.cs" />
     <Compile Include="Grafo\Estáticos\GrafoVecindad.cs" />
-    <Compile Include="Grafo\Dinámicos\GrafoVecindad.cs" />
+    <Compile Include="Grafo\Dinámicos\NeighborGraph.cs" />
     <Compile Include="Edges\IDirectedEdge.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

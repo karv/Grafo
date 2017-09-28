@@ -50,7 +50,7 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-		ICollection<IEdge<T>> IGrafo<T>.Aristas ()
+		ICollection<IEdge<T>> IGrafo<T>.Edges ()
 		{
 			return Aristas () as ICollection<IEdge<T>>;
 		}
@@ -58,7 +58,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Convierte una sucesión coherente en ruta
 		/// </summary>
-		public IRuta<T> ToRuta (IEnumerable<T> seq)
+		public IRuta<T> ToPath (IEnumerable<T> seq)
 		{
 			var Nods = new List<Nodo<T>> ();
 			foreach (var x in seq)
@@ -93,7 +93,7 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		IGrafo<T> IGrafo<T>.Subgraph (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (conjunto);
 		}
@@ -110,16 +110,16 @@ namespace Graficas.Grafo
 			: this ()
 		{
 			// Primero crear los nodos
-			foreach (var x in graf.Nodos)
+			foreach (var x in graf.Nodes)
 			{
 				Add (x);
 			}
 
 			// Hacer la topología
-			foreach (var item in graf.Nodos)
+			foreach (var item in graf.Nodes)
 			{
 				Nodo<T> nodoDeItem = AsNodo (item);
-				foreach (var x in graf.Vecinos (item))
+				foreach (var x in graf.Neighborhood (item))
 					nodoDeItem.Vecindad.Add (AsNodo (x));
 			}
 		}
@@ -160,7 +160,7 @@ namespace Graficas.Grafo
 			}
 		}
 
-		ICollection<T> IGrafo<T>.Vecinos (T nodo)
+		ICollection<T> IGrafo<T>.Neighborhood (T nodo)
 		{
 			var ret = new List<T> ();
 			foreach (var x in this[nodo].Vecindad)
@@ -174,7 +174,7 @@ namespace Graficas.Grafo
 		/// Devuelve una colección con los nodos de la gráfica
 		/// </summary>
 		/// <value>The nodos.</value>
-		public ICollection<T> Nodos
+		public ICollection<T> Nodes
 		{
 			get
 			{

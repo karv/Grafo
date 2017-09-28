@@ -73,7 +73,7 @@ namespace Graficas.Grafo.Estáticos
 		/// Colección de aristas existentes.
 		/// </summary>
 		/// <remarks>No preserva referencia </remarks>
-		public ICollection<IEdge<T>> Aristas ()
+		public ICollection<IEdge<T>> Edges ()
 		{
 			var ret = new HashSet<IEdge<T>> ();
 			foreach (var x in Vecindad)
@@ -86,7 +86,7 @@ namespace Graficas.Grafo.Estáticos
 		/// Devuelve una copia de la vecindad de un nodo dado.
 		/// </summary>
 		/// <param name="nodo">Nodoa a considedad su vecindad</param>
-		public ICollection<T> Vecinos (T nodo)
+		public ICollection<T> Neighborhood (T nodo)
 		{
 			try
 			{
@@ -106,7 +106,7 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		/// <returns>The ruta.</returns>
 		/// <param name="seq">Sucesión consistente.</param>
-		public IRuta<T> ToRuta (IEnumerable<T> seq)
+		public IRuta<T> ToPath (IEnumerable<T> seq)
 		{
 			var ret = new Ruta<T> ();
 			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
@@ -120,7 +120,7 @@ namespace Graficas.Grafo.Estáticos
 				}
 				else
 				{
-					if (!Vecinos (last).Contains (x))
+					if (!Neighborhood (last).Contains (x))
 						throw new RutaInconsistenteException ("La sucesión dada no representa una ruta.");
 					ret.Concat (new Step<T> (last, x));
 				}
@@ -150,7 +150,7 @@ namespace Graficas.Grafo.Estáticos
 			}
 		}
 
-		IGrafo<T> IGrafo<T>.Subgrafo (IEnumerable<T> conjunto)
+		IGrafo<T> IGrafo<T>.Subgraph (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (conjunto);
 		}
@@ -228,7 +228,7 @@ namespace Graficas.Grafo.Estáticos
 		/// Devuelve una colección sólo lectura de sus nodos
 		/// </summary>
 		/// <value>The nodos.</value>
-		public ICollection<T> Nodos
+		public ICollection<T> Nodes
 		{
 			get
 			{

@@ -18,7 +18,7 @@ namespace Graficas.Extensiones
 		public static ICollection<IGrafo<T>> ComponentesConexas<T> (this IGrafo<T> gr)
 			where T : IEquatable<T>
 		{
-			var nodosRestantes = new HashSet<T> (gr.Nodos);
+			var nodosRestantes = new HashSet<T> (gr.Nodes);
 			HashSet<T> Verdes;
 			var ret = new List<IGrafo<T>> ();
 
@@ -36,7 +36,7 @@ namespace Graficas.Extensiones
 					nubeAgregando = new HashSet<T> ();
 					foreach (var x in Verdes)
 					{
-						nubeAgregando.UnionWith (gr.Vecinos (x));
+						nubeAgregando.UnionWith (gr.Neighborhood (x));
 						nubeAgregando.ExceptWith (nubeActual);
 						nubeAgregando.ExceptWith (Verdes);
 					}
@@ -45,7 +45,7 @@ namespace Graficas.Extensiones
 				}
 				while (Verdes.Count > 0);
 
-				ret.Add (gr.Subgrafo (nubeActual));
+				ret.Add (gr.Subgraph (nubeActual));
 				nodosRestantes.ExceptWith (nubeActual);
 			}
 

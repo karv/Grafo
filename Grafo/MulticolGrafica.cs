@@ -23,12 +23,12 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public IGrafo<TNodo> Subgrafo (IEnumerable<TNodo> conjunto)
+		public IGrafo<TNodo> Subgraph (IEnumerable<TNodo> conjunto)
 		{
 			throw new NotImplementedException ();
 		}
 
-		ICollection<IEdge<TNodo>> IGrafo<TNodo>.Aristas ()
+		ICollection<IEdge<TNodo>> IGrafo<TNodo>.Edges ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -37,13 +37,13 @@ namespace Graficas.Grafo
 		/// Devuelve los vecinos de cualquier color de un nodo dado
 		/// </summary>
 		/// <param name="nodo">Nodo.</param>
-		public ICollection<TNodo> Vecinos (TNodo nodo)
+		public ICollection<TNodo> Neighborhood (TNodo nodo)
 		{
 			ISet<TNodo> ret = new HashSet<TNodo> ();
 
 			foreach (var color in _asignación.Keys)
 			{
-				ret.UnionWith (_asignación[color].Vecinos (nodo));
+				ret.UnionWith (_asignación[color].Neighborhood (nodo));
 			}
 			return ret;
 		}
@@ -53,7 +53,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <returns>The ruta.</returns>
 		/// <param name="seq">Sucesión consistente.</param>
-		public IRuta<TNodo> ToRuta (IEnumerable<TNodo> seq)
+		public IRuta<TNodo> ToPath (IEnumerable<TNodo> seq)
 		{
 			throw new NotImplementedException ();
 			/*
@@ -146,21 +146,21 @@ namespace Graficas.Grafo
 		public ICollection<TNodo> Vecinos (TNodo nodo, TColor color)
 		{
 			IGrafo<TNodo> graf;
-			return _asignación.TryGetValue (color, out graf) ? graf.Vecinos (nodo) : new TNodo[0];
+			return _asignación.TryGetValue (color, out graf) ? graf.Neighborhood (nodo) : new TNodo[0];
 		}
 
 		/// <summary>
 		/// Devuelve los nodos de la gráfica
 		/// </summary>
 		/// <value>The nodos.</value>
-		public ICollection<TNodo> Nodos
+		public ICollection<TNodo> Nodes
 		{
 			get
 			{
 				var ret = new List<TNodo> ();
 				foreach (var x in _asignación)
 				{
-					foreach (var nod in x.Value.Nodos)
+					foreach (var nod in x.Value.Nodes)
 					{
 						if (!ret.Contains (nod))
 							ret.Add (nod);
