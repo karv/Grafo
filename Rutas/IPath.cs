@@ -1,76 +1,49 @@
 ﻿using System.Collections.Generic;
 using Graficas.Edges;
-using System;
 
 namespace Graficas.Rutas
 {
 	/// <summary>
-	/// Una ruta de un grafo
+	/// A graph path.
 	/// </summary>
 	public interface IPath<T>
 	{
 		/// <summary>
-		/// Devuelve el nodo inicial
+		/// Gets the starting node.
 		/// </summary>
-		T NodoInicial { get; }
+		T StartNode { get; }
 
 		/// <summary>
-		/// Devuelve el nodo final
+		/// Gets the finish node.
 		/// </summary>
 		/// <value>The nodo final.</value>
-		T NodoFinal { get; }
+		T EndNode { get; }
 
 		/// <summary>
-		/// Devuelve el número de pasos
+		/// Gets the step count.
 		/// </summary>
-		int NumPasos { get; }
+		int StepCount { get; }
 
 		/// <summary>
-		/// Devuelve la longitud de la ruta
+		/// Gets the length.
 		/// </summary>
-		/// <value>The longitud.</value>
-		float Longitud { get; }
+		float Length { get; }
 
 		/// <summary>
-		/// Concatena esta ruta con un paso
+		/// Concatenates a step.
 		/// </summary>
-		/// <param name="paso">Paso con qué concatenar</param>
-		void Concat (IStep<T> paso);
+		/// <param name="step">Step to concatenate.</param>
+		void Concat (IStep<T> step);
 
 		/// <summary>
-		/// Concatena esta ruta con otra ruta
+		/// Concatenates a path.
 		/// </summary>
-		/// <param name="ruta">Ruta con qué concatenar</param>
-		void Concat (IPath<T> ruta);
+		/// <param name="path">Path to concatenate.</param>
+		void Concat (IPath<T> path);
 
 		/// <summary>
-		/// Enumera los pasos de la ruta
+		/// Enumerates the steps.
 		/// </summary>
-		IEnumerable<IStep<T>> Pasos { get; }
-	}
-
-	/// <summary>
-	/// Extensiones para rutas
-	/// </summary>
-	public static class RutaExt
-	{
-		/// <summary>
-		/// Devuelve la longitud de esta ruta, dada una función de peso
-		/// </summary>
-		/// <param name="ruta">Ruta.</param>
-		/// <param name="peso">Función de peso</param>
-		/// <typeparam name="T">Nodos de ruta</typeparam>
-		[Obsolete ("IRuta cuenta con propiedad Longitud.get")]
-		public static float Longitud<T> (this IPath<T> ruta,
-																		 Func<IEdge<T>, float> peso)
-			where T : IEquatable<T>
-		{
-			float ret = 0;
-			foreach (var x in ruta.Pasos)
-			{
-				ret += peso (x);
-			}
-			return ret;
-		}
+		IEnumerable<IStep<T>> Steps { get; }
 	}
 }
