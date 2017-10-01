@@ -60,8 +60,8 @@
     <Compile Include="Edges\HardEdge.cs" />
     <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
     <Compile Include="Rutas\HardRuta.cs" />
-    <Compile Include="Nodos\INodo.cs" />
-    <Compile Include="Nodos\Nodo.cs" />
+    <Compile Include="Nodos\INode.cs" />
+    <Compile Include="Nodos\Node.cs" />
     <Compile Include="Extensiones\GraphExt.cs" />
     <Compile Include="Edges\WeightedEdge.cs" />
     <Compile Include="Edges\ExistentialEdge.cs" />
