@@ -1,6 +1,6 @@
-﻿using Graficas.Edges;
+﻿using System.Collections.Generic;
+using Graficas.Edges;
 using Graficas.Rutas;
-using System.Collections.Generic;
 
 namespace Graficas.Grafo
 {
