@@ -66,7 +66,6 @@
     <Compile Include="Edges\WeightedEdge.cs" />
     <Compile Include="Edges\ExistentialEdge.cs" />
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
-    <Compile Include="Grafo\NodosCollectionComparer.cs" />
     <Compile Include="Grafo\DuplicatedColorException.cs" />
     <Compile Include="Grafo\NonExistentNodeException.cs" />
     <Compile Include="Edges\IStep.cs" />
@@ -75,7 +74,6 @@
     <Compile Include="Continua\MatchComparer.cs" />
     <Compile Include="Continua\ContinuumPoint.cs" />
     <Compile Include="Continua\Path.cs" />
-    <Compile Include="Grafo\OperaciónInválidaGrafosException.cs" />
     <Compile Include="Grafo\Estáticos\Graph.cs" />
     <Compile Include="Grafo\Dinámicos\NeighborGraph.cs" />
     <Compile Include="Edges\IDirectedEdge.cs" />
