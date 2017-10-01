@@ -70,7 +70,7 @@
     <Compile Include="Grafo\NonExistentNodeException.cs" />
     <Compile Include="Edges\IStep.cs" />
     <Compile Include="Edges\Step.cs" />
-    <Compile Include="Rutas\ComparadorPorPaso.cs" />
+    <Compile Include="Rutas\StepPathComparer.cs" />
     <Compile Include="Continua\MatchComparer.cs" />
     <Compile Include="Continua\ContinuumPoint.cs" />
     <Compile Include="Continua\Path.cs" />

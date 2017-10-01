@@ -5,35 +5,32 @@ using Graficas.Edges;
 namespace Graficas.Rutas
 {
 	/// <summary>
-	/// Un comparador de Rutas que hace la comparación paso a paso
-	/// con un comparador de nodos dado.
+	/// Step by step node comparer.
 	/// </summary>
-	public class ComparadorPorPaso<T> : IEqualityComparer<IPath<T>>
+	public class StepPathComparer<T> : IEqualityComparer<IPath<T>>
 	{
 		/// <summary>
+		/// Gets the node comparer,
 		/// </summary>
-		public ComparadorPorPaso ()
+		public IEqualityComparer<T> Comparador { get; }
+
+		/// <summary>
+		/// </summary>
+		public StepPathComparer ()
 		{
 			Comparador = EqualityComparer<T>.Default;
 		}
 
-		/// <param name="comparador">Comparador de nodos</param>
-		public ComparadorPorPaso (IEqualityComparer<T> comparador)
+		/// <param name="comparer">Node comparer.</param>
+		public StepPathComparer (IEqualityComparer<T> comparer)
 		{
-			if (comparador == null)
-				throw new ArgumentException (
-					"No se puede usar null como comparador",
-					"comparador");
-			Comparador = comparador;
+			Comparador = comparer ?? throw new ArgumentNullException (nameof (comparer));
 		}
 
-		IEqualityComparer<T> Comparador { get; }
 
 		/// <summary>
-		/// Revisa si dos rutas son equivalentes.
+		/// Determines whether two specified paths are equivalent.
 		/// </summary>
-		/// <param name="x">Primera ruta</param>
-		/// <param name="y">Segunda ruta</param>
 		public bool Equals (IPath<T> x, IPath<T> y)
 		{
 			if (x == null || y == null)
