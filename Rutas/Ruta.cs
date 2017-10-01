@@ -8,7 +8,7 @@ namespace Graficas.Rutas
 	/// Representa una ruta
 	/// </summary>
 	[Serializable]
-	public class Ruta<T> : IRuta<T>
+	public class Ruta<T> : IPath<T>
 	{
 		/// <summary>
 		/// 
@@ -37,7 +37,7 @@ namespace Graficas.Rutas
 		/// Construye una implementación de esta ruta, dada una ruta abstracta
 		/// </summary>
 		/// <param name="ruta">Ruta a imitar</param>
-		public Ruta (IRuta<T> ruta)
+		public Ruta (IPath<T> ruta)
 		{
 			if (ruta == null)
 				throw new ArgumentNullException ();
@@ -65,7 +65,7 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		IEnumerable<IStep<T>> IRuta<T>.Pasos
+		IEnumerable<IStep<T>> IPath<T>.Pasos
 		{
 			get
 			{
@@ -140,7 +140,7 @@ namespace Graficas.Rutas
 		/// Concatena esta ruta
 		/// </summary>
 		/// <param name="ruta">Ruta.</param>
-		public void Concat (IRuta<T> ruta)
+		public void Concat (IPath<T> ruta)
 		{
 			if (ruta.NumPasos == 0)
 				return;

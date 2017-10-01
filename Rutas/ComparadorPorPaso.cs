@@ -8,7 +8,7 @@ namespace Graficas.Rutas
 	/// Un comparador de Rutas que hace la comparación paso a paso
 	/// con un comparador de nodos dado.
 	/// </summary>
-	public class ComparadorPorPaso<T> : IEqualityComparer<IRuta<T>>
+	public class ComparadorPorPaso<T> : IEqualityComparer<IPath<T>>
 	{
 		/// <summary>
 		/// </summary>
@@ -34,7 +34,7 @@ namespace Graficas.Rutas
 		/// </summary>
 		/// <param name="x">Primera ruta</param>
 		/// <param name="y">Segunda ruta</param>
-		public bool Equals (IRuta<T> x, IRuta<T> y)
+		public bool Equals (IPath<T> x, IPath<T> y)
 		{
 			if (x == null || y == null)
 				return false;
@@ -66,7 +66,7 @@ namespace Graficas.Rutas
 		/// Gets the hash code.
 		/// </summary>
 		/// <param name="obj">Object.</param>
-		public int GetHashCode (IRuta<T> obj)
+		public int GetHashCode (IPath<T> obj)
 		{
 			if (obj == null)
 				return 0;

@@ -137,7 +137,7 @@ namespace Graficas.Continua
 			{
 				if (Universe.NodeComparer.Equals (A, extremo))
 					return 0;
-				var ar = Universe.GrafoBase.EncuentraArista (A, extremo);
+				var ar = Universe.GrafoBase.FindEdge (A, extremo);
 				if (ar.Exists)
 					return ar.Data;
 				throw new IndexOutOfRangeException (string.Format (
@@ -168,7 +168,7 @@ namespace Graficas.Continua
 				if (point.AtNode)
 				{
 					return Universe.NodeComparer.Equals (A, point.A) ||
-					Universe.GrafoBase.ExisteArista (A, point.A);
+					Universe.GrafoBase.EdgeExists (A, point.A);
 				}
 				else
 				{

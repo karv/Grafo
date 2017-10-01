@@ -18,7 +18,7 @@ namespace Graficas.Continua
 		/// <summary>
 		/// Graph producing this continnum.
 		/// </summary>
-		public Grafo<T, float> GrafoBase { get; }
+		public Graph<T, float> GrafoBase { get; }
 
 		/// <summary>
 		/// Observable points.
@@ -28,7 +28,7 @@ namespace Graficas.Continua
 		/// <summary>
 		/// Gets the comparer for nodes.
 		/// </summary>
-		public IEqualityComparer<T> NodeComparer => GrafoBase.Comparador;
+		public IEqualityComparer<T> NodeComparer => GrafoBase.NodeComparer;
 
 		/// <summary>
 		/// Gets the comparer for points.
@@ -124,12 +124,12 @@ namespace Graficas.Continua
 		}
 
 		/// <param name="gráfica">Base graph</param>
-		public GraphContinuum (Grafo<T, float> gráfica)
+		public GraphContinuum (Graph<T, float> gráfica)
 		{
-			GrafoBase = gráfica.SóloLectura ? gráfica : gráfica.ComoSóloLectura ();
+			GrafoBase = gráfica.IsReadOnly ? gráfica : gráfica.AsReadonly ();
 			PointComparer = new MatchComparer<T> (NodeComparer);
 			_fixedPoints = new Dictionary<T, ContinuumPoint<T>> (NodeComparer);
-			foreach (var x in gráfica.Nodos)
+			foreach (var x in gráfica.Nodes)
 				_fixedPoints.Add (x, AddPoint (x));
 		}
 

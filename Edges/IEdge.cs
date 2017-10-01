@@ -27,7 +27,6 @@ namespace Graficas.Edges
 		/// <summary>
 		/// Gets the antipodal node from a specified node, relative to this edge.
 		/// </summary>
-		/// <param name="nodo">Node.</param>
 		T Antipode (T node);
 	}
 }

@@ -12,7 +12,7 @@ namespace Graficas.Grafo
 	/// </summary>
 	[Serializable]
 	[Obsolete]
-	public class HardGrafo<T> : IGrafo<T>
+	public class HardGrafo<T> : IGraph<T>
 		where T : IEquatable<T>
 	{
 		readonly HashSet<Nodo<T>> _nodos = new HashSet<Nodo<T>> ();
@@ -50,7 +50,7 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-		ICollection<IEdge<T>> IGrafo<T>.Edges ()
+		IEnumerable<IEdge<T>> IGraph<T>.Edges ()
 		{
 			return Aristas () as ICollection<IEdge<T>>;
 		}
@@ -58,7 +58,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// Convierte una sucesión coherente en ruta
 		/// </summary>
-		public IRuta<T> ToPath (IEnumerable<T> seq)
+		public IPath<T> ToPath (IEnumerable<T> seq)
 		{
 			var Nods = new List<Nodo<T>> ();
 			foreach (var x in seq)
@@ -93,7 +93,7 @@ namespace Graficas.Grafo
 			return ret;
 		}
 
-		IGrafo<T> IGrafo<T>.Subgraph (IEnumerable<T> conjunto)
+		IGraph<T> IGraph<T>.Subgraph (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (conjunto);
 		}
@@ -106,7 +106,7 @@ namespace Graficas.Grafo
 		}
 
 		/// <param name="graf">Gráfica de dónde copiar la información.</param>
-		public HardGrafo (IGrafo<T> graf)
+		public HardGrafo (IGraph<T> graf)
 			: this ()
 		{
 			// Primero crear los nodos
@@ -152,7 +152,7 @@ namespace Graficas.Grafo
 
 		#region IGrafica implementation
 
-		IEdge<T> IGrafo<T>.this[T desde, T hasta]
+		IEdge<T> IGraph<T>.this[T desde, T hasta]
 		{
 			get
 			{
@@ -160,7 +160,7 @@ namespace Graficas.Grafo
 			}
 		}
 
-		ICollection<T> IGrafo<T>.Neighborhood (T nodo)
+		ICollection<T> IGraph<T>.Neighborhood (T nodo)
 		{
 			var ret = new List<T> ();
 			foreach (var x in this[nodo].Vecindad)
@@ -240,6 +240,21 @@ namespace Graficas.Grafo
 			_nodos.Remove (AsNodo (item));
 		}
 
+		int IGraph<T>.EdgeCount ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		void IGraph<T>.Clear ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		IPath<T> IGraph<T>.ToPath (IEnumerable<T> seq)
+		{
+			throw new NotImplementedException ();
+		}
+
 		/// <summary>
 		/// Devuelve el número de nodos.
 		/// </summary>
@@ -251,6 +266,10 @@ namespace Graficas.Grafo
 				return _nodos.Count;
 			}
 		}
+
+		IEnumerable<T> IGraph<T>.Nodes => throw new NotImplementedException ();
+
+		int IGraph<T>.NodeCount => throw new NotImplementedException ();
 
 		#endregion
 	}

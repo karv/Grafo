@@ -15,7 +15,7 @@ namespace Graficas.Grafo
 		/// <summary>
 		/// La asignación de color -> Gráfica
 		/// </summary>
-		readonly Dictionary<TColor, IGrafo<TNodo>> _asignación = new Dictionary<TColor, IGrafo<TNodo>> ();
+		readonly Dictionary<TColor, IGraph<TNodo>> _asignación = new Dictionary<TColor, IGraph<TNodo>> ();
 
 		#region IGrafica
 
@@ -23,12 +23,12 @@ namespace Graficas.Grafo
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public IGrafo<TNodo> Subgraph (IEnumerable<TNodo> conjunto)
+		public IGraph<TNodo> Subgraph (IEnumerable<TNodo> conjunto)
 		{
 			throw new NotImplementedException ();
 		}
 
-		ICollection<IEdge<TNodo>> IGrafo<TNodo>.Edges ()
+		IEnumerable<IEdge<TNodo>> IGraph<TNodo>.Edges ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -53,7 +53,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <returns>The ruta.</returns>
 		/// <param name="seq">Sucesión consistente.</param>
-		public IRuta<TNodo> ToPath (IEnumerable<TNodo> seq)
+		public IPath<TNodo> ToPath (IEnumerable<TNodo> seq)
 		{
 			throw new NotImplementedException ();
 			/*
@@ -77,7 +77,7 @@ namespace Graficas.Grafo
 			*/
 		}
 
-		IEdge<TNodo> IGrafo<TNodo>.this[TNodo desde, TNodo hasta]
+		IEdge<TNodo> IGraph<TNodo>.this[TNodo desde, TNodo hasta]
 		{
 			get
 			{
@@ -118,7 +118,7 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <param name="color">Nombre del color</param>
 		/// <param name="grafo">Grafo que modela este color</param>
-		public void AgregaColor (TColor color, IGrafo<TNodo> grafo)
+		public void AgregaColor (TColor color, IGraph<TNodo> grafo)
 		{
 			if (_asignación.ContainsKey (color))
 				throw new ColorDuplicadoException ("Ya existe el color " + color);
@@ -130,9 +130,9 @@ namespace Graficas.Grafo
 		/// </summary>
 		/// <returns>The color.</returns>
 		/// <param name="color">Color.</param>
-		public IGrafo<TNodo> GrafoColor (TColor color)
+		public IGraph<TNodo> GrafoColor (TColor color)
 		{
-			IGrafo<TNodo> ret;
+			IGraph<TNodo> ret;
 			if (_asignación.TryGetValue (color, out ret))
 				return ret;
 			throw new Exception (string.Format ("Color {0} no existe.", color));
@@ -145,8 +145,53 @@ namespace Graficas.Grafo
 		/// <param name="color">Color.</param>
 		public ICollection<TNodo> Vecinos (TNodo nodo, TColor color)
 		{
-			IGrafo<TNodo> graf;
+			IGraph<TNodo> graf;
 			return _asignación.TryGetValue (color, out graf) ? graf.Neighborhood (nodo) : new TNodo[0];
+		}
+
+		ICollection<TNodo> IMulticolGrafo<TNodo, TColor>.Vecinos (TNodo nodo, TColor color)
+		{
+			throw new NotImplementedException ();
+		}
+
+		void IMulticolGrafo<TNodo, TColor>.AgregaColor (TColor color, IGraph<TNodo> grafo)
+		{
+			throw new NotImplementedException ();
+		}
+
+		IGraph<TNodo> IMulticolGrafo<TNodo, TColor>.GrafoColor (TColor color)
+		{
+			throw new NotImplementedException ();
+		}
+
+		IEnumerable<TColor> IMulticolGrafo<TNodo, TColor>.ColoresArista (IEdge<TNodo> aris)
+		{
+			throw new NotImplementedException ();
+		}
+
+		int IGraph<TNodo>.EdgeCount ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		void IGraph<TNodo>.Clear ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		ICollection<TNodo> IGraph<TNodo>.Neighborhood (TNodo node)
+		{
+			throw new NotImplementedException ();
+		}
+
+		IPath<TNodo> IGraph<TNodo>.ToPath (IEnumerable<TNodo> seq)
+		{
+			throw new NotImplementedException ();
+		}
+
+		IGraph<TNodo> IGraph<TNodo>.Subgraph (IEnumerable<TNodo> nodeSubset)
+		{
+			throw new NotImplementedException ();
 		}
 
 		/// <summary>
@@ -169,6 +214,10 @@ namespace Graficas.Grafo
 				return ret;
 			}
 		}
+
+		IEnumerable<TNodo> IGraph<TNodo>.Nodes => throw new NotImplementedException ();
+
+		int IGraph<TNodo>.NodeCount => throw new NotImplementedException ();
 
 		#endregion
 	}

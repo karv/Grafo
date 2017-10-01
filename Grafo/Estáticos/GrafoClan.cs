@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Graficas.Edges;
+using Graficas.Rutas;
 
 namespace Graficas.Grafo.Estáticos
 {
@@ -10,7 +11,7 @@ namespace Graficas.Grafo.Estáticos
 	/// </summary>
 	[Serializable]
 	[Obsolete]
-	public class GrafoClan<T> : IGrafo<T>
+	public class GrafoClan<T> : IGraph<T>
 		where T : IEquatable<T>
 	{
 		[Serializable]
@@ -35,7 +36,7 @@ namespace Graficas.Grafo.Estáticos
 		/// Calcula el subgrafo generado por un subconjutno de Nodos
 		/// </summary>
 		/// <param name="conjunto">Conjunto de nodos para calcular el subgrafo</param>
-		public IGrafo<T> Subgraph (IEnumerable<T> conjunto)
+		public IGraph<T> Subgraph (IEnumerable<T> conjunto)
 		{
 			throw new NotImplementedException ();
 		}
@@ -127,7 +128,7 @@ namespace Graficas.Grafo.Estáticos
 			return new ExistentialEdge<T> (desde, hasta, ExisteArista (desde, hasta), true);
 		}
 
-		IEdge<T> IGrafo<T>.this[T desde, T hasta]
+		IEdge<T> IGraph<T>.this[T desde, T hasta]
 		{
 			get
 			{
@@ -135,7 +136,7 @@ namespace Graficas.Grafo.Estáticos
 			}
 		}
 
-		ICollection<IEdge<T>> IGrafo<T>.Edges ()
+		IEnumerable<IEdge<T>> IGraph<T>.Edges ()
 		{
 			throw new NotImplementedException ();
 		}
@@ -221,7 +222,7 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		/// <returns>The ruta.</returns>
 		/// <param name="seq">Sucesión consistente.</param>
-		public Graficas.Rutas.IRuta<T> ToPath (IEnumerable<T> seq)
+		public Graficas.Rutas.IPath<T> ToPath (IEnumerable<T> seq)
 		{
 			Rutas.Ruta<T> ret = new Graficas.Rutas.Ruta<T> ();
 			var lst = new List<T> (seq);
@@ -241,7 +242,7 @@ namespace Graficas.Grafo.Estáticos
 		/// <returns>The óptima.</returns>
 		/// <param name="x">Origen</param>
 		/// <param name="y">Destino</param>
-		public Graficas.Rutas.IRuta<T> RutaÓptima (T x, T y)
+		public Graficas.Rutas.IPath<T> RutaÓptima (T x, T y)
 		{
 			throw new NotImplementedException ();
 		}
@@ -256,6 +257,10 @@ namespace Graficas.Grafo.Estáticos
 				return _nodos;
 			}
 		}
+
+		IEnumerable<T> IGraph<T>.Nodes => throw new NotImplementedException ();
+
+		int IGraph<T>.NodeCount => throw new NotImplementedException ();
 
 		#endregion
 
@@ -272,6 +277,31 @@ namespace Graficas.Grafo.Estáticos
 					return true;
 			}
 			return false;
+		}
+
+		int IGraph<T>.EdgeCount ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		void IGraph<T>.Clear ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		ICollection<T> IGraph<T>.Neighborhood (T node)
+		{
+			throw new NotImplementedException ();
+		}
+
+		IPath<T> IGraph<T>.ToPath (IEnumerable<T> seq)
+		{
+			throw new NotImplementedException ();
+		}
+
+		IGraph<T> IGraph<T>.Subgraph (IEnumerable<T> nodeSubset)
+		{
+			throw new NotImplementedException ();
 		}
 	}
 }

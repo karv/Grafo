@@ -6,7 +6,7 @@ namespace Graficas.Grafo
 	/// <summary>
 	/// Provee método para encontrar ruta óptima entre puntos
 	/// </summary>
-	public interface IGrafoRutas<T> : IGrafo<T>
+	public interface IGrafoRutas<T> : IGraph<T>
 		where T : IEquatable<T>
 	{
 		/// <summary>
@@ -15,6 +15,6 @@ namespace Graficas.Grafo
 		/// <returns>Devuelve una ruta de menor longitud</returns>
 		/// <param name="x">Origen</param>
 		/// <param name="y">Final</param>
-		IRuta<T> RutaÓptima (T x, T y);
+		IPath<T> RutaÓptima (T x, T y);
 	}
 }

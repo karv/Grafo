@@ -8,7 +8,7 @@ namespace Graficas.Rutas
 	/// <summary>
 	/// Representa una ruta dinámica según un grafo asociado.
 	/// </summary>
-	public class HardRuta<T> : IRuta<T>
+	public class HardRuta<T> : IPath<T>
 		where T : IEquatable<T>
 	{
 		List<Nodo<T>> _pasos { get; set; }
@@ -61,7 +61,7 @@ namespace Graficas.Rutas
 			}
 		}
 
-		T IRuta<T>.NodoInicial
+		T IPath<T>.NodoInicial
 		{
 			get
 			{
@@ -69,7 +69,7 @@ namespace Graficas.Rutas
 			}
 		}
 
-		T IRuta<T>.NodoFinal
+		T IPath<T>.NodoFinal
 		{
 			get
 			{
@@ -98,7 +98,7 @@ namespace Graficas.Rutas
 		/// Concatena esta ruta con otra
 		/// </summary>
 		/// <param name="ruta">Ruta.</param>
-		public void Concat (IRuta<T> ruta)
+		public void Concat (IPath<T> ruta)
 		{
 			if (!NodoFinal.Objeto.Equals (ruta.NodoInicial))
 				throw new Exception ("Nodo final de la ruta no concide con origen del paso.");

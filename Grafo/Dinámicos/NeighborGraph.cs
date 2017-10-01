@@ -10,7 +10,7 @@ namespace Graficas.Grafo.Dinámicos
 	/// <summary>
 	/// A graph implemented as a collection of neighborhoods.
 	/// </summary>
-	public class NeighborGraph<TNode> : IGrafo<TNode>
+	public class NeighborGraph<TNode> : IGraph<TNode>
 	{
 		/// <summary>
 		/// Gets a value indicating whether the specified edge exists.
@@ -36,6 +36,11 @@ namespace Graficas.Grafo.Dinámicos
 		public ReadOnlyCollection<TNode> Nodes => new List<TNode> (Neighbor.Keys).AsReadOnly ();
 
 		/// <summary>
+		/// Gets the node count.
+		/// </summary>
+		public int NodeCount => Neighbor.Keys.Count;
+
+		/// <summary>
 		/// Gets the node comparer.
 		/// </summary>
 		public IEqualityComparer<TNode> NodeComparer { get; }
@@ -51,9 +56,9 @@ namespace Graficas.Grafo.Dinámicos
 		/// </summary>
 		protected Dictionary<TNode, HashSet<TNode>> Neighbor { get; }
 
-		IEdge<TNode> IGrafo<TNode>.this[TNode desde, TNode hasta] => Arista (desde, hasta);
+		IEdge<TNode> IGraph<TNode>.this[TNode desde, TNode hasta] => Arista (desde, hasta);
 
-		ICollection<TNode> IGrafo<TNode>.Nodes => Nodes;
+		IEnumerable<TNode> IGraph<TNode>.Nodes => Nodes;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Dinámicos.NeighborGraph{TNode}"/> class.
@@ -89,12 +94,21 @@ namespace Graficas.Grafo.Dinámicos
 		/// Gets the collection of edges.
 		/// </summary>
 		/// <remarks>Reference is nor preserved.</remarks>
-		public ICollection<IEdge<TNode>> Edges ()
+		public IEnumerable<IEdge<TNode>> Edges ()
 		{
-			var ret = new HashSet<IEdge<TNode>> ();
 			foreach (var x in Neighbor)
 				foreach (var y in x.Value)
-					ret.Add (new ExistentialEdge<TNode> (x.Key, y, true, true, IsSymmetric));
+					yield return new ExistentialEdge<TNode> (x.Key, y, true, true, IsSymmetric);
+		}
+
+		/// <summary>
+		/// Gets the edge count.
+		/// </summary>
+		public int EdgeCount ()
+		{
+			var ret = 0;
+			foreach (var z in Neighbor)
+				ret += z.Value.Count;
 			return ret;
 		}
 
@@ -147,9 +161,9 @@ namespace Graficas.Grafo.Dinámicos
 		}
 
 		/// <summary>
-		/// Convers a sequence of nodes into a <see cref="IRuta{TNode}"/>
+		/// Convers a sequence of nodes into a <see cref="IPath{TNode}"/>
 		/// </summary>
-		public IRuta<TNode> ToPath (IEnumerable<TNode> seq)
+		public IPath<TNode> ToPath (IEnumerable<TNode> seq)
 		{
 			var ret = new Ruta<TNode> ();
 			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
@@ -233,7 +247,7 @@ namespace Graficas.Grafo.Dinámicos
 			vec.Add (destination);
 		}
 
-		IGrafo<TNode> IGrafo<TNode>.Subgraph (IEnumerable<TNode> conjunto)
+		IGraph<TNode> IGraph<TNode>.Subgraph (IEnumerable<TNode> conjunto)
 		{
 			return Subgraph (conjunto);
 		}

@@ -7,7 +7,7 @@ namespace Graficas.Rutas
 	/// <summary>
 	/// Una ruta de un grafo
 	/// </summary>
-	public interface IRuta<T>
+	public interface IPath<T>
 	{
 		/// <summary>
 		/// Devuelve el nodo inicial
@@ -41,7 +41,7 @@ namespace Graficas.Rutas
 		/// Concatena esta ruta con otra ruta
 		/// </summary>
 		/// <param name="ruta">Ruta con qué concatenar</param>
-		void Concat (IRuta<T> ruta);
+		void Concat (IPath<T> ruta);
 
 		/// <summary>
 		/// Enumera los pasos de la ruta
@@ -61,7 +61,7 @@ namespace Graficas.Rutas
 		/// <param name="peso">Función de peso</param>
 		/// <typeparam name="T">Nodos de ruta</typeparam>
 		[Obsolete ("IRuta cuenta con propiedad Longitud.get")]
-		public static float Longitud<T> (this IRuta<T> ruta,
+		public static float Longitud<T> (this IPath<T> ruta,
 																		 Func<IEdge<T>, float> peso)
 			where T : IEquatable<T>
 		{

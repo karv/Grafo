@@ -9,7 +9,7 @@ namespace Graficas.Grafo.Estáticos
 	/// <summary>
 	/// Representa un grafo visto como una función que a cada nodo le asigna su vecindad.
 	/// </summary>
-	public class GrafoVecindad<T> : IGrafo<T>
+	public class GrafoVecindad<T> : IGraph<T>
 	{
 		#region Ctor
 
@@ -106,7 +106,7 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		/// <returns>The ruta.</returns>
 		/// <param name="seq">Sucesión consistente.</param>
-		public IRuta<T> ToPath (IEnumerable<T> seq)
+		public IPath<T> ToPath (IEnumerable<T> seq)
 		{
 			var ret = new Ruta<T> ();
 			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
@@ -150,7 +150,7 @@ namespace Graficas.Grafo.Estáticos
 			}
 		}
 
-		IGrafo<T> IGrafo<T>.Subgraph (IEnumerable<T> conjunto)
+		IGraph<T> IGraph<T>.Subgraph (IEnumerable<T> conjunto)
 		{
 			return Subgrafo (conjunto);
 		}
@@ -216,7 +216,32 @@ namespace Graficas.Grafo.Estáticos
 			return new ExistentialEdge<T> (desde, hasta, ret, true, Simétrico);
 		}
 
-		IEdge<T> IGrafo<T>.this[T desde, T hasta]
+		int IGraph<T>.EdgeCount ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		void IGraph<T>.Clear ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		IEnumerable<IEdge<T>> IGraph<T>.Edges ()
+		{
+			throw new NotImplementedException ();
+		}
+
+		ICollection<T> IGraph<T>.Neighborhood (T node)
+		{
+			throw new NotImplementedException ();
+		}
+
+		IPath<T> IGraph<T>.ToPath (IEnumerable<T> seq)
+		{
+			throw new NotImplementedException ();
+		}
+
+		IEdge<T> IGraph<T>.this[T desde, T hasta]
 		{
 			get
 			{
@@ -235,6 +260,10 @@ namespace Graficas.Grafo.Estáticos
 				return new List<T> (nodos).AsReadOnly ();
 			}
 		}
+
+		IEnumerable<T> IGraph<T>.Nodes => throw new NotImplementedException ();
+
+		int IGraph<T>.NodeCount => throw new NotImplementedException ();
 
 		#endregion
 	}

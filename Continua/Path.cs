@@ -33,6 +33,9 @@ namespace Graficas.Continua
 			}
 		}
 
+		/// <summary>
+		/// Gets the step count.
+		/// </summary>
 		public new int NumPasos => base.NumPasos + 2;
 
 		/// <summary>
