@@ -70,7 +70,7 @@
     <Compile Include="Edges\ExistentialEdge.cs" />
     <Compile Include="Rutas\RutaInconsistenteException.cs" />
     <Compile Include="Grafo\NodosCollectionComparer.cs" />
-    <Compile Include="Grafo\ColorDuplicadoException.cs" />
+    <Compile Include="Grafo\DuplicatedColorException.cs" />
     <Compile Include="Grafo\NonExistentNodeException.cs" />
     <Compile Include="Edges\IStep.cs" />
     <Compile Include="Edges\Step.cs" />

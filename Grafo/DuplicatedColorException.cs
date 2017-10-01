@@ -6,31 +6,31 @@ namespace Graficas.Grafo
 	/// Color duplicado expection.
 	/// </summary>
 	[Serializable]
-	public class ColorDuplicadoException : Exception
+	public class DuplicatedColorException : Exception
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		public ColorDuplicadoException ()
+		public DuplicatedColorException ()
 		{
 		}
 
 		/// <param name="message">Message.</param>
-		public ColorDuplicadoException (string message)
+		public DuplicatedColorException (string message)
 			: base (message)
 		{
 		}
 
 		/// <param name="message">Message.</param>
 		/// <param name="inner">Inner.</param>
-		public ColorDuplicadoException (string message, Exception inner)
+		public DuplicatedColorException (string message, Exception inner)
 			: base (message, inner)
 		{
 		}
 
 		/// <param name="info">Info.</param>
 		/// <param name="context">Context.</param>
-		protected ColorDuplicadoException (System.Runtime.Serialization.SerializationInfo info,
+		protected DuplicatedColorException (System.Runtime.Serialization.SerializationInfo info,
 		                                   System.Runtime.Serialization.StreamingContext context)
 			: base (info,
 			        context)

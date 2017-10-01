@@ -121,7 +121,7 @@ namespace Graficas.Grafo
 		public void AgregaColor (TColor color, IGraph<TNodo> grafo)
 		{
 			if (_asignación.ContainsKey (color))
-				throw new ColorDuplicadoException ("Ya existe el color " + color);
+				throw new DuplicatedColorException ("Ya existe el color " + color);
 			_asignación.Add (color, grafo);
 		}
 
