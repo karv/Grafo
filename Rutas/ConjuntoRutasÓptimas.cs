@@ -11,6 +11,7 @@ namespace Graficas.Rutas
 	/// Representa un conjunto de mejores rutas en una gráfica
 	/// </summary>
 	[Serializable]
+	[Obsolete]
 	public class ConjuntoRutasÓptimas<TNodo>
 	{
 		HashSet<IPath<TNodo>> rutas;
