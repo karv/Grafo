@@ -55,8 +55,7 @@
     <Compile Include="Continua\GraphContinuum.cs" />
     <Compile Include="Rutas\IPath.cs" />
     <Compile Include="Rutas\Ruta.cs" />
-    <Compile Include="Grafo\IMulticolGrafo.cs" />
-    <Compile Include="Grafo\MulticolGrafica.cs" />
+    <Compile Include="Grafo\MultiColoredGraph.cs" />
     <Compile Include="Grafo\IGraph.cs" />
     <Compile Include="Edges\HardEdge.cs" />
     <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
