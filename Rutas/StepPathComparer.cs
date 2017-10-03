@@ -35,17 +35,17 @@ namespace Graficas.Rutas
 		{
 			if (x == null || y == null)
 				return false;
-			if (x.NumPasos != y.NumPasos)
+			if (x.StepCount != y.StepCount)
 				return false;
-			if (!Comparador.Equals (x.NodoInicial, y.NodoInicial))
+			if (!Comparador.Equals (x.StartNode, y.StartNode))
 				return false;
-			if (!Comparador.Equals (x.NodoFinal, y.NodoFinal))
+			if (!Comparador.Equals (x.EndNode, y.EndNode))
 				return false;
 
-			var enumX = new List<IStep<T>> (x.Pasos);
-			var enumY = new List<IStep<T>> (y.Pasos);
+			var enumX = new List<IStep<T>> (x.Steps);
+			var enumY = new List<IStep<T>> (y.Steps);
 
-			for (int i = 0; i < x.NumPasos; i++)
+			for (int i = 0; i < x.StepCount; i++)
 			{
 				if (!Comparador.Equals (enumX[i].Origin, enumY[i].Origin))
 					return false;
@@ -68,7 +68,7 @@ namespace Graficas.Rutas
 			if (obj == null)
 				return 0;
 			var ret = 0;
-			foreach (var x in obj.Pasos)
+			foreach (var x in obj.Steps)
 				ret += Comparador.GetHashCode (x.Origin) + Comparador.GetHashCode (x.Destination);
 			return ret;
 		}

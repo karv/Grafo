@@ -476,7 +476,7 @@ namespace Graficas.Grafo.Estáticos
 					if (!últAris.Exists)
 						throw new Exception ();
 					mejorRuta.Concat (últAris, v);
-					if (ret == null || mejorRuta.NumPasos < ret.NumPasos)
+					if (ret == null || mejorRuta.StepCount < ret.StepCount)
 						ret = mejorRuta;
 				}
 			}

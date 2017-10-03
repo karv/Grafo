@@ -133,24 +133,6 @@ namespace Graficas.Continua
 				_fixedPoints.Add (x, AddPoint (x));
 		}
 
-		/// <summary>
-		/// Gets the shortest path between two observable points.
-		/// </summary>
-		/// <param name="origin">Punto inicial.</param>
-		/// <param name="destination">Punto final.</param>
-		/// <param name="routes">Optimal routes collection</param>
-		public static Path<T> OptimalPath (ContinuumPoint<T> origin,
-																			 ContinuumPoint<T> destination,
-																			 ConjuntoRutasÓptimas<T> routes)
-		{
-			// TODO: several issues
-			var ruta = routes.CaminoÓptimo (origin.A, destination.A);
-			var ret = new Path<T> (origin);
-			ret.Concat (ruta);
-			ret.ConcatFinal (destination);
-			return ret;
-		}
-
 		readonly Dictionary<T, ContinuumPoint<T>> _fixedPoints;
 	}
 }

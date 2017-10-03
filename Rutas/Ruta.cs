@@ -41,8 +41,8 @@ namespace Graficas.Rutas
 		{
 			if (ruta == null)
 				throw new ArgumentNullException ();
-			_virtualInicial = ruta.NodoInicial;
-			foreach (var x in ruta.Pasos)
+			_virtualInicial = ruta.StartNode;
+			foreach (var x in ruta.Steps)
 				Step.Add (new Step<T> (x.Origin, x.Destination, x.Weight));
 		}
 
@@ -56,7 +56,7 @@ namespace Graficas.Rutas
 		/// </summary>
 		public override string ToString ()
 		{
-			string ret = string.Format ("[{0}]: ", NumPasos);
+			string ret = string.Format ("[{0}]: ", StepCount);
 			foreach (var x in Step)
 				ret += string.Format (" {0} ", x);
 			return ret;
@@ -65,7 +65,7 @@ namespace Graficas.Rutas
 		/// <summary>
 		/// Enumera los pasos de la ruta
 		/// </summary>
-		IEnumerable<IStep<T>> IPath<T>.Pasos
+		IEnumerable<IStep<T>> IPath<T>.Steps
 		{
 			get
 			{
@@ -89,7 +89,7 @@ namespace Graficas.Rutas
 		/// Devuelve la longitud de la ruta
 		/// </summary>
 		/// <value>The longitud.</value>
-		public float Longitud
+		public float Length
 		{
 			get
 			{
@@ -108,13 +108,13 @@ namespace Graficas.Rutas
 		{
 			if (paso == null)
 				throw new NullReferenceException ("No se puede concatenar con una arista nula.");
-			if (NumPasos == 0)
+			if (StepCount == 0)
 			{
 				Step.Add (new Step<T> (paso));
 			}
 			else
 			{
-				if (paso.Contains (NodoFinal))
+				if (paso.Contains (EndNode))
 				{
 					Step.Add (new Step<T> (paso));
 				}
@@ -142,12 +142,12 @@ namespace Graficas.Rutas
 		/// <param name="ruta">Ruta.</param>
 		public void Concat (IPath<T> ruta)
 		{
-			if (ruta.NumPasos == 0)
+			if (ruta.StepCount == 0)
 				return;
-			if (NumPasos > 0 && !NodoFinal.Equals (ruta.NodoInicial))
+			if (StepCount > 0 && !EndNode.Equals (ruta.StartNode))
 				throw new RutaInconsistenteException ("No se puede concatenar si no coinciden los extremos finales e iniciales de los nodos.");
 
-			foreach (var paso in ruta.Pasos)
+			foreach (var paso in ruta.Steps)
 			{
 				Step.Add (new Step<T> (paso));
 			}
@@ -159,7 +159,7 @@ namespace Graficas.Rutas
 		/// Devuelve el origen de la ruta
 		/// </summary>
 		/// <value>The nodo inicial.</value>
-		public T NodoInicial
+		public T StartNode
 		{
 			get
 			{
@@ -171,11 +171,11 @@ namespace Graficas.Rutas
 		/// Devuelve el destino de la ruta
 		/// </summary>
 		/// <value>The nodo final.</value>
-		public T NodoFinal
+		public T EndNode
 		{
 			get
 			{
-				return NumPasos < 1 ? NodoInicial : Step[NumPasos - 1].Destination;
+				return StepCount < 1 ? StartNode : Step[StepCount - 1].Destination;
 			}
 		}
 
@@ -183,7 +183,7 @@ namespace Graficas.Rutas
 		/// Devuelve el número de pasos en la ruta
 		/// </summary>
 		/// <value>The number pasos.</value>
-		public int NumPasos
+		public int StepCount
 		{
 			get
 			{
@@ -199,7 +199,7 @@ namespace Graficas.Rutas
 		{
 			get
 			{
-				return NumPasos == 0;
+				return StepCount == 0;
 			}
 		}
 

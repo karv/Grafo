@@ -14,29 +14,29 @@ namespace Graficas.Continua
 		/// <summary>
 		/// Gets the origin node.
 		/// </summary>
-		public new ContinuumPoint<T> NodoInicial { get; }
+		public new ContinuumPoint<T> StartNode { get; }
 
 		/// <summary>
 		/// Gets the destination.
 		/// </summary>
-		public new ContinuumPoint<T> NodoFinal { get; private set; }
+		public new ContinuumPoint<T> EndNode { get; private set; }
 
 		/// <summary>
 		/// Gets the total weight of this route
 		/// </summary>
-		public new float Longitud
+		public new float Length
 		{
 			get
 			{
 				var lbase = Step.Sum (z => z.Weight);
-				return lbase + NodoInicial.DistanciaAExtremo (base.NodoInicial) + NodoFinal.DistanciaAExtremo (base.NodoFinal);
+				return lbase + StartNode.DistanciaAExtremo (base.StartNode) + EndNode.DistanciaAExtremo (base.EndNode);
 			}
 		}
 
 		/// <summary>
 		/// Gets the step count.
 		/// </summary>
-		public new int NumPasos => base.NumPasos + 2;
+		public new int StepCount => base.StepCount + 2;
 
 		/// <summary>
 		/// Initializes a new instance of the class.
@@ -44,8 +44,8 @@ namespace Graficas.Continua
 		/// <param name="origin">Origin</param>
 		public Path (ContinuumPoint<T> origin)
 		{
-			NodoInicial = origin;
-			NodoFinal = origin;
+			StartNode = origin;
+			EndNode = origin;
 		}
 
 		/// <summary>
@@ -61,7 +61,7 @@ namespace Graficas.Continua
 		/// </summary>
 		public void ConcatFinal (ContinuumPoint<T> final)
 		{
-			NodoFinal = final;
+			EndNode = final;
 		}
 
 
@@ -77,10 +77,10 @@ namespace Graficas.Continua
 			// 2) Está en un intervalo intermedio
 
 			// 0)
-			if (NodoInicial.OnSameInterval (punto))
+			if (StartNode.OnSameInterval (punto))
 			{
 				T MyA = punto.A;
-				if (NodoInicial.DistanciaAExtremo (MyA) <= punto.Loc)
+				if (StartNode.DistanciaAExtremo (MyA) <= punto.Loc)
 					return true;
 			}
 
@@ -92,10 +92,10 @@ namespace Graficas.Continua
 			}
 
 			// 1)
-			if (NodoFinal.OnSameInterval (punto))
+			if (EndNode.OnSameInterval (punto))
 			{
 				T MyB = punto.B;
-				if (NodoFinal.DistanciaAExtremo (MyB) < punto.Aloc)
+				if (EndNode.DistanciaAExtremo (MyB) < punto.Aloc)
 					return true;
 			}
 
