@@ -162,7 +162,7 @@ namespace Graficas.Grafo.Estáticos
 		/// </summary>
 		public IPath<T> ToPath (IEnumerable<T> seq)
 		{
-			var ret = new Ruta<T> ();
+			var ret = new Path<T> ();
 			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
 			T last = default (T);
 			foreach (var x in seq)
@@ -170,7 +170,7 @@ namespace Graficas.Grafo.Estáticos
 				if (iniciando)
 				{
 					iniciando = false;
-					ret = new Ruta<T> ();
+					ret = new Path<T> ();
 				}
 				else
 				{

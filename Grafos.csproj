@@ -54,7 +54,7 @@
     <Compile Include="Edges\IEdge.cs" />
     <Compile Include="Continua\GraphContinuum.cs" />
     <Compile Include="Rutas\IPath.cs" />
-    <Compile Include="Rutas\Ruta.cs" />
+    <Compile Include="Rutas\Path.cs" />
     <Compile Include="Grafo\MultiColoredGraph.cs" />
     <Compile Include="Grafo\IGraph.cs" />
     <Compile Include="Edges\HardEdge.cs" />

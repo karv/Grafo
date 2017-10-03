@@ -165,7 +165,7 @@ namespace Graficas.Grafo.Dinámicos
 		/// </summary>
 		public IPath<TNode> ToPath (IEnumerable<TNode> seq)
 		{
-			var ret = new Ruta<TNode> ();
+			var ret = new Path<TNode> ();
 			bool iniciando = true; // Flag que indica que está construyendo el primer nodo (no paso)
 			TNode last = default (TNode);
 			foreach (var x in seq)
@@ -173,7 +173,7 @@ namespace Graficas.Grafo.Dinámicos
 				if (iniciando)
 				{
 					iniciando = false;
-					ret = new Ruta<TNode> ();
+					ret = new Path<TNode> ();
 				}
 				else
 				{

@@ -199,17 +199,17 @@ namespace Graficas.Grafo.Estáticos
 		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
 		/// <remarks>Devuelve null si toda ruta de x a y toca a ignorar</remarks>
 		[Obsolete]
-		Ruta<T> CaminoÓptimo (T x,
+		Path<T> CaminoÓptimo (T x,
 													T y,
 													Func<WeightedEdge<T, TData>, float> peso,
 													ISet<T> ignorar)
 		{
-			Ruta<T> ret = null;
+			Path<T> ret = null;
 			float longRet = 0;
 
 			var arisXY = FindEdge (x, y);
 			if (arisXY.Exists)
-				return new Ruta<T> (x, y);
+				return new Path<T> (x, y);
 
 			var consideradNodos = new HashSet<T> (InwardNeighborhood (y));
 			consideradNodos.ExceptWith (ignorar);
@@ -453,13 +453,13 @@ namespace Graficas.Grafo.Estáticos
 		/// <remarks>Devuelve ruta vacía (no nula) si origen es destino </remarks>
 		/// <remarks>Devuelve null si toda ruta de x a y toca a ignorar</remarks>
 		[Obsolete]
-		Ruta<T> CaminoÓptimo (T x, T y, ISet<T> ignorar)
+		Path<T> CaminoÓptimo (T x, T y, ISet<T> ignorar)
 		{
-			Ruta<T> ret = null;
+			Path<T> ret = null;
 
 			var arisXY = GetEdgeSym (x, y);
 			if (arisXY.Exists)
-				return new Ruta<T> (x, y);
+				return new Path<T> (x, y);
 
 			var consideradNodos = new HashSet<T> (InwardNeighborhood (y));
 			consideradNodos.ExceptWith (ignorar);

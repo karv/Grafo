@@ -9,7 +9,7 @@ namespace Graficas.Continua
 	/// A path for <see cref="ContinuumPoint{T}"/>.
 	/// </summary>
 	[Serializable]
-	public class Path<T> : Rutas.Ruta<T>, IClass<ContinuumPoint<T>>
+	public class Path<T> : Rutas.Path<T>, IClass<ContinuumPoint<T>>
 	{
 		/// <summary>
 		/// Gets the origin node.
