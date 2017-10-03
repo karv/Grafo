@@ -64,7 +64,7 @@
     <Compile Include="Extensiones\GraphExt.cs" />
     <Compile Include="Edges\WeightedEdge.cs" />
     <Compile Include="Edges\ExistentialEdge.cs" />
-    <Compile Include="Rutas\RutaInconsistenteException.cs" />
+    <Compile Include="Rutas\InvalidPathOperationException.cs" />
     <Compile Include="Grafo\DuplicatedColorException.cs" />
     <Compile Include="Grafo\NonExistentNodeException.cs" />
     <Compile Include="Edges\IStep.cs" />

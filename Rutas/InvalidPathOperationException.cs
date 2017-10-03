@@ -3,40 +3,38 @@
 namespace Graficas.Rutas
 {
 	/// <summary>
-	/// Ocurre cuando una operación entre rutas no funciona.
+	/// Occurs when an invalid path operation is executed.
 	/// </summary>
 	[Serializable]
-	public class RutaInconsistenteException : InvalidOperationException
+	public class InvalidPathOperationException : InvalidOperationException
 	{
 		/// <summary>
-		/// Initializes a new instance of this class
 		/// </summary>
-		public RutaInconsistenteException ()
+		public InvalidPathOperationException ()
 		{
 		}
 
 		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
-		public RutaInconsistenteException (string message)
+		public InvalidPathOperationException (string message)
 			: base (message)
 		{
 		}
 
 		/// <param name="message">A <see cref="T:System.String"/> that describes the exception. </param>
 		/// <param name="inner">The exception that is the cause of the current exception. </param>
-		public RutaInconsistenteException (string message, Exception inner)
+		public InvalidPathOperationException (string message, Exception inner)
 			: base (message,
-			        inner)
+							inner)
 		{
 		}
 
 		/// <param name="context">The contextual information about the source or destination.</param>
 		/// <param name="info">The object that holds the serialized object data.</param>
-		protected RutaInconsistenteException (System.Runtime.Serialization.SerializationInfo info,
-		                                      System.Runtime.Serialization.StreamingContext context)
+		protected InvalidPathOperationException (System.Runtime.Serialization.SerializationInfo info,
+																					System.Runtime.Serialization.StreamingContext context)
 			: base (info,
-			        context)
+							context)
 		{
 		}
 	}
 }
-

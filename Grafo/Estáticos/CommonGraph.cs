@@ -176,7 +176,7 @@ namespace Graficas.Grafo.Estáticos
 				{
 					var ar = GetEdge (last, x);
 					if (!ar.Exists)
-						throw new RutaInconsistenteException ();
+						throw new InvalidPathOperationException ();
 					ret.Concat (ar, last);
 
 				}

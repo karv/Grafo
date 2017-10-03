@@ -178,7 +178,7 @@ namespace Graficas.Grafo.Dinámicos
 				else
 				{
 					if (!Neighborhood (last).Contains (x))
-						throw new RutaInconsistenteException ("La sucesión dada no representa una ruta.");
+						throw new InvalidPathOperationException ("La sucesión dada no representa una ruta.");
 					ret.Concat (new Step<TNode> (last, x));
 				}
 				last = x;

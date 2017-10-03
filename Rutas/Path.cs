@@ -105,7 +105,7 @@ namespace Graficas.Rutas
 				if (paso.Contains (EndNode))
 					Step.Add (new Step<T> (paso));
 				else
-					throw new RutaInconsistenteException ();
+					throw new InvalidPathOperationException ();
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace Graficas.Rutas
 			if (path.StepCount == 0)
 				return;
 			if (StepCount > 0 && !EndNode.Equals (path.StartNode))
-				throw new RutaInconsistenteException ();
+				throw new InvalidPathOperationException ();
 
 			foreach (var paso in path.Steps)
 			{
