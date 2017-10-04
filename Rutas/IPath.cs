@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using Graficas.Edges;
+using CE.Graph.Edges;
+using CE.Collections;
 
-namespace Graficas.Rutas
+namespace CE.Graph.Rutas
 {
 	/// <summary>
 	/// A graph path.
 	/// </summary>
-	public interface IPath<T>
+	public interface IPath<T> : IClass<T>
 	{
 		/// <summary>
 		/// Gets the starting node.

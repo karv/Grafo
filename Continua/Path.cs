@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CE.Collections;
 
-namespace Graficas.Continua
+namespace CE.Graph.Continua
 {
 	/// <summary>
 	/// A path for <see cref="ContinuumPoint{T}"/>.
@@ -105,7 +105,7 @@ namespace Graficas.Continua
 		/// <summary>
 		/// Gets a new list of points in this path.
 		/// </summary>
-		public List<ContinuumPoint<T>> PointsInGraph (GraphContinuum<T> gr)
+		public List<ContinuumPoint<T>> PointsInGraph (ContinuumGraph<T> gr)
 		{
 			return gr.Points.FindAll (Contains);
 		}

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Graficas.Edges
+namespace CE.Graph.Edges
 {
 	/// <summary>
 	/// A generic implementation of an immutable step.

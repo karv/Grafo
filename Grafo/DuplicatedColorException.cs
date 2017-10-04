@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Graficas.Grafo
+namespace CE.Graph.Grafo
 {
 	/// <summary>
 	/// Color duplicado expection.

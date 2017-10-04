@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Graficas.Nodos
+namespace CE.Graph.Nodos
 {
 	/// <summary>
 	/// A graph node.

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Graficas.Edges;
-using Graficas.Rutas;
+using CE.Graph.Edges;
+using CE.Graph.Rutas;
 
-namespace Graficas.Grafo
+namespace CE.Graph.Grafo
 {
 	/// <summary>
 	/// Un grafo en el que se pueden leer y escribir nodos y aristas

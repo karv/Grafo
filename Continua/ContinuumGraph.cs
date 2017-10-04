@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graficas.Edges;
-using Graficas.Grafo;
-using Graficas.Grafo.Estáticos;
-using Graficas.Rutas;
+using CE.Graph.Edges;
+using CE.Graph.Grafo;
+using CE.Graph.Grafo.Estáticos;
+using CE.Graph.Rutas;
 
-namespace Graficas.Continua
+namespace CE.Graph.Continua
 {
 
 	/// <summary>
 	/// Representa un continuo producido por una IGrafica
 	/// </summary>
 	[Serializable]
-	public class GraphContinuum<T>
+	public class ContinuumGraph<T>
 	{
 		/// <summary>
 		/// Graph producing this continnum.
@@ -124,7 +124,7 @@ namespace Graficas.Continua
 		}
 
 		/// <param name="gráfica">Base graph</param>
-		public GraphContinuum (Graph<T, float> gráfica)
+		public ContinuumGraph (Graph<T, float> gráfica)
 		{
 			GrafoBase = gráfica.IsReadOnly ? gráfica : gráfica.AsReadonly ();
 			PointComparer = new MatchComparer<T> (NodeComparer);

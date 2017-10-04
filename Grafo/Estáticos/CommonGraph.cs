@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Edges;
-using Graficas.Rutas;
+using CE.Graph.Edges;
+using CE.Graph.Rutas;
 using System.Linq;
 
-namespace Graficas.Grafo.Estáticos
+namespace CE.Graph.Grafo.Estáticos
 {
 	/// <summary>
 	/// Common implementation for static graphs.

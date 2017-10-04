@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Graficas.Edges
+namespace CE.Graph.Edges
 {
 	/// <summary>
 	/// A weighted edge.

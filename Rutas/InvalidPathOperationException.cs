@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Graficas.Rutas
+namespace CE.Graph.Rutas
 {
 	/// <summary>
 	/// Occurs when an invalid path operation is executed.

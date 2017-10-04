@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graficas.Edges;
+using CE.Graph.Edges;
 
-namespace Graficas.Rutas
+namespace CE.Graph.Rutas
 {
 	/// <summary>
 	/// A path in a graph.
@@ -134,6 +134,8 @@ namespace Graficas.Rutas
 				Step.Add (new Step<T> (paso));
 			}
 		}
+
+		public bool Contains (T node) => throw new NotImplementedException ();
 
 		T _virtualInicial;
 

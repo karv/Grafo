@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Edges;
-using Graficas.Nodos;
+using CE.Graph.Edges;
+using CE.Graph.Nodos;
 
-namespace Graficas.Rutas
+namespace CE.Graph.Rutas
 {
 	/// <summary>
 	/// A path that preserves references.
@@ -108,6 +108,8 @@ namespace Graficas.Rutas
 				throw new InvalidOperationException ();
 			_pasos.Add (agrega);
 		}
+
+		public bool Contains (T node) => throw new NotImplementedException ();
 
 		List<Node<T>> _pasos;
 

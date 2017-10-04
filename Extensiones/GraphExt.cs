@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using CE.Graph.Grafo;
 using ListasExtra.Extensiones;
-using Graficas.Grafo;
-using System;
 
-namespace Graficas.Extensiones
+namespace CE.Graph
 {
 	/// <summary>
 	/// Métodos extendidos de grafos

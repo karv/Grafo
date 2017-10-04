@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Graficas.Edges;
+using CE.Graph.Edges;
 
-namespace Graficas.Rutas
+namespace CE.Graph.Rutas
 {
 	/// <summary>
 	/// Step by step node comparer.

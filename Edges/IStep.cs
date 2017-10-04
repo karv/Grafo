@@ -1,4 +1,4 @@
-﻿namespace Graficas.Edges
+﻿namespace CE.Graph.Edges
 {
 	/// <summary>
 	/// Represents a step in a graph path.	

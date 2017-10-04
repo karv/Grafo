@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Graficas.Edges;
-using Graficas.Rutas;
+using CE.Graph.Edges;
+using CE.Graph.Rutas;
 
-namespace Graficas.Grafo.Dinámicos
+namespace CE.Graph.Grafo.Dinámicos
 {
 	/// <summary>
 	/// A graph implemented as a collection of neighborhoods.

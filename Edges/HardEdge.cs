@@ -1,7 +1,7 @@
 ﻿using System;
-using Graficas.Nodos;
+using CE.Graph.Nodos;
 
-namespace Graficas.Edges
+namespace CE.Graph.Edges
 {
 	/// <summary>
 	/// Edge that preserve references to nodes.

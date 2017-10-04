@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Graficas.Nodos
+namespace CE.Graph.Nodos
 {
 	/// <summary>
 	/// Representa un nodo que vincula a su vecindad

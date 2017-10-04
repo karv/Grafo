@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graficas.Edges;
+using CE.Graph.Edges;
 using ListasExtra;
 
-namespace Graficas.Continua
+namespace CE.Graph.Continua
 {
 	// TODO: Many methods in this must be placed on the continuum class.
 	/// <summary>
@@ -59,7 +59,7 @@ namespace Graficas.Continua
 		/// <summary>
 		/// Gets the universe where this point exists.
 		/// </summary>
-		public GraphContinuum<T> Universe { get; }
+		public ContinuumGraph<T> Universe { get; }
 
 		/// <summary>
 		/// Gets a value indicating whether this point is on a graph node.
@@ -74,14 +74,14 @@ namespace Graficas.Continua
 
 		/// <param name="universe">The continuum where this point will be created.</param>
 		/// <param name="node">graph node.</param>
-		public ContinuumPoint (GraphContinuum<T> universe, T node)
+		public ContinuumPoint (ContinuumGraph<T> universe, T node)
 			: this (universe, node, default (T), 0) { }
 
 		/// <param name="universe">The continuum where this point will be created.</param>
 		/// <param name="p0">An adjacent node for this point.</param>
 		/// <param name="p1">Another adjacent node.</param>
 		/// <param name="dist">Distance between <paramref name="p0"/> and this.</param>
-		public ContinuumPoint (GraphContinuum<T> universe, T p0, T p1, float dist)
+		public ContinuumPoint (ContinuumGraph<T> universe, T p0, T p1, float dist)
 		{
 			Universe = universe;
 			A = p0;
@@ -92,7 +92,7 @@ namespace Graficas.Continua
 
 		/// <param name="universe">The continuum where this point will be created.</param>
 		/// <remarks>When invoking this, please make sure the field <see cref="A"/> is assigned.</remarks>
-		protected ContinuumPoint (GraphContinuum<T> universe)
+		protected ContinuumPoint (ContinuumGraph<T> universe)
 		{
 			Universe = universe;
 		}
@@ -121,7 +121,7 @@ namespace Graficas.Continua
 		}
 
 		/// <summary>
-		/// Removes this point from its <see cref="GraphContinuum{T}"/>.
+		/// Removes this point from its <see cref="ContinuumGraph{T}"/>.
 		/// </summary>
 		public void Remove ()
 		{
@@ -421,8 +421,7 @@ namespace Graficas.Continua
 		/// <summary>
 		/// Determines whether two observable points are in the same interval of a graph.
 		/// </summary>
-		public static bool EnMismoIntervalo (ContinuumPoint<T> punto1,
-																				 ContinuumPoint<T> punto2)
+		public static bool OnSameInterval (ContinuumPoint<T> punto1, ContinuumPoint<T> punto2)
 		{
 			// TODO: Mode this to a continuum graph;
 			// and set to obsolete

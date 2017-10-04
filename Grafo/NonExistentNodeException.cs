@@ -1,6 +1,6 @@
 using System;
 
-namespace Graficas.Grafo
+namespace CE.Graph.Grafo
 {
 	/// <summary>
 	/// Exception de cuando se intenta accesar por un grafo a un nodo que no existe en él.

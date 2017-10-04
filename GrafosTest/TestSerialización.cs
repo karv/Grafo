@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Graficas.Continua;
-using Graficas.Grafo;
-using Graficas.Grafo.Estáticos;
-using Graficas.Rutas;
+using CE.Graph.Continua;
+using CE.Graph.Grafo;
+using CE.Graph.Grafo.Estáticos;
+using CE.Graph.Rutas;
 using NUnit.Framework;
 
 namespace Test
@@ -30,7 +30,7 @@ namespace Test
 		}
 
 		static void TestSerialPeso<T> (T gr)
-			where T : Grafo<Objeto, float>
+			where T : Graph<Objeto, float>
 		{
 			gr [0, 1] = 1;
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
@@ -41,7 +41,7 @@ namespace Test
 		[Test]
 		public void SerGraf ()
 		{
-			var gr = new Grafo<Objeto, float> (ObjetoColl);
+			var gr = new Graph<Objeto, float> (ObjetoColl);
 			gr [0, 1] = 1;
 			TestSerial (gr);
 
@@ -52,7 +52,7 @@ namespace Test
 		[Test]
 		public void PathSet ()
 		{
-			var gr = new Grafo<Objeto, float> (ObjetoColl);
+			var gr = new Graph<Objeto, float> (ObjetoColl);
 			gr [0, 1] = 1;
 			gr [1, 2] = 2;
 			gr [2, 3] = 3;
@@ -72,12 +72,12 @@ namespace Test
 		[Test]
 		public void Cont ()
 		{
-			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
+			var gr = new Graph<Objeto, float> (ObjetoColl, true);
 			gr [0, 1] = 1;
-			var c = new GraphContinuum<Objeto> (gr);
+			var c = new ContinuumGraph<Objeto> (gr);
 			c.AgregaPunto (0, 1, 0.3f);
 			Store.BinarySerialization.WriteToBinaryFile ("continuo", c);
-			var c2 = Store.BinarySerialization.ReadFromBinaryFile<GraphContinuum<Objeto>> ("continuo");
+			var c2 = Store.BinarySerialization.ReadFromBinaryFile<ContinuumGraph<Objeto>> ("continuo");
 			Assert.True (c2.Puntos.Count == c.Puntos.Count);
 		}
 

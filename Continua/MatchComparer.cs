@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Graficas.Continua
+namespace CE.Graph.Continua
 {
 	/// <summary>
 	/// Compares points in a continuum.

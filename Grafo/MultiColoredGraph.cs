@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graficas.Rutas;
-using Graficas.Edges;
+using CE.Graph.Rutas;
+using CE.Graph.Edges;
 
-namespace Graficas.Grafo
+namespace CE.Graph.Grafo
 {
 	/// <summary>
 	/// A multicolored graph
