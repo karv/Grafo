@@ -1,6 +1,7 @@
 ﻿using System;
 using CE.Graph.Grafo.Dinámicos;
 using NUnit.Framework;
+using CE.Graph.Grafo;
 
 namespace Test
 {
@@ -12,7 +13,7 @@ namespace Test
 		{
 			var gr = new NeighborGraph<int> (true);
 			gr.AddNode (0);
-			Assert.Throws<InvalidOperationException> (delegate
+			Assert.Throws<NonExistentNodeException> (delegate
 			{ gr[1, 0] = true; });
 			gr.AddNode (1);
 			gr[1, 0] = true;

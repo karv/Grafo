@@ -55,8 +55,7 @@ namespace Test
 		{
 			const int len = 10;
 			var colisionó = new HashSet<ContinuumPoint<Objeto>> ();
-			bool seDesplazó = false;
-			bool terminóRuta = false;
+			var seDesplazó = false;
 			var nods = new HashSet<Objeto> ();
 			var gr = new Graph<Objeto, float> (ObjetoColl, true);
 
@@ -90,7 +89,6 @@ namespace Test
 			Assert.True (colisionó.Contains (pmov));
 			Assert.True (seDesplazó);
 			Assert.True (rt);
-			Assert.True (terminóRuta);
 			Assert.AreEqual (3, nods.Count);
 			for (int i = 0; i < 3; i++)
 				Assert.True (nods.Contains (i), i.ToString ());

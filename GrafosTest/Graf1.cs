@@ -183,8 +183,8 @@ namespace Test
 			}
 
 			var ruta = grafo.ToPath (enumerador);
-			Assert.AreEqual (0, ruta.StartNode);
-			Assert.AreEqual (max - 1, ruta.EndNode);
+			Assert.AreEqual (0, ruta.StartNode.Hash);
+			Assert.AreEqual (max - 1, ruta.EndNode.Hash);
 			Assert.AreEqual (max - 1, ruta.StepCount);
 
 			enumerador[0] = 3;
@@ -202,8 +202,8 @@ namespace Test
 			}
 
 			ruta = grafo.ToPath (enumerador);
-			Assert.AreEqual (0, ruta.StartNode);
-			Assert.AreEqual (max - 1, ruta.EndNode);
+			Assert.AreEqual (0, ruta.StartNode.Hash);
+			Assert.AreEqual (max - 1, ruta.EndNode.Hash);
 			Assert.AreEqual (max - 1, ruta.StepCount);
 
 			enumerador[0] = 3;
