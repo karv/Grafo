@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Graficas.Grafo;
-using Graficas.Grafo.Estáticos;
 using NUnit.Framework;
-using Test;
+using CE.Graph.Grafo;
+using CE.Graph.Grafo.Estáticos;
 
 namespace Test
 {
 	[TestFixture]
 	public abstract class IGrafoTest
 	{
-		public IGrafo<int> Gr { get; set; }
+		public IGraph<int> Gr { get; set; }
 
 		public int RealNumNodos { get; set; }
 
@@ -20,7 +19,7 @@ namespace Test
 		public void HacerAleatorio ()
 		{
 			Gr.Clear ();
-			var nods = new List<int> (Gr.Nodos);
+			var nods = new List<int> (Gr.Nodes);
 
 			for (int i = 0; i < nods.Count; i++)
 				for (int j = 0; j < nods.Count; j++)
@@ -44,7 +43,7 @@ namespace Test
 		void HacerLineal ()
 		{
 			Reset ();
-			var n = Gr.Nodos.Count;
+			var n = Gr.NodeCount;
 			for (int i = 0; i < n - 1; i++)
 				SetValue (i, i + 1, true);
 		}
@@ -70,56 +69,53 @@ namespace Test
 		[Test]
 		public void SubGrafo ()
 		{
-			var r = new Random ();
-			var hs = new List<int> (Gr.Nodos.Where (z => r.Next (2) == 1));
+			var hs = new List<int> (Gr.Nodes.Where (z => r.Next (2) == 1));
 
-			var g2 = Gr.Subgrafo (hs);
-			Assert.AreEqual (hs.Count, g2.Nodos.Count);
+			var g2 = Gr.Subgraph (hs);
+			Assert.AreEqual (hs.Count, g2.NodeCount);
 			for (int i = 0; i < hs.Count; i++)
 				for (int j = 0; j < hs.Count; j++)
 				{
-					var ni = hs [i];
-					var nj = hs [j];
+					var ni = hs[i];
+					var nj = hs[j];
 					Assert.AreEqual (
-						Gr [ni, nj].Existe,
-						g2 [ni, nj].Existe,
+						Gr[ni, nj].Exists,
+						g2[ni, nj].Exists,
 						string.Format ("i == {0}; j == {1}", ni, nj));
 				}
 
-			while (Gr.Nodos.Contains (hs [0]))
-				hs [0]++;
+			while (Gr.Nodes.Contains (hs[0]))
+				hs[0]++;
 
 			Assert.Throws<ArgumentException> (delegate
-			{
-				Gr.Subgrafo (hs);
-			});
+			{ Gr.Subgraph (hs); });
 		}
 
 		[Test]
 		public void Clear ()
 		{
 			SetValue (0, 1, true);
-			Assert.True (Gr [0, 1].Existe);
+			Assert.True (Gr[0, 1].Exists);
 			Gr.Clear ();
-			Assert.False (Gr [0, 1].Existe);
-			Assert.IsEmpty (Gr.Vecinos (0));
-			Assert.IsEmpty (Gr.Vecinos (1));
-			Assert.IsEmpty (Gr.Aristas ());
+			Assert.False (Gr[0, 1].Exists);
+			Assert.IsEmpty (Gr.Neighborhood (0));
+			Assert.IsEmpty (Gr.Neighborhood (1));
+			Assert.IsEmpty (Gr.Edges ());
 		}
 
 		[Test]
 		public void AristasVsGetter ()
 		{
 			HacerAleatorio ();
-			var ar = Gr.Aristas ();
-			var ls = new List<int> (Gr.Nodos);
+			var ar = Gr.Edges ();
+			var ls = new List<int> (Gr.Nodes);
 			for (int i = 0; i < ls.Count; i++)
 				for (int j = 0; j < ls.Count; j++)
 				{
-					var a = Gr [i, j];
-					if (a.Existe)
+					var a = Gr[i, j];
+					if (a.Exists)
 					{
-						Assert.True (a.Coincide (i, j));
+						Assert.True (a.Match (i, j));
 						Assert.True (ar.Contains (a));
 					}
 					else
@@ -134,28 +130,28 @@ namespace Test
 		public void Path ()
 		{
 			HacerLineal ();
-			var n = Gr.Nodos.Count;
+			var n = Gr.NodeCount;
 			var rr = new int[n];
 			for (int i = 0; i < n; i++)
-				rr [i] = i;
-			var ruta = Gr.ToRuta (rr);
+				rr[i] = i;
+			var ruta = Gr.ToPath (rr);
 
-			Assert.AreEqual (0, ruta.NodoInicial);
-			Assert.AreEqual (n - 1, ruta.NodoFinal);
-			Assert.AreEqual (n - 1, ruta.NumPasos);
-			foreach (var x in ruta.Pasos)
+			Assert.AreEqual (0, ruta.StartNode);
+			Assert.AreEqual (n - 1, ruta.EndNode);
+			Assert.AreEqual (n - 1, ruta.StepCount);
+			foreach (var x in ruta.Steps)
 			{
-				var ar = Gr [x.Origen, x.Destino];
-				Assert.True (ar.Existe);
+				var ar = Gr[x.Origin, x.Destination];
+				Assert.True (ar.Exists);
 			}
 		}
 
 		[Test]
 		public void Nodos ()
 		{
-			Assert.AreEqual (RealNumNodos, Gr.Nodos.Count);
+			Assert.AreEqual (RealNumNodos, Gr.NodeCount);
 			for (int i = 0; i < RealNumNodos; i++)
-				Assert.True (Gr.Nodos.Contains (i));
+				Assert.True (Gr.Nodes.Contains (i));
 		}
 	}
 
@@ -165,14 +161,14 @@ namespace Test
 		{
 			var nodos = new int[size];
 			for (int i = 0; i < nodos.Length; i++)
-				nodos [i] = i;
-			Gr = new Grafo<int> (nodos);
+				nodos[i] = i;
+			Gr = new Graph<int> (nodos);
 		}
 
 		public override void SetValue (int a, int b, bool r)
 		{
-			var graf = (Grafo<int>)(Gr);
-			graf [a, b] = r;
+			var graf = (Graph<int>)(Gr);
+			graf[a, b] = r;
 		}
 	}
 
@@ -182,14 +178,14 @@ namespace Test
 		{
 			var nodos = new int[size];
 			for (int i = 0; i < nodos.Length; i++)
-				nodos [i] = i;
-			Gr = new Grafo<int, float> (nodos);
+				nodos[i] = i;
+			Gr = new Graph<int, float> (nodos);
 		}
 
 		public override void SetValue (int a, int b, bool r)
 		{
-			var graf = (Grafo<int, float>)(Gr);
-			graf.EncuentraArista (a, b).Existe = r;
+			var graf = (Graph<int, float>)(Gr);
+			graf.FindEdge (a, b).Exists = r;
 		}
 	}
 
@@ -199,14 +195,14 @@ namespace Test
 		{
 			var nodos = new int[size];
 			for (int i = 0; i < nodos.Length; i++)
-				nodos [i] = i;
-			Gr = new Grafo<int> (nodos);
+				nodos[i] = i;
+			Gr = new Graph<int> (nodos);
 		}
 
 		public override void SetValue (int a, int b, bool r)
 		{
-			var graf = (Grafo<int>)(Gr);
-			graf [a, b] = r;
+			var graf = (Graph<int>)(Gr);
+			graf[a, b] = r;
 		}
 	}
 }

@@ -1,6 +1,7 @@
-﻿using Graficas.Grafo;
-using Graficas.Grafo.Dinámicos;
+﻿using System;
+using CE.Graph.Grafo.Dinámicos;
 using NUnit.Framework;
+using CE.Graph.Grafo;
 
 namespace Test
 {
@@ -10,27 +11,25 @@ namespace Test
 		[Test]
 		public void AddNode ()
 		{
-			var gr = new GrafoVecindad<int> (true);
+			var gr = new NeighborGraph<int> (true);
 			gr.AddNode (0);
-			Assert.Throws<NodoInexistenteException> (delegate
-			{
-				gr [1, 0] = true;
-			});
+			Assert.Throws<NonExistentNodeException> (delegate
+			{ gr[1, 0] = true; });
 			gr.AddNode (1);
-			gr [1, 0] = true;
-			Assert.True (gr [1, 0]);
+			gr[1, 0] = true;
+			Assert.True (gr[1, 0]);
 		}
 
 		[Test]
 		public void RemoveNode ()
 		{
-			var gr = new GrafoVecindad<int> ();
+			var gr = new NeighborGraph<int> ();
 			gr.AddNode (0);
 			gr.AddNode (1);
-			gr [0, 1] = true;
-			Assert.True (gr.Vecinos (0).Contains (1));
+			gr[0, 1] = true;
+			Assert.True (gr.Neighborhood (0).Contains (1));
 			gr.RemoveNode (1);
-			Assert.False (gr.Vecinos (0).Contains (1));
+			Assert.False (gr.Neighborhood (0).Contains (1));
 		}
 	}
 }

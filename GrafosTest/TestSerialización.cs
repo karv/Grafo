@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Graficas.Continuo;
-using Graficas.Grafo;
-using Graficas.Grafo.Estáticos;
-using Graficas.Rutas;
+using CE.Graph.Continua;
+using CE.Graph.Grafo;
+using CE.Graph.Grafo.Estáticos;
+using CE.Graph.Rutas;
 using NUnit.Framework;
 
 namespace Test
@@ -25,23 +25,23 @@ namespace Test
 			where T : IGrafo<Objeto>
 		{
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
-			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
-			Assert.AreEqual (gr [0, 1].Existe, gr2 [0, 1].Existe);
+			var gr2 = Store.BinarySerialization.ReadFromBinaryFile<T> ("some.graph");
+			Assert.AreEqual (gr [0, 1].Exists, gr2 [0, 1].Existe);
 		}
 
 		static void TestSerialPeso<T> (T gr)
-			where T : Grafo<Objeto, float>
+			where T : Graph<Objeto, float>
 		{
 			gr [0, 1] = 1;
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", gr);
-			var gr2 = Store.BinarySerialization.ReadFromBinaryFile <T> ("some.graph");
+			var gr2 = Store.BinarySerialization.ReadFromBinaryFile<T> ("some.graph");
 			Assert.AreEqual (gr [0, 1], gr2 [0, 1]);
 		}
 
 		[Test]
 		public void SerGraf ()
 		{
-			var gr = new Grafo<Objeto, float> (ObjetoColl);
+			var gr = new Graph<Objeto, float> (ObjetoColl);
 			gr [0, 1] = 1;
 			TestSerial (gr);
 
@@ -52,7 +52,7 @@ namespace Test
 		[Test]
 		public void PathSet ()
 		{
-			var gr = new Grafo<Objeto, float> (ObjetoColl);
+			var gr = new Graph<Objeto, float> (ObjetoColl);
 			gr [0, 1] = 1;
 			gr [1, 2] = 2;
 			gr [2, 3] = 3;
@@ -62,7 +62,7 @@ namespace Test
 			var zero3 = rr.CaminoÓptimo (0, 3);
 
 			Store.BinarySerialization.WriteToBinaryFile ("some.graph", rr);
-			var rr2 = Store.BinarySerialization.ReadFromBinaryFile <ConjuntoRutasÓptimas<Objeto>> ("some.graph");
+			var rr2 = Store.BinarySerialization.ReadFromBinaryFile<ConjuntoRutasÓptimas<Objeto>> ("some.graph");
 			var copia = rr2.CaminoÓptimo (0, 3);
 			Assert.AreEqual (zero3.NumPasos, copia.NumPasos);
 			Assert.AreEqual (zero3.NodoInicial, copia.NodoInicial);
@@ -72,12 +72,12 @@ namespace Test
 		[Test]
 		public void Cont ()
 		{
-			var gr = new Grafo<Objeto, float> (ObjetoColl, true);
+			var gr = new Graph<Objeto, float> (ObjetoColl, true);
 			gr [0, 1] = 1;
-			var c = new Continuo<Objeto> (gr);
+			var c = new ContinuumGraph<Objeto> (gr);
 			c.AgregaPunto (0, 1, 0.3f);
 			Store.BinarySerialization.WriteToBinaryFile ("continuo", c);
-			var c2 = Store.BinarySerialization.ReadFromBinaryFile <Continuo<Objeto>> ("continuo");
+			var c2 = Store.BinarySerialization.ReadFromBinaryFile<ContinuumGraph<Objeto>> ("continuo");
 			Assert.True (c2.Puntos.Count == c.Puntos.Count);
 		}
 

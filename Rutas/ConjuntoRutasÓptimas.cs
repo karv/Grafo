@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Graficas.Grafo;
-using Graficas.Aristas;
-using ListasExtra;
 using System.Linq;
-using System.Threading.Tasks;
+using Graficas.Grafo;
+using Graficas.Edges;
 
 namespace Graficas.Rutas
 {
@@ -13,9 +11,10 @@ namespace Graficas.Rutas
 	/// Representa un conjunto de mejores rutas en una gráfica
 	/// </summary>
 	[Serializable]
+	[Obsolete]
 	public class ConjuntoRutasÓptimas<TNodo>
 	{
-		HashSet<IRuta<TNodo>> rutas;
+		HashSet<IPath<TNodo>> rutas;
 
 		/// <summary>
 		/// Devuelve el camino óptimo entre dos puntos.
@@ -23,7 +22,7 @@ namespace Graficas.Rutas
 		/// </summary>
 		/// <param name="x">Origen</param>
 		/// <param name="y">Destino</param>
-		public IRuta<TNodo> CaminoÓptimo (TNodo x, TNodo y)
+		public IPath<TNodo> CaminoÓptimo (TNodo x, TNodo y)
 		{
 			if (rutas == null)
 				throw new Exception (@"No se inicializó esta clase
@@ -31,34 +30,34 @@ Ejecute Calcular () antes de llamar esta función");
 
 			var cmp = EqualityComparer<TNodo>.Default;
 			var ret = rutas.FirstOrDefault (r => cmp.Equals (r.NodoInicial, x) && cmp.Equals (
-				          r.NodoFinal,
-				          y));
+									r.NodoFinal,
+									y));
 			return ret;
 		}
 
-		void reemplazaRuta (IRuta<TNodo> reemplazando)
+		void reemplazaRuta (IPath<TNodo> reemplazando)
 		{
 			var eliminar = CaminoÓptimo (
-				               reemplazando.NodoInicial,
-				               reemplazando.NodoFinal);
+											 reemplazando.NodoInicial,
+											 reemplazando.NodoFinal);
 			if (eliminar != null)
 				rutas.Remove (eliminar);
 			rutas.Add (reemplazando);
 		}
 
-		static float Peso (IArista<TNodo> aris)
+		static float Peso (IEdge<TNodo> aris)
 		{
-			var ar = aris as AristaPeso<TNodo, float>;
-			if (!ar.Existe)
+			var ar = aris as WeightedEdge<TNodo, float>;
+			if (!ar.Exists)
 				return float.PositiveInfinity;
 			return ar == null ? 1 : ar.Data;
 		}
 
-		bool IntentaAgregarArista (IArista<TNodo> aris, TNodo ori, TNodo des)
+		bool IntentaAgregarArista (IEdge<TNodo> aris, TNodo ori, TNodo des)
 		{
-			if (!aris.Existe)
+			if (!aris.Exists)
 				return false;
-			
+
 			bool ret = false;
 
 			var peso = Peso (aris);
@@ -71,7 +70,7 @@ Ejecute Calcular () antes de llamar esta función");
 			return ret;
 		}
 
-		bool IntentaAgregarArista (IRuta<TNodo> ruta)
+		bool IntentaAgregarArista (IPath<TNodo> ruta)
 		{
 			var rta = CaminoÓptimo (ruta.NodoInicial, ruta.NodoFinal);
 
@@ -96,32 +95,34 @@ Ejecute Calcular () antes de llamar esta función");
 		/// Calcula las rutas óptimas
 		/// </summary>
 		/// <param name="gr">Gráfica asociada</param>
-		public void Calcular (IGrafo<TNodo> gr)
+		public void Calcular (IGraph<TNodo> gr)
 		{
-			rutas = new HashSet<IRuta<TNodo>> ();
-			agregarDiagonal (gr.Nodos);
+			throw new NotImplementedException ();
+
+			rutas = new HashSet<IPath<TNodo>> ();
+			agregarDiagonal (null); //(gr.Nodes);
 
 			var cmp = EqualityComparer<TNodo>.Default;
 
-			foreach (var x in gr.Nodos)
+			foreach (var x in gr.Nodes)
 			{
-				foreach (var y in gr.Nodos)
+				foreach (var y in gr.Nodes)
 				{
-					var ar = gr [x, y];
-					if (!ar.Existe)
+					var ar = gr[x, y];
+					if (!ar.Exists)
 						continue;
 
 					IntentaAgregarArista (ar, x, y);
 
 					// Ahora rellenar las rutas
-					var clone = new HashSet<IRuta<TNodo>> (rutas);
+					var clone = new HashSet<IPath<TNodo>> (rutas);
 					foreach (var z in clone)
 					{
 						// Tomar a los que tienen como destino a x.Origen y concatenarlos con x
 						if (cmp.Equals (z.NodoFinal, x))
 						{
 							var path = new Ruta<TNodo> (z);
-							var paso = new Paso<TNodo> (x, y, Peso (ar));
+							var paso = new Step<TNodo> (x, y, Peso (ar));
 							path.Concat (paso);
 							if (IntentaAgregarArista (path))
 								Debug.WriteLine (string.Format ("Nueva mejor ruta: {0}", path));

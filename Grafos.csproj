@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\NuGet.Build.Packaging.0.1.276\build\NuGet.Build.Packaging.props" Condition="Exists('packages\NuGet.Build.Packaging.0.1.276\build\NuGet.Build.Packaging.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AF2E2C37-9F1D-4D32-AE62-8484B0A9DD50}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Graficas</RootNamespace>
+    <RootNamespace>CE.Graph</RootNamespace>
     <AssemblyName>Grafos</AssemblyName>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ReleaseVersion>0.2.2.1</ReleaseVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <PackageId>CE.Graph</PackageId>
+    <PackageVersion>0.2.2</PackageVersion>
+    <Authors>Edgar Carballo</Authors>
+    <Description>General graph structures and methods</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,42 +41,47 @@
     <Reference Include="ListaExtras">
       <HintPath>packages\ListaExtras.0.3.1\lib\ListaExtras.dll</HintPath>
     </Reference>
+    <Reference Include="CE">
+      <HintPath>packages\CE.core.0.2.2\lib\net45\CE.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="CE.Collections">
+      <HintPath>packages\CE.Collections.0.3.2\lib\net45\CE.Collections.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Aristas\IArista.cs" />
-    <Compile Include="Continuo\Continuo.cs" />
-    <Compile Include="Rutas\IRuta.cs" />
-    <Compile Include="Rutas\Ruta.cs" />
-    <Compile Include="Grafo\IGrafoRutas.cs" />
-    <Compile Include="Grafo\IMulticolGrafo.cs" />
-    <Compile Include="Grafo\MulticolGrafica.cs" />
-    <Compile Include="Grafo\IGrafo.cs" />
-    <Compile Include="Grafo\HardGrafo.cs" />
-    <Compile Include="Aristas\HardArista.cs" />
-    <Compile Include="Rutas\ConjuntoRutasÓptimas.cs" />
-    <Compile Include="Rutas\HardRuta.cs" />
-    <Compile Include="Nodos\INodo.cs" />
-    <Compile Include="Nodos\Nodo.cs" />
-    <Compile Include="Extensiones\Extensiones.cs" />
-    <Compile Include="Aristas\AristaPeso.cs" />
-    <Compile Include="Aristas\AristaBool.cs" />
-    <Compile Include="Aristas\OperaciónAristaInválida.cs" />
-    <Compile Include="Rutas\RutaInconsistenteException.cs" />
-    <Compile Include="Grafo\NodosCollectionComparer.cs" />
-    <Compile Include="Grafo\ColorDuplicadoException.cs" />
-    <Compile Include="Grafo\NodoInexistenteException.cs" />
-    <Compile Include="Aristas\IPaso.cs" />
-    <Compile Include="Aristas\Paso.cs" />
-    <Compile Include="Rutas\ComparadorPorPaso.cs" />
-    <Compile Include="Continuo\Comparador.cs" />
-    <Compile Include="Continuo\Punto.cs" />
-    <Compile Include="Continuo\RutaContinuo.cs" />
-    <Compile Include="Grafo\OperaciónInválidaGrafosException.cs" />
-    <Compile Include="Grafo\Estáticos\Grafo.cs" />
-    <Compile Include="Grafo\Estáticos\GrafoClan.cs" />
-    <Compile Include="Grafo\Estáticos\GrafoVecindad.cs" />
-    <Compile Include="Grafo\Dinámicos\GrafoVecindad.cs" />
+    <Compile Include="Edges\IEdge.cs" />
+    <Compile Include="Continua\ContinuumGraph.cs" />
+    <Compile Include="Rutas\IPath.cs" />
+    <Compile Include="Rutas\Path.cs" />
+    <Compile Include="Grafo\MultiColoredGraph.cs" />
+    <Compile Include="Grafo\IGraph.cs" />
+    <Compile Include="Edges\HardEdge.cs" />
+    <Compile Include="Rutas\ReferencedPath.cs" />
+    <Compile Include="Nodos\INode.cs" />
+    <Compile Include="Nodos\Node.cs" />
+    <Compile Include="Extensiones\GraphExt.cs" />
+    <Compile Include="Edges\WeightedEdge.cs" />
+    <Compile Include="Edges\ExistentialEdge.cs" />
+    <Compile Include="Rutas\InvalidPathOperationException.cs" />
+    <Compile Include="Grafo\DuplicatedColorException.cs" />
+    <Compile Include="Grafo\NonExistentNodeException.cs" />
+    <Compile Include="Edges\IStep.cs" />
+    <Compile Include="Edges\Step.cs" />
+    <Compile Include="Rutas\StepPathComparer.cs" />
+    <Compile Include="Continua\MatchComparer.cs" />
+    <Compile Include="Continua\ContinuumPoint.cs" />
+    <Compile Include="Continua\Path.cs" />
+    <Compile Include="Grafo\Estáticos\Graph.cs" />
+    <Compile Include="Grafo\Dinámicos\NeighborGraph.cs" />
+    <Compile Include="Edges\IDirectedEdge.cs" />
+    <Compile Include="Grafo\Estáticos\CommonGraph.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -80,19 +90,61 @@
         <Policies>
           <XmlFormattingPolicy inheritsSet="null" scope="application/config+xml" />
           <TextStylePolicy inheritsSet="null" scope="application/config+xml" />
-          <TextStylePolicy FileWidth="120" TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/plain" />
+          <TextStylePolicy RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="80" TabWidth="2" TabsToSpaces="True" IndentWidth="2" scope="text/plain" />
           <TextStylePolicy inheritsSet="null" scope="application/xml" />
-          <XmlFormattingPolicy inheritsSet="Mono" inheritsScope="application/xml" scope="application/xml" />
-          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="FileName" />
-          <TextStylePolicy TabsToSpaces="False" inheritsSet="VisualStudio" inheritsScope="text/plain" scope="text/x-csharp" />
-          <CSharpFormattingPolicy IndentSwitchBody="True" AutoPropertyFormatting="ForceOneLine" AnonymousMethodBraceStyle="NextLine" PropertyBraceStyle="NextLine" PropertyGetBraceStyle="NextLine" PropertySetBraceStyle="NextLine" EventBraceStyle="NextLine" EventAddBraceStyle="NextLine" EventRemoveBraceStyle="NextLine" StatementBraceStyle="NextLine" ElseNewLinePlacement="NewLine" CatchNewLinePlacement="NewLine" FinallyNewLinePlacement="NewLine" WhileNewLinePlacement="NewLine" ArrayInitializerBraceStyle="NextLine" NewLineBeforeConstructorInitializerColon="NewLine" NewLineAfterConstructorInitializerColon="SameLine" AfterDelegateDeclarationParameterComma="True" BeforeSizeOfParentheses="True" BeforeTypeOfParentheses="True" SpacesBeforeArrayDeclarationBrackets="True" MethodCallArgumentWrapping="WrapIfTooLong" MethodDeclarationParameterWrapping="WrapIfTooLong" IndexerDeclarationParameterWrapping="WrapIfTooLong" IndexerArgumentWrapping="WrapIfTooLong" inheritsSet="Mono" inheritsScope="text/x-csharp" scope="text/x-csharp" />
+          <XmlFormattingPolicy scope="application/xml">
+            <DefaultFormat OmitXmlDeclaration="False" NewLineChars="&#xA;" IndentContent="True" ContentIndentString="&#x9;" AttributesInNewLine="False" MaxAttributesPerLine="10" AttributesIndentString="&#x9;" WrapAttributes="False" AlignAttributes="False" AlignAttributeValues="False" QuoteChar="&quot;" SpacesBeforeAssignment="0" SpacesAfterAssignment="0" EmptyLinesBeforeStart="0" EmptyLinesAfterStart="0" EmptyLinesBeforeEnd="0" EmptyLinesAfterEnd="0" />
+          </XmlFormattingPolicy>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="MSBuild" />
+          <TextStylePolicy TabsToSpaces="False" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" EolMarker="Native" FileWidth="150" TabWidth="2" IndentWidth="2" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" IndentSwitchSection="False" IndentSwitchCaseSection="False" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForMembersInObjectInit="False" NewLineForMembersInAnonymousTypes="False" NewLineForClausesInQuery="True" SpacingAfterMethodDeclarationName="True" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceAfterMethodCallName="True" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="False" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" PlaceSystemDirectiveFirst="True" scope="text/x-csharp" />
+          <VersionControlPolicy>
+            <CommitMessageStyle Header="" Indent="" FirstFilePrefix="* " FileSeparator=":&#xA;* " LastFilePostfix=": " LineAlign="2" InterMessageLines="1" IncludeDirectoryPaths="False" Wrap="True" />
+          </VersionControlPolicy>
+          <StandardHeader Text="" IncludeInNewFiles="True" />
+          <NameConventionPolicy>
+            <Rules>
+              <NamingRule>
+                <Name>Type Parameters</Name>
+                <AffectedEntity>TypeParameter</AffectedEntity>
+                <VisibilityMask>VisibilityMask</VisibilityMask>
+                <NamingStyle>PascalCase</NamingStyle>
+                <IncludeInstanceMembers>True</IncludeInstanceMembers>
+                <IncludeStaticEntities>True</IncludeStaticEntities>
+                <RequiredPrefixes>
+                  <String>T</String>
+                </RequiredPrefixes>
+                <RequiredSuffixes>
+                  <String>Exception</String>
+                </RequiredSuffixes>
+              </NamingRule>
+            </Rules>
+          </NameConventionPolicy>
+          <NameConventionPolicy>
+            <Rules>
+              <NamingRule>
+                <Name>Type Parameters</Name>
+                <AffectedEntity>TypeParameter</AffectedEntity>
+                <VisibilityMask>VisibilityMask</VisibilityMask>
+                <NamingStyle>PascalCase</NamingStyle>
+                <IncludeInstanceMembers>True</IncludeInstanceMembers>
+                <IncludeStaticEntities>True</IncludeStaticEntities>
+                <RequiredPrefixes>
+                  <String>T</String>
+                </RequiredPrefixes>
+                <RequiredSuffixes>
+                  <String>Exception</String>
+                </RequiredSuffixes>
+              </NamingRule>
+            </Rules>
+          </NameConventionPolicy>
         </Policies>
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Folder Include="Aristas\" />
-    <Folder Include="Continuo\" />
+    <Folder Include="Edges\" />
+    <Folder Include="Continua\" />
     <Folder Include="Rutas\" />
     <Folder Include="Grafo\" />
     <Folder Include="Nodos\" />
@@ -103,4 +155,5 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <Import Project="packages\NuGet.Build.Packaging.0.1.276\build\NuGet.Build.Packaging.targets" Condition="Exists('packages\NuGet.Build.Packaging.0.1.276\build\NuGet.Build.Packaging.targets')" />
 </Project>
